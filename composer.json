@@ -24,7 +24,12 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^2.7"
+        "symfony/phpunit-bridge": "^2.7",
+        "phpunit/phpunit": "dev-master",
+        "phpunit/php-invoker": "dev-master",
+        "phpunit/dbunit": "~1.2",
+        "phpmd/phpmd": "dev-master",
+        "phpunit/php-code-coverage": "dev-master#b8436b000263f6d72fbad1d36890e247ce84857e"
     },
     "scripts": {
         "post-install-cmd": [

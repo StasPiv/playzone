@@ -3,11 +3,72 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+            <link href="{{ asset('css/jquery.alerts.css') }}" rel="stylesheet" type="text/css" media="screen" />
+        {% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicons/Black Q.ico') }}" />
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block body %}
+            <div class="content">
+                <div class="header">
+                    <a href="/"><img class="logo" src="{{ asset('images/logo.png') }}" /></a>
+                    <div class="menu">
+                        <ul>
+                            <li class="button"><a href="/games/">Партии</a>
+                                <ul>
+                                    <li class="button"><a href="/games/">Мои партии</a></li>
+                                    <li class="button"><a href="/games/personal/">Все партии</a></li>
+                                    <li class="button"><a href="/games/personal/?filter_button=OK&top=10">TOP-10 партий</a></li>
+                                </ul>
+                            </li>
+                            <li class="button"><a href="/tournaments/">Турниры</a>
+                                <ul>
+                                    <li class="button"><a href="/tournaments/">Личные</a></li>
+                                    <li class="button"><a href="/tournaments/call/">Турниры вызова</a></li>
+                                    <li style="display:none;" class="button"><a href="/tournaments/prerecord/">Особые</a></li>
+                                    <li class="button"><a href="/tournaments/top/">Топ турниры</a></li>
+                                    <li class="button"><a href="/tournaments/team/">Командные</a></li>
+                                    <li class="button"><a href="/tournaments/prerecord/">По записи</a></li>
+                                    <li class="button"><a href="/tournaments/archive/">Архив</a></li>
+                                </ul>
+                            </li>
+                            <li class="button"><a href="/players/list/">Игроки</a>
+                                <ul>
+                                    <li class="button"><a href="/players/list/">Рейтинг-лист</a></li>
+                                    <li class="button"><a href="/players/search/">Найти игрока</a></li>
+                                    <li class="button"><a href="/team/">Команды</a></li>
+                                </ul>
+                            </li>
+                            <li class="button"><a href="/team/chat/">Общение (+0)</a>
+                                <ul>
+                                    <li class="button"><a target="_blank" href="http://immortalchess.net/forum/forumdisplay.php?f=85">Общий форум</a></li>
+                                    <li class="button"><a href="/team/chat/">Командный чат (+0)</a></li>
+                                    <li class="button"><a target="_blank" href="http://immortalchess.net/forum/private.php?do=newpm&u=87">Задать вопрос</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </div>
+                <div class="middle">
+                    {% block content %}{% endblock %}
+                </div>
+                <div class="footer">
+                    <div class="overlay"></div>
+                </div>
+            </div>
+        {% endblock %}
+        {% block javascripts %}
+            <script src="http://code.jquery.com/jquery-1.8.1.js"></script>
+            <script src="{{ asset('js/script.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/jquery.zclip.js') }}"></script>
+            <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+            <script type="text/javascript" src="http://static.tinymce.com/tinymce/js/4.0b2/tinymce.min.js"></script>
+            <script src="{{ asset('js/jquery.ui.draggable.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('js/jquery.alerts.js') }}" type="text/javascript"></script>
+        {% endblock %}
     </body>
 </html>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e2381fb7f014fbb7a49c8f17bdc7db6d",
+    "hash": "4c6709d58c8289b59dda2da91e533345",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -520,6 +520,64 @@
             "time": "2015-11-27 04:59:07"
         },
         {
+            "name": "doctrine/doctrine-migrations-bundle",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
+                "reference": "303a576e2124efb07ec215e34ea2480b841cf5e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/303a576e2124efb07ec215e34ea2480b841cf5e4",
+                "reference": "303a576e2124efb07ec215e34ea2480b841cf5e4",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "~1.0",
+                "doctrine/migrations": "~1.0",
+                "php": ">=5.3.2",
+                "symfony/framework-bundle": "~2.3|~3.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Doctrine\\Bundle\\MigrationsBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Doctrine Project",
+                    "homepage": "http://www.doctrine-project.org"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Symfony DoctrineMigrationsBundle",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "dbal",
+                "migrations",
+                "schema"
+            ],
+            "time": "2015-11-04 13:45:30"
+        },
+        {
             "name": "doctrine/inflector",
             "version": "v1.1.0",
             "source": {
@@ -693,6 +751,74 @@
                 "parser"
             ],
             "time": "2014-09-09 13:34:57"
+        },
+        {
+            "name": "doctrine/migrations",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/migrations.git",
+                "reference": "57e50714fcb34235cf055edc409e169b8d7af690"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/57e50714fcb34235cf055edc409e169b8d7af690",
+                "reference": "57e50714fcb34235cf055edc409e169b8d7af690",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "~2.2",
+                "php": ">=5.4.0",
+                "symfony/console": "~2.3|~3.0",
+                "symfony/yaml": "~2.3|~3.0"
+            },
+            "require-dev": {
+                "doctrine/coding-standard": "dev-master",
+                "doctrine/orm": "2.*",
+                "johnkary/phpunit-speedtrap": "~1.0@dev",
+                "mockery/mockery": "^0.9.4",
+                "phpunit/phpunit": "~4.7",
+                "satooshi/php-coveralls": "0.6.*"
+            },
+            "bin": [
+                "bin/doctrine-migrations"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "v1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Doctrine\\DBAL\\Migrations\\": "lib/Doctrine/DBAL/Migrations"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com"
+                },
+                {
+                    "name": "Michael Simonson",
+                    "email": "contact@mikesimonson.com"
+                }
+            ],
+            "description": "Database Schema migrations using Doctrine DBAL",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "database",
+                "migrations"
+            ],
+            "time": "2015-12-15 21:46:29"
         },
         {
             "name": "doctrine/orm",
@@ -1961,12 +2087,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "1f2a60eecdcac77090a0668865496bd3c899fa2f"
+                "reference": "a04dee7fc4d539f33ceefb95db98dd86005dee58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/1f2a60eecdcac77090a0668865496bd3c899fa2f",
-                "reference": "1f2a60eecdcac77090a0668865496bd3c899fa2f",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/a04dee7fc4d539f33ceefb95db98dd86005dee58",
+                "reference": "a04dee7fc4d539f33ceefb95db98dd86005dee58",
                 "shasum": ""
             },
             "require": {
@@ -2018,7 +2144,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2015-11-30 11:34:02"
+            "time": "2015-12-15 11:39:54"
         },
         {
             "name": "phpspec/prophecy",
@@ -2431,12 +2557,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "b8c914e8028fae2529f283fd77f7105ff91a30e4"
+                "reference": "61ea97f7467086b65efd26cf924c4a7ca0fbb2a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b8c914e8028fae2529f283fd77f7105ff91a30e4",
-                "reference": "b8c914e8028fae2529f283fd77f7105ff91a30e4",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/61ea97f7467086b65efd26cf924c4a7ca0fbb2a6",
+                "reference": "61ea97f7467086b65efd26cf924c4a7ca0fbb2a6",
                 "shasum": ""
             },
             "require": {
@@ -2497,7 +2623,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-12-11 17:49:57"
+            "time": "2015-12-17 14:44:35"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

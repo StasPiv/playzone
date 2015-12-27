@@ -1,0 +1,14 @@
+{
+  "name": "playzone",
+  "description": "A playzone project for AngularJS",
+  "version": "0.0.0",
+  "homepage": "https://github.com/StasPiv/playzone",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "1.4.x",
+    "angular-mocks": "1.4.x",
+    "jquery": "~2.1.1",
+    "bootstrap": "~3.1.1"
+  }
+}

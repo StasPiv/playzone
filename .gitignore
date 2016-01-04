@@ -18,3 +18,4 @@
 app/build/
 frontend/bower_components
 frontend/node_modules
+npm-debug.log

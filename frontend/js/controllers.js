@@ -3,10 +3,9 @@
  */
 'use strict';
 
-var playzoneApp = angular.module('playzoneApp', []);
+var playzoneControllers = angular.module('playzoneControllers', []);
 
-playzoneApp.controller('TopMenuCtrl', function ($scope) {
-    // TODO: heed to move menu into json file or something else storage
+playzoneControllers.controller('TopMenuCtrl', function ($scope) {
     $scope.menu = [
         {
             "label": "Партии",
@@ -99,11 +98,47 @@ playzoneApp.controller('TopMenuCtrl', function ($scope) {
     ];
 });
 
-playzoneApp.controller('TopRegisterCtrl', function ($scope) {
-    // TODO: these data should be fetched from backend
-    $scope.isAuth = true;
-    $scope.userName = 'Stas';
-    $scope.userId = 1;
-    $scope.userClass = 'D';
-    $scope.userRating = 2200;
+playzoneControllers.controller('TopRegisterCtrl', function ($scope) {
+    $scope.registerLink = '/#/register';
+    $scope.authLink = '/#/auth';
+    $scope.questionLink = 'http://immortalchess.net/forum/private.php?do=newpm&u=87';
+    $scope.profileLink = '/#/profile';
+    $scope.logoutLink = '/#/logout';
+});
+
+playzoneControllers.controller('HomeCtrl', function ($scope) {
+    $scope.isEnableYoutubeGuide = false;
+    $scope.mainPossibilities = [
+        'Игра один на один',
+        'Игра в личных турнирах',
+        'Игра в командных турнирах',
+        'Различные игровые контроли времени',
+        'Подсчет рейтинга и продвижение по классам',
+        'Отпускное время'
+    ];
+});
+
+playzoneControllers.controller('RegisterCtrl', function ($scope, $rootScope, $http, $location, ApiService) {
+    $rootScope.user = {};
+    $scope.errors = {};
+
+    $scope.register = function() {
+        $http({
+            method  : 'POST',
+            url     : ApiService.register,
+            data    : $scope.user, //forms user object
+            headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+        .success(function(data) {
+            if (data.errors) {
+                $rootScope.user.isAuth = false;
+                $scope.errors = data.errors;
+            } else {
+                $rootScope.user = data.user;
+                $rootScope.user.isAuth = true;
+                $scope.errors = {};
+                $location.path('/');
+            }
+        });
+    }
 });

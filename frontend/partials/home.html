@@ -1,0 +1,61 @@
+<div class="text">
+    <p style="font-weight: bold;margin-bottom: 10px;">Добро пожаловать на сервер для игры в заочные шахматы!</p>
+    <p>Основные возможности сервера:
+    <ol style="list-style: inside;">
+        <li ng-repeat="possibility in mainPossibilities">
+            {{possibility}}
+        </li>
+    </ol>
+    </p>
+    <p ng-if="!$root.user.isAuth" style="margin: 10px 0;">Для того, чтобы иметь возможность играть партии, Вы должны <a class="button accept" style="font-size:20px;" href="/#/register/">зарегистрироваться</a></p>
+    <p style="margin: 10px 0;">
+        Ваши замечания и пожелания по улучшению сервера Вы можете прислать, воспользовавшись формой обратной связи:
+    </p>
+    <form action="/#/feedback/" method="post">
+        <table>
+            <tr>
+                <td>
+                    Ваше имя:
+                </td>
+                <td>
+                    <input name="name" required="" type="text" style="width: 300px;" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Ваш E-mail:
+                </td>
+                <td>
+                    <input name="email" required="" type="text" style="width: 300px;" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Ваше сообщение:
+                </td>
+                <td>
+                    <textarea name="message" required="" rows="10" style="width: 304px;"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="checkvalid" value="" style="display: none;" />
+                    <input type="hidden" name="postback" value="1" />
+                </td>
+                <td style="text-align: right;">
+                    <input type="submit" class="button" value="Отправить" />
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div class="guide-zone-video" ng-if="isEnableYoutubeGuide">
+        <h1>Гид по зоне (видео)</h1>
+        <b><a class="#" onclick="$('#video').toggle()">Посмотреть</a></b>
+        <div id="video" style="display:none;">
+        <h2>Часть 1</h2>
+            <iframe width="560" height="315" src="http://www.youtube.com/embed/oWuZTV4X35A" frameborder="0" allowfullscreen></iframe>
+            <h2>Часть 2</h2>
+            <iframe width="560" height="315" src="http://www.youtube.com/embed/akU7nA9vA4g" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>

@@ -98,3 +98,12 @@ playzoneApp.controller('TopMenuCtrl', function ($scope) {
         }
     ];
 });
+
+playzoneApp.controller('TopRegisterCtrl', function ($scope) {
+    // TODO: these data should be fetched from backend
+    $scope.isAuth = true;
+    $scope.userName = 'Stas';
+    $scope.userId = 1;
+    $scope.userClass = 'D';
+    $scope.userRating = 2200;
+});

@@ -71,13 +71,13 @@ h2{
     position: relative;
     z-index: 1;
 }
-.header .auth{
+.header .register {
     top: 8px;
     position: absolute;
     right: 20px;
     font-size: 14px;
 }
-.header .auth .enter{
+.header .register .enter{
     font-weight: bold;
 }
 .header .rest{
@@ -258,7 +258,7 @@ input[type="text"],input[type="password"]{
     margin: 0;
     padding: 3px;
 }
-table.register.auth td{
+table.register.register td{
     padding: 5px;
 }
 table.register .error{

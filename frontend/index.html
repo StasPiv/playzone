@@ -28,8 +28,23 @@
                     </li>
                 </ul>
             </div>
-
-
+            <div class="register" ng-controller="TopRegisterCtrl">
+                <div class="for-unauthorized" ng-if="!isAuth">
+                    <a href="/register/">Регистрация</a> / <span class="enter"><a href="/auth/">Вход</a></span>
+                </div>
+                <div class="for-authorized" ng-if="isAuth">
+                    <span>Логин: <b><a href="/profile/{{userId}}/">{{userName}}</a></b></span>.
+                    <span class="rating">Рейтинг: <b>{{userRating}}</b>. Класс: <b>{{userClass}}</b></span>.
+                    <br/>
+                    <span style="float:right;">
+                        <span style="color:red;">
+                            <a target="_blank" href="http://immortalchess.net/forum/private.php?do=newpm&u=87"><strong>Задать вопрос</strong></a>
+                        </span> |
+                        <span><a href="/profile/"><strong>Настройки</strong></a></span> |
+                        <span class="enter"><a href="/logout/">Выход</a></span>
+                    </span>
+                </div>
+            </div>
         </div>
         <div class="middle">
 

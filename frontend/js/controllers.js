@@ -118,26 +118,19 @@ playzoneControllers.controller('HomeCtrl', function ($scope) {
     ];
 });
 
-playzoneControllers.controller('RegisterCtrl', function ($scope, $rootScope, $http, $location, ApiService) {
+playzoneControllers.controller('RegisterCtrl', function ($scope, $rootScope, $http, $location, UserService) {
     $rootScope.user = {};
     $scope.errors = {};
 
     $scope.register = function() {
-        $http({
-            method  : 'POST',
-            url     : ApiService.register,
-            data    : $scope.user, //forms user object
-            headers : {'Content-Type': 'application/x-www-form-urlencoded'}
-        })
-        .success(function(data) {
-            if (data.errors) {
-                $rootScope.user.isAuth = false;
-                $scope.errors = data.errors;
-            } else {
-                $rootScope.user = data.user;
-                $rootScope.user.isAuth = true;
+        UserService.register({
+            user: $scope.user,
+            success: function(data) {
                 $scope.errors = {};
                 $location.path('/');
+            },
+            error: function(data) {
+                $scope.errors = data.errors;
             }
         });
     }

@@ -35,7 +35,7 @@
                     <a href="{{registerLink}}">Регистрация</a> / <span class="enter"><a href="{{authLink}}">Вход</a></span>
                 </div>
                 <div class="for-authorized" ng-if="$root.user.isAuth">
-                    <span>Логин: <b><a href="{{profileLink}}">{{$root.user.name}}</a></b></span>.
+                    <span>Логин: <b><a href="{{profileLink}}">{{$root.user.login}}</a></b></span>.
                     <span class="rating">Рейтинг: <b>{{$root.user.rating}}</b>. Класс: <b>{{$root.user.class}}</b></span>.
                     <br/>
                     <span style="float:right;">

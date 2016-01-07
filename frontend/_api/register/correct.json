@@ -1,6 +1,7 @@
 {
-  "user": {
-    "name": "Stas Fetched",
+  "status": 200,
+  "data": {
+    "login": "Stas Fetched",
     "rating": 2205,
     "class": "D"
   }

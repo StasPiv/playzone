@@ -3,9 +3,13 @@
 namespace CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * User
+ *
+ * @JMS\ExclusionPolicy("all")
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="CoreBundle\Repository\UserRepository")
@@ -25,6 +29,20 @@ class User
      * @var string
      *
      * @ORM\Column(name="login", type="string", length=255, unique=true)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 30,
+     *      minMessage = "Login must contain at least {{ limit }} symbols",
+     *      maxMessage = "Login must not contain greater than {{ limit }} symbols"
+     * )
+     * @Assert\NotBlank(
+     *     message = "Enter login"
+     * )
+     * @Assert\Regex("/^[\d\-_\wа-яА-Я]+$/", message="Login must contain only words, numbers, underscores and dashes")
+     *
+     * @JMS\Expose
+     * @JMS\SerializedName("login")
+     * @JMS\Type("string")
      */
     private $login;
 
@@ -32,8 +50,34 @@ class User
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @Assert\Email(
+     *     message = "E-mail is not correct",
+     *     checkMX = true
+     * )
+     * @Assert\NotBlank(
+     *     message = "Enter e-mail"
+     * )
+     *
+     * @JMS\Expose
+     * @JMS\SerializedName("email")
+     * @JMS\Type("string")
      */
     private $email;
+
+    /**
+     * @var string
+     *
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 15,
+     *      minMessage = "The password must contain at least {{ limit }} symbols",
+     *      maxMessage = "The password must not contain greater than {{ limit }} symbols"
+     * )
+     * @Assert\NotBlank(
+     *     message = "Enter password"
+     * )
+     */
+    private $rawPassword;
 
     /**
      * @var string
@@ -45,35 +89,35 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="hash", type="string", length=255)
+     * @ORM\Column(name="hash", type="string", length=255, nullable=true)
      */
     private $hash;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="confirm", type="boolean")
+     * @ORM\Column(name="confirm", type="boolean", nullable=true)
      */
     private $confirm;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="in_rest", type="boolean")
+     * @ORM\Column(name="in_rest", type="boolean", nullable=true)
      */
     private $inRest;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="left_rest", type="integer")
+     * @ORM\Column(name="left_rest", type="integer", nullable=true)
      */
     private $leftRest;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="gone_in_rest", type="time")
+     * @ORM\Column(name="gone_in_rest", type="datetime", nullable=true)
      */
     private $goneInRest;
 
@@ -81,69 +125,77 @@ class User
      * @var string
      *
      * @ORM\Column(name="class", type="string", length=1)
+     *
+     * @JMS\Expose
+     * @JMS\SerializedName("class")
+     * @JMS\Type("string")
      */
-    private $class;
+    private $class = 'N';
 
     /**
      * @var int
      *
      * @ORM\Column(name="rating", type="integer")
+     *
+     * @JMS\Expose
+     * @JMS\SerializedName("rating")
+     * @JMS\Type("integer")
      */
-    private $rating;
+    private $rating = 2200;
 
     /**
      * @var int
      *
      * @ORM\Column(name="win", type="integer")
      */
-    private $win;
+    private $win = 0;
 
     /**
      * @var int
      *
      * @ORM\Column(name="draw", type="integer")
      */
-    private $draw;
+    private $draw = 0;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lose", type="integer")
      */
-    private $lose;
+    private $lose = 0;
 
     /**
      * @var int
      *
      * @ORM\Column(name="lose_time", type="integer")
      */
-    private $loseTime;
+    private $loseTime = 0;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="last_auth", type="time")
+     * @ORM\Column(name="last_auth", type="datetime", nullable=true)
      */
     private $lastAuth;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="immortal_id", type="integer")
+     * @ORM\Column(name="immortal_id", type="integer", nullable=true)
      */
     private $immortalId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="another_login", type="string", length=255)
+     * @ORM\Column(name="another_login", type="string", length=255, nullable=true)
      */
     private $anotherLogin;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="last_move", type="time")
+     * @ORM\Column(name="last_move", type="datetime", nullable=true)
      */
     private $lastMove;
 
@@ -152,7 +204,7 @@ class User
      *
      * @ORM\Column(name="balance", type="bigint")
      */
-    private $balance;
+    private $balance = 0;
 
 
     /**
@@ -619,6 +671,22 @@ class User
     public function getBalance()
     {
         return $this->balance;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRawPassword()
+    {
+        return $this->rawPassword;
+    }
+
+    /**
+     * @param string $rawPassword
+     */
+    public function setRawPassword($rawPassword)
+    {
+        $this->rawPassword = $rawPassword;
     }
 }
 

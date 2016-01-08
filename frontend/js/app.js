@@ -23,6 +23,13 @@ playzoneApp.config(['$routeProvider',
                     factory: checkIfUnauthorized
                 }
             }).
+            when('/auth', {
+                templateUrl: 'partials/auth.html',
+                controller: 'AuthCtrl',
+                resolve: {
+                    factory: checkIfUnauthorized
+                }
+            }).
             otherwise({
                 redirectTo: '/'
             });

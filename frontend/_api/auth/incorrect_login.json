@@ -1,0 +1,6 @@
+{
+  "status" : 403,
+  "errors" : {
+    "login" : "The login is not found"
+  }
+}

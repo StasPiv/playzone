@@ -1,0 +1,9 @@
+{
+  "status": 200,
+  "data": {
+    "login" : "TestLogin",
+    "email" : "test-login@yandex.ru",
+    "rating" : 2243,
+    "class" : "D"
+  }
+}

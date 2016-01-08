@@ -17,9 +17,10 @@ use Symfony\Component\Validator\ConstraintViolation;
 
 class UserHandler implements UserProcessorInterface
 {
+    use ContainerAwareTrait;
+
     const AUTHORIZATION_FAILED = "Authorization failed";
     const REGISTRATION_FAILED = "Registration failed";
-    use ContainerAwareTrait;
 
     /**
      * @var \CoreBundle\Service\UserService
@@ -116,9 +117,18 @@ class UserHandler implements UserProcessorInterface
         return $user;
     }
 
+    /**
+     * @return array
+     */
     public function processGet()
     {
-        return $this->userService->getCurrentUser();
+        $currentUser = $this->userService->getCurrentUser();
+
+        if (empty($currentUser)) {
+            throw new ProcessorException("Forbidden", 403);
+        }
+
+        return $currentUser;
     }
 
 }

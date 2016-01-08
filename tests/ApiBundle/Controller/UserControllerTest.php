@@ -19,19 +19,7 @@ class UserControllerTest extends BaseControllerTest
 
     public function testGet()
     {
-        $client = static::createClient();
-
-        $client->getContainer()->get("session")
-               ->set(
-                   UserService::CURRENT_USER,
-                   [
-                      "login" => "UnitTestLogin",
-                      "email" => "unittest@yandex.ru",
-                      "rating" => 2200,
-                      "class" => "N"
-                   ]
-               );
-        $this->testFromJson('user', $client);
+        $this->testFromJson('user', static::createClient());
     }
 
     public function testAuth()

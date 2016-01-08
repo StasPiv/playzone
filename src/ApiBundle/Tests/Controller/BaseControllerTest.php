@@ -29,6 +29,15 @@ class BaseControllerTest extends WebTestCase
 
         foreach ($testData as $caseName => $data) {
             $request = isset($data['request']) ? $data['request'] : [];
+            $setSession = isset($data['set_session']) ? $data['set_session'] : [];
+
+            if (!empty($setSession)) {
+                $client = static::createClient();
+            }
+
+            foreach ($setSession as $name => $value) {
+                $client->getContainer()->get("session")->set($name, $value);
+            }
 
             $client->request($data['method'], '/'.$uri, $request);
             $expectedResponse = $data['response'];
@@ -58,16 +67,16 @@ class BaseControllerTest extends WebTestCase
             }
 
             if (isset($data['session'])) {
-                foreach ($data['session'] as $key => $expectedValue) {
+                foreach ($data['session'] as $name => $expectedValue) {
                     if (is_array($expectedValue)) {
-                        $actualValue = (array)$client->getContainer()->get('session')->get($key);
+                        $actualValue = (array)$client->getContainer()->get('session')->get($name);
                         $this->assertEmpty(array_diff_assoc($expectedValue, $actualValue),
                             'session is not correct');
                         $this->assertEmpty(array_diff_assoc($actualValue, $expectedValue),
                             'session is not correct');
                     } else {
                         $this->assertEquals($expectedValue,
-                            $client->getContainer()->get('session')->get($key));
+                            $client->getContainer()->get('session')->get($name));
                     }
                 }
             }

@@ -81,7 +81,9 @@ abstract class BaseController extends FOSRestController
             $data['data'] = $this->getProcessor()->$actionName($this->getRequestParams($request));
             $statusCode = $successStatusCode;
         } catch (ProcessorException $exception) {
-            $data['errors'] = $exception->getErrors();
+            if (!empty($exception->getErrors())) {
+                $data['errors'] = $exception->getErrors();
+            }
             $data['errorMessage'] = $exception->getMessage();
             $statusCode = $exception->getCode();
         } catch (\Exception $exception) {

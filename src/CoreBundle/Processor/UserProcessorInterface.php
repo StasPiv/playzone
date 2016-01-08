@@ -9,11 +9,19 @@
 namespace CoreBundle\Processor;
 
 
-interface UserProcessorInterface
+interface UserProcessorInterface extends ProcessorInterface
 {
     /**
      * @param array $userData
-     * @return mixed
+     * @return array
      */
-    public function processRegister(array $userData);
+    public function processPostRegister(array $userData);
+
+    /**
+     * @param array $userData
+     * @return array
+     */
+    public function processPostAuth(array $userData);
+
+    public function processGet();
 }

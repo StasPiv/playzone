@@ -12,6 +12,7 @@ use CoreBundle\Exception\ProcessorException;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use CoreBundle\Processor\UserProcessorInterface;
 
 /**
  * Class UserController
@@ -22,27 +23,24 @@ class UserController extends BaseController
 {
     public function postRegisterAction(Request $request)
     {
-        $params = $this->getRequestParams($request);
+        return $this->process($request);
+    }
 
-        try {
-            $data['data'] = $this->container->get("core.handler.user")->processRegister($params);
-            $statusCode = 200;
-        } catch (ProcessorException $exception) {
-            $data['errors'] = $exception->getErrors();
-            $data['errorMessage'] = $exception->getMessage();
-            $statusCode = $exception->getCode();
-        } catch (\Exception $exception) {
-            $data['errors'] = [];
-            $data['errorMessage'] = $exception->getMessage();
-            if ($this->container->get('kernel')->getEnvironment() == 'dev') {
-                $data['errorFile'] = $exception->getFile();
-                $data['errorLine'] = $exception->getLine();
-            }
-            $statusCode = 500;
-        }
+    public function postAuthAction(Request $request)
+    {
+        return $this->process($request);
+    }
 
-        return $this->handleView(
-            $this->view($data, $statusCode)
-        );
+    public function getAction(Request $request)
+    {
+        return $this->process($request);
+    }
+
+    /**
+     * @return UserProcessorInterface
+     */
+    protected function getProcessor()
+    {
+        return $this->container->get("core.handler.user");
     }
 }

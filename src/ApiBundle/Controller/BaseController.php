@@ -8,6 +8,8 @@
 
 namespace ApiBundle\Controller;
 
+use CoreBundle\Exception\ProcessorException;
+use CoreBundle\Processor\ProcessorInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +17,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class BaseController extends FOSRestController
 {
+    /**
+     * @return ProcessorInterface
+     */
+    abstract protected function getProcessor();
 
     /**
      * Converts view into a response object.
@@ -58,5 +64,38 @@ abstract class BaseController extends FOSRestController
         }
 
         return $jsonRequest;
+    }
+
+    /**
+     * @param Request $request
+     * @param int $successStatusCode
+     * @return Response
+     */
+    protected function process(Request $request, $successStatusCode = 200)
+    {
+        $data = [];
+        try {
+            $requestMethod = strtolower($request->getMethod());
+            $actionType = str_replace([$requestMethod, 'Action'], '', debug_backtrace()[1]['function']);
+            $actionName = 'process' . ucfirst($requestMethod) . ucfirst($actionType);
+            $data['data'] = $this->getProcessor()->$actionName($this->getRequestParams($request));
+            $statusCode = $successStatusCode;
+        } catch (ProcessorException $exception) {
+            $data['errors'] = $exception->getErrors();
+            $data['errorMessage'] = $exception->getMessage();
+            $statusCode = $exception->getCode();
+        } catch (\Exception $exception) {
+            $data['errors'] = [];
+            $data['errorMessage'] = $exception->getMessage();
+            if ($this->container->get('kernel')->getEnvironment() == 'dev') {
+                $data['errorFile'] = $exception->getFile();
+                $data['errorLine'] = $exception->getLine();
+            }
+            $statusCode = 500;
+        }
+
+        return $this->handleView(
+            $this->view($data, $statusCode)
+        );
     }
 }

@@ -1,0 +1,81 @@
+{
+  "login_not_found" : {
+    "method" : "POST",
+    "request" : {
+      "login": "FakeLogin",
+      "password": "1234567"
+    },
+    "response" : {
+      "status" : 403,
+      "errors" : {
+        "login" : "The login is not found"
+      },
+      "errorMessage":"Authorization failed"
+    }
+  },
+  "password_not_correct" : {
+    "method" : "POST",
+    "request" : {
+      "login": "TestLogin",
+      "password": "1234567"
+    },
+    "response" : {
+      "status" : 403,
+      "errors" : {
+        "password" : "The password is not correct"
+      },
+      "errorMessage":"Authorization failed"
+    }
+  },
+  "empty_login_and_password" : {
+    "method" : "POST",
+    "request" : {
+
+    },
+    "response" : {
+      "status" : 403,
+      "errors" : {
+        "login" : "Enter login"
+      },
+      "errorMessage":"Authorization failed"
+    }
+  },
+  "empty_password" : {
+    "method" : "POST",
+    "request" : {
+      "login" : "TestLogin"
+    },
+    "response" : {
+      "status" : 403,
+      "errors" : {
+        "password" : "Enter password"
+      },
+      "errorMessage":"Authorization failed"
+    }
+  },
+  "correct" : {
+    "method" : "POST",
+    "request" : {
+      "login": "TestLogin",
+      "password": "123456"
+    },
+    "response" : {
+      "status" : 200,
+      "data" : {
+        "login" : "TestLogin",
+        "email" : "test-login@yandex.ru",
+        "rating" : 2243,
+        "class" : "D"
+      },
+      "errorMessage":"Registration failed"
+    },
+    "session" : {
+      "current_user" : {
+        "login" : "TestLogin",
+        "email" : "test-login@yandex.ru",
+        "rating" : 2243,
+        "class" : "D"
+      }
+    }
+  }
+}

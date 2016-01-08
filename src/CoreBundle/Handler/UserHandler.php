@@ -17,6 +17,8 @@ use Symfony\Component\Validator\ConstraintViolation;
 
 class UserHandler implements UserProcessorInterface
 {
+    const AUTHORIZATION_FAILED = "Authorization failed";
+    const REGISTRATION_FAILED = "Registration failed";
     use ContainerAwareTrait;
 
     /**
@@ -38,7 +40,7 @@ class UserHandler implements UserProcessorInterface
      * @param array $userData
      * @return mixed
      */
-    public function processRegister(array $userData)
+    public function processPostRegister(array $userData)
     {
         $this->userService->setData($user = new User(), $userData);
 
@@ -71,12 +73,52 @@ class UserHandler implements UserProcessorInterface
         }
 
         if (!empty($errors)) {
-            throw new ProcessorException("Registration failed", 403, $errors);
+            throw new ProcessorException(self::REGISTRATION_FAILED, 403, $errors);
         }
 
         $this->userService->saveUser($user);
 
         return $user;
+    }
+
+    /**
+     * @param array $userData
+     * @return array
+     */
+    public function processPostAuth(array $userData)
+    {
+        if (!isset($userData['login'])) {
+            $errors["login"] = "Enter login";
+            throw new ProcessorException(self::AUTHORIZATION_FAILED, 403, $errors);
+        }
+
+        if (!isset($userData['password'])) {
+            $errors["password"] = "Enter password";
+            throw new ProcessorException(self::AUTHORIZATION_FAILED, 403, $errors);
+        }
+
+        $users = $this->userService->getUsers(['login' => $userData['login']]);
+
+        if (!$users) {
+            $errors["login"] = "The login is not found";
+            throw new ProcessorException(self::AUTHORIZATION_FAILED, 403, $errors);
+        }
+
+        $user = $users[0];
+
+        if ($user->getPassword() != md5($userData['password'])) {
+            $errors["password"] = "The password is not correct";
+            throw new ProcessorException(self::AUTHORIZATION_FAILED, 403, $errors);
+        }
+
+        $this->userService->setCurrentUser($user);
+
+        return $user;
+    }
+
+    public function processGet()
+    {
+        return $this->userService->getCurrentUser();
     }
 
 }

@@ -9,16 +9,19 @@
 namespace CoreBundle\Service;
 
 use CoreBundle\Entity\User;
-use CoreBundle\Exception\ProcessorException;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use JMS\Serializer\SerializerBuilder;
 
 class UserService
 {
+    const CURRENT_USER = 'current_user';
     use ContainerAwareTrait;
 
     private $manager;
+
+    private $serializer;
 
     /**
      * UserService constructor.
@@ -29,6 +32,7 @@ class UserService
     {
         $this->setContainer($container);
         $this->manager = $manager;
+        $this->serializer = SerializerBuilder::create()->build();
     }
 
     public function setData(User $user, array $userData)
@@ -53,8 +57,11 @@ class UserService
     public function saveUser(User $user)
     {
         $user->setPassword(md5($user->getRawPassword()));
-        $this->manager->persist($user);
-        $this->manager->flush();
+        if ($this->container->get('kernel')->getEnvironment() != 'test') {
+            $this->manager->persist($user);
+            $this->manager->flush();
+        }
+        $this->setCurrentUser($user);
     }
 
     /**
@@ -64,5 +71,19 @@ class UserService
     public function getUsers(array $criteria = [])
     {
         return $this->manager->getRepository('CoreBundle:User')->findBy($criteria);
+    }
+
+    public function getCurrentUser()
+    {
+        return $this->container->get("session")->get(self::CURRENT_USER);
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setCurrentUser(User $user)
+    {
+        $this->container->get('session')->set(self::CURRENT_USER,
+            json_decode($this->serializer->serialize($user, 'json'), true));
     }
 }

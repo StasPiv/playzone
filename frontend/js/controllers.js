@@ -98,12 +98,12 @@ playzoneControllers.controller('TopMenuCtrl', function ($scope) {
     ];
 });
 
-playzoneControllers.controller('TopRegisterCtrl', function ($scope) {
-    $scope.registerLink = '/#/register';
-    $scope.authLink = '/#/auth';
-    $scope.questionLink = 'http://immortalchess.net/forum/private.php?do=newpm&u=87';
-    $scope.profileLink = '/#/profile';
-    $scope.logoutLink = '/#/logout';
+playzoneControllers.controller('TopRegisterCtrl', function ($scope, $rootScope, $cookies) {
+    $scope.logout = function() {
+        $cookies.remove("user_login");
+        $cookies.remove("user_password");
+        $rootScope.user = {};
+    }
 });
 
 playzoneControllers.controller('HomeCtrl', function ($scope) {

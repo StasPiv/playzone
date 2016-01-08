@@ -5,9 +5,27 @@
 
 var playzoneApp = angular.module('playzoneApp', [
     'ngRoute',
+    'ngCookies',
     'playzoneControllers',
     'playzoneServices'
-]);
+]).run(['$http', '$rootScope', '$cookies', 'UserService', function($http, $rootScope, $cookies, UserService) {
+    $rootScope.user = {};
+
+    if ($cookies.get("user_login") && $cookies.get("user_password")) {
+        UserService.auth({
+            user: {
+                "login" : $cookies.get("user_login"),
+                "password" : $cookies.get("user_password")
+            },
+            success: function() {
+
+            },
+            error: function() {
+
+            }
+        });
+    }
+}]);
 
 playzoneApp.config(['$routeProvider',
     function($routeProvider) {

@@ -13,6 +13,18 @@ playzoneServices.factory('EnvService', function() {
     };
 });
 
+playzoneServices.factory('CookieService', function($cookies) {
+    return {
+        rememberUser: function (user) {
+            var expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + 365*20);
+
+            $cookies.put('user_login', user.login, {'expires': expireDate});
+            $cookies.put('user_password', user.password, {'expires': expireDate});
+        }
+    };
+});
+
 playzoneServices.factory('ApiService', function(EnvService) {
     var API_URL,
         registerUrl,
@@ -40,7 +52,7 @@ playzoneServices.factory('ApiService', function(EnvService) {
     };
 });
 
-playzoneServices.factory('UserService', function($http, $rootScope, $cookies, ApiService) {
+playzoneServices.factory('UserService', function($http, $rootScope, $cookies, ApiService, CookieService) {
     return {
         register : function(params) {
             var user = params.user;
@@ -56,8 +68,7 @@ playzoneServices.factory('UserService', function($http, $rootScope, $cookies, Ap
                 if (data.data) {
                     $rootScope.user = data.data;
                     $rootScope.user.isAuth = true;
-                    $cookies.put('user_login', user.login);
-                    $cookies.put('user_password', user.password);
+                    CookieService.rememberUser(user);
                 }
                 onSuccess(data);
             })
@@ -80,8 +91,7 @@ playzoneServices.factory('UserService', function($http, $rootScope, $cookies, Ap
                 if (data.data) {
                     $rootScope.user = data.data;
                     $rootScope.user.isAuth = true;
-                    $cookies.put('user_login', user.login);
-                    $cookies.put('user_password', user.password);
+                    CookieService.rememberUser(user);
                 }
                 onSuccess(data);
             })

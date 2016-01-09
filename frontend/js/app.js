@@ -7,7 +7,8 @@ var playzoneApp = angular.module('playzoneApp', [
     'ngRoute',
     'ngCookies',
     'playzoneControllers',
-    'playzoneServices'
+    'playzoneServices',
+    'pascalprecht.translate'
 ]).run(['$http', '$rootScope', '$cookies', 'UserService', function($http, $rootScope, $cookies, UserService) {
     $rootScope.user = {};
 
@@ -25,7 +26,19 @@ var playzoneApp = angular.module('playzoneApp', [
             }
         });
     }
-}]);
+}]).config(['$translateProvider',
+        function ($translateProvider) {
+            // configures staticFilesLoader
+            $translateProvider.useStaticFilesLoader({
+                prefix: 'translations/',
+                suffix: '.json'
+            });
+            // load 'en' table on startup
+            $translateProvider.preferredLanguage('en');
+            // remember language
+            $translateProvider.useLocalStorage();
+        }]
+);
 
 playzoneApp.config(['$routeProvider',
     function($routeProvider) {

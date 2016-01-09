@@ -8,95 +8,101 @@ var playzoneControllers = angular.module('playzoneControllers', []);
 playzoneControllers.controller('TopMenuCtrl', function ($scope) {
     $scope.menu = [
         {
-            "label": "Партии",
+            "label": "Games",
             "url": "/games/",
             "menu": [
                 {
-                    "label": "Мои партии",
+                    "label": "My games",
                     "url": "/games/"
                 },
                 {
-                    "label": "Все партии",
+                    "label": "All games",
                     "url": "/games/personal/"
                 },
                 {
-                    "label": "TOP 10 партий",
+                    "label": "TOP 10 games",
                     "url": "/games/personal/?filter_button=OK&top=10"
                 }
             ]
         },
         {
-            "label": "Турниры",
+            "label": "Tournaments",
             "url": "/tournaments/",
             "menu": [
                 {
-                    "label": "Личные",
+                    "label": "Personal",
                     "url": "/tournaments/"
                 },
                 {
-                    "label": "Турниры вызова",
+                    "label": "Call tournaments",
                     "url": "/tournaments/call/"
                 },
                 {
-                    "label": "Особые",
+                    "label": "Special",
                     "url": "/tournaments/prerecord/"
                 },
                 {
-                    "label": "Топ турниры",
+                    "label": "Top tournaments",
                     "url": "/tournaments/top/"
                 },
                 {
-                    "label": "Командные",
+                    "label": "Team",
                     "url": "/tournaments/team/"
                 },
                 {
-                    "label": "По записи",
+                    "label": "By record",
                     "url": "/tournaments/prerecord/"
                 },
                 {
-                    "label": "Архив",
+                    "label": "Archive",
                     "url": "/tournaments/archive/"
                 }
             ]
         },
         {
-            "label": "Игроки",
+            "label": "Players",
             "url": "/players/list/",
             "menu": [
                 {
-                    "label": "Рейтинг-лист",
+                    "label": "Rating-list",
                     "url": "/players/list/"
                 },
                 {
-                    "label": "Найти игрока",
+                    "label": "Search player",
                     "url": "/players/search/"
                 },
                 {
-                    "label": "Команды",
+                    "label": "Teams",
                     "url": "/team/"
                 }
             ]
         },
         {
-            "label": "Общение (+0)", // TODO: counter of messages
+            "label": "Communication", // TODO: counter of messages
             "url": "/team/chat/",
             "menu": [
                 {
-                    "label": "Общий форум",
+                    "label": "Common forum",
                     "url": "http://immortalchess.net/forum/forumdisplay.php?f=85"
                 },
                 {
-                    "label": "Командный чат (+0)", // TODO: counter of messages
+                    "label": "Team chat", // TODO: counter of messages
                     "url": "/team/chat/"
                 },
                 {
-                    "label": "Задать вопрос",
+                    "label": "Ask question",
                     "url": "http://immortalchess.net/forum/private.php?do=newpm&u=87"
                 }
             ]
         }
     ];
 });
+
+playzoneControllers.controller('LanguageCtrl', ['$translate', '$scope', function ($translate, $scope) {
+    $scope.changeLanguage = function (langKey) {
+        $translate.use(langKey);
+    };
+}]);
 
 playzoneControllers.controller('TopRegisterCtrl', function ($scope, $rootScope, $cookies) {
     $scope.logout = function() {
@@ -109,12 +115,12 @@ playzoneControllers.controller('TopRegisterCtrl', function ($scope, $rootScope, 
 playzoneControllers.controller('HomeCtrl', function ($scope) {
     $scope.isEnableYoutubeGuide = false;
     $scope.mainPossibilities = [
-        'Игра один на один',
-        'Игра в личных турнирах',
-        'Игра в командных турнирах',
-        'Различные игровые контроли времени',
-        'Подсчет рейтинга и продвижение по классам',
-        'Отпускное время'
+        'The personal game',
+        'The personal tournaments',
+        'The team tournaments',
+        'Miscellaneous time controls',
+        'Rating calculations and class promotions',
+        'The rest time'
     ];
 });
 

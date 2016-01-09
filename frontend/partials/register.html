@@ -1,49 +1,49 @@
-<h1>Регистрация</h1>
+<h1>{{ 'Registration' | translate }}</h1>
 
 <table class="register inner" style="display: table;">
     <tr>
         <td>
-            Введите свой e-mail:
+            {{ 'Enter e-mail' | translate }}:
         </td>
         <td>
             <input type="text" name="email" autocomplete="off" ng-model="user.email" />
         </td>
         <td class="error">
-            {{errors.email}}
+            {{errors.email | translate}}
         </td>
     </tr>
     <tr>
         <td>
-            Введите свой логин:
+            {{ 'Enter login' | translate }}:
         </td>
         <td>
             <input type="text" name="login" autocomplete="off" ng-model="user.login" />
         </td>
         <td class="error">
-            {{errors.login}}
+            {{errors.login | translate}}
         </td>
     </tr>
     <tr>
         <td>
-            Пароль:
+            {{ 'Password' | translate }}:
         </td>
         <td>
             <input type="password" name="password" autocomplete="off" ng-model="user.password" />
         </td>
         <td class="error">
-            {{errors.password}}
+            {{errors.password | translate}}
         </td>
     </tr>
     <tr>
         <td>
-            Пароль (еще раз):
+            {{ 'Repeat password' | translate }}:
         </td>
         <td>
             <input type="password" name="password_repeat" autocomplete="off" ng-model="user.password_repeat" />
         </td>
         <td class="error">
-            {{errors.password_repeat}}
+            {{errors.password_repeat | translate}}
         </td>
     </tr>
 </table>
-<input class="button" type="submit" name="postback" value="Зарегистрироваться" ng-click="register()" />
+<input class="button" type="submit" name="postback" value="{{ 'Send' | translate }}" ng-click="register()" />

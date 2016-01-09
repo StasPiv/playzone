@@ -11,6 +11,18 @@
     "jquery": "~2.1.1",
     "bootstrap": "~3.1.1",
     "angular-route": "1.4.x",
-    "angular-websocket": "~1.0.14"
+    "angular-websocket": "~1.0.14",
+    "angular-cookies": "master",
+    "angular-translate": "master",
+    "angular-translate-loader-url": "master",
+    "angular-translate-loader-static-files": "master",
+    "angular-translate-storage-local": "master",
+    "angular-translate-storage-cookie": "master"
+  },
+  "resolutions": {
+    "angular": "1.4.8",
+    "angular-translate": "~2.8.1",
+    "angular-translate-storage-cookie": "~2.8.1",
+    "angular-cookies": ">=1.2.26 <=1.5"
   }
 }

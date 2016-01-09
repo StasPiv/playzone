@@ -7,6 +7,11 @@
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-translate/angular-translate.js"></script>
+    <script src="bower_components/angular-translate-loader-url/angular-translate-loader-url.js"></script>
+    <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+    <script src="bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+    <script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
     <script src="js/app.js" type="text/javascript"></script>
     <script src="js/controllers.js" type="text/javascript"></script>
     <script src="js/services.js" type="text/javascript"></script>
@@ -22,29 +27,32 @@
             <div class="menu" ng-controller="TopMenuCtrl">
                 <ul>
                     <li class="button" ng-repeat="item in menu">
-                        <a href="{{item.url}}">{{item.label}}</a>
+                        <a href="{{item.url}}">{{item.label | translate}}</a>
                         <ul>
                             <li class="button" ng-repeat="subItem in item.menu">
-                                <a href="{{subItem.url}}">{{subItem.label}}</a>
+                                <a href="{{subItem.url}}">{{subItem.label | translate}}</a>
                             </li>
                         </ul>
                     </li>
                 </ul>
             </div>
+            <div class="language" ng-controller="LanguageCtrl">
+                <a ng-click="changeLanguage('en')" href="/#/">en</a> | <a ng-click="changeLanguage('ru')" href="/#/">ru</a>
+            </div>
             <div class="register" ng-controller="TopRegisterCtrl">
                 <div class="for-unauthorized" ng-if="!$root.user.isAuth">
-                    <a href="/#/register">Регистрация</a> / <span class="enter"><a href="/#/auth">Вход</a></span>
+                    <a href="/#/register">{{ 'Sign Up' | translate }}</a> / <span class="enter"><a href="/#/auth">{{ 'Sign In' | translate }}</a></span>
                 </div>
                 <div class="for-authorized" ng-if="$root.user.isAuth">
-                    <span>Логин: <b><a href="/#/profile">{{$root.user.login}}</a></b></span>.
-                    <span class="rating">Рейтинг: <b>{{$root.user.rating}}</b>. Класс: <b>{{$root.user.class}}</b></span>.
+                    <span>{{ 'Login' | translate }}: <b><a href="/#/profile">{{$root.user.login}}</a></b></span>.
+                    <span class="rating">{{ 'Rating' | translate }}: <b>{{$root.user.rating}}</b>. {{ 'Class' | translate }}: <b>{{$root.user.class}}</b></span>.
                     <br/>
                     <span style="float:right;">
                         <span style="color:red;">
-                            <a target="_blank" href="http://immortalchess.net/forum/private.php?do=newpm&u=87"><strong>Задать вопрос</strong></a>
+                            <a target="_blank" href="http://immortalchess.net/forum/private.php?do=newpm&u=87"><strong>{{ 'Ask question' | translate }}</strong></a>
                         </span> |
-                        <span><a href="/#/profile"><strong>Настройки</strong></a></span> |
-                        <span class="enter"><a href="/#/logout" ng-click="logout()">Выход</a></span>
+                        <span><a href="/#/profile"><strong>{{ 'Settings' | translate }}</strong></a></span> |
+                        <span class="enter"><a href="/#/logout" ng-click="logout()">{{ 'Logout' | translate }}</a></span>
                     </span>
                 </div>
             </div>

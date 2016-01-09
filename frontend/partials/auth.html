@@ -1,39 +1,39 @@
-<h1>Авторизация</h1>
+<h1>{{ 'Authorization' | translate }}</h1>
 <table class="register auth">
     <tbody>
     <tr>
         <td>
-            Логин:
+            {{ 'Login' | translate }}:
         </td>
         <td>
             <input type="text" name="login" autocomplete="off" ng-model="user.login">
         </td>
         <td class="error">
-            {{errors.login}}
+            {{ errors.login | translate }}
         </td>
     </tr>
     <tr>
         <td>
-            Пароль:
+            {{ 'Password' | translate }}:
         </td>
         <td>
             <input type="password" name="password" autocomplete="off" ng-model="user.password">
         </td>
         <td class="error">
-            {{errors.password}}
+            {{ errors.password | translate }}
         </td>
     </tr>
     <tr>
         <td>
-            <a href="/#/register/">Регистрация</a>
+            <a href="/#/register/">{{ 'Sign Up' | translate }}</a>
         </td>
         <td colspan="2">
-            <a href="/#/forgot/">Забыли пароль?</a>
+            <a href="/#/forgot/">{{ 'Forgot password?' | translate }}</a>
         </td>
     </tr>
     <tr>
         <td colspan="3">
-            <input class="button" value="Войти" type="submit" ng-click="auth()">
+            <input class="button" value="{{ 'Enter' | translate }}" type="submit" ng-click="auth()">
         </td>
     </tr>
     </tbody>

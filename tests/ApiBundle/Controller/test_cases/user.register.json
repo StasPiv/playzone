@@ -209,14 +209,6 @@
           "class" : "N"
         },
         "errorMessage":"Registration failed"
-      },
-      "session" : {
-        "current_user" : {
-          "login" : "UnitTestLogin",
-          "email" : "unittest@yandex.ru",
-          "rating" : 2200,
-          "class" : "N"
-        }
       }
     }
 }

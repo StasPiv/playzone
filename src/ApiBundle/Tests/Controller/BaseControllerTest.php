@@ -8,17 +8,16 @@
 
 namespace ApiBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;;
 
 class BaseControllerTest extends WebTestCase
 {
     /**
      * @param string $uri
-     * @param Client $client
      */
-    protected function testFromJson($uri, Client $client)
+    protected function testFromJson($uri)
     {
+        $client = static::createClient();
         $action = str_replace('/', '.', $uri);
 
         $directoryName = $client->getContainer()->get('kernel')->getRootDir() . '/../tests/ApiBundle/Controller/test_cases/';
@@ -30,10 +29,6 @@ class BaseControllerTest extends WebTestCase
         foreach ($testData as $caseName => $data) {
             $request = isset($data['request']) ? $data['request'] : [];
             $setSession = isset($data['set_session']) ? $data['set_session'] : [];
-
-            if (!empty($setSession)) {
-                $client = static::createClient();
-            }
 
             foreach ($setSession as $name => $value) {
                 $client->getContainer()->get("session")->set($name, $value);

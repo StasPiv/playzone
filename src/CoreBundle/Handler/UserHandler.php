@@ -43,7 +43,7 @@ class UserHandler implements UserProcessorInterface
      */
     public function processPostRegister(array $userData)
     {
-        $this->userService->setData($user = new User(), $userData);
+        $this->setData($user = new User(), $userData);
 
         $validatorResult = $this->container->get('validator')->validate($user);
         $errors = [];
@@ -83,6 +83,26 @@ class UserHandler implements UserProcessorInterface
     }
 
     /**
+     * @param User $user
+     * @param array $userData
+     */
+    private function setData(User $user, array $userData)
+    {
+        if (isset($userData['login'])) {
+            $user->setLogin($userData['login']);
+        }
+
+        if (isset($userData['email'])) {
+            $user->setEmail($userData['email']);
+        }
+
+        if (isset($userData['password'])) {
+            $user->setRawPassword($userData['password']);
+        }
+
+    }
+
+    /**
      * @param array $userData
      * @return array
      */
@@ -112,23 +132,7 @@ class UserHandler implements UserProcessorInterface
             throw new ProcessorException(self::AUTHORIZATION_FAILED, 403, $errors);
         }
 
-        $this->userService->setCurrentUser($user);
-
         return $user;
-    }
-
-    /**
-     * @return array
-     */
-    public function processGet()
-    {
-        $currentUser = $this->userService->getCurrentUser();
-
-        if (empty($currentUser)) {
-            throw new ProcessorException("Forbidden", 403);
-        }
-
-        return $currentUser;
     }
 
 }

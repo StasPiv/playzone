@@ -8,22 +8,15 @@
 
 namespace ApiBundle\Tests\Controller;
 
-use CoreBundle\Service\UserService;
-
 class UserControllerTest extends BaseControllerTest
 {
     public function testRegister()
     {
-        $this->testFromJson('user/register', static::createClient());
-    }
-
-    public function testGet()
-    {
-        $this->testFromJson('user', static::createClient());
+        $this->testFromJson('user/register');
     }
 
     public function testAuth()
     {
-        $this->testFromJson('user/auth', static::createClient());
+        $this->testFromJson('user/auth');
     }
 }

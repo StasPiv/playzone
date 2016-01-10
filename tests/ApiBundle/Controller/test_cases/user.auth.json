@@ -68,14 +68,6 @@
         "class" : "D"
       },
       "errorMessage":"Registration failed"
-    },
-    "session" : {
-      "current_user" : {
-        "login" : "TestLogin",
-        "email" : "test-login@yandex.ru",
-        "rating" : 2243,
-        "class" : "D"
-      }
     }
   }
 }

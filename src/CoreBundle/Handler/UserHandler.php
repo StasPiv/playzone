@@ -9,32 +9,38 @@
 namespace CoreBundle\Handler;
 
 use CoreBundle\Entity\User;
-use CoreBundle\Exception\ProcessorException;
+use CoreBundle\Exception\UserProcessorException;
 use CoreBundle\Processor\UserProcessorInterface;
+use CoreBundle\Repository\UserRepository;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Validator\ConstraintViolation;
+use Doctrine\ORM\EntityManager;
 
 class UserHandler implements UserProcessorInterface
 {
     use ContainerAwareTrait;
 
-    const AUTHORIZATION_FAILED = "Authorization failed";
-    const REGISTRATION_FAILED = "Registration failed";
+    /**
+     * @var EntityManager
+     */
+    private $manager;
 
     /**
-     * @var \CoreBundle\Service\UserService
+     * @var UserRepository
      */
-    private $userService;
+    private $repository;
 
     /**
      * UserHandler constructor.
      * @param Container $container
+     * @param EntityManager $manager
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, EntityManager $manager)
     {
         $this->setContainer($container);
-        $this->userService = $this->container->get("core.service.user");
+        $this->manager = $manager;
+        $this->repository = $this->manager->getRepository('CoreBundle:User');
     }
 
     /**
@@ -45,10 +51,9 @@ class UserHandler implements UserProcessorInterface
     {
         $this->setData($user = new User(), $userData);
 
-        $validatorResult = $this->container->get('validator')->validate($user);
         $errors = [];
 
-        foreach($validatorResult as $error) {
+        foreach($this->container->get('validator')->validate($user) as $error) {
             /** @var ConstraintViolation $error */
             switch ($error->getPropertyPath()) {
                 case 'rawPassword':
@@ -61,11 +66,11 @@ class UserHandler implements UserProcessorInterface
             $errors[$errorKey] = $error->getMessage();
         }
 
-        if ($this->userService->getUsers(['email' => $user->getEmail()])) {
+        if ($this->repository->findBy(['email' => $user->getEmail()])) {
             $errors['email'] = 'This email was already registered';
         }
 
-        if ($this->userService->getUsers(['login' => $user->getLogin()])) {
+        if ($this->repository->findBy(['login' => $user->getLogin()])) {
             $errors['login'] = 'This login was already registered';
         }
 
@@ -74,10 +79,44 @@ class UserHandler implements UserProcessorInterface
         }
 
         if (!empty($errors)) {
-            throw new ProcessorException(self::REGISTRATION_FAILED, 403, $errors);
+            throw new UserProcessorException("Registration failed", 403, $errors);
         }
 
-        $this->userService->saveUser($user);
+        $this->saveUser($user);
+
+        return $user;
+    }
+
+    /**
+     * @param array $userData
+     * @return array
+     */
+    public function processPostAuth(array $userData)
+    {
+        if (!isset($userData['login'])) {
+            $errors["login"] = "Enter login";
+            throw new UserProcessorException("Authorization failed", 403, $errors);
+        }
+
+        if (!isset($userData['password'])) {
+            $errors["password"] = "Enter password";
+            throw new UserProcessorException("Authorization failed", 403, $errors);
+        }
+
+        $users = $this->repository->findBy(['login' => $userData['login']]);
+
+        if (!$users) {
+            $errors["login"] = "The login is not found";
+            throw new UserProcessorException("Authorization failed", 403, $errors);
+        }
+
+        /** @var User $user */
+        $user = $users[0];
+
+        if ($user->getPassword() != md5($userData['password'])) {
+            $errors["password"] = "The password is not correct";
+            throw new UserProcessorException("Authorization failed", 403, $errors);
+        }
 
         return $user;
     }
@@ -99,40 +138,18 @@ class UserHandler implements UserProcessorInterface
         if (isset($userData['password'])) {
             $user->setRawPassword($userData['password']);
         }
-
     }
 
     /**
-     * @param array $userData
-     * @return array
+     * @param User $user
      */
-    public function processPostAuth(array $userData)
+    private function saveUser(User $user)
     {
-        if (!isset($userData['login'])) {
-            $errors["login"] = "Enter login";
-            throw new ProcessorException(self::AUTHORIZATION_FAILED, 403, $errors);
+        $user->setPassword(md5($user->getRawPassword()));
+        if ($this->container->get('kernel')->getEnvironment() != 'test') {
+            $this->manager->persist($user);
+            $this->manager->flush();
         }
-
-        if (!isset($userData['password'])) {
-            $errors["password"] = "Enter password";
-            throw new ProcessorException(self::AUTHORIZATION_FAILED, 403, $errors);
-        }
-
-        $users = $this->userService->getUsers(['login' => $userData['login']]);
-
-        if (!$users) {
-            $errors["login"] = "The login is not found";
-            throw new ProcessorException(self::AUTHORIZATION_FAILED, 403, $errors);
-        }
-
-        $user = $users[0];
-
-        if ($user->getPassword() != md5($userData['password'])) {
-            $errors["password"] = "The password is not correct";
-            throw new ProcessorException(self::AUTHORIZATION_FAILED, 403, $errors);
-        }
-
-        return $user;
     }
 
 }

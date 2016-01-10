@@ -1,7 +1,4 @@
 services:
     core.handler.user:
         class: CoreBundle\Handler\UserHandler
-        arguments: ['@service_container']
-    core.service.user:
-        class: CoreBundle\Service\UserService
         arguments: ['@service_container', '@doctrine.orm.entity_manager']

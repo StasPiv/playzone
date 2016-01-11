@@ -1,0 +1,22 @@
+[
+  {
+    "referenceName": "timecontrol-0",
+    "id": "1",
+    "name": "10/10no",
+    "begin": "10",
+    "increment": "10",
+    "moves": "10",
+    "timeLimit": "20",
+    "rest": "0"
+  },
+  {
+    "referenceName": "timecontrol-0",
+    "id": "2",
+    "name": "20/10no",
+    "begin": "20",
+    "increment": "20",
+    "moves": "10",
+    "timeLimit": "20",
+    "rest": "0"
+  }
+]

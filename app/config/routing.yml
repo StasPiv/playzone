@@ -1,5 +1,11 @@
-api:
+user_api:
     resource: "@ApiBundle/Controller/UserController.php"
+    type:     rest
+    prefix:   /
+    defaults: {_format: json}
+
+timecontrol_api:
+    resource: "@ApiBundle/Controller/TimecontrolController.php"
     type:     rest
     prefix:   /
     defaults: {_format: json}

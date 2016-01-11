@@ -206,6 +206,13 @@ class User
      */
     private $balance = 0;
 
+    /**
+     * @JMS\Expose
+     * @JMS\SerializedName("token")
+     * @JMS\Type("string")
+     */
+    private $token;
+
 
     /**
      * Get id
@@ -687,6 +694,22 @@ class User
     public function setRawPassword($rawPassword)
     {
         $this->rawPassword = $rawPassword;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param mixed $token
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
     }
 }
 

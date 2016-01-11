@@ -118,6 +118,8 @@ class UserHandler implements UserProcessorInterface
             throw new UserProcessorException("Authorization failed", 403, $errors);
         }
 
+        $user->setToken(md5($user->getLogin() . $user->getPassword()));
+
         return $user;
     }
 

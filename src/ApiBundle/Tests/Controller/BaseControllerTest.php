@@ -55,10 +55,18 @@ class BaseControllerTest extends WebTestCase
             }
 
             if (isset($expectedResponse['data'])) {
-                $this->assertEmpty(array_diff_assoc($expectedResponse['data'],
-                    $actualResponse['data']), $errorMessage);
-                $this->assertEmpty(array_diff_assoc($actualResponse['data'],
-                    $expectedResponse['data']), $errorMessage);
+                $expectedData = $expectedResponse['data'];
+                $actualData = $actualResponse['data'];
+
+                if (key($expectedData) !== 0) {
+                    $expectedData = [$expectedData];
+                    $actualData = [$actualData];
+                }
+
+                foreach ($expectedData as $key => $expectedChunk) {
+                    $this->assertEmpty(array_diff_assoc($expectedData[$key], $actualData[$key]), $errorMessage);
+                    $this->assertEmpty(array_diff_assoc($actualData[$key], $expectedData[$key]), $errorMessage);
+                }
             }
 
             if (isset($data['session'])) {

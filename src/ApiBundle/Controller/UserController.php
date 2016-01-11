@@ -8,7 +8,6 @@
 
 namespace ApiBundle\Controller;
 
-use CoreBundle\Exception\ProcessorException;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

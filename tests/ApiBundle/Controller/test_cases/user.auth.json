@@ -65,9 +65,9 @@
         "login" : "TestLogin",
         "email" : "test-login@yandex.ru",
         "rating" : 2243,
-        "class" : "D"
-      },
-      "errorMessage":"Registration failed"
+        "class" : "D",
+        "token" : "aba37b62d15cc5f8671fd3d1b034c354"
+      }
     }
   }
 }

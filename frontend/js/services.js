@@ -29,26 +29,26 @@ playzoneServices.factory('ApiService', function(EnvService) {
     var API_URL,
         registerUrl,
         authUrl,
-        getUserUrl;
+        getTimeControlsUrl;
 
     switch (EnvService.currentMode) {
         case EnvService.testMode:
             API_URL = 'http://playzone-test-api.lc';
             registerUrl = API_URL + '/?method=register';
             authUrl = API_URL + '/?method=auth';
-            getUserUrl = API_URL + '?method=getuser';
+            getTimeControlsUrl = API_URL + '/?method=gettimecontrols';
             break;
         case EnvService.prodMode:
             API_URL = 'http://api.playzone-angular.lc/app_dev.php/';
             registerUrl = API_URL + 'user/register';
             authUrl = API_URL + 'user/auth';
-            getUserUrl = API_URL + 'user';
+            getTimeControlsUrl = API_URL + 'timecontrols';
     }
 
     return {
         register : registerUrl,
         auth : authUrl,
-        getUser : getUserUrl
+        get_time_controls : getTimeControlsUrl
     };
 });
 
@@ -113,6 +113,20 @@ playzoneServices.factory('UserService', function($http, $rootScope, $cookies, Ap
             .error(function(data) {
                 onError(data);
             });
+        }
+    };
+});
+
+playzoneServices.factory('TimeControlService', function($http, $rootScope, ApiService) {
+    return {
+        initTimeControls: function() {
+            $http.get(ApiService.get_time_controls)
+                .then(
+                    function(response)
+                    {
+                        $rootScope.timecontrols = response.data.data;
+                    }
+                );
         }
     };
 });

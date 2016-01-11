@@ -9,7 +9,7 @@ var playzoneApp = angular.module('playzoneApp', [
     'playzoneControllers',
     'playzoneServices',
     'pascalprecht.translate'
-]).run(['$http', '$rootScope', '$cookies', 'UserService', function($http, $rootScope, $cookies, UserService) {
+]).run(['$http', '$rootScope', '$cookies', 'UserService', 'TimeControlService', function($http, $rootScope, $cookies, UserService, TimeControlService) {
     $rootScope.user = {};
 
     if ($cookies.get("user_login") && $cookies.get("user_password")) {
@@ -60,6 +60,10 @@ playzoneApp.config(['$routeProvider',
                 resolve: {
                     factory: checkIfUnauthorized
                 }
+            }).
+            when('/games', {
+                templateUrl: 'partials/games.html',
+                controller: 'GamesCtrl'
             }).
             otherwise({
                 redirectTo: '/'

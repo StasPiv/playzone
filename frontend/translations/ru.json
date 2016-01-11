@@ -60,5 +60,14 @@
   "This email was already registered": "E-mail уже зарегистрирован",
   "This login was already registered": "Логин уже зарегистрирован",
   "The password must contain at least 6 symbols": "Минимальная длина пароля - 6 символов",
-  "The password must not contain greater than 15 symbols": "Максимальная длина пароля - 15 символов"
+  "The password must not contain greater than 15 symbols": "Максимальная длина пароля - 15 символов",
+  "Personal calls do not affect the rating": "Личные вызовы не влияют на рейтинг",
+  "Player": "Игрок",
+  "Color": "Цвет",
+  "Time control": "Контроль времени",
+  "The game count": "Количество партий",
+  "Random": "Случайный",
+  "White": "Белый",
+  "Black": "Черный",
+  "Call on the game": "Вызвать на игру"
 }

@@ -1,0 +1,164 @@
+<div ng-controller="CallCtrl">
+    <div class="call_form filter">
+        <table>
+            <tbody>
+            <tr>
+                <td style="color:red;" colspan="2">{{ 'Personal calls do not affect the rating' | translate }}</td>
+            </tr>
+            <tr>
+                <td><label for="login_enemy">{{ 'Player' | translate }}:</label></td>
+                <td>
+                    <input type="text" id="login_enemy" ng-model="call.login_enemy">
+                </td>
+            </tr>
+            <tr>
+                <td><label for="color">{{ 'Color' | translate }}:</label></td>
+                <td>
+                    <select
+                            id="color"
+                            data-ng-model="call.color"
+                            ng-options="color.name|translate for color in colors track by color.id">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="timecontrol">{{ 'Time control' | translate }}:</label></td>
+                <td>
+                    <select
+                            id="timecontrol"
+                            data-ng-model="call.timecontrol"
+                            ng-options="timecontrol.name for timecontrol in $root.timecontrols track by timecontrol.id">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="count">{{ 'The game count'| translate }}:</label></td>
+                <td>
+                    <input type="text" id="count" value="1" size="2" ng-model="call.count" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td>
+                    <input class="button" value="OK" type="submit">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="apply-call open-popup" data-open-popup=".call_form"><a>{{ 'Call on the game' | translate }}</a></div>
+</div>
+<h1>Отправленные вызовы</h1>
+<table class="games">
+    <tr>
+        <th>№</th>
+        <th>Контроль времени</th>
+        <th>Белые</th>
+        <th>Черные</th>
+        <th width="20%">&nbsp;</th>
+    </tr>
+    <tr ng-repeat="game in games.call_from_me">
+        <td>
+            <a href="">{{ game.id }}</a>
+        </td>
+        <td>
+            <a href="">{{ timecontrols[game.id_timecontrol] }}</a>
+        </td>
+        <td>
+            <a href="/#/profile/{{ game.id_white }}">{{ users[game.id_white] }}</a>
+        </td>
+        <td>
+            <a href="/#/profile/{{ game.id_black }}">{{ users[game.id_black] }}</a>
+        </td>
+        <td>
+            <a href="/#/game/remove/{{ game.id }}" class="button remove">Удалить</a>
+        </td>
+    </tr>
+</table>
+<h1>Вас вызвали</h1>
+<table class="games">
+    <tr>
+        <th>№</th>
+        <th>Контроль времени</th>
+        <th>Белые</th>
+        <th>Черные</th>
+        <th width="20%">&nbsp;</th>
+    </tr>
+    <tr ng-repeat="game in games.call_to_me">
+        <td>
+            <a href="">{{ game.id }}</a>
+        </td>
+        <td>
+            <a href="">{{ timecontrols[game.id_timecontrol] }}</a>
+        </td>
+        <td>
+            <a href="/#/profile/{{ game.id_white }}">{{ users[game.id_white] }}</a>
+        </td>
+        <td>
+            <a href="/#/profile/{{ game.id_black }}">{{ users[game.id_black] }}</a>
+        </td>
+        <td>
+            <a href="/#/game/accept/{{ game.id }}" class="button accept">Принять</a>&nbsp;&nbsp;<a href="/game/cancel/{{ game.id }}" class="button remove">Отклонить</a>
+        </td>
+    </tr>
+</table>
+<h1>Текущие партии ({{ games.current.length }})</h1>
+<table class="games current">
+    <thead>
+    <tr>
+        <th>№</th>
+        <th>КВ</th>
+        <th>Турнир</th>
+        <th>Соперник</th>
+        <th>Цвет</th>
+        <th>Время ваше</th>
+        <th>Время соперника</th>
+        <th>Прошло</th>
+        <th width="15%">Действие</th>
+        <th>Ход</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="game in games.current">
+        <td>
+            <a href="/play/{{ game.id_game }}">{{ game.id_game }}</a>
+        </td>
+        <td>
+            <a href="">{{ timecontrols[game.id_timecontrol] }}</a>
+        </td>
+        <td>
+            <a ng-show="game.id_tournament" href="/tournaments/{{ game.id_tournament }}/show/">#{{ game.id_tournament }}</a>
+            <a ng-show="!game.id_tournament" href="/play/{{ game.id_game }}">матч</a>
+        </td>
+        <td>
+            <a ng-show="game.opponent_online" class="online_player" title="Игрок онлайн" href="/profile/{{ game.id_opponent }}">{{ users[game.id_opponent] }}</a>
+            <a ng-show="!game.opponent_online" href="/profile/{{ game.id_opponent }}">{{ users[game.id_opponent] }}</a>
+        </td>
+        <td>
+            <div class="color_pic" style="background-color: {{ game.my_color }};"></div>
+        </td>
+        <td>
+            <span style="background-color: <?=$arGame['color_mine']?>;<?if($arGame['color_mine'] == 'yellow'):?>color:black;<?endif;?>">{{ game.rest_mine }}</span>
+        </td>
+        <td>
+            <span style="background-color: <?=$arGame['color_opponent']?>;<?if($arGame['color_opponent'] == 'yellow'):?>color:black;<?endif;?>">{{ game.rest_opponent }}</span>
+        </td>
+        <td>
+            {{ game.diff }}
+        </td>
+        <td>
+            <span style="display: none">1</span><a ng-show="game.is_my_move" href="/play/{{ game.id_game }}/show/" class="button domove">Сделать ход</a>
+            <span style="display: none">2</span><a ng-show="!game.is_my_move" href="/play/{{ game.id_game }}/show/" class="button">Посмотреть</a>
+        </td>
+        <td class="last_move" title="{{ game.time_last_move }}">
+            {{ game.last_move }}
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="download_games">
+    <a class="button accept" href="/games/personal/?pgn_download=1&rate=1&login_white=1&login_black=&ignore_color=on&status=play&result_white=x&filter_button=OK">Скачать свои текущие партии в PGN</a>
+</div>
+<p>Также Вы можете выбрать стандартный турнир для записи <a href="/tournaments/">здесь</a></p>

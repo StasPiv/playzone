@@ -3,83 +3,118 @@
  */
 'use strict';
 
-var playzoneControllers = angular.module('playzoneControllers', []);
+var playzoneControllers = angular.module('playzoneControllers', [])
+.directive('dropDownMenu', function () {
+    return {
+        restrict: 'C',
+        link: function(scope, element) {
+            element.hover(
+                function()
+                {
+                    $(this).find('.sub-menu').fadeIn(200);
+                },
+                function()
+                {
+                    $(this).find('.sub-menu').fadeOut(200);
+                }
+            );
+        }
+    }
+})
+.directive('openPopup', function () {
+    var overlay = $('.footer .overlay');
+    return {
+        restrict: 'C',
+        link: function(scope, element) {
+            element.on('click', function(){
+                var popupSelector = $(this).data('open-popup');
+                overlay.show();
+                $(popupSelector).show();
+                overlay.on('click', function() {
+                    $(this).hide();
+                    $(popupSelector).hide();
+                });
+                return false;
+            });
+        }
+    }
+});
 
 playzoneControllers.controller('TopMenuCtrl', function ($scope) {
     $scope.menu = [
         {
             "label": "Games",
-            "url": "/games/",
+            "url": "/#/games/",
             "menu": [
                 {
                     "label": "My games",
-                    "url": "/games/"
+                    "url": "/#/games/"
                 },
                 {
                     "label": "All games",
-                    "url": "/games/personal/"
+                    "url": "/#/games/personal/"
                 },
                 {
                     "label": "TOP 10 games",
-                    "url": "/games/personal/?filter_button=OK&top=10"
+                    "url": "/#/games/personal/?filter_button=OK&top=10"
                 }
             ]
         },
         {
             "label": "Tournaments",
-            "url": "/tournaments/",
+            "url": "/#/tournaments/",
             "menu": [
                 {
                     "label": "Personal",
-                    "url": "/tournaments/"
+                    "url": "/#/tournaments/"
                 },
                 {
                     "label": "Call tournaments",
-                    "url": "/tournaments/call/"
+                    "url": "/#/tournaments/call/"
                 },
                 {
                     "label": "Special",
-                    "url": "/tournaments/prerecord/"
+                    "url": "/#/tournaments/prerecord/"
                 },
                 {
                     "label": "Top tournaments",
-                    "url": "/tournaments/top/"
+                    "url": "/#/tournaments/top/"
                 },
                 {
                     "label": "Team",
-                    "url": "/tournaments/team/"
+                    "url": "/#/tournaments/team/"
                 },
                 {
                     "label": "By record",
-                    "url": "/tournaments/prerecord/"
+                    "url": "/#/tournaments/prerecord/"
                 },
                 {
                     "label": "Archive",
-                    "url": "/tournaments/archive/"
+                    "url": "/#/tournaments/archive/"
                 }
             ]
         },
         {
             "label": "Players",
-            "url": "/players/list/",
+            "url": "/#/players/list/",
             "menu": [
                 {
                     "label": "Rating-list",
-                    "url": "/players/list/"
+                    "url": "/#/players/list/"
                 },
                 {
                     "label": "Search player",
-                    "url": "/players/search/"
+                    "url": "/#/players/search/"
                 },
                 {
                     "label": "Teams",
-                    "url": "/team/"
+                    "url": "/#/team/"
                 }
             ]
         },
         {
             "label": "Communication", // TODO: counter of messages
-            "url": "/team/chat/",
+            "url": "/#/team/chat/",
             "menu": [
                 {
                     "label": "Common forum",
@@ -87,7 +122,7 @@ playzoneControllers.controller('TopMenuCtrl', function ($scope) {
                 },
                 {
                     "label": "Team chat", // TODO: counter of messages
-                    "url": "/team/chat/"
+                    "url": "/#/team/chat/"
                 },
                 {
                     "label": "Ask question",
@@ -158,4 +193,106 @@ playzoneControllers.controller('AuthCtrl', function ($scope, $rootScope, $http, 
             }
         });
     }
+});
+
+playzoneControllers.controller('GamesCtrl', function ($scope, TimeControlService) {
+    TimeControlService.initTimeControls();
+    $scope.timecontrols = {
+        "1" : "5+1/10",
+        "2" : "10+1/30"
+    };
+
+    $scope.users = {
+        "1": "Stas",
+        "2": "Petro",
+        "3": "Dmytro",
+        "4": "Vasyl"
+    };
+
+    $scope.games = {
+        call_from_me: [
+            {
+                "id": 1,
+                "id_timecontrol": 1,
+                "id_white": 1,
+                "id_black": 2
+            },
+            {
+                "id": 1,
+                "id_timecontrol": 2,
+                "id_white": 1,
+                "id_black": 3
+            },
+            {
+                "id": 1,
+                "id_timecontrol": 1,
+                "id_white": 1,
+                "id_black": 4
+            }
+        ],
+        call_to_me: [
+            {
+                "id": 1,
+                "id_timecontrol": 1,
+                "id_white": 1,
+                "id_black": 2
+            },
+            {
+                "id": 1,
+                "id_timecontrol": 1,
+                "id_white": 1,
+                "id_black": 3
+            },
+            {
+                "id": 1,
+                "id_timecontrol": 1,
+                "id_white": 1,
+                "id_black": 4
+            }
+        ],
+        current: [
+            {
+                "id_game": 1,
+                "id": 1,
+                "id_timecontrol": 1,
+                "id_tournament": 1,
+                "id_white": 1,
+                "id_black": 2,
+                "opponent_online": true,
+                "id_opponent": 1,
+                "my_color": "white",
+                "rest_mine": "01:00:32",
+                "rest_opponent": "01:00:32",
+                "diff": "01:00:32",
+                "is_my_move": true,
+                "time_last_move": "01:00:32",
+                "last_move": "..Qf7-g8"
+            },
+            {
+                "id_game": 2,
+                "id": 1,
+                "id_timecontrol": 1,
+                "id_tournament": 1,
+                "id_white": 1,
+                "id_black": 2,
+                "opponent_online": false,
+                "id_opponent": 1,
+                "my_color": "black",
+                "rest_mine": "01:00:32",
+                "rest_opponent": "01:00:32",
+                "diff": "01:00:32",
+                "is_my_move": false,
+                "time_last_move": "01:00:32",
+                "last_move": "..Qf7-h1"
+            }
+        ]
+    };
+});
+
+playzoneControllers.controller('CallCtrl', function ($scope) {
+    $scope.colors = [
+        {id: '0', name: 'Random'},
+        {id: '1', name: 'White'},
+        {id: '2', name: 'Black'}
+    ];
 });

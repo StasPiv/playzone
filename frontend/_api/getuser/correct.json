@@ -1,9 +1,0 @@
-{
-  "status" : 200,
-  "data" : {
-    "login" : "UnitTestLogin",
-    "email" : "unittest@yandex.ru",
-    "rating" : 2200,
-    "class" : "N"
-  }
-}

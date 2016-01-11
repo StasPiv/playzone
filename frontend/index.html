@@ -29,7 +29,7 @@
             <div class="menu" ng-controller="TopMenuCtrl">
                 <ul>
                     <li class="button drop-down-menu" ng-repeat="item in menu">
-                        <a>{{item.label | translate}}</a>
+                        <a href="{{item.url}}">{{item.label | translate}}</a>
                         <ul class="sub-menu">
                             <li class="button" ng-repeat="subItem in item.menu">
                                 <a href="{{subItem.url}}">{{subItem.label | translate}}</a>

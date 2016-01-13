@@ -14,8 +14,9 @@ class BaseControllerTest extends WebTestCase
 {
     /**
      * @param string $uri
+     * @param array $ignoreKeys
      */
-    protected function testFromJson($uri)
+    protected function testFromJson($uri, $ignoreKeys = ['id'])
     {
         $client = static::createClient();
         $action = str_replace('/', '.', $uri);
@@ -64,6 +65,14 @@ class BaseControllerTest extends WebTestCase
                 }
 
                 foreach ($expectedData as $key => $expectedChunk) {
+                    foreach ($ignoreKeys as $ignoreKey) {
+                        if (isset($expectedData[$key][$ignoreKey])) {
+                            unset($expectedData[$key][$ignoreKey]);
+                        }
+                        if (isset($actualData[$key][$ignoreKey])) {
+                            unset($actualData[$key][$ignoreKey]);
+                        }
+                    }
                     $this->assertEmpty(array_diff_assoc($expectedData[$key], $actualData[$key]), $errorMessage);
                     $this->assertEmpty(array_diff_assoc($actualData[$key], $expectedData[$key]), $errorMessage);
                 }

@@ -22,4 +22,9 @@ interface UserProcessorInterface extends ProcessorInterface
      * @return array
      */
     public function processPostAuth(array $userData);
+
+    /**
+     * @return array
+     */
+    public function processGetList();
 }

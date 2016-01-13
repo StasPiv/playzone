@@ -30,6 +30,11 @@ class UserController extends BaseController
         return $this->process($request);
     }
 
+    public function getListAction(Request $request)
+    {
+        return $this->process($request);
+    }
+
     /**
      * @return UserProcessorInterface
      */

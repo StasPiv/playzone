@@ -124,6 +124,14 @@ class UserHandler implements UserProcessorInterface
     }
 
     /**
+     * @return array
+     */
+    public function processGetList()
+    {
+        return $this->repository->findAll();
+    }
+
+    /**
      * @param User $user
      * @param array $userData
      */

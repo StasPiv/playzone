@@ -1,0 +1,22 @@
+{
+  "users_list" : {
+    "method" : "GET",
+    "response" : {
+      "status" : 200,
+      "data" : [
+        {
+          "login" : "Stas",
+          "email" : "piv1986@yandex.ru",
+          "rating" : 2200,
+          "class" : "N"
+        },
+        {
+          "login" : "TestLogin",
+          "email" : "test-login@yandex.ru",
+          "rating" : 2243,
+          "class" : "D"
+        }
+      ]
+    }
+  }
+}

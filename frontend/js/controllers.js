@@ -195,19 +195,20 @@ playzoneControllers.controller('AuthCtrl', function ($scope, $rootScope, $http, 
     }
 });
 
-playzoneControllers.controller('GamesCtrl', function ($scope, TimeControlService) {
-    TimeControlService.initTimeControls();
-    $scope.timecontrols = {
-        "1" : "5+1/10",
-        "2" : "10+1/30"
-    };
+playzoneControllers.controller('GamesCtrl', function ($scope, TimeControlService, UserService) {
+    TimeControlService.initTimeControls($scope);
 
-    $scope.users = {
-        "1": "Stas",
-        "2": "Petro",
-        "3": "Dmytro",
-        "4": "Vasyl"
-    };
+    UserService.initUsers(
+        {
+            success: function (data) {
+                $scope.users = data.data;
+            },
+            error: function (data) {
+
+            }
+        },
+        $scope
+    );
 
     $scope.games = {
         call_from_me: [

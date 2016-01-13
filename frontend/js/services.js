@@ -29,7 +29,8 @@ playzoneServices.factory('ApiService', function(EnvService) {
     var API_URL,
         registerUrl,
         authUrl,
-        getTimeControlsUrl;
+        getTimeControlsUrl,
+        getUsersUrl;
 
     switch (EnvService.currentMode) {
         case EnvService.testMode:
@@ -37,18 +38,21 @@ playzoneServices.factory('ApiService', function(EnvService) {
             registerUrl = API_URL + '/?method=register';
             authUrl = API_URL + '/?method=auth';
             getTimeControlsUrl = API_URL + '/?method=gettimecontrols';
+            getUsersUrl = API_URL + '/?method=getusers';
             break;
         case EnvService.prodMode:
             API_URL = 'http://api.playzone-angular.lc/app_dev.php/';
             registerUrl = API_URL + 'user/register';
             authUrl = API_URL + 'user/auth';
             getTimeControlsUrl = API_URL + 'timecontrols';
+            getUsersUrl = API_URL + 'user/list';
     }
 
     return {
         register : registerUrl,
         auth : authUrl,
-        get_time_controls : getTimeControlsUrl
+        get_time_controls : getTimeControlsUrl,
+        get_users : getUsersUrl
     };
 });
 
@@ -100,14 +104,21 @@ playzoneServices.factory('UserService', function($http, $rootScope, $cookies, Ap
                 onError(data);
             });
         },
-        getUser : function(params) {
+        initUsers : function(params, $scope) {
             var onSuccess = params.success;
             var onError = params.error;
             $http({
                 method  : 'GET',
-                url     : ApiService.getUser
+                url     : ApiService.get_users
             })
             .success(function(data) {
+                $scope.users = data.data;
+                $scope.usersHashMap = [];
+
+                angular.forEach($scope.users, function(value, key) {
+                    $scope.usersHashMap[value.id] = value.login;
+                });
+
                 onSuccess(data);
             })
             .error(function(data) {
@@ -117,14 +128,20 @@ playzoneServices.factory('UserService', function($http, $rootScope, $cookies, Ap
     };
 });
 
-playzoneServices.factory('TimeControlService', function($http, $rootScope, ApiService) {
+playzoneServices.factory('TimeControlService', function($http, ApiService) {
     return {
-        initTimeControls: function() {
+        initTimeControls: function($scope) {
             $http.get(ApiService.get_time_controls)
                 .then(
                     function(response)
                     {
-                        $rootScope.timecontrols = response.data.data;
+                        $scope.timecontrols = response.data.data;
+
+                        $scope.timecontrolsHashMap = [];
+
+                        angular.forEach($scope.timecontrols, function(value, key) {
+                            $scope.timecontrolsHashMap[value.id] = value.name;
+                        });
                     }
                 );
         }

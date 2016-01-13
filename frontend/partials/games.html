@@ -27,7 +27,7 @@
                     <select
                             id="timecontrol"
                             data-ng-model="call.timecontrol"
-                            ng-options="timecontrol.name for timecontrol in $root.timecontrols track by timecontrol.id">
+                            ng-options="timecontrol.name for timecontrol in timecontrols track by timecontrol.id">
                     </select>
                 </td>
             </tr>
@@ -64,13 +64,13 @@
             <a href="">{{ game.id }}</a>
         </td>
         <td>
-            <a href="">{{ timecontrols[game.id_timecontrol] }}</a>
+            <a href="">{{ timecontrolsHashMap[game.id_timecontrol] }}</a>
         </td>
         <td>
-            <a href="/#/profile/{{ game.id_white }}">{{ users[game.id_white] }}</a>
+            <a href="/#/profile/{{ game.id_white }}">{{ usersHashMap[game.id_white] }}</a>
         </td>
         <td>
-            <a href="/#/profile/{{ game.id_black }}">{{ users[game.id_black] }}</a>
+            <a href="/#/profile/{{ game.id_black }}">{{ usersHashMap[game.id_black] }}</a>
         </td>
         <td>
             <a href="/#/game/remove/{{ game.id }}" class="button remove">Удалить</a>
@@ -91,13 +91,13 @@
             <a href="">{{ game.id }}</a>
         </td>
         <td>
-            <a href="">{{ timecontrols[game.id_timecontrol] }}</a>
+            <a href="">{{ timecontrolsHashMap[game.id_timecontrol] }}</a>
         </td>
         <td>
-            <a href="/#/profile/{{ game.id_white }}">{{ users[game.id_white] }}</a>
+            <a href="/#/profile/{{ game.id_white }}">{{ usersHashMap[game.id_white] }}</a>
         </td>
         <td>
-            <a href="/#/profile/{{ game.id_black }}">{{ users[game.id_black] }}</a>
+            <a href="/#/profile/{{ game.id_black }}">{{ usersHashMap[game.id_black] }}</a>
         </td>
         <td>
             <a href="/#/game/accept/{{ game.id }}" class="button accept">Принять</a>&nbsp;&nbsp;<a href="/game/cancel/{{ game.id }}" class="button remove">Отклонить</a>
@@ -126,15 +126,15 @@
             <a href="/play/{{ game.id_game }}">{{ game.id_game }}</a>
         </td>
         <td>
-            <a href="">{{ timecontrols[game.id_timecontrol] }}</a>
+            <a href="">{{ timecontrolsHashMap[game.id_timecontrol] }}</a>
         </td>
         <td>
             <a ng-show="game.id_tournament" href="/tournaments/{{ game.id_tournament }}/show/">#{{ game.id_tournament }}</a>
             <a ng-show="!game.id_tournament" href="/play/{{ game.id_game }}">матч</a>
         </td>
         <td>
-            <a ng-show="game.opponent_online" class="online_player" title="Игрок онлайн" href="/profile/{{ game.id_opponent }}">{{ users[game.id_opponent] }}</a>
-            <a ng-show="!game.opponent_online" href="/profile/{{ game.id_opponent }}">{{ users[game.id_opponent] }}</a>
+            <a ng-show="game.opponent_online" class="online_player" title="Игрок онлайн" href="/profile/{{ game.id_opponent }}">{{ usersHashMap[game.id_opponent] }}</a>
+            <a ng-show="!game.opponent_online" href="/profile/{{ game.id_opponent }}">{{ usersHashMap[game.id_opponent] }}</a>
         </td>
         <td>
             <div class="color_pic" style="background-color: {{ game.my_color }};"></div>

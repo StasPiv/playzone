@@ -8,8 +8,12 @@
 
 namespace CoreBundle\Handler;
 
+use ApiBundle\Model\Request\User\UserGetListRequest;
+use ApiBundle\Model\Request\User\UserPostAuthRequest;
+use ApiBundle\Model\Request\User\UserPostRegisterRequest;
+use ApiBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\User;
-use CoreBundle\Exception\UserProcessorException;
+use CoreBundle\Exception\Processor\UserProcessorException;
 use CoreBundle\Processor\UserProcessorInterface;
 use CoreBundle\Repository\UserRepository;
 use Symfony\Component\DependencyInjection\Container;
@@ -44,43 +48,34 @@ class UserHandler implements UserProcessorInterface
     }
 
     /**
-     * @param array $userData
-     * @return mixed
+     * @param UserPostRegisterRequest $registerRequest
+     * @return User
      */
-    public function processPostRegister(array $userData)
+    public function processPostRegister(UserPostRegisterRequest $registerRequest)
     {
-        $this->setData($user = new User(), $userData);
-
         $errors = [];
 
-        foreach($this->container->get('validator')->validate($user) as $error) {
-            /** @var ConstraintViolation $error */
-            switch ($error->getPropertyPath()) {
-                case 'rawPassword':
-                    $errorKey = 'password';
-                    break;
-                default:
-                    $errorKey = $error->getPropertyPath();
-            }
-
-            $errors[$errorKey] = $error->getMessage();
-        }
-
-        if ($this->repository->findBy(['email' => $user->getEmail()])) {
+        if ($this->repository->findBy(['email' => $registerRequest->getEmail()])) {
             $errors['email'] = 'This email was already registered';
         }
 
-        if ($this->repository->findBy(['login' => $user->getLogin()])) {
+        if ($this->repository->findBy(['login' => $registerRequest->getLogin()])) {
             $errors['login'] = 'This login was already registered';
         }
 
-        if (!isset($userData['password_repeat']) || isset($userData['password']) && $userData['password'] != $userData['password_repeat']) {
+        if ($registerRequest->getPassword() != $registerRequest->getPasswordRepeat()) {
             $errors['password_repeat'] = 'The password repeat should be the same';
         }
 
         if (!empty($errors)) {
-            throw new UserProcessorException("Registration failed", 403, $errors);
+            throw new UserProcessorException("Registration failed", ResponseStatusCode::FORBIDDEN, $errors);
         }
+
+        $user = new User();
+
+        $user->setLogin($registerRequest->getLogin());
+        $user->setEmail($registerRequest->getEmail());
+        $user->setPassword(md5($registerRequest->getPassword()));
 
         $this->saveUser($user);
 
@@ -88,66 +83,34 @@ class UserHandler implements UserProcessorInterface
     }
 
     /**
-     * @param array $userData
-     * @return array
+     * @param UserPostAuthRequest $authRequest
+     * @return User
      */
-    public function processPostAuth(array $userData)
+    public function processPostAuth(UserPostAuthRequest $authRequest)
     {
-        if (!isset($userData['login'])) {
-            $errors["login"] = "Enter login";
-            throw new UserProcessorException("Authorization failed", 403, $errors);
+        $user = $this->repository->findOneBy(['login' => $authRequest->getLogin()]);
+
+        if (!$user instanceof User) {
+            throw new UserProcessorException("Authorization failed", ResponseStatusCode::FORBIDDEN, ["login" => "The login is not found"]);
         }
 
-        if (!isset($userData['password'])) {
-            $errors["password"] = "Enter password";
-            throw new UserProcessorException("Authorization failed", 403, $errors);
+        if ($user->getPassword() != md5($authRequest->getPassword())) {
+            throw new UserProcessorException("Authorization failed", ResponseStatusCode::FORBIDDEN, ["password" => "The password is not correct"]);
         }
 
-        $users = $this->repository->findBy(['login' => $userData['login']]);
-
-        if (!$users) {
-            $errors["login"] = "The login is not found";
-            throw new UserProcessorException("Authorization failed", 403, $errors);
-        }
-
-        /** @var User $user */
-        $user = $users[0];
-
-        if ($user->getPassword() != md5($userData['password'])) {
-            $errors["password"] = "The password is not correct";
-            throw new UserProcessorException("Authorization failed", 403, $errors);
-        }
-
-        $user->setToken(md5($user->getLogin() . $user->getPassword()));
+        $user->setToken($this->generateValidUserToken($user));
 
         return $user;
     }
 
     /**
-     * @return array
+     * @param UserGetListRequest $listRequest
+     * @return User[]
      */
-    public function processGetList()
+    public function processGetList(UserGetListRequest $listRequest)
     {
+        // TODO: need to add conditions here
         return $this->repository->findAll();
-    }
-
-    /**
-     * @param User $user
-     * @param array $userData
-     */
-    private function setData(User $user, array $userData)
-    {
-        if (isset($userData['login'])) {
-            $user->setLogin($userData['login']);
-        }
-
-        if (isset($userData['email'])) {
-            $user->setEmail($userData['email']);
-        }
-
-        if (isset($userData['password'])) {
-            $user->setRawPassword($userData['password']);
-        }
     }
 
     /**
@@ -155,11 +118,39 @@ class UserHandler implements UserProcessorInterface
      */
     private function saveUser(User $user)
     {
-        $user->setPassword(md5($user->getRawPassword()));
         if ($this->container->get('kernel')->getEnvironment() != 'test') {
             $this->manager->persist($user);
             $this->manager->flush();
         }
+    }
+
+    /**
+     * @param User $user
+     * @return string
+     */
+    public function generateValidUserToken($user)
+    {
+        return md5($user->getLogin() . $user->getPassword());
+    }
+
+    /**
+     * @param $login
+     * @param $token
+     * @return User
+     */
+    public function getUserByLoginAndToken($login, $token)
+    {
+        $user = $this->repository->findOneBy(['login' => $login]);
+
+        if (!$user instanceof User) {
+            return null;
+        }
+
+        if ($this->generateValidUserToken($user) !== $token) {
+            return null;
+        }
+
+        return $user;
     }
 
 }

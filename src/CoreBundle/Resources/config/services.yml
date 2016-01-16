@@ -5,3 +5,9 @@ services:
     core.handler.timecontrol:
         class: CoreBundle\Handler\TimecontrolHandler
         arguments: ['@service_container', '@doctrine.orm.entity_manager']
+    core.handler.game:
+        class: CoreBundle\Handler\GameHandler
+        arguments: ['@service_container', '@doctrine.orm.entity_manager']
+    core.handler.game.call:
+        class: CoreBundle\Handler\GameCallHandler
+        arguments: ['@service_container', '@doctrine.orm.entity_manager']

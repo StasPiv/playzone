@@ -9,22 +9,28 @@
 namespace CoreBundle\Processor;
 
 
+use ApiBundle\Model\Request\User\UserGetListRequest;
+use ApiBundle\Model\Request\User\UserPostAuthRequest;
+use ApiBundle\Model\Request\User\UserPostRegisterRequest;
+use CoreBundle\Entity\User;
+
 interface UserProcessorInterface extends ProcessorInterface
 {
     /**
-     * @param array $userData
-     * @return array
+     * @param UserPostRegisterRequest $registerRequest
+     * @return User
      */
-    public function processPostRegister(array $userData);
+    public function processPostRegister(UserPostRegisterRequest $registerRequest);
 
     /**
-     * @param array $userData
-     * @return array
+     * @param UserPostAuthRequest $authRequest
+     * @return User
      */
-    public function processPostAuth(array $userData);
+    public function processPostAuth(UserPostAuthRequest $authRequest);
 
     /**
-     * @return array
+     * @param UserGetListRequest $listRequest
+     * @return User[]
      */
-    public function processGetList();
+    public function processGetList(UserGetListRequest $listRequest);
 }

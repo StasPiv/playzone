@@ -6,9 +6,10 @@
  * Time: 13:14
  */
 
-namespace CoreBundle\Exception;
+namespace CoreBundle\Exception\Processor;
 
 use Exception;
+use RuntimeException;
 
 class ProcessorException extends \RuntimeException
 {

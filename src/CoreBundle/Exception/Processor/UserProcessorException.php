@@ -6,7 +6,7 @@
  * Time: 12:07
  */
 
-namespace CoreBundle\Exception;
+namespace CoreBundle\Exception\Processor;
 
 class UserProcessorException extends ProcessorException
 {

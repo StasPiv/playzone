@@ -6,7 +6,7 @@
  * Time: 22:41
  */
 
-namespace CoreBundle\Exception;
+namespace CoreBundle\Exception\Processor;
 
 class TimecontrolProcessorException extends ProcessorException
 {

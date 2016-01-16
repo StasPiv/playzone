@@ -8,6 +8,9 @@
 
 namespace ApiBundle\Controller;
 
+use ApiBundle\Model\Request\User\UserPostAuthRequest;
+use ApiBundle\Model\Request\User\UserGetListRequest;
+use ApiBundle\Model\Request\User\UserPostRegisterRequest;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,17 +25,17 @@ class UserController extends BaseController
 {
     public function postRegisterAction(Request $request)
     {
-        return $this->process($request);
+        return $this->process($request, new UserPostRegisterRequest());
     }
 
     public function postAuthAction(Request $request)
     {
-        return $this->process($request);
+        return $this->process($request, new UserPostAuthRequest());
     }
 
     public function getListAction(Request $request)
     {
-        return $this->process($request);
+        return $this->process($request, new UserGetListRequest());
     }
 
     /**

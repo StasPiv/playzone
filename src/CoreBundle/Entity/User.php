@@ -33,16 +33,6 @@ class User
      * @var string
      *
      * @ORM\Column(name="login", type="string", length=255, unique=true)
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 30,
-     *      minMessage = "Login must contain at least {{ limit }} symbols",
-     *      maxMessage = "Login must not contain greater than {{ limit }} symbols"
-     * )
-     * @Assert\NotBlank(
-     *     message = "Enter login"
-     * )
-     * @Assert\Regex("/^[\d\-_\wа-яА-Я]+$/", message="Login must contain only words, numbers, underscores and dashes")
      *
      * @JMS\Expose
      * @JMS\SerializedName("login")
@@ -54,34 +44,12 @@ class User
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
-     * @Assert\Email(
-     *     message = "E-mail is not correct",
-     *     checkMX = true
-     * )
-     * @Assert\NotBlank(
-     *     message = "Enter e-mail"
-     * )
      *
      * @JMS\Expose
      * @JMS\SerializedName("email")
      * @JMS\Type("string")
      */
     private $email;
-
-    /**
-     * @var string
-     *
-     * @Assert\Length(
-     *      min = 6,
-     *      max = 15,
-     *      minMessage = "The password must contain at least {{ limit }} symbols",
-     *      maxMessage = "The password must not contain greater than {{ limit }} symbols"
-     * )
-     * @Assert\NotBlank(
-     *     message = "Enter password"
-     * )
-     */
-    private $rawPassword;
 
     /**
      * @var string
@@ -682,22 +650,6 @@ class User
     public function getBalance()
     {
         return $this->balance;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRawPassword()
-    {
-        return $this->rawPassword;
-    }
-
-    /**
-     * @param string $rawPassword
-     */
-    public function setRawPassword($rawPassword)
-    {
-        $this->rawPassword = $rawPassword;
     }
 
     /**

@@ -8,6 +8,7 @@
 
 namespace ApiBundle\Controller;
 
+use ApiBundle\Model\Request\Timecontrol\TimecontrolGetRequest;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,7 @@ class TimecontrolController extends BaseController
 {
     public function getAction(Request $request)
     {
-        return $this->process($request);
+        return $this->process($request, new TimecontrolGetRequest());
     }
 
     /**

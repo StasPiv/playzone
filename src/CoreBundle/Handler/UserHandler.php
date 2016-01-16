@@ -48,6 +48,14 @@ class UserHandler implements UserProcessorInterface
     }
 
     /**
+     * @return UserRepository
+     */
+    public function getRepository()
+    {
+        return $this->repository;
+    }
+
+    /**
      * @param UserPostRegisterRequest $registerRequest
      * @return User
      */

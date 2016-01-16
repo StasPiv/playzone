@@ -8,6 +8,7 @@
 
 namespace CoreBundle\Handler;
 
+use CoreBundle\Entity\Timecontrol;
 use CoreBundle\Processor\TimecontrolProcessorInterface;
 use CoreBundle\Repository\TimecontrolRepository;
 use Doctrine\ORM\EntityManager;
@@ -36,7 +37,15 @@ class TimecontrolHandler implements TimecontrolProcessorInterface
     }
 
     /**
-     * @return array
+     * @return TimecontrolRepository
+     */
+    public function getRepository()
+    {
+        return $this->repository;
+    }
+
+    /**
+     * @return Timecontrol[]
      */
     public function processGet()
     {

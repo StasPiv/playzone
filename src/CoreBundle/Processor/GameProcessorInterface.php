@@ -10,7 +10,9 @@ namespace CoreBundle\Processor;
 
 
 use ApiBundle\Model\Request\Game\GameGetListRequest;
+use ApiBundle\Model\Request\Game\GamePostCallRequest;
 use CoreBundle\Entity\Game;
+use CoreBundle\Entity\GameCall;
 
 interface GameProcessorInterface extends ProcessorInterface
 {
@@ -19,4 +21,10 @@ interface GameProcessorInterface extends ProcessorInterface
      * @return Game[]
      */
     public function processGetList(GameGetListRequest $listRequest);
+
+    /**
+     * @param GamePostCallRequest $callRequest
+     * @return GameCall
+     */
+    public function processPostCall(GamePostCallRequest $callRequest);
 }

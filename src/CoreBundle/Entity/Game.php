@@ -67,14 +67,14 @@ class Game
      *
      * @ORM\Column(name="pgn", type="text")
      */
-    private $pgn;
+    private $pgn = "";
 
     /**
      * @var string
      *
      * @ORM\Column(name="pgn_alt", type="text")
      */
-    private $pgnAlt;
+    private $pgnAlt = "";
 
     /**
      * @var string
@@ -88,7 +88,7 @@ class Game
      *
      * @ORM\Column(name="rate", type="boolean")
      */
-    private $rate;
+    private $rate = false;
 
     /**
      * @var float
@@ -109,14 +109,14 @@ class Game
      *
      * @ORM\Column(name="time_white", type="integer")
      */
-    private $timeWhite;
+    private $timeWhite = 0;
 
     /**
      * @var int
      *
      * @ORM\Column(name="time_black", type="integer")
      */
-    private $timeBlack;
+    private $timeBlack = 0;
 
     /**
      * @var Timecontrol

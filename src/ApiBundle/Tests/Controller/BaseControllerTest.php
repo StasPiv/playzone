@@ -56,7 +56,9 @@ class BaseControllerTest extends WebTestCase
                     $errorMessage);
             }
 
-            if (isset($expectedResponse['data']) && isset($actualResponse['data'])) {
+            if (isset($expectedResponse['data'])) {
+                $this->assertArrayHasKey("data", $actualResponse, $errorMessage);
+
                 $expectedData = $expectedResponse['data'];
                 $actualData = $actualResponse['data'];
 
@@ -90,7 +92,7 @@ class BaseControllerTest extends WebTestCase
         $multiDimensional = false;
 
         foreach ($expectedData as $key => $expectedChunk) {
-            $this->assertArrayHasKey($key, $actualData, json_encode($actualData));
+            $this->assertArrayHasKey($key, $actualData, $errorMessage . PHP_EOL . json_encode($actualData));
             if (is_array(($expectedChunk))) {
                 $this->assertActualContainsExpected($actualData[$key], $expectedChunk, $errorMessage);
                 $multiDimensional = true;

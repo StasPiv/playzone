@@ -8,11 +8,12 @@
 
 namespace CoreBundle\Processor;
 
+use CoreBundle\Entity\Timecontrol;
 
 interface TimecontrolProcessorInterface extends ProcessorInterface
 {
     /**
-     * @return array
+     * @return Timecontrol[]
      */
     public function processGet();
 }

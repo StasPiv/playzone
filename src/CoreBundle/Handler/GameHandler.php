@@ -9,8 +9,11 @@
 namespace CoreBundle\Handler;
 
 use ApiBundle\Model\Request\Game\GameGetListRequest;
+use ApiBundle\Model\Request\Game\GamePostCallRequest;
 use ApiBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
+use CoreBundle\Entity\GameCall;
+use CoreBundle\Entity\Timecontrol;
 use CoreBundle\Exception\Processor\GameProcessorException;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Model\Game\GameStatus;
@@ -67,6 +70,54 @@ class GameHandler implements GameProcessorInterface
         }
 
         return [];
+    }
+
+    /**
+     * @param GamePostCallRequest $callRequest
+     * @return GameCall
+     */
+    public function processPostCall(GamePostCallRequest $callRequest)
+    {
+        $me = $this->container->get("core.handler.user")->getUserByLoginAndToken($callRequest->getLogin(),
+            $callRequest->getToken());
+
+        if (!$me instanceof User) {
+            throw new GameProcessorException("User is not found", ResponseStatusCode::FORBIDDEN,
+                ["login" => "Forbidden for user with this credentials"]);
+        }
+
+        /** @var User $opponent */
+        $opponent = $this->container->get("core.handler.user")->getRepository()->findOneByLogin($callRequest->getPlayer());
+
+        if (!$opponent instanceof User) {
+            throw new GameProcessorException("User is not found", ResponseStatusCode::NOT_FOUND,
+                ["player" => "Opponent with this login is not found"]);
+        }
+
+        $timecontrol = $this->container->get("core.handler.timecontrol")->getRepository()->find($callRequest->getTimecontrol());
+
+        if (!$timecontrol instanceof Timecontrol) {
+            throw new GameProcessorException("Timecontrol is not found", ResponseStatusCode::NOT_FOUND,
+                ["timecontrol" => "Timecontrol is not found"]);
+        }
+
+        if ($callRequest->getColor() == GameColor::RANDOM) {
+            $callRequest->setColor(
+                [GameColor::WHITE, GameColor::BLACK][mt_rand(0, 1)]
+            );
+        }
+
+        $newCalls = [];
+
+        for ($i = 0; $i < $callRequest->getGamesCount(); $i++) {
+            $newCalls[] = $this->container->get("core.handler.game.call")->createGameCall($me, $opponent,
+                $game = $this->createMyGame($me, $opponent, $timecontrol, $callRequest->getColor()));
+            $this->manager->persist($game);
+        }
+
+        $this->manager->flush();
+
+        return $callRequest->getGamesCount() == 1 ? $newCalls[0] : $newCalls;
     }
 
     /**
@@ -134,5 +185,40 @@ class GameHandler implements GameProcessorInterface
             default:
                 throw new GameProcessorException("Unknown user {$user->getLogin()} for game {$game->getId()}");
         }
+    }
+
+    /**
+     * @param User $me
+     * @param User $opponent
+     * @param Timecontrol $timecontrol
+     * @param $myColor
+     * @return Game
+     */
+    private function createMyGame(User $me, User $opponent, Timecontrol $timecontrol, $myColor)
+    {
+        $game = new Game();
+
+        switch ($myColor) {
+            case GameColor::WHITE:
+                $game->setUserWhite($me)
+                    ->setUserBlack($opponent);
+                break;
+            case GameColor::BLACK:
+                $game->setUserBlack($me)
+                    ->setUserWhite($opponent);
+                break;
+            default:
+                throw new GameProcessorException("Color is incorrect", ResponseStatusCode::NOT_FOUND,
+                    ["color" => "Color is incorrect"]);
+        }
+
+        $game->setStatus(GameStatus::CALL)
+            ->setTimecontrol($timecontrol)
+            ->setTimeLastMove(new \DateTime())
+            ->setUserToMove($game->getUserWhite());
+
+        $this->container->get("core.handler.game")->defineUserColorForGame($me, $game);
+
+        return $game;
     }
 }

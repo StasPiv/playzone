@@ -9,9 +9,13 @@
 namespace CoreBundle\Handler;
 
 use ApiBundle\Model\Response\ResponseStatusCode;
+use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
+use CoreBundle\Entity\Timecontrol;
 use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\GameCallHandlerException;
+use CoreBundle\Model\Game\GameColor;
+use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\GameCall\GameCallType;
 use CoreBundle\Repository\GameCallRepository;
 use Doctrine\ORM\EntityManager;
@@ -62,12 +66,7 @@ class GameCallHandler
                 throw new GameCallHandlerException("Unknown call type for calls", ResponseStatusCode::FORBIDDEN);
         }
 
-        $calls = $this->manager
-            ->createQuery(
-                "SELECT c FROM CoreBundle:GameCall c WHERE c.$fieldForUser = :user"
-            )
-            ->setParameter("user", $user)
-            ->getResult();
+        $calls = $this->repository->findBy([$fieldForUser => $user]);
 
         foreach ($calls as $call) {
             /** @var GameCall $call */
@@ -75,5 +74,24 @@ class GameCallHandler
         }
 
         return $calls;
+    }
+
+    /**
+     * @param User $me
+     * @param User $opponent
+     * @param Game $game
+     * @return GameCall
+     */
+    public function createGameCall(User $me, User $opponent, Game $game)
+    {
+        $call = new GameCall();
+
+        $call->setFromUser($me)
+             ->setToUser($opponent)
+             ->setGame($game);
+
+        $this->manager->persist($call);
+
+        return $call;
     }
 }

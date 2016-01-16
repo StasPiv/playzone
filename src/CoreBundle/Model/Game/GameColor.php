@@ -13,4 +13,6 @@ class GameColor
     const WHITE = "white";
 
     const BLACK = "black";
+
+    const RANDOM = "random";
 }

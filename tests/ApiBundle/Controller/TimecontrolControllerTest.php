@@ -8,7 +8,7 @@
 
 namespace ApiBundle\Tests\Controller;
 
-class TimeControllerTest extends BaseControllerTest
+class TimecontrolControllerTest extends BaseControllerTest
 {
     public function testGet()
     {

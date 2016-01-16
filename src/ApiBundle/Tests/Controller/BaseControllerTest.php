@@ -14,9 +14,8 @@ class BaseControllerTest extends WebTestCase
 {
     /**
      * @param string $uri
-     * @param array $ignoreKeys
      */
-    protected function testFromJson($uri, $ignoreKeys = ['id'])
+    protected function testFromJson($uri)
     {
         $client = static::createClient();
         $action = str_replace('/', '.', $uri);
@@ -55,27 +54,11 @@ class BaseControllerTest extends WebTestCase
                     $errorMessage);
             }
 
-            if (isset($expectedResponse['data'])) {
+            if (isset($expectedResponse['data']) && isset($actualResponse['data'])) {
                 $expectedData = $expectedResponse['data'];
                 $actualData = $actualResponse['data'];
 
-                if (key($expectedData) !== 0) {
-                    $expectedData = [$expectedData];
-                    $actualData = [$actualData];
-                }
-
-                foreach ($expectedData as $key => $expectedChunk) {
-                    foreach ($ignoreKeys as $ignoreKey) {
-                        if (isset($expectedData[$key][$ignoreKey])) {
-                            unset($expectedData[$key][$ignoreKey]);
-                        }
-                        if (isset($actualData[$key][$ignoreKey])) {
-                            unset($actualData[$key][$ignoreKey]);
-                        }
-                    }
-                    $this->assertEmpty(array_diff_assoc($expectedData[$key], $actualData[$key]), $errorMessage);
-                    $this->assertEmpty(array_diff_assoc($actualData[$key], $expectedData[$key]), $errorMessage);
-                }
+                $this->assertActualContainsExpected($actualData, $expectedData, $errorMessage);
             }
 
             if (isset($data['session'])) {
@@ -93,5 +76,30 @@ class BaseControllerTest extends WebTestCase
                 }
             }
         }
+    }
+
+    /**
+     * @param array $actualData
+     * @param array $expectedData
+     * @param string $errorMessage
+     */
+    private function assertActualContainsExpected(array $actualData, array $expectedData, $errorMessage)
+    {
+        $multiDimensional = false;
+
+        foreach ($expectedData as $key => $expectedChunk) {
+            $this->assertArrayHasKey($key, $actualData, json_encode($actualData));
+            if (is_array(($expectedChunk))) {
+                $this->assertActualContainsExpected($actualData[$key], $expectedChunk, $errorMessage);
+                $multiDimensional = true;
+            }
+        }
+
+        if ($multiDimensional) {
+            return;
+        }
+
+        $unFoundArray = array_diff_assoc($expectedData, $actualData);
+        $this->assertEmpty($unFoundArray, $errorMessage . "\n" . print_r($unFoundArray, true));
     }
 }

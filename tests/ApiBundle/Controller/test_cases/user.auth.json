@@ -33,9 +33,10 @@
 
     },
     "response" : {
-      "status" : 403,
+      "status" : 400,
       "errors" : {
-        "login" : "Enter login"
+        "login" : "Enter login",
+        "password" : "Enter password"
       },
       "errorMessage":"Authorization failed"
     }
@@ -46,7 +47,7 @@
       "login" : "TestLogin"
     },
     "response" : {
-      "status" : 403,
+      "status" : 400,
       "errors" : {
         "password" : "Enter password"
       },

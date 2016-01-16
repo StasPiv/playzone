@@ -1,6 +1,6 @@
 [
   {
-    "referenceName": "timecontrol-0",
+    "referenceName": "timecontrol-10-10-no",
     "id": "1",
     "name": "10/10no",
     "begin": "10",
@@ -10,7 +10,7 @@
     "rest": "0"
   },
   {
-    "referenceName": "timecontrol-0",
+    "referenceName": "timecontrol-20-10-no",
     "id": "2",
     "name": "20/10no",
     "begin": "20",

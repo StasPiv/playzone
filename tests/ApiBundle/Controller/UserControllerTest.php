@@ -22,6 +22,6 @@ class UserControllerTest extends BaseControllerTest
 
     public function testList()
     {
-        $this->testFromJson('user/list', ['id', 'token']);
+        $this->testFromJson('user/list');
     }
 }

@@ -1,0 +1,72 @@
+[
+  {
+    "referenceName": "game-0",
+    "user_white": "user-stas",
+    "user_black": "user-test-login",
+    "user_to_move": "user-test-login",
+    "timecontrol": "timecontrol-10-10-no",
+    "pgn": "1",
+    "pgn_alt": "1",
+    "status": "play",
+    "rate": false,
+    "time_white": 20,
+    "time_black": 30,
+    "time_last_move": "yesterday"
+  },
+  {
+    "referenceName": "game-1",
+    "user_white": "user-stas",
+    "user_black": "user-petro",
+    "user_to_move": "user-petro",
+    "timecontrol": "timecontrol-20-10-no",
+    "pgn": "1",
+    "pgn_alt": "1",
+    "status": "play",
+    "rate": false,
+    "time_white": 20,
+    "time_black": 30,
+    "time_last_move": "yesterday"
+  },
+  {
+    "referenceName": "game-2",
+    "user_white": "user-test-login",
+    "user_black": "user-petro",
+    "user_to_move": "user-test-login",
+    "timecontrol": "timecontrol-20-10-no",
+    "pgn": "1",
+    "pgn_alt": "1",
+    "status": "play",
+    "rate": true,
+    "time_white": 20,
+    "time_black": 30,
+    "time_last_move": "yesterday"
+  },
+  {
+    "referenceName": "game-for-call-0",
+    "user_white": "user-test-login",
+    "user_black": "user-stas",
+    "user_to_move": "user-test-login",
+    "timecontrol": "timecontrol-10-10-no",
+    "pgn": "1",
+    "pgn_alt": "1",
+    "status": "call",
+    "rate": true,
+    "time_white": 20,
+    "time_black": 30,
+    "time_last_move": "yesterday"
+  },
+  {
+    "referenceName": "game-for-call-1",
+    "user_white": "user-petro",
+    "user_black": "user-test-login",
+    "user_to_move": "user-petro",
+    "timecontrol": "timecontrol-20-10-no",
+    "pgn": "1",
+    "pgn_alt": "1",
+    "status": "call",
+    "rate": true,
+    "time_white": 20,
+    "time_black": 30,
+    "time_last_move": "yesterday"
+  }
+]

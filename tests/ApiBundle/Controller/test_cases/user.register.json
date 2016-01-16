@@ -1,214 +1,214 @@
 {
-    "empty_email_and_login" : {
-      "method" : "POST",
-      "request" : {
-        "email": "",
-        "login": "",
-        "password": "cxzcxzcz",
-        "password_repeat": "cxzcxzcz"
-      },
-      "response" : {
-        "status" : 403,
-        "errors" : {
-          "email" : "Enter e-mail",
-          "login" : "Enter login"
-        },
-        "errorMessage":"Registration failed"
-      }
+  "empty_email_and_login": {
+    "method": "POST",
+    "request": {
+      "email": "",
+      "login": "",
+      "password": "cxzcxzcz",
+      "password_repeat": "cxzcxzcz"
     },
-    "empty_email_and_login_without_password" : {
-      "method" : "POST",
-      "request" : {
-        "email": "",
-        "login": ""
+    "response": {
+      "status": 400,
+      "errors": {
+        "login": "Enter login",
+        "email": "Enter e-mail"
       },
-      "response" : {
-        "status" : 403,
-        "errors" : {
-          "email" : "Enter e-mail",
-          "login" : "Enter login",
-          "password" : "Enter password",
-          "password_repeat":"The password repeat should be the same"
-        },
-        "errorMessage":"Registration failed"
-      }
-    },
-    "incorrect_email" : {
-      "method" : "POST",
-      "request" : {
-        "email": "dsadsa",
-        "login": "dsadsa",
-        "password": "cxzcxzcz",
-        "password_repeat": "cxzcxzcz"
-      },
-      "response" : {
-        "status" : 403,
-        "errors" : {
-          "email" : "E-mail is not correct"
-        },
-        "errorMessage":"Registration failed"
-      }
-    },
-    "very_short_login" : {
-      "method" : "POST",
-      "request" : {
-        "email": "test@yandex.ru",
-        "login": "d",
-        "password": "cxzcxzcz",
-        "password_repeat": "cxzcxzcz"
-      },
-      "response" : {
-        "status" : 403,
-        "errors" : {
-          "login" : "Login must contain at least 2 symbols"
-        },
-        "errorMessage":"Registration failed"
-      }
-    },
-    "very_long_login" : {
-      "method" : "POST",
-      "request" : {
-        "email": "test@yandex.ru",
-        "login": "sadsffjdsfdsjfdsjfdsweqdsadsadsadsadsadsadsadsadxzcxcxzcxzcxz",
-        "password": "cxzcxzcz",
-        "password_repeat": "cxzcxzcz"
-      },
-      "response" : {
-        "status" : 403,
-        "errors" : {
-          "login" : "Login must not contain greater than 30 symbols"
-        },
-        "errorMessage":"Registration failed"
-      }
-    },
-    "incorrect_login" : {
-      "method" : "POST",
-      "request" : {
-        "email": "test@yandex.ru",
-        "login": "%$%$%$sadsadsa",
-        "password": "cxzcxzcz",
-        "password_repeat": "cxzcxzcz"
-      },
-      "response" : {
-        "status" : 403,
-        "errors" : {
-          "login" : "Login must contain only words, numbers, underscores and dashes"
-        },
-        "errorMessage":"Registration failed"
-      }
-    },
-    "email_already_exists" : {
-      "method" : "POST",
-      "request" : {
-        "email": "piv1986@yandex.ru",
-        "login": "SimpleLogin",
-        "password": "cxzcxzcz",
-        "password_repeat": "cxzcxzcz"
-      },
-      "response" : {
-        "status" : 403,
-        "errors" : {
-          "email" : "This email was already registered"
-        },
-        "errorMessage":"Registration failed"
-      }
-    },
-    "login_already_exists" : {
-      "method" : "POST",
-      "request" : {
-        "email": "test@yandex.ru",
-        "login": "TestLogin",
-        "password": "cxzcxzcz",
-        "password_repeat": "cxzcxzcz"
-      },
-      "response" : {
-        "status" : 403,
-        "errors" : {
-          "login" : "This login was already registered"
-        },
-        "errorMessage":"Registration failed"
-      }
-    },
-    "password_very_short" : {
-      "method" : "POST",
-      "request" : {
-        "email": "test@yandex.ru",
-        "login": "UnitTestLogin",
-        "password": "12",
-        "password_repeat": "12"
-      },
-      "response" : {
-        "status" : 403,
-        "errors" : {
-          "password" : "The password must contain at least 6 symbols"
-        },
-        "errorMessage":"Registration failed"
-      }
-    },
-    "password_very_long" : {
-      "method" : "POST",
-      "request" : {
-        "email": "test@yandex.ru",
-        "login": "UnitTestLogin",
-        "password": "1234567890123456",
-        "password_repeat": "1234567890123456"
-      },
-      "response" : {
-        "status" : 403,
-        "errors" : {
-          "password" : "The password must not contain greater than 15 symbols"
-        },
-        "errorMessage":"Registration failed"
-      }
-    },
-    "passwords_not_equal" : {
-      "method" : "POST",
-      "request" : {
-        "email": "test@yandex.ru",
-        "login": "UnitTestLogin",
-        "password": "123456",
-        "password_repeat": "1234567"
-      },
-      "response" : {
-        "status" : 403,
-        "errors" : {
-          "password_repeat" : "The password repeat should be the same"
-        },
-        "errorMessage":"Registration failed"
-      }
-    },
-    "passwords_not_equal_repeat_empty" : {
-      "method" : "POST",
-      "request" : {
-        "email": "test@yandex.ru",
-        "login": "UnitTestLogin",
-        "password": "123456"
-      },
-      "response" : {
-        "status" : 403,
-        "errors" : {
-          "password_repeat" : "The password repeat should be the same"
-        },
-        "errorMessage":"Registration failed"
-      }
-    },
-    "correct" : {
-      "method" : "POST",
-      "request" : {
-        "email": "unittest@yandex.ru",
-        "login": "UnitTestLogin",
-        "password": "1234567",
-        "password_repeat": "1234567"
-      },
-      "response" : {
-        "status" : 200,
-        "data" : {
-          "login" : "UnitTestLogin",
-          "email" : "unittest@yandex.ru",
-          "rating" : 2200,
-          "class" : "N"
-        },
-        "errorMessage":"Registration failed"
-      }
+      "errorMessage": "Registration failed"
     }
+  },
+  "empty_email_and_login_without_password": {
+    "method": "POST",
+    "request": {
+      "email": "",
+      "login": ""
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "login": "Enter login",
+        "email": "Enter e-mail",
+        "password": "Enter password",
+        "password_repeat":"Enter password repeat"
+      },
+      "errorMessage": "Registration failed"
+    }
+  },
+  "incorrect_email": {
+    "method": "POST",
+    "request": {
+      "email": "dsadsa",
+      "login": "dsadsa",
+      "password": "cxzcxzcz",
+      "password_repeat": "cxzcxzcz"
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "email": "E-mail is not correct"
+      },
+      "errorMessage": "Registration failed"
+    }
+  },
+  "very_short_login": {
+    "method": "POST",
+    "request": {
+      "email": "test@yandex.ru",
+      "login": "d",
+      "password": "cxzcxzcz",
+      "password_repeat": "cxzcxzcz"
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "login": "Login must contain at least 2 symbols"
+      },
+      "errorMessage": "Registration failed"
+    }
+  },
+  "very_long_login": {
+    "method": "POST",
+    "request": {
+      "email": "test@yandex.ru",
+      "login": "sadsffjdsfdsjfdsjfdsweqdsadsadsadsadsadsadsadsadxzcxcxzcxzcxz",
+      "password": "cxzcxzcz",
+      "password_repeat": "cxzcxzcz"
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "login": "Login must not contain greater than 30 symbols"
+      },
+      "errorMessage": "Registration failed"
+    }
+  },
+  "incorrect_login": {
+    "method": "POST",
+    "request": {
+      "email": "test@yandex.ru",
+      "login": "%$%$%$sadsadsa",
+      "password": "cxzcxzcz",
+      "password_repeat": "cxzcxzcz"
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "login": "Login must contain only words, numbers, underscores and dashes"
+      },
+      "errorMessage": "Registration failed"
+    }
+  },
+  "email_already_exists": {
+    "method": "POST",
+    "request": {
+      "email": "piv1986@yandex.ru",
+      "login": "SimpleLogin",
+      "password": "cxzcxzcz",
+      "password_repeat": "cxzcxzcz"
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "email": "This email was already registered"
+      },
+      "errorMessage": "Registration failed"
+    }
+  },
+  "login_already_exists": {
+    "method": "POST",
+    "request": {
+      "email": "test@yandex.ru",
+      "login": "TestLogin",
+      "password": "cxzcxzcz",
+      "password_repeat": "cxzcxzcz"
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "login": "This login was already registered"
+      },
+      "errorMessage": "Registration failed"
+    }
+  },
+  "password_very_short": {
+    "method": "POST",
+    "request": {
+      "email": "test@yandex.ru",
+      "login": "UnitTestLogin",
+      "password": "12",
+      "password_repeat": "12"
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "password": "The password must contain at least 6 symbols"
+      },
+      "errorMessage": "Registration failed"
+    }
+  },
+  "password_very_long": {
+    "method": "POST",
+    "request": {
+      "email": "test@yandex.ru",
+      "login": "UnitTestLogin",
+      "password": "1234567890123456",
+      "password_repeat": "1234567890123456"
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "password": "The password must not contain greater than 15 symbols"
+      },
+      "errorMessage": "Registration failed"
+    }
+  },
+  "passwords_not_equal": {
+    "method": "POST",
+    "request": {
+      "email": "test@yandex.ru",
+      "login": "UnitTestLogin",
+      "password": "123456",
+      "password_repeat": "1234567"
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "password_repeat": "The password repeat should be the same"
+      },
+      "errorMessage": "Registration failed"
+    }
+  },
+  "passwords_not_equal_repeat_empty": {
+    "method": "POST",
+    "request": {
+      "email": "test@yandex.ru",
+      "login": "UnitTestLogin",
+      "password": "123456"
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "password_repeat": "Enter password repeat"
+      },
+      "errorMessage": "Registration failed"
+    }
+  },
+  "correct": {
+    "method": "POST",
+    "request": {
+      "email": "unittest@yandex.ru",
+      "login": "UnitTestLogin",
+      "password": "1234567",
+      "password_repeat": "1234567"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "login": "UnitTestLogin",
+        "email": "unittest@yandex.ru",
+        "rating": 2200,
+        "class": "N"
+      },
+      "errorMessage": "Registration failed"
+    }
+  }
 }

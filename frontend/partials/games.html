@@ -50,13 +50,13 @@
     </div>
     <div class="apply-call open-popup" data-open-popup=".call_form"><a>{{ 'Call on the game' | translate }}</a></div>
 </div>
-<h1>Отправленные вызовы</h1>
+<h1>{{ "Your calls" | translate }}</h1>
 <table class="games">
     <tr>
         <th>№</th>
-        <th>Контроль времени</th>
-        <th>Кому</th>
-        <th>Мой цвет</th>
+        <th>{{ "Time control" | translate }}</th>
+        <th>{{ "To user" | translate }}</th>
+        <th>{{ "Color" | translate }}</th>
         <th width="20%">&nbsp;</th>
     </tr>
     <tr ng-repeat="call in games.call_from_me">
@@ -73,17 +73,17 @@
             <div class="color_pic" style="background-color: {{ call.game.color }};"></div>
         </td>
         <td>
-            <a href="/#/game/remove/{{ call.id }}" class="button remove">Удалить</a>
+            <a href="/#/game/remove/{{ call.id }}" class="button remove">{{ "Remove" | translate }}</a>
         </td>
     </tr>
 </table>
-<h1>Вас вызвали</h1>
+<h1>{{ "Calls to you" | translate }}</h1>
 <table class="games">
     <tr>
         <th>№</th>
-        <th>Контроль времени</th>
-        <th>От кого</th>
-        <th>Мой цвет</th>
+        <th>{{ "Time control" | translate }}</th>
+        <th>{{ "From user" | translate }}</th>
+        <th>{{ "Color" | translate }}</th>
         <th width="20%">&nbsp;</th>
     </tr>
     <tr ng-repeat="call in games.call_to_me">
@@ -100,24 +100,24 @@
             <div class="color_pic" style="background-color: {{ call.game.color }};"></div>
         </td>
         <td>
-            <a href="/#/game/accept/{{ call.id }}" class="button accept">Принять</a>&nbsp;&nbsp;<a href="/game/cancel/{{ call.id }}" class="button remove">Отклонить</a>
+            <a href="/#/game/accept/{{ call.id }}" class="button accept">{{ "Accept" | translate }}</a>&nbsp;&nbsp;<a href="/game/cancel/{{ call.id }}" class="button remove">{{ "Decline" | translate }}</a>
         </td>
     </tr>
 </table>
-<h1>Текущие партии ({{ games.current.length }})</h1>
+<h1>{{ "Current games" | translate }} ({{ games.current.length }})</h1>
 <table class="games current">
     <thead>
     <tr>
         <th>№</th>
-        <th>КВ</th>
-        <th>Турнир</th>
-        <th>Соперник</th>
-        <th>Цвет</th>
-        <th>Время ваше</th>
-        <th>Время соперника</th>
-        <th>Прошло</th>
-        <th width="15%">Действие</th>
-        <th>Ход</th>
+        <th>{{ "TC" | translate }}</th>
+        <th>{{ "Tournament" | translate }}</th>
+        <th>{{ "Opponent" | translate }}</th>
+        <th>{{ "Color" | translate }}</th>
+        <th>{{ "Your time" | translate }}</th>
+        <th>{{ "Opponent time" | translate }}</th>
+        <th>{{ "From last move" | translate }}</th>
+        <th width="15%">{{ "Action" | translate }}</th>
+        <th>{{ "Move" | translate }}</th>
     </tr>
     </thead>
     <tbody>
@@ -130,10 +130,10 @@
         </td>
         <td>
             <a ng-show="game.id_tournament" href="/tournaments/{{ game.id_tournament }}/show/">#{{ game.id_tournament }}</a>
-            <a ng-show="!game.id_tournament" href="/play/{{ game.id }}">матч</a>
+            <a ng-show="!game.id_tournament" href="/play/{{ game.id }}">{{ "match" | translate }}</a>
         </td>
         <td>
-            <a ng-show="game.opponent_online" class="online_player" title="Игрок онлайн" href="/profile/{{ game.opponent.id }}">{{ game.opponent.id }}</a>
+            <a ng-show="game.opponent_online" class="online_player" title="{{ 'Player online' | translate }}" href="/profile/{{ game.opponent.id }}">{{ game.opponent.id }}</a>
             <a ng-show="!game.opponent_online" href="/profile/{{ game.opponent.id }}">{{ game.opponent.login }}</a>
         </td>
         <td>
@@ -149,8 +149,8 @@
             {{ game.diff }}
         </td>
         <td>
-            <span style="display: none">1</span><a ng-show="game.user_move" href="/play/{{ game.id }}/show/" class="button domove">Сделать ход</a>
-            <span style="display: none">2</span><a ng-show="!game.user_move" href="/play/{{ game.id }}/show/" class="button">Посмотреть</a>
+            <span style="display: none">1</span><a ng-show="game.user_move" href="/play/{{ game.id }}/show/" class="button domove">{{ "Do move" | translate }}</a>
+            <span style="display: none">2</span><a ng-show="!game.user_move" href="/play/{{ game.id }}/show/" class="button">{{ "See" | translate }}</a>
         </td>
         <td class="last_move" title="{{ game.time_last_move }}">
             {{ game.last_move }}
@@ -159,6 +159,6 @@
     </tbody>
 </table>
 <div class="download_games">
-    <a class="button accept" href="/games/personal/?pgn_download=1&rate=1&login_white=1&login_black=&ignore_color=on&status=play&result_white=x&filter_button=OK">Скачать свои текущие партии в PGN</a>
+    <a class="button accept" href="/games/personal/?pgn_download=1&rate=1&login_white=1&login_black=&ignore_color=on&status=play&result_white=x&filter_button=OK">{{ "Download my current games in PGN" | translate }}</a>
 </div>
-<p>Также Вы можете выбрать стандартный турнир для записи <a href="/tournaments/">здесь</a></p>
+<p>{{ "Also you can choose standard tournament for record" | translate }} <a href="/tournaments/">{{ "here" | translate }}</a></p>

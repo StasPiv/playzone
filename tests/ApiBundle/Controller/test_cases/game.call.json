@@ -1,0 +1,218 @@
+{
+  "login_and_token_is_required": {
+    "method": "POST",
+    "request": {
+      "player": "Stas",
+      "color": "white",
+      "timecontrol": 1,
+      "games_count": 2
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "login": "Login is required for this request",
+        "token": "Token is required for this request"
+      }
+    }
+  },
+  "login_and_token_incorrect": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "bba37b62d15cc5f8671fd3d1b034c354",
+      "player": "Stas",
+      "color": "white",
+      "timecontrol": 1,
+      "games_count": 2
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "login": "Forbidden for user with this credentials"
+      },
+      "errorMessage": "User is not found"
+    }
+  },
+  "opponent_is_not_found": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "player": "Stas2",
+      "color": "white",
+      "timecontrol": 1,
+      "games_count": 2
+    },
+    "response": {
+      "status": 404,
+      "errors": {
+        "player": "Opponent with this login is not found"
+      },
+      "errorMessage": "User is not found"
+    }
+  },
+  "timecontrol_is_not_found": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "player": "Stas",
+      "color": "white",
+      "timecontrol": 666,
+      "games_count": 2
+    },
+    "response": {
+      "status": 404,
+      "errors": {
+        "timecontrol": "Timecontrol is not found"
+      },
+      "errorMessage": "Timecontrol is not found"
+    }
+  },
+  "timecontrol_is_empty": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "player": "Stas",
+      "color": "white",
+      "games_count": 2
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "timecontrol": "Enter timecontrol"
+      },
+      "errorMessage": "Enter timecontrol"
+    }
+  },
+  "incorrect_color": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "player": "Stas",
+      "color": "ewhite",
+      "timecontrol": 1,
+      "games_count": 2
+    },
+    "response": {
+      "status": 404,
+      "errors": {
+        "color": "Color is incorrect"
+      },
+      "errorMessage": "Color is incorrect"
+    }
+  },
+  "correct_call": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "player": "Stas",
+      "color": "white",
+      "timecontrol": 1,
+      "games_count": 1
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "to_user": {
+          "login": "Stas",
+          "email": "piv1986@yandex.ru",
+          "class": "N",
+          "rating": 2200
+        },
+        "game" : {
+          "timecontrol": {
+            "id": 1,
+            "name": "10\/10no"
+          },
+          "user_white": {
+            "login": "TestLogin",
+            "email": "test-login@yandex.ru",
+            "class": "D",
+            "rating": 2243
+          },
+          "user_black": {
+            "login": "Stas",
+            "email": "piv1986@yandex.ru",
+            "class": "N",
+            "rating": 2200
+          },
+          "color": "white"
+        }
+      }
+    }
+  },
+  "correct_call_2_games": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "player": "Stas",
+      "color": "white",
+      "timecontrol": 1,
+      "games_count": 2
+    },
+    "response": {
+      "status": 200,
+      "data": [
+        {
+          "to_user": {
+            "login": "Stas",
+            "email": "piv1986@yandex.ru",
+            "class": "N",
+            "rating": 2200
+          },
+          "game" : {
+            "timecontrol": {
+              "id": 1,
+              "name": "10\/10no"
+            },
+            "user_white": {
+              "login": "TestLogin",
+              "email": "test-login@yandex.ru",
+              "class": "D",
+              "rating": 2243
+            },
+            "user_black": {
+              "login": "Stas",
+              "email": "piv1986@yandex.ru",
+              "class": "N",
+              "rating": 2200
+            },
+            "color": "white"
+          }
+        },
+        {
+          "to_user": {
+            "login": "Stas",
+            "email": "piv1986@yandex.ru",
+            "class": "N",
+            "rating": 2200
+          },
+          "game" : {
+            "timecontrol": {
+              "id": 1,
+              "name": "10\/10no"
+            },
+            "user_white": {
+              "login": "TestLogin",
+              "email": "test-login@yandex.ru",
+              "class": "D",
+              "rating": 2243
+            },
+            "user_black": {
+              "login": "Stas",
+              "email": "piv1986@yandex.ru",
+              "class": "N",
+              "rating": 2200
+            },
+            "color": "white"
+          }
+        }
+      ]
+    }
+  }
+}

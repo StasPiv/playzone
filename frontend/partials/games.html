@@ -55,25 +55,25 @@
     <tr>
         <th>№</th>
         <th>Контроль времени</th>
-        <th>Белые</th>
-        <th>Черные</th>
+        <th>Кому</th>
+        <th>Мой цвет</th>
         <th width="20%">&nbsp;</th>
     </tr>
-    <tr ng-repeat="game in games.call_from_me">
+    <tr ng-repeat="call in games.call_from_me">
         <td>
-            <a href="">{{ game.id }}</a>
+            <a href="">{{ call.game.id }}</a>
         </td>
         <td>
-            <a href="">{{ timecontrolsHashMap[game.id_timecontrol] }}</a>
+            <a href="">{{ call.game.timecontrol.name }}</a>
         </td>
         <td>
-            <a href="/#/profile/{{ game.id_white }}">{{ usersHashMap[game.id_white] }}</a>
+            <a href="/#/profile/{{ call.to_user.id }}">{{ call.to_user.login }}</a>
         </td>
         <td>
-            <a href="/#/profile/{{ game.id_black }}">{{ usersHashMap[game.id_black] }}</a>
+            <div class="color_pic" style="background-color: {{ call.game.color }};"></div>
         </td>
         <td>
-            <a href="/#/game/remove/{{ game.id }}" class="button remove">Удалить</a>
+            <a href="/#/game/remove/{{ call.id }}" class="button remove">Удалить</a>
         </td>
     </tr>
 </table>
@@ -82,25 +82,25 @@
     <tr>
         <th>№</th>
         <th>Контроль времени</th>
-        <th>Белые</th>
-        <th>Черные</th>
+        <th>От кого</th>
+        <th>Мой цвет</th>
         <th width="20%">&nbsp;</th>
     </tr>
-    <tr ng-repeat="game in games.call_to_me">
+    <tr ng-repeat="call in games.call_to_me">
         <td>
-            <a href="">{{ game.id }}</a>
+            <a href="">{{ call.game.id }}</a>
         </td>
         <td>
-            <a href="">{{ timecontrolsHashMap[game.id_timecontrol] }}</a>
+            <a href="">{{ call.game.timecontrol.name }}</a>
         </td>
         <td>
-            <a href="/#/profile/{{ game.id_white }}">{{ usersHashMap[game.id_white] }}</a>
+            <a href="/#/profile/{{ call.from_user.id }}">{{ call.from_user.login }}</a>
         </td>
         <td>
-            <a href="/#/profile/{{ game.id_black }}">{{ usersHashMap[game.id_black] }}</a>
+            <div class="color_pic" style="background-color: {{ call.game.color }};"></div>
         </td>
         <td>
-            <a href="/#/game/accept/{{ game.id }}" class="button accept">Принять</a>&nbsp;&nbsp;<a href="/game/cancel/{{ game.id }}" class="button remove">Отклонить</a>
+            <a href="/#/game/accept/{{ call.id }}" class="button accept">Принять</a>&nbsp;&nbsp;<a href="/game/cancel/{{ call.id }}" class="button remove">Отклонить</a>
         </td>
     </tr>
 </table>
@@ -123,21 +123,21 @@
     <tbody>
     <tr ng-repeat="game in games.current">
         <td>
-            <a href="/play/{{ game.id_game }}">{{ game.id_game }}</a>
+            <a href="/play/{{ game.id }}">{{ game.id }}</a>
         </td>
         <td>
-            <a href="">{{ timecontrolsHashMap[game.id_timecontrol] }}</a>
+            <a href="">{{ game.timecontrol.name }}</a>
         </td>
         <td>
             <a ng-show="game.id_tournament" href="/tournaments/{{ game.id_tournament }}/show/">#{{ game.id_tournament }}</a>
-            <a ng-show="!game.id_tournament" href="/play/{{ game.id_game }}">матч</a>
+            <a ng-show="!game.id_tournament" href="/play/{{ game.id }}">матч</a>
         </td>
         <td>
-            <a ng-show="game.opponent_online" class="online_player" title="Игрок онлайн" href="/profile/{{ game.id_opponent }}">{{ usersHashMap[game.id_opponent] }}</a>
-            <a ng-show="!game.opponent_online" href="/profile/{{ game.id_opponent }}">{{ usersHashMap[game.id_opponent] }}</a>
+            <a ng-show="game.opponent_online" class="online_player" title="Игрок онлайн" href="/profile/{{ game.opponent.id }}">{{ game.opponent.id }}</a>
+            <a ng-show="!game.opponent_online" href="/profile/{{ game.opponent.id }}">{{ game.opponent.login }}</a>
         </td>
         <td>
-            <div class="color_pic" style="background-color: {{ game.my_color }};"></div>
+            <div class="color_pic" style="background-color: {{ game.color }};"></div>
         </td>
         <td>
             <span style="background-color: <?=$arGame['color_mine']?>;<?if($arGame['color_mine'] == 'yellow'):?>color:black;<?endif;?>">{{ game.rest_mine }}</span>
@@ -149,8 +149,8 @@
             {{ game.diff }}
         </td>
         <td>
-            <span style="display: none">1</span><a ng-show="game.is_my_move" href="/play/{{ game.id_game }}/show/" class="button domove">Сделать ход</a>
-            <span style="display: none">2</span><a ng-show="!game.is_my_move" href="/play/{{ game.id_game }}/show/" class="button">Посмотреть</a>
+            <span style="display: none">1</span><a ng-show="game.user_move" href="/play/{{ game.id }}/show/" class="button domove">Сделать ход</a>
+            <span style="display: none">2</span><a ng-show="!game.user_move" href="/play/{{ game.id }}/show/" class="button">Посмотреть</a>
         </td>
         <td class="last_move" title="{{ game.time_last_move }}">
             {{ game.last_move }}

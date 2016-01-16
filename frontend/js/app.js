@@ -26,52 +26,14 @@ var playzoneApp = angular.module('playzoneApp', [
             }
         });
     }
-}]).config(['$translateProvider',
-        function ($translateProvider) {
-            // configures staticFilesLoader
-            $translateProvider.useStaticFilesLoader({
-                prefix: 'translations/',
-                suffix: '.json'
-            });
-            // load 'en' table on startup
-            $translateProvider.preferredLanguage('en');
-            // remember language
-            $translateProvider.useLocalStorage();
-        }]
-);
-
-playzoneApp.config(['$routeProvider',
-    function($routeProvider) {
-        $routeProvider.
-            when('/', {
-                templateUrl: 'partials/home.html',
-                controller: 'HomeCtrl'
-            }).
-            when('/register', {
-                templateUrl: 'partials/register.html',
-                controller: 'RegisterCtrl',
-                resolve: {
-                    factory: checkIfUnauthorized
-                }
-            }).
-            when('/auth', {
-                templateUrl: 'partials/auth.html',
-                controller: 'AuthCtrl',
-                resolve: {
-                    factory: checkIfUnauthorized
-                }
-            }).
-            when('/games', {
-                templateUrl: 'partials/games.html',
-                controller: 'GamesCtrl'
-            }).
-            otherwise({
-                redirectTo: '/'
-            });
-    }]);
+}]);
 
 var checkIfUnauthorized = function ($q, $rootScope, $location) {
     if ($rootScope.user && $rootScope.user.isAuth) {
         $location.path('/');
     }
 };
+
+var playzoneControllers = angular.module('playzoneControllers', []);
+
+var playzoneServices = angular.module('playzoneServices',[]);

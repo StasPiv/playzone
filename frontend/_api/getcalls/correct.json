@@ -1,0 +1,19 @@
+{
+  "status": 200,
+  "data": [
+    {
+      "from_user": {
+        "login": "Petro",
+        "email": "petro@yandex.ru",
+        "class": "D",
+        "rating": 2443
+      },
+      "to_user": {
+        "login": "TestLogin",
+        "email": "test-login@yandex.ru",
+        "class": "D",
+        "rating": 2243
+      }
+    }
+  ]
+}

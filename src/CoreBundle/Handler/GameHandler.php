@@ -9,6 +9,7 @@
 namespace CoreBundle\Handler;
 
 use ApiBundle\Model\Request\Game\GameGetListRequest;
+use ApiBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
 use CoreBundle\Exception\Processor\GameProcessorException;
 use CoreBundle\Model\Game\GameColor;
@@ -55,11 +56,12 @@ class GameHandler implements GameProcessorInterface
     {
         if ($listRequest->getUser() == UserType::ME) {
             if (!$listRequest->getLogin() || !$listRequest->getToken()) {
-                throw new GameProcessorException("Need to pass login and token for getting game list for current user", 400);
+                throw new GameProcessorException("Need to pass login and token for getting game list for current user",
+                    ResponseStatusCode::FORBIDDEN);
             }
 
             $user = $this->container->get("core.handler.user")
-                         ->getUserByLoginAndToken($listRequest->getLogin(), $listRequest->getToken());
+                ->getUserByLoginAndToken($listRequest->getLogin(), $listRequest->getToken());
 
             return $this->getGamesForUser($listRequest, $user);
         }

@@ -32,12 +32,12 @@ class TimecontrolFixtures extends AbstractPlayzoneFixtures
         $timecontrol = new Timecontrol();
 
         $timecontrol->setId($data['id'])
-                    ->setName($data['name'])
-                    ->setBegin($data['begin'])
-                    ->setIncrement($data['increment'])
-                    ->setMoves($data['moves'])
-                    ->setTimeLimit($data['timeLimit'])
-                    ->setRest($data['rest']);
+            ->setName($data['name'])
+            ->setBegin($data['begin'])
+            ->setIncrement($data['increment'])
+            ->setMoves($data['moves'])
+            ->setTimeLimit($data['timeLimit'])
+            ->setRest($data['rest']);
 
         return $timecontrol;
     }

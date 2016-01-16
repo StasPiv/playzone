@@ -208,6 +208,7 @@ class Game
     public function setUserWhite($userWhite)
     {
         $this->userWhite = $userWhite;
+
         return $this;
     }
 
@@ -226,6 +227,7 @@ class Game
     public function setUserBlack($userBlack)
     {
         $this->userBlack = $userBlack;
+
         return $this;
     }
 
@@ -244,6 +246,7 @@ class Game
     public function setUserToMove($userToMove)
     {
         $this->userToMove = $userToMove;
+
         return $this;
     }
 

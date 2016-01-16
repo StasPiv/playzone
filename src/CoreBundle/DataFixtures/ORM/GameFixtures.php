@@ -43,16 +43,16 @@ class GameFixtures extends AbstractPlayzoneFixtures
         $timecontrol = $this->getReference($data['timecontrol']);
 
         $game->setUserWhite($userWhite)
-             ->setUserBlack($userBlack)
-             ->setUserToMove($userToMove)
-             ->setTimecontrol($timecontrol)
-             ->setPgn($data['pgn'])
-             ->setPgnAlt($data['pgn_alt'])
-             ->setStatus($data['status'])
-             ->setRate($data['rate'])
-             ->setTimeWhite($data['time_white'])
-             ->setTimeBlack($data['time_black'])
-             ->setTimeLastMove(new \DateTime($data['time_last_move']));
+            ->setUserBlack($userBlack)
+            ->setUserToMove($userToMove)
+            ->setTimecontrol($timecontrol)
+            ->setPgn($data['pgn'])
+            ->setPgnAlt($data['pgn_alt'])
+            ->setStatus($data['status'])
+            ->setRate($data['rate'])
+            ->setTimeWhite($data['time_white'])
+            ->setTimeBlack($data['time_black'])
+            ->setTimeLastMove(new \DateTime($data['time_last_move']));
 
         return $game;
     }

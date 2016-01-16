@@ -80,6 +80,7 @@ class Timecontrol
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 

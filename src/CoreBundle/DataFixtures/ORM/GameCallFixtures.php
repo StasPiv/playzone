@@ -29,7 +29,7 @@ class GameCallFixtures extends AbstractPlayzoneFixtures
         $toUser = $this->getReference($data['toUser']);
 
         $gameCall->setFromUser($fromUser)
-                 ->setToUser($toUser);
+            ->setToUser($toUser);
 
         if (!empty($data['game'])) {
             /** @var Game $game */

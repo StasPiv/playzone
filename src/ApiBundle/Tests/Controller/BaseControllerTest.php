@@ -8,7 +8,9 @@
 
 namespace ApiBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+;
 
 class BaseControllerTest extends WebTestCase
 {
@@ -34,7 +36,7 @@ class BaseControllerTest extends WebTestCase
                 $client->getContainer()->get("session")->set($name, $value);
             }
 
-            $client->request($data['method'], '/'.$uri, $request);
+            $client->request($data['method'], '/' . $uri, $request);
             $expectedResponse = $data['response'];
             $errorMessage = "Failed $caseName.\nExpected response: " . json_encode($expectedResponse) . ".\nActual response: {$client->getResponse()->getContent()}.";
             $this->assertEquals(

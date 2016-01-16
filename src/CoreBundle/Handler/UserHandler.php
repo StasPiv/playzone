@@ -91,11 +91,13 @@ class UserHandler implements UserProcessorInterface
         $user = $this->repository->findOneBy(['login' => $authRequest->getLogin()]);
 
         if (!$user instanceof User) {
-            throw new UserProcessorException("Authorization failed", ResponseStatusCode::FORBIDDEN, ["login" => "The login is not found"]);
+            throw new UserProcessorException("Authorization failed", ResponseStatusCode::FORBIDDEN,
+                ["login" => "The login is not found"]);
         }
 
         if ($user->getPassword() != md5($authRequest->getPassword())) {
-            throw new UserProcessorException("Authorization failed", ResponseStatusCode::FORBIDDEN, ["password" => "The password is not correct"]);
+            throw new UserProcessorException("Authorization failed", ResponseStatusCode::FORBIDDEN,
+                ["password" => "The password is not correct"]);
         }
 
         $user->setToken($this->generateValidUserToken($user));

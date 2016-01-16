@@ -49,8 +49,9 @@ abstract class BaseController extends FOSRestController
             return $response;
         }
 
-        $allowedDomain = 'http://' . preg_replace('/^(api\.)/','', $_SERVER['HTTP_HOST']);
+        $allowedDomain = 'http://' . preg_replace('/^(api\.)/', '', $_SERVER['HTTP_HOST']);
         $response->headers->set('Access-Control-Allow-Origin', $allowedDomain);
+
         return $response;
     }
 
@@ -88,9 +89,10 @@ abstract class BaseController extends FOSRestController
 
             $requestObject = $this->fillRequestObjectWithRequest($request, $requestObject);
 
-            foreach($this->container->get('validator')->validate($requestObject) as $error) {
+            foreach ($this->container->get('validator')->validate($requestObject) as $error) {
                 /** @var ConstraintViolation $error */
-                $errors[strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $error->getPropertyPath()))] = $error->getMessage();
+                $errors[strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2',
+                    $error->getPropertyPath()))] = $error->getMessage();
             }
 
             if (!empty($errors)) {

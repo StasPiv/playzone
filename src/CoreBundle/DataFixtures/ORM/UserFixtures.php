@@ -30,24 +30,24 @@ class UserFixtures extends AbstractPlayzoneFixtures
     {
         $user = new User();
         $user->setLogin($data['login'])
-             ->setEmail($data['email'])
-             ->setPassword(md5($data['password']))
-             ->setHash(md5($data['hash']))
-             ->setConfirm($data['confirm'])
-             ->setInRest($data['in_rest'])
-             ->setLeftRest($data['left_rest'])
-             ->setGoneInRest(new \DateTime($data['gone_in_rest']))
-             ->setLastAuth(new \DateTime($data['last_auth']))
-             ->setClass($data['class'])
-             ->setRating($data['rating'])
-             ->setWin($data['win'])
-             ->setDraw($data['draw'])
-             ->setLose($data['lose'])
-             ->setLoseTime($data['lose_time'])
-             ->setImmortalId($data['immortal_id'])
-             ->setAnotherLogin($data['another_login'])
-             ->setLastMove(new \DateTime($data['last_move']))
-             ->setBalance($data['balance']);
+            ->setEmail($data['email'])
+            ->setPassword(md5($data['password']))
+            ->setHash(md5($data['hash']))
+            ->setConfirm($data['confirm'])
+            ->setInRest($data['in_rest'])
+            ->setLeftRest($data['left_rest'])
+            ->setGoneInRest(new \DateTime($data['gone_in_rest']))
+            ->setLastAuth(new \DateTime($data['last_auth']))
+            ->setClass($data['class'])
+            ->setRating($data['rating'])
+            ->setWin($data['win'])
+            ->setDraw($data['draw'])
+            ->setLose($data['lose'])
+            ->setLoseTime($data['lose_time'])
+            ->setImmortalId($data['immortal_id'])
+            ->setAnotherLogin($data['another_login'])
+            ->setLastMove(new \DateTime($data['last_move']))
+            ->setBalance($data['balance']);
 
         return $user;
     }

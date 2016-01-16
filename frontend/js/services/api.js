@@ -10,7 +10,8 @@ playzoneServices.factory('ApiService', function(EnvService) {
         getTimeControlsUrl,
         getUsersUrl,
         getCallsUrl,
-        getGamesUrl;
+        getGamesUrl,
+        postCallUrl;
 
     switch (EnvService.currentMode) {
         case EnvService.testMode:
@@ -21,6 +22,7 @@ playzoneServices.factory('ApiService', function(EnvService) {
             getUsersUrl = API_URL + '/?method=getusers';
             getCallsUrl = API_URL + '/?method=getcalls';
             getGamesUrl = API_URL + '/?method=getgames';
+            postCallUrl = API_URL + '/?method=postcall';
             break;
         case EnvService.prodMode:
             API_URL = 'http://api.playzone-angular.lc/app_dev.php/';
@@ -30,6 +32,7 @@ playzoneServices.factory('ApiService', function(EnvService) {
             getUsersUrl = API_URL + 'user/list';
             getCallsUrl = API_URL + 'game/list';
             getGamesUrl = API_URL + 'game/list';
+            postCallUrl = API_URL + 'game/call';
     }
 
     return {
@@ -38,6 +41,7 @@ playzoneServices.factory('ApiService', function(EnvService) {
         get_time_controls : getTimeControlsUrl,
         get_users : getUsersUrl,
         get_calls : getCallsUrl,
-        get_games : getGamesUrl
+        get_games : getGamesUrl,
+        post_call : postCallUrl
     };
 });

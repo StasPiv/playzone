@@ -8,7 +8,7 @@
             <tr>
                 <td><label for="login_enemy">{{ 'Player' | translate }}:</label></td>
                 <td>
-                    <input type="text" id="login_enemy" ng-model="call.login_enemy">
+                    <input type="text" id="login_enemy" data-ng-model="call.player">
                 </td>
             </tr>
             <tr>
@@ -34,7 +34,7 @@
             <tr>
                 <td><label for="count">{{ 'The game count'| translate }}:</label></td>
                 <td>
-                    <input type="text" id="count" value="1" size="2" ng-model="call.count" />
+                    <input type="text" id="count" value="1" size="2" ng-model="call.games_count" />
                 </td>
             </tr>
             <tr>
@@ -42,7 +42,7 @@
                     &nbsp;
                 </td>
                 <td>
-                    <input class="button" value="OK" type="submit">
+                    <input class="button" value="OK" type="submit" data-ng-click="sendCall()">
                 </td>
             </tr>
             </tbody>

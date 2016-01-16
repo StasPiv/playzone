@@ -3,12 +3,25 @@
  */
 'use strict';
 
-playzoneControllers.controller('CallCtrl', function ($scope, TimeControlService) {
+playzoneControllers.controller('CallCtrl', function ($scope, TimeControlService, CallService, GameService) {
     TimeControlService.initTimeControls($scope);
 
     $scope.colors = [
-        {id: '0', name: 'Random'},
-        {id: '1', name: 'White'},
-        {id: '2', name: 'Black'}
+        {id: 'random', name: 'Random'},
+        {id: 'white', name: 'White'},
+        {id: 'black', name: 'Black'}
     ];
+
+    $scope.sendCall = function() {
+        CallService.sendCall({
+            call: $scope.call,
+            success: function() {
+                $scope.errors = {};
+                GameService.initCallsFromMe($scope);
+            },
+            error: function(data) {
+                $scope.errors = data.errors;
+            }
+        });
+    }
 });

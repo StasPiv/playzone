@@ -24,7 +24,8 @@
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "cboden/ratchet": "dev-master",
         "friendsofsymfony/rest-bundle": "dev-master",
-        "jms/serializer-bundle": "dev-master"
+        "jms/serializer-bundle": "dev-master",
+        "nelmio/cors-bundle": "^1.4"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

@@ -23,5 +23,5 @@ playzoneControllers.controller('CallCtrl', function ($scope, TimeControlService,
                 $scope.errors = data.errors;
             }
         });
-    }
+    };
 });

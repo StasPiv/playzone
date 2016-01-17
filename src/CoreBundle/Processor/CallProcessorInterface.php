@@ -9,9 +9,11 @@
 namespace CoreBundle\Processor;
 
 
+use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
+use CoreBundle\Model\Request\Call\CallPutAcceptRequest;
 
 interface CallProcessorInterface
 {
@@ -28,4 +30,11 @@ interface CallProcessorInterface
      * @return GameCall
      */
     public function processDeleteRemove(CallDeleteRemoveRequest $removeRequest, CallDeleteRemoveRequest $removeError);
+
+    /**
+     * @param CallPutAcceptRequest $acceptRequest
+     * @param CallPutAcceptRequest $acceptError
+     * @return Game
+     */
+    public function processPutAccept(CallPutAcceptRequest $acceptRequest, CallPutAcceptRequest $acceptError);
 }

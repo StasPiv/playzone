@@ -11,6 +11,7 @@ namespace CoreBundle\Handler;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
+use CoreBundle\Model\Request\Call\CallPutAcceptRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
@@ -106,13 +107,7 @@ class CallHandler implements CallProcessorInterface
      */
     public function processPostSend(CallPostSendRequest $sendRequest, CallPostSendRequest $sendError)
     {
-        $me = $this->container->get("core.handler.user")->getUserByLoginAndToken($sendRequest->getLogin(),
-            $sendRequest->getToken());
-
-        if (!$me instanceof User) {
-            $sendError->setLogin("Forbidden for user with this credentials");
-            $sendError->throwException(ResponseStatusCode::FORBIDDEN);
-        }
+        $me = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($sendRequest, $sendError);
 
         /** @var User $opponent */
         $opponent = $this->container->get("core.handler.user")->getRepository()->findOneByLogin($sendRequest->getPlayer());
@@ -156,15 +151,7 @@ class CallHandler implements CallProcessorInterface
      */
     public function processDeleteRemove(CallDeleteRemoveRequest $removeRequest, CallDeleteRemoveRequest $removeError)
     {
-        $me = $this->container->get("core.handler.user")->getUserByLoginAndToken(
-            $removeRequest->getLogin(),
-            $removeRequest->getToken()
-        );
-
-        if (!$me instanceof User) {
-            $removeError->setLogin("Forbidden for user with this credentials");
-            $removeError->throwException(ResponseStatusCode::FORBIDDEN);
-        }
+        $me = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($removeRequest, $removeError);
 
         $call = $this->repository->find($removeRequest->getCallId());
 
@@ -190,5 +177,40 @@ class CallHandler implements CallProcessorInterface
         $this->manager->flush();
 
         return $call;
+    }
+
+    /**
+     * @param CallPutAcceptRequest $acceptRequest
+     * @param CallPutAcceptRequest $acceptError
+     * @return Game
+     */
+    public function processPutAccept(CallPutAcceptRequest $acceptRequest, CallPutAcceptRequest $acceptError)
+    {
+        $me = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($acceptRequest, $acceptError);
+
+        $call = $this->repository->find($acceptRequest->getCallId());
+
+        if (!$call instanceof GameCall) {
+            $acceptError->setCallId("Call is not found");
+            $acceptError->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        if ($call->getToUser() != $me) {
+            $acceptError->setLogin("This is not call to you");
+            $acceptError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        if ($call->getGame()->getStatus() != GameStatus::CALL) {
+            $acceptError->setCallId("The call is already accepted");
+            $acceptError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        $this->manager->remove($call);
+        $call->getGame()->setStatus(GameStatus::PLAY);
+
+        $this->manager->persist($call->getGame());
+        $this->manager->flush();
+
+        return $call->getGame();
     }
 }

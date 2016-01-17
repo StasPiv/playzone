@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: stas
  * Date: 17.01.16
- * Time: 18:55
+ * Time: 20:58
  */
 
 namespace CoreBundle\Model\Request\Call;
@@ -12,7 +12,7 @@ use CoreBundle\Model\Request\SecurityRequestInterface;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CallDeleteRemoveRequest extends CallRequest implements SecurityRequestInterface
+class CallPutAcceptRequest extends CallRequest implements SecurityRequestInterface
 {
     /**
      * @var string

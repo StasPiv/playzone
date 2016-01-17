@@ -14,3 +14,6 @@ services:
     core.handler.error:
         class: CoreBundle\Handler\ErrorHandler
         arguments: ['@service_container']
+    core.handler.security:
+        class: CoreBundle\Handler\SecurityHandler
+        arguments: ['@service_container']

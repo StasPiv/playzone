@@ -10,11 +10,12 @@ namespace CoreBundle\Model\Request\Game;
 
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Call\CallType;
+use CoreBundle\Model\Request\SecurityRequestInterface;
 use CoreBundle\Model\User\UserType;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class GameGetListRequest extends GameRequest
+class GameGetListRequest extends GameRequest implements SecurityRequestInterface
 {
     /**
      * @var string

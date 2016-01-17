@@ -8,6 +8,7 @@
 
 namespace ApiBundle\Controller;
 
+use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Processor\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,11 @@ class CallController extends BaseController
     public function postSendAction(Request $request)
     {
         return $this->process($request, new CallPostSendRequest());
+    }
+
+    public function deleteRemoveAction(Request $request)
+    {
+        return $this->process($request, new CallDeleteRemoveRequest());
     }
 
     /**

@@ -33,8 +33,8 @@ class Game
      * @JMS\Type("CoreBundle\Entity\User")
      * @JMS\SerializedName("user_white")
      *
-     * @ORM\ManyToOne(targetEntity="User", cascade={"all"}, fetch="EAGER")
-     * @ORM\JoinColumn(name="id_white", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User", fetch="EAGER")
+     * @ORM\JoinColumn(name="id_white", referencedColumnName="id", nullable=false)
      */
     private $userWhite;
 
@@ -45,8 +45,8 @@ class Game
      * @JMS\Type("CoreBundle\Entity\User")
      * @JMS\SerializedName("user_black")
      *
-     * @ORM\ManyToOne(targetEntity="User", cascade={"all"}, fetch="EAGER")
-     * @ORM\JoinColumn(name="id_black", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User", fetch="EAGER")
+     * @ORM\JoinColumn(name="id_black", referencedColumnName="id", nullable=false)
      */
     private $userBlack;
 
@@ -57,8 +57,8 @@ class Game
      * @JMS\Type("CoreBundle\Entity\User")
      * @JMS\SerializedName("user_to_move")
      *
-     * @ORM\ManyToOne(targetEntity="User", cascade={"all"}, fetch="EAGER")
-     * @ORM\JoinColumn(name="id_to_move", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User", fetch="EAGER")
+     * @ORM\JoinColumn(name="id_to_move", referencedColumnName="id", nullable=false)
      */
     private $userToMove;
 
@@ -125,8 +125,8 @@ class Game
      * @JMS\Type("CoreBundle\Entity\Timecontrol")
      * @JMS\SerializedName("timecontrol")
      *
-     * @ORM\ManyToOne(targetEntity="Timecontrol", cascade={"all"}, fetch="EAGER")
-     * @ORM\JoinColumn(name="id_timecontrol", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Timecontrol", fetch="EAGER")
+     * @ORM\JoinColumn(name="id_timecontrol", referencedColumnName="id", nullable=false)
      */
     private $timecontrol;
 

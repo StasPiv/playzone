@@ -8,6 +8,8 @@
 
 namespace CoreBundle\Handler;
 
+use CoreBundle\Model\Game\GameStatus;
+use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
@@ -100,7 +102,7 @@ class CallHandler implements CallProcessorInterface
     /**
      * @param CallPostSendRequest $sendRequest
      * @param CallPostSendRequest $sendError
-     * @return mixed
+     * @return GameCall[]
      */
     public function processPostSend(CallPostSendRequest $sendRequest, CallPostSendRequest $sendError)
     {
@@ -145,5 +147,48 @@ class CallHandler implements CallProcessorInterface
         $this->manager->flush();
 
         return $newCalls;
+    }
+
+    /**
+     * @param CallDeleteRemoveRequest $removeRequest
+     * @param CallDeleteRemoveRequest $removeError
+     * @return GameCall
+     */
+    public function processDeleteRemove(CallDeleteRemoveRequest $removeRequest, CallDeleteRemoveRequest $removeError)
+    {
+        $me = $this->container->get("core.handler.user")->getUserByLoginAndToken(
+            $removeRequest->getLogin(),
+            $removeRequest->getToken()
+        );
+
+        if (!$me instanceof User) {
+            $removeError->setLogin("Forbidden for user with this credentials");
+            $removeError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        $call = $this->repository->find($removeRequest->getCallId());
+
+        if (!$call instanceof GameCall) {
+            $removeError->setCallId("Call is not found");
+            $removeError->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        if ($call->getFromUser() != $me) {
+            $removeError->setLogin("This is not your call");
+            $removeError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        if ($call->getGame()->getStatus() != GameStatus::CALL) {
+            $removeError->setCallId("Game is not call already");
+            $removeError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        $this->container->get("core.handler.game")->defineUserColorForGame($me, $call->getGame());
+
+        $this->manager->remove($call);
+
+        $this->manager->flush();
+
+        return $call;
     }
 }

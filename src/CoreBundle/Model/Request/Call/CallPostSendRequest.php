@@ -8,7 +8,6 @@
 
 namespace CoreBundle\Model\Request\Call;
 
-use CoreBundle\Model\Game\GameColor;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 

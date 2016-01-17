@@ -29,8 +29,8 @@ class GameCall
      * @JMS\Type("CoreBundle\Entity\User")
      * @JMS\SerializedName("from_user")
      *
-     * @ORM\ManyToOne(targetEntity="User", cascade={"all"}, fetch="EAGER")
-     * @ORM\JoinColumn(name="id_call_from", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User", fetch="EAGER")
+     * @ORM\JoinColumn(name="id_call_from", referencedColumnName="id", nullable=false)
      */
     private $fromUser;
 
@@ -41,8 +41,8 @@ class GameCall
      * @JMS\Type("CoreBundle\Entity\User")
      * @JMS\SerializedName("to_user")
      *
-     * @ORM\ManyToOne(targetEntity="User", cascade={"all"}, fetch="EAGER")
-     * @ORM\JoinColumn(name="id_call_to", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User", fetch="EAGER")
+     * @ORM\JoinColumn(name="id_call_to", referencedColumnName="id", nullable=false)
      */
     private $toUser;
 

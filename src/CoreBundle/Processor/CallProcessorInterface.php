@@ -9,6 +9,8 @@
 namespace CoreBundle\Processor;
 
 
+use CoreBundle\Entity\GameCall;
+use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 
 interface CallProcessorInterface
@@ -16,7 +18,14 @@ interface CallProcessorInterface
     /**
      * @param CallPostSendRequest $sendRequest
      * @param CallPostSendRequest $sendError
-     * @return mixed
+     * @return GameCall[]
      */
     public function processPostSend(CallPostSendRequest $sendRequest, CallPostSendRequest $sendError);
+
+    /**
+     * @param CallDeleteRemoveRequest $removeRequest
+     * @param CallDeleteRemoveRequest $removeError
+     * @return GameCall
+     */
+    public function processDeleteRemove(CallDeleteRemoveRequest $removeRequest, CallDeleteRemoveRequest $removeError);
 }

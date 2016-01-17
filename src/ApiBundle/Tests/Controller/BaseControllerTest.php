@@ -12,6 +12,8 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
 
 class BaseControllerTest extends WebTestCase
 {
+    protected $fixtures;
+
     /**
      * @param string $uri
      */
@@ -27,12 +29,19 @@ class BaseControllerTest extends WebTestCase
         );
 
         if (isset($testData["fixtures"])) {
-            $this->loadFixtures($testData["fixtures"]);
+            $this->fixtures = $this->loadFixtures($testData["fixtures"])->getReferenceRepository();
             unset($testData["fixtures"]);
         }
 
         foreach ($testData as $caseName => $data) {
             $request = isset($data['request']) ? $data['request'] : [];
+
+            if (isset($request["reference"])) {
+                $reference = $request["reference"];
+                $request[$reference["name"]] = $this->fixtures->getReference($reference["value"])->getId();
+                unset($request["reference"]);
+            }
+
             $setSession = isset($data['set_session']) ? $data['set_session'] : [];
 
             foreach ($setSession as $name => $value) {

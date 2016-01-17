@@ -53,6 +53,30 @@ playzoneServices.factory('CallService', function($http, $rootScope, ApiService) 
             .error(function(data) {
                 onError(data);
             });
+        },
+        acceptCall : function(params) {
+            if (!params.call) {
+                params.call = {};
+            }
+
+            var call = {};
+            call.call_id = params.call.id;
+            call.login = $rootScope.user.login;
+            call.token = $rootScope.user.token;
+            var onSuccess = params.success;
+            var onError = params.error;
+
+            $http({
+                method  : 'PUT',
+                url     : ApiService.accept_call,
+                data    : call
+            })
+            .success(function(data) {
+                onSuccess(data);
+            })
+            .error(function(data) {
+                onError(data);
+            });
         }
     };
 });

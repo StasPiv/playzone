@@ -97,7 +97,7 @@
             <div class="color_pic" style="background-color: {{ call.game.color }};"></div>
         </td>
         <td>
-            <a href="/#/game/accept/{{ call.id }}" class="button accept">{{ "Accept" | translate }}</a>&nbsp;&nbsp;<a href="/game/cancel/{{ call.id }}" class="button remove">{{ "Decline" | translate }}</a>
+            <a href="" class="button accept" ng-click="acceptCall(call)">{{ "Accept" | translate }}</a>&nbsp;&nbsp;<a href="/game/cancel/{{ call.id }}" class="button remove">{{ "Decline" | translate }}</a>
         </td>
     </tr>
 </table>

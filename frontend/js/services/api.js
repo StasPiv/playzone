@@ -12,7 +12,8 @@ playzoneServices.factory('ApiService', function(EnvService) {
         getCallsUrl,
         getGamesUrl,
         postCallUrl,
-        deleteCallUrl;
+        deleteCallUrl,
+        acceptCallUrl;
 
     switch (EnvService.currentMode) {
         case EnvService.testMode:
@@ -25,6 +26,7 @@ playzoneServices.factory('ApiService', function(EnvService) {
             getGamesUrl = API_URL + '/?method=getgames';
             postCallUrl = API_URL + '/?method=postcall';
             deleteCallUrl = API_URL + '/?method=deletecall';
+            acceptCallUrl = API_URL + '/?method=acceptcall';
             break;
         case EnvService.prodMode:
             API_URL = 'http://api.playzone-angular.lc/app_dev.php/';
@@ -36,6 +38,7 @@ playzoneServices.factory('ApiService', function(EnvService) {
             getGamesUrl = API_URL + 'game/list';
             postCallUrl = API_URL + 'call/send';
             deleteCallUrl = API_URL + 'call/remove';
+            acceptCallUrl = API_URL + 'call/accept';
     }
 
     return {
@@ -46,6 +49,7 @@ playzoneServices.factory('ApiService', function(EnvService) {
         get_calls : getCallsUrl,
         get_games : getGamesUrl,
         post_call : postCallUrl,
-        remove_call : deleteCallUrl
+        remove_call : deleteCallUrl,
+        accept_call : acceptCallUrl
     };
 });

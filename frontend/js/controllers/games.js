@@ -20,5 +20,19 @@ playzoneControllers.controller('GamesCtrl', function ($scope, GameService, CallS
                 $scope.errors = data.errors;
             }
         });
+    };
+
+    $scope.acceptCall = function(call) {
+        CallService.acceptCall({
+            call: call,
+            success: function() {
+                $scope.errors = {};
+                GameService.initCallsToMe($scope);
+                GameService.initCurrentGames($scope);
+            },
+            error: function(data) {
+                $scope.errors = data.errors;
+            }
+        });
     }
 });

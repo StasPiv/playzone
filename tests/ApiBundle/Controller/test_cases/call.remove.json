@@ -1,0 +1,97 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\TimecontrolFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\CallFixtures"
+  ],
+  "login_and_token_is_incorrect": {
+    "method": "DELETE",
+    "request": {
+      "login": "TestLogin",
+      "token": "bba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "call_id",
+        "value": "game-call-0"
+      }
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "login": "Forbidden for user with this credentials"
+      }
+    }
+  },
+  "call_is_not_found": {
+    "method": "DELETE",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "call_id": 767676
+    },
+    "response": {
+      "status": 404,
+      "errors": {
+        "call_id": "Call is not found"
+      }
+    }
+  },
+  "not_my_call": {
+    "method": "DELETE",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "call_id",
+        "value": "game-call-1"
+      }
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "login": "This is not your call"
+      }
+    }
+  },
+  "correct": {
+    "method": "DELETE",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "call_id",
+        "value": "game-call-0"
+      }
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "to_user": {
+          "login": "Stas",
+          "email": "piv1986@yandex.ru",
+          "class": "N",
+          "rating": 2200
+        },
+        "game" : {
+          "timecontrol": {
+            "id": 1,
+            "name": "10\/10no"
+          },
+          "user_white": {
+            "login": "TestLogin",
+            "email": "test-login@yandex.ru",
+            "class": "D",
+            "rating": 2243
+          },
+          "user_black": {
+            "login": "Stas",
+            "email": "piv1986@yandex.ru",
+            "class": "N",
+            "rating": 2200
+          },
+          "color": "white"
+        }
+      }
+    }
+  }
+}

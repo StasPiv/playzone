@@ -16,4 +16,9 @@ class CallControllerTest extends BaseControllerTest
     {
         $this->testFromJson('call/send');
     }
+
+    public function testCallRemove()
+    {
+        $this->testFromJson('call/remove');
+    }
 }

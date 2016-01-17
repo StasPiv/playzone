@@ -131,6 +131,15 @@ abstract class BaseController extends FOSRestController
     {
         $requestParams = $this->getRequestParams($request);
 
+        foreach ($requestParams as $index => $param) {
+            if (is_array($param)) { // dropdown from angularjs
+                if (!isset($param['id'])) {
+                    throw new BadRequestHttpException("id is required");
+                }
+                $requestParams[$index] = $param['id'];
+            }
+        }
+
         $serializer = $this->container->get('jms_serializer');
         $requestObject = $serializer->deserialize(json_encode($requestParams), get_class($requestObject), 'json');
 

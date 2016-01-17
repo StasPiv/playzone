@@ -7,8 +7,12 @@
     "method": "POST",
     "request": {
       "player": "Stas",
-      "color": "white",
-      "timecontrol": 1,
+      "color": {
+        "id": "white"
+      },
+      "timecontrol": {
+        "id": 1
+      },
       "games_count": 2
     },
     "response": {
@@ -25,8 +29,12 @@
       "login": "TestLogin",
       "token": "bba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
-      "color": "white",
-      "timecontrol": 1,
+      "color": {
+        "id": "white"
+      },
+      "timecontrol": {
+        "id": 1
+      },
       "games_count": 2
     },
     "response": {
@@ -43,8 +51,12 @@
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas2",
-      "color": "white",
-      "timecontrol": 1,
+      "color": {
+        "id": "white"
+      },
+      "timecontrol": {
+        "id": 1
+      },
       "games_count": 2
     },
     "response": {
@@ -61,8 +73,12 @@
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
-      "color": "white",
-      "timecontrol": 666,
+      "color": {
+        "id": "white"
+      },
+      "timecontrol": {
+        "id": 666
+      },
       "games_count": 2
     },
     "response": {
@@ -79,7 +95,9 @@
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
-      "color": "white",
+      "color": {
+        "id": "white"
+      },
       "games_count": 2
     },
     "response": {
@@ -96,8 +114,12 @@
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
-      "color": "ewhite",
-      "timecontrol": 1,
+      "color": {
+        "id": "ewhite"
+      },
+      "timecontrol": {
+        "id": 1
+      },
       "games_count": 2
     },
     "response": {
@@ -113,8 +135,12 @@
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
-      "color": "white",
-      "timecontrol": 1
+      "color": {
+        "id": "white"
+      },
+      "timecontrol": {
+        "id": 1
+      }
     },
     "response": {
       "status": 400,
@@ -129,8 +155,12 @@
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
-      "color": "white",
-      "timecontrol": 1,
+      "color": {
+        "id": "white"
+      },
+      "timecontrol": {
+        "id": 1
+      },
       "games_count": 11
     },
     "response": {
@@ -146,8 +176,12 @@
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
-      "color": "white",
-      "timecontrol": 1,
+      "color": {
+        "id": "white"
+      },
+      "timecontrol": {
+        "id": 1
+      },
       "games_count": 1
     },
     "response": {
@@ -189,8 +223,12 @@
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
-      "color": "white",
-      "timecontrol": 1,
+      "color": {
+        "id": "white"
+      },
+      "timecontrol": {
+        "id": 1
+      },
       "games_count": 2
     },
     "response": {

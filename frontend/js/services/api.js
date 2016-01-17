@@ -32,7 +32,7 @@ playzoneServices.factory('ApiService', function(EnvService) {
             getUsersUrl = API_URL + 'user/list';
             getCallsUrl = API_URL + 'game/list';
             getGamesUrl = API_URL + 'game/list';
-            postCallUrl = API_URL + 'game/call';
+            postCallUrl = API_URL + 'call/send';
     }
 
     return {

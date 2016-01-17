@@ -21,10 +21,4 @@ interface GameProcessorInterface extends ProcessorInterface
      * @return Game[]
      */
     public function processGetList(GameGetListRequest $listRequest);
-
-    /**
-     * @param GamePostCallRequest $callRequest
-     * @return GameCall
-     */
-    public function processPostCall(GamePostCallRequest $callRequest);
 }

@@ -2,17 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: stas
- * Date: 16.01.16
- * Time: 23:17
+ * Date: 17.01.16
+ * Time: 11:08
  */
 
-namespace ApiBundle\Model\Request\Game;
+namespace ApiBundle\Model\Request\Call;
 
 use CoreBundle\Model\Game\GameColor;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class GamePostCallRequest extends GameRequest
+class CallPostSendRequest extends CallRequest
 {
     /**
      * @var string

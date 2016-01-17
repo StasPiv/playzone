@@ -16,3 +16,9 @@ game_api:
     prefix:   /
     defaults: {_format: json}
 
+call_api:
+    resource: "@ApiBundle/Controller/CallController.php"
+    type:     rest
+    prefix:   /
+    defaults: {_format: json}
+

@@ -79,7 +79,7 @@ abstract class BaseController extends FOSRestController
      * @param int $successStatusCode
      * @return Response
      */
-    protected function process(Request $request, RequestInterface $requestObject, $successStatusCode = 200)
+    protected function process(Request $request, RequestInterface $requestObject, $successStatusCode = ResponseStatusCode::OK)
     {
         $data = [];
         try {
@@ -107,7 +107,7 @@ abstract class BaseController extends FOSRestController
                 $data['errors'] = $exception->getErrors();
             }
             $data['errorMessage'] = $exception->getMessage();
-            if ($this->container->get('kernel')->getEnvironment() == 'test') {
+            if ($this->container->get('kernel')->getEnvironment() != 'prod') {
                 $data['errorFile'] = $exception->getFile();
                 $data['errorLine'] = $exception->getLine();
             }
@@ -115,11 +115,11 @@ abstract class BaseController extends FOSRestController
         } catch (\Exception $exception) {
             $data['errors'] = [];
             $data['errorMessage'] = $exception->getMessage();
-            if ($this->container->get('kernel')->getEnvironment() == 'test') {
+            if ($this->container->get('kernel')->getEnvironment() != 'prod') {
                 $data['errorFile'] = $exception->getFile();
                 $data['errorLine'] = $exception->getLine();
             }
-            $statusCode = 500;
+            $statusCode = ResponseStatusCode::ISE;
         }
 
         return $this->handleView(

@@ -1,0 +1,35 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: stas
+ * Date: 17.01.16
+ * Time: 11:03
+ */
+
+namespace ApiBundle\Controller;
+
+use ApiBundle\Model\Request\Call\CallPostSendRequest;
+use CoreBundle\Processor\ProcessorInterface;
+use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\Annotations\RouteResource;
+
+/**
+ * Class CallController
+ * @package ApiBundle\Controller
+ * @RouteResource("Call", pluralize=false)
+ */
+class CallController extends BaseController
+{
+    public function postSendAction(Request $request)
+    {
+        return $this->process($request, new CallPostSendRequest());
+    }
+
+    /**
+     * @return ProcessorInterface
+     */
+    protected function getProcessor()
+    {
+        return $this->container->get("core.handler.game.call");
+    }
+}

@@ -9,5 +9,5 @@ services:
         class: CoreBundle\Handler\GameHandler
         arguments: ['@service_container', '@doctrine.orm.entity_manager']
     core.handler.game.call:
-        class: CoreBundle\Handler\GameCallHandler
+        class: CoreBundle\Handler\CallHandler
         arguments: ['@service_container', '@doctrine.orm.entity_manager']

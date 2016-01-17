@@ -1,4 +1,7 @@
 {
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures"
+  ],
   "empty_email_and_login": {
     "method": "POST",
     "request": {

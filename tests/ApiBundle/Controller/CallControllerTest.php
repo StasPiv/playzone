@@ -9,7 +9,7 @@
 namespace ApiBundle\Tests\Controller;
 
 
-class GameCallControllerTest extends BaseControllerTest
+class CallControllerTest extends BaseControllerTest
 {
 
     public function testCallSend()

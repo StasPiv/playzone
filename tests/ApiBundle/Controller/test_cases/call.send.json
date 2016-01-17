@@ -1,4 +1,8 @@
 {
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\TimecontrolFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures"
+  ],
   "login_and_token_is_required": {
     "method": "POST",
     "request": {
@@ -97,11 +101,43 @@
       "games_count": 2
     },
     "response": {
-      "status": 404,
+      "status": 400,
       "errors": {
         "color": "Color is incorrect"
-      },
-      "errorMessage": "Color is incorrect"
+      }
+    }
+  },
+  "empty_games_count": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "player": "Stas",
+      "color": "white",
+      "timecontrol": 1
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "games_count":"Enter games count"
+      }
+    }
+  },
+  "incorrect_games_count": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "player": "Stas",
+      "color": "white",
+      "timecontrol": 1,
+      "games_count": 11
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "games_count":"Maximum 10 games to match"
+      }
     }
   },
   "correct_call": {
@@ -116,33 +152,35 @@
     },
     "response": {
       "status": 200,
-      "data": {
-        "to_user": {
-          "login": "Stas",
-          "email": "piv1986@yandex.ru",
-          "class": "N",
-          "rating": 2200
-        },
-        "game" : {
-          "timecontrol": {
-            "id": 1,
-            "name": "10\/10no"
-          },
-          "user_white": {
-            "login": "TestLogin",
-            "email": "test-login@yandex.ru",
-            "class": "D",
-            "rating": 2243
-          },
-          "user_black": {
+      "data": [
+        {
+          "to_user": {
             "login": "Stas",
             "email": "piv1986@yandex.ru",
             "class": "N",
             "rating": 2200
           },
-          "color": "white"
+          "game" : {
+            "timecontrol": {
+              "id": 1,
+              "name": "10\/10no"
+            },
+            "user_white": {
+              "login": "TestLogin",
+              "email": "test-login@yandex.ru",
+              "class": "D",
+              "rating": 2243
+            },
+            "user_black": {
+              "login": "Stas",
+              "email": "piv1986@yandex.ru",
+              "class": "N",
+              "rating": 2200
+            },
+            "color": "white"
+          }
         }
-      }
+      ]
     }
   },
   "correct_call_2_games": {

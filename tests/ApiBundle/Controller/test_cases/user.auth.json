@@ -1,4 +1,7 @@
 {
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures"
+  ],
   "login_not_found" : {
     "method" : "POST",
     "request" : {

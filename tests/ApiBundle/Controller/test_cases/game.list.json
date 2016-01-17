@@ -1,4 +1,25 @@
 {
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\TimecontrolFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\CallFixtures"
+  ],
+  "incorrect_token": {
+    "method": "GET",
+    "request": {
+      "login": "TestLogin",
+      "token": "bba37b62d15cc5f8671fd3d1b034c354",
+      "user": "me",
+      "status": "call"
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "login":"Need to pass correct login and token for getting game list for current user"
+      }
+    }
+  },
   "call_from_me": {
     "method": "GET",
     "request": {

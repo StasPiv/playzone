@@ -8,7 +8,7 @@
 
 namespace ApiBundle\Controller;
 
-use ApiBundle\Model\Request\Timecontrol\TimecontrolGetRequest;
+use CoreBundle\Model\Request\Timecontrol\TimecontrolGetRequest;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

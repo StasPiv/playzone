@@ -6,15 +6,13 @@
  * Time: 16:31
  */
 
-namespace ApiBundle\Model\Request\User;
+namespace CoreBundle\Model\Request\User;
 
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class UserPostAuthRequest extends UserRequest
 {
-    protected $errorMessage = "Authorization failed";
-
     /**
      * @var string
      *

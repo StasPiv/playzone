@@ -6,7 +6,7 @@
  * Time: 11:08
  */
 
-namespace ApiBundle\Model\Request\Call;
+namespace CoreBundle\Model\Request\Call;
 
 use CoreBundle\Model\Game\GameColor;
 use JMS\Serializer\Annotation as JMS;
@@ -56,14 +56,16 @@ class CallPostSendRequest extends CallRequest
      *
      * @JMS\Expose()
      * @JMS\Type("string")
+     *
+     * @Assert\Choice(choices = {"white", "black", "random"}, message = "Color is incorrect")
      */
-    private $color = GameColor::RANDOM;
+    private $color;
 
     /**
      * @var integer
      *
      * @JMS\Expose()
-     * @JMS\Type("integer")
+     * @JMS\Type("string")
      *
      * @Assert\NotBlank(
      *     message = "Enter timecontrol"
@@ -75,9 +77,20 @@ class CallPostSendRequest extends CallRequest
      * @var integer
      *
      * @JMS\Expose()
-     * @JMS\Type("integer")
+     * @JMS\Type("string")
+     *
+     * @Assert\Range(
+     *      min = 1,
+     *      max = 10,
+     *      minMessage = "Minimum {{ limit }} games to match",
+     *      maxMessage = "Maximum {{ limit }} games to match"
+     * )
+     *
+     * @Assert\NotBlank(
+     *      message = "Enter games count"
+     * )
      */
-    private $gamesCount = 1;
+    private $gamesCount;
 
     /**
      * @return string

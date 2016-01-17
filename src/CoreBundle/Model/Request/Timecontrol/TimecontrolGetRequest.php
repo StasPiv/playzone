@@ -6,7 +6,7 @@
  * Time: 20:14
  */
 
-namespace ApiBundle\Model\Request\Timecontrol;
+namespace CoreBundle\Model\Request\Timecontrol;
 
 class TimecontrolGetRequest extends TimecontrolRequest
 {

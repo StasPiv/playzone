@@ -6,7 +6,7 @@
  * Time: 19:14
  */
 
-namespace ApiBundle\Model\Response;
+namespace CoreBundle\Model\Response;
 
 class ResponseStatusCode
 {

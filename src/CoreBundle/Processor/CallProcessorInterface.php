@@ -9,13 +9,14 @@
 namespace CoreBundle\Processor;
 
 
-use ApiBundle\Model\Request\Call\CallPostSendRequest;
+use CoreBundle\Model\Request\Call\CallPostSendRequest;
 
 interface CallProcessorInterface
 {
     /**
      * @param CallPostSendRequest $sendRequest
+     * @param CallPostSendRequest $sendError
      * @return mixed
      */
-    public function processPostSend(CallPostSendRequest $sendRequest);
+    public function processPostSend(CallPostSendRequest $sendRequest, CallPostSendRequest $sendError);
 }

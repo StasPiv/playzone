@@ -47,10 +47,7 @@ abstract class AbstractPlayzoneFixtures extends AbstractFixture implements Conta
     public function load(ObjectManager $manager)
     {
         $this->processEntities($manager);
-
-        if (!$this->isTestMode()) {
-            $manager->flush();
-        }
+        $manager->flush();
     }
 
     /**

@@ -6,10 +6,10 @@
  * Time: 20:21
  */
 
-namespace ApiBundle\Model\Request\Game;
+namespace CoreBundle\Model\Request\Game;
 
 use CoreBundle\Model\Game\GameStatus;
-use CoreBundle\Model\GameCall\GameCallType;
+use CoreBundle\Model\Call\CallType;
 use CoreBundle\Model\User\UserType;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -38,7 +38,7 @@ class GameGetListRequest extends GameRequest
      * @JMS\Expose
      * @JMS\Type("string")
      */
-    private $user = UserType::ME;
+    private $user;
 
     /**
      * @var string
@@ -46,7 +46,7 @@ class GameGetListRequest extends GameRequest
      * @JMS\Expose
      * @JMS\Type("string")
      */
-    private $status = GameStatus::PLAY;
+    private $status;
 
     /**
      * @var string
@@ -54,7 +54,7 @@ class GameGetListRequest extends GameRequest
      * @JMS\Expose
      * @JMS\Type("string")
      */
-    private $callType = GameCallType::FROM;
+    private $callType;
 
     /**
      * @return string

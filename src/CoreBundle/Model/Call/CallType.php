@@ -6,9 +6,9 @@
  * Time: 21:32
  */
 
-namespace CoreBundle\Model\GameCall;
+namespace CoreBundle\Model\Call;
 
-class GameCallType
+class CallType
 {
     const FROM = 'from';
     const TO = 'to';

@@ -8,9 +8,9 @@
 
 namespace CoreBundle\Handler;
 
-use ApiBundle\Model\Request\Game\GameGetListRequest;
-use ApiBundle\Model\Request\Game\GamePostCallRequest;
-use ApiBundle\Model\Response\ResponseStatusCode;
+use CoreBundle\Exception\Handler\GameHandlerException;
+use CoreBundle\Model\Request\Game\GameGetListRequest;
+use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
 use CoreBundle\Entity\Timecontrol;
@@ -53,23 +53,24 @@ class GameHandler implements GameProcessorInterface
 
     /**
      * @param GameGetListRequest $listRequest
-     * @return Game[]
+     * @param GameGetListRequest $listError
+     * @return \CoreBundle\Entity\Game[]
      */
-    public function processGetList(GameGetListRequest $listRequest)
+    public function processGetList(GameGetListRequest $listRequest, GameGetListRequest $listError)
     {
-        if ($listRequest->getUser() == UserType::ME) {
-            if (!$listRequest->getLogin() || !$listRequest->getToken()) {
-                throw new GameProcessorException("Need to pass login and token for getting game list for current user",
-                    ResponseStatusCode::FORBIDDEN);
-            }
-
-            $user = $this->container->get("core.handler.user")
-                ->getUserByLoginAndToken($listRequest->getLogin(), $listRequest->getToken());
-
-            return $this->getGamesForUser($listRequest, $user);
+        if ($listRequest->getUser() != UserType::ME) {
+            return [];
         }
 
-        return [];
+        $user = $this->container->get("core.handler.user")
+            ->getUserByLoginAndToken($listRequest->getLogin(), $listRequest->getToken());
+
+        if (!$user instanceof User) {
+            $listError->setLogin("Need to pass correct login and token for getting game list for current user");
+            $listError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        return $this->getGamesForUser($listRequest, $user);
     }
 
     /**
@@ -115,7 +116,7 @@ class GameHandler implements GameProcessorInterface
                 $game->setColor(GameColor::BLACK);
                 break;
             default:
-                throw new GameProcessorException("Unknown user {$user->getLogin()} for game {$game->getId()}");
+                throw new GameHandlerException("Unknown user {$user->getLogin()} for game {$game->getId()}");
         }
     }
 
@@ -135,7 +136,7 @@ class GameHandler implements GameProcessorInterface
                 $game->setOpponent($game->getUserWhite());
                 break;
             default:
-                throw new GameProcessorException("Unknown user {$user->getLogin()} for game {$game->getId()}");
+                throw new GameHandlerException("Unknown user {$user->getLogin()} for game {$game->getId()}");
         }
     }
 
@@ -153,15 +154,14 @@ class GameHandler implements GameProcessorInterface
         switch ($myColor) {
             case GameColor::WHITE:
                 $game->setUserWhite($me)
-                    ->setUserBlack($opponent);
+                     ->setUserBlack($opponent);
                 break;
             case GameColor::BLACK:
                 $game->setUserBlack($me)
-                    ->setUserWhite($opponent);
+                     ->setUserWhite($opponent);
                 break;
             default:
-                throw new GameProcessorException("Color is incorrect", ResponseStatusCode::NOT_FOUND,
-                    ["color" => "Color is incorrect"]);
+                throw new GameHandlerException("Color is incorrect");
         }
 
         $game->setStatus(GameStatus::CALL)

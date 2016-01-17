@@ -8,14 +8,15 @@
 
 namespace ApiBundle\Controller;
 
-use ApiBundle\Model\Request\RequestInterface;
-use ApiBundle\Model\Response\ResponseStatusCode;
+use CoreBundle\Model\Request\RequestInterface;
+use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Processor\ProcessorInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Validator\ConstraintViolation;
 
 abstract class BaseController extends FOSRestController
@@ -87,26 +88,20 @@ abstract class BaseController extends FOSRestController
             $actionType = str_replace([$requestMethod, 'Action'], '', debug_backtrace()[1]['function']);
             $actionName = 'process' . ucfirst($requestMethod) . ucfirst($actionType);
 
+            $errorRequestObject = clone $requestObject;
             $requestObject = $this->fillRequestObjectWithRequest($request, $requestObject);
 
             foreach ($this->container->get('validator')->validate($requestObject) as $error) {
-                /** @var ConstraintViolation $error */
-                $errors[strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2',
-                    $error->getPropertyPath()))] = $error->getMessage();
+                $errorRequestObject->{'set'.ucfirst($error->getPropertyPath())}($error->getMessage());
             }
 
-            if (!empty($errors)) {
-                throw $requestObject->getException(ResponseStatusCode::BAD_FORMAT, $errors);
-            }
+            $this->container->get("core.handler.error")->throwExceptionIfHasErrors($errorRequestObject, ResponseStatusCode::BAD_FORMAT);
 
-            $data['data'] = $this->getProcessor()->$actionName($requestObject);
+            $data['data'] = $this->getProcessor()->$actionName($requestObject, $errorRequestObject);
 
             $statusCode = $successStatusCode;
         } catch (ProcessorException $exception) {
-            if (!empty($exception->getErrors())) {
-                $data['errors'] = $exception->getErrors();
-            }
-            $data['errorMessage'] = $exception->getMessage();
+            $data['errors'] = $exception->getRequestError();
             if ($this->container->get('kernel')->getEnvironment() != 'prod') {
                 $data['errorFile'] = $exception->getFile();
                 $data['errorLine'] = $exception->getLine();

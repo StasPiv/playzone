@@ -6,7 +6,7 @@
  * Time: 17:14
  */
 
-namespace ApiBundle\Model\Request\User;
+namespace CoreBundle\Model\Request\User;
 
 class UserGetListRequest extends UserRequest
 {

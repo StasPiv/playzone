@@ -12,7 +12,7 @@ use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
 use CoreBundle\Entity\User;
 
-class GameCallFixtures extends AbstractPlayzoneFixtures
+class CallFixtures extends AbstractPlayzoneFixtures
 {
     /**
      * @param array $data

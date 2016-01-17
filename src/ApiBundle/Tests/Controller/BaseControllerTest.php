@@ -8,9 +8,7 @@
 
 namespace ApiBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-;
+use Liip\FunctionalTestBundle\Test\WebTestCase;
 
 class BaseControllerTest extends WebTestCase
 {
@@ -27,6 +25,11 @@ class BaseControllerTest extends WebTestCase
             file_get_contents($directoryName . $action . '.json'),
             true
         );
+
+        if (isset($testData["fixtures"])) {
+            $this->loadFixtures($testData["fixtures"]);
+            unset($testData["fixtures"]);
+        }
 
         foreach ($testData as $caseName => $data) {
             $request = isset($data['request']) ? $data['request'] : [];
@@ -48,6 +51,8 @@ class BaseControllerTest extends WebTestCase
             $actualResponse = json_decode($client->getResponse()->getContent(), true);
 
             if (isset($expectedResponse['errors'])) {
+                $this->assertArrayHasKey("errors", $actualResponse, $errorMessage);
+
                 $this->assertEmpty(array_diff_assoc($expectedResponse['errors'],
                     $actualResponse['errors']),
                     $errorMessage);

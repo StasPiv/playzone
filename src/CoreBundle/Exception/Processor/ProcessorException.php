@@ -8,46 +8,46 @@
 
 namespace CoreBundle\Exception\Processor;
 
+use CoreBundle\Model\Request\RequestInterface;
 use Exception;
 use RuntimeException;
 
-class ProcessorException extends \RuntimeException
+abstract class ProcessorException extends RuntimeException
 {
     /**
-     * @var array
+     * @var RequestInterface
      */
-    private $errors = [];
+    private $requestError;
+
 
     /**
      * (PHP 5 &gt;= 5.1.0)<br/>
      * Construct the exception. Note: The message is NOT binary safe.
      * @link http://php.net/manual/en/exception.construct.php
-     * @param string $message [optional] The Exception message to throw.
+     * @param RequestInterface $requestError
      * @param int $code [optional] The Exception code.
-     * @param Exception $previous [optional] The previous exception used for the exception chaining. Since 5.3.0
+     * @param string $message [optional] The Exception message to throw.
      */
-    public function __construct($message = "", $code = 0, array $errors = [], Exception $previous = null)
+    public function __construct(RequestInterface $requestError, $code, $message = "")
     {
-        if (!empty($errors)) {
-            $this->setErrors($errors);
-        }
-        parent::__construct($message, $code, $previous);
+        $this->setRequestError($requestError);
+        parent::__construct($message, $code);
     }
 
     /**
-     * @return array
+     * @return RequestInterface
      */
-    public function getErrors()
+    public function getRequestError()
     {
-        return $this->errors;
+        return $this->requestError;
     }
 
     /**
-     * @param array $errors
+     * @param RequestInterface $requestError
      */
-    public function setErrors($errors)
+    public function setRequestError($requestError)
     {
-        $this->errors = $errors;
+        $this->requestError = $requestError;
     }
 
 }

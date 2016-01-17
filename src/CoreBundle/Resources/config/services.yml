@@ -11,3 +11,6 @@ services:
     core.handler.game.call:
         class: CoreBundle\Handler\CallHandler
         arguments: ['@service_container', '@doctrine.orm.entity_manager']
+    core.handler.error:
+        class: CoreBundle\Handler\ErrorHandler
+        arguments: ['@service_container']

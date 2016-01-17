@@ -8,9 +8,9 @@
 
 namespace ApiBundle\Controller;
 
-use ApiBundle\Model\Request\User\UserPostAuthRequest;
-use ApiBundle\Model\Request\User\UserGetListRequest;
-use ApiBundle\Model\Request\User\UserPostRegisterRequest;
+use CoreBundle\Model\Request\User\UserPostAuthRequest;
+use CoreBundle\Model\Request\User\UserGetListRequest;
+use CoreBundle\Model\Request\User\UserPostRegisterRequest;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

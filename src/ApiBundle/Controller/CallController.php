@@ -8,7 +8,7 @@
 
 namespace ApiBundle\Controller;
 
-use ApiBundle\Model\Request\Call\CallPostSendRequest;
+use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Processor\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations\RouteResource;

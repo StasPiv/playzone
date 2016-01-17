@@ -11,6 +11,7 @@ use CoreBundle\Entity\User;
  * repository methods below.
  *
  * @method User findOneByLogin(string $login)
+ * @method User findOneByEmail(string $email)
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {

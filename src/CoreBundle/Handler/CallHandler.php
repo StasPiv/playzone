@@ -9,6 +9,7 @@
 namespace CoreBundle\Handler;
 
 use CoreBundle\Model\Game\GameStatus;
+use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Call\CallPutAcceptRequest;
@@ -212,5 +213,41 @@ class CallHandler implements CallProcessorInterface
         $this->manager->flush();
 
         return $call->getGame();
+    }
+
+    /**
+     * @param CallDeleteDeclineRequest $declineRequest
+     * @param CallDeleteDeclineRequest $declineError
+     * @return GameCall
+     */
+    public function processDeleteDecline(
+        CallDeleteDeclineRequest $declineRequest,
+        CallDeleteDeclineRequest $declineError
+    ) {
+        $me = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($declineRequest, $declineError);
+
+        $call = $this->repository->find($declineRequest->getCallId());
+
+        if (!$call instanceof GameCall) {
+            $declineError->setCallId("Call is not found");
+            $declineError->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        if ($call->getToUser() != $me) {
+            $declineError->setLogin("This is not call to you");
+            $declineError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        if ($call->getGame()->getStatus() != GameStatus::CALL) {
+            $declineError->setCallId("The call is already accepted");
+            $declineError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        $this->manager->remove($call);
+        $this->manager->remove($call->getGame());
+
+        $this->manager->flush();
+
+        return $call;
     }
 }

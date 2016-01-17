@@ -106,7 +106,7 @@ class BaseControllerTest extends WebTestCase
         $multiDimensional = false;
 
         foreach ($expectedData as $key => $expectedChunk) {
-            $this->assertArrayHasKey($key, $actualData, $errorMessage . PHP_EOL . json_encode($actualData));
+            $this->assertArrayHasKey($key, $actualData, $errorMessage);
             if (is_array(($expectedChunk))) {
                 $this->assertActualContainsExpected($actualData[$key], $expectedChunk, $errorMessage);
                 $multiDimensional = true;

@@ -8,6 +8,7 @@
 
 namespace ApiBundle\Controller;
 
+use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Call\CallPutAcceptRequest;
@@ -35,6 +36,11 @@ class CallController extends BaseController
     public function putAcceptAction(Request $request)
     {
         return $this->process($request, new CallPutAcceptRequest());
+    }
+
+    public function deleteDeclineAction(Request $request)
+    {
+        return $this->process($request, new CallDeleteDeclineRequest());
     }
 
     /**

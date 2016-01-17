@@ -11,6 +11,7 @@ namespace CoreBundle\Processor;
 
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
+use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Call\CallPutAcceptRequest;
@@ -37,4 +38,11 @@ interface CallProcessorInterface
      * @return Game
      */
     public function processPutAccept(CallPutAcceptRequest $acceptRequest, CallPutAcceptRequest $acceptError);
+
+    /**
+     * @param CallDeleteDeclineRequest $declineRequest
+     * @param CallDeleteDeclineRequest $declineError
+     * @return GameCall
+     */
+    public function processDeleteDecline(CallDeleteDeclineRequest $declineRequest, CallDeleteDeclineRequest $declineError);
 }

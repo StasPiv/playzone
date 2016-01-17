@@ -5,13 +5,13 @@
             <tr>
                 <td style="color:red;" colspan="2">{{ 'Personal calls do not affect the rating' | translate }}</td>
             </tr>
-            <tr>
+            <tr ng-class="{ error: errors.player }">
                 <td><label for="login_enemy">{{ 'Player' | translate }}:</label></td>
                 <td>
                     <input type="text" id="login_enemy" data-ng-model="call.player">
                 </td>
             </tr>
-            <tr>
+            <tr ng-class="{ error: errors.color }">
                 <td><label for="color">{{ 'Color' | translate }}:</label></td>
                 <td>
                     <select
@@ -21,7 +21,7 @@
                     </select>
                 </td>
             </tr>
-            <tr>
+            <tr ng-class="{ error: errors.timecontrol }">
                 <td><label for="timecontrol">{{ 'Time control' | translate }}:</label></td>
                 <td>
                     <select
@@ -31,17 +31,14 @@
                     </select>
                 </td>
             </tr>
-            <tr>
+            <tr ng-class="{ error: errors.games_count }">
                 <td><label for="count">{{ 'The game count'| translate }}:</label></td>
                 <td>
                     <input type="text" id="count" value="1" size="2" ng-model="call.games_count" />
                 </td>
             </tr>
             <tr>
-                <td>
-                    &nbsp;
-                </td>
-                <td>
+                <td colspan="2">
                     <input class="button" value="OK" type="submit" data-ng-click="sendCall()">
                 </td>
             </tr>

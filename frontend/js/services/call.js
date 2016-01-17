@@ -6,9 +6,13 @@
 playzoneServices.factory('CallService', function($http, $rootScope, ApiService) {
     return {
         sendCall : function(params) {
+            if (!params.call) {
+                params.call = {};
+            }
+
             var call = params.call;
-            call.color = params.call.color.id;
-            call.timecontrol = params.call.timecontrol.id;
+            call.color = params.call.color !== undefined ? params.call.color.id : "random";
+            call.timecontrol = params.call.timecontrol !== undefined ? params.call.timecontrol.id : 0;
             call.login = $rootScope.user.login;
             call.token = $rootScope.user.token;
             var onSuccess = params.success;

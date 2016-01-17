@@ -271,6 +271,9 @@ table.register.register td{
 table.register .error{
 	color:red;
 }
+.error{
+    color:red;
+}
 .errorMessage,.successMessage{
 	text-align:center;
 	border: 1px solid black;

@@ -185,6 +185,13 @@ class User
      */
     private $token;
 
+    /**
+     * @JMS\Expose
+     * @JMS\SerializedName("isAuth")
+     * @JMS\Type("boolean")
+     */
+    private $auth = true;
+
 
     /**
      * Get id
@@ -666,6 +673,22 @@ class User
     public function setToken($token)
     {
         $this->token = $token;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAuth()
+    {
+        return $this->auth;
+    }
+
+    /**
+     * @param mixed $auth
+     */
+    public function setAuth($auth)
+    {
+        $this->auth = $auth;
     }
 }
 

@@ -11,6 +11,7 @@ namespace CoreBundle\Handler;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
+use CoreBundle\Model\Request\Call\CallGetRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Call\CallPutAcceptRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
@@ -54,13 +55,15 @@ class CallHandler implements CallProcessorInterface
     }
 
     /**
-     * @param User $user
-     * @param $callType
+     * @param CallGetRequest $getRequest
+     * @param CallGetRequest $getError
      * @return GameCall[]
      */
-    public function getCalls(User $user, $callType = CallType::FROM)
+    public function processGet(CallGetRequest $getRequest, CallGetRequest $getError)
     {
-        switch ($callType) {
+        $me = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($getRequest, $getError);
+
+        switch ($getRequest->getType()) {
             case CallType::FROM:
                 $fieldForUser = 'fromUser';
                 break;
@@ -72,11 +75,11 @@ class CallHandler implements CallProcessorInterface
                 break;
         }
 
-        $calls = $this->repository->findBy([$fieldForUser => $user]);
+        $calls = $this->repository->findBy([$fieldForUser => $me]);
 
         foreach ($calls as $call) {
             /** @var GameCall $call */
-            $this->container->get("core.handler.game")->defineUserColorForGame($user, $call->getGame());
+            $this->container->get("core.handler.game")->defineUserColorForGame($me, $call->getGame());
         }
 
         return $calls;
@@ -211,6 +214,9 @@ class CallHandler implements CallProcessorInterface
 
         $this->manager->persist($call->getGame());
         $this->manager->flush();
+
+        $this->container->get("core.handler.game")->defineUserColorForGame($me, $call->getGame());
+        $this->container->get("core.handler.game")->defineUserMoveAndOpponentForGame($me, $call->getGame());
 
         return $call->getGame();
     }

@@ -66,12 +66,22 @@ abstract class BaseController extends FOSRestController
 
         switch (true) {
             case !empty($jsonRequest):
-                return $jsonRequest;
-            case $request->getMethod() == 'GET':
-                return $request->query->all();
+                $params = $jsonRequest;
+                break;
             default:
-                return $request->request->all();
+                $params = $request->request->all();
+                break;
         }
+
+        $params = array_merge($params, $request->query->all());
+
+        foreach ($request->attributes->all() as $name => $value) { // add url parameters such as {id}
+            if (substr($name, 0, 1) != '_') {
+                $params[$name] = $value;
+            }
+        }
+
+        return $params;
     }
 
     /**

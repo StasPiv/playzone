@@ -13,11 +13,19 @@ use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
 use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
+use CoreBundle\Model\Request\Call\CallGetRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Call\CallPutAcceptRequest;
 
 interface CallProcessorInterface
 {
+    /**
+     * @param CallGetRequest $getRequest
+     * @param CallGetRequest $getError
+     * @return GameCall[]
+     */
+    public function processGet(CallGetRequest $getRequest, CallGetRequest $getError);
+
     /**
      * @param CallPostSendRequest $sendRequest
      * @param CallPostSendRequest $sendError

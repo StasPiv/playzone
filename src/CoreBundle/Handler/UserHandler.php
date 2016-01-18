@@ -82,6 +82,8 @@ class UserHandler implements UserProcessorInterface
 
         $this->saveUser($user);
 
+        $user->setToken($this->generateValidUserToken($user));
+
         return $user;
     }
 
@@ -92,6 +94,12 @@ class UserHandler implements UserProcessorInterface
      */
     public function processPostAuth(UserPostAuthRequest $authRequest, UserPostAuthRequest $authError)
     {
+        if ($authRequest->getToken()) {
+            $user = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($authRequest, $authError);
+            $user->setToken($this->generateValidUserToken($user));
+            return $user;
+        }
+
         $user = $this->repository->findOneByLogin($authRequest->getLogin());
 
         switch (true) {

@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: stas
- * Date: 17.01.16
- * Time: 20:58
+ * Date: 18.01.16
+ * Time: 13:25
  */
 
 namespace CoreBundle\Model\Request\Call;
@@ -12,7 +12,7 @@ use CoreBundle\Model\Request\SecurityRequestInterface;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CallPutAcceptRequest extends CallRequest implements SecurityRequestInterface
+class CallGetRequest extends CallRequest implements SecurityRequestInterface
 {
     /**
      * @var string
@@ -41,14 +41,16 @@ class CallPutAcceptRequest extends CallRequest implements SecurityRequestInterfa
     /**
      * @var string
      *
-     * @JMS\Expose()
+     * @JMS\Expose
      * @JMS\Type("string")
      *
      * @Assert\NotBlank(
-     *     message = "Call id is required for this request"
+     *    message = "Enter call type"
      * )
+     *
+     * @Assert\Choice(choices = {"from", "to"}, message = "Call type is incorrect")
      */
-    private $callId;
+    private $type;
 
     /**
      * @return string
@@ -89,16 +91,19 @@ class CallPutAcceptRequest extends CallRequest implements SecurityRequestInterfa
     /**
      * @return string
      */
-    public function getCallId()
+    public function getType()
     {
-        return $this->callId;
+        return $this->type;
     }
 
     /**
-     * @param string $callId
+     * @param string $type
+     * @return $this
      */
-    public function setCallId($callId)
+    public function setType($type)
     {
-        $this->callId = $callId;
+        $this->type = $type;
+        return $this;
     }
+
 }

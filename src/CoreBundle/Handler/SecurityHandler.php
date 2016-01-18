@@ -28,22 +28,22 @@ class SecurityHandler
     }
 
     /**
-     * @param SecurityRequestInterface $removeRequest
-     * @param SecurityRequestInterface $removeError
+     * @param SecurityRequestInterface $securityRequest
+     * @param SecurityRequestInterface $securityError
      * @return User
      */
     public function getMeIfCredentialsIsOk(
-        SecurityRequestInterface $removeRequest,
-        SecurityRequestInterface $removeError
+        SecurityRequestInterface $securityRequest,
+        SecurityRequestInterface $securityError
     ) {
         $me = $this->container->get("core.handler.user")->getUserByLoginAndToken(
-            $removeRequest->getLogin(),
-            $removeRequest->getToken()
+            $securityRequest->getLogin(),
+            $securityRequest->getToken()
         );
 
         if (!$me instanceof User) {
-            $removeError->setLogin("Forbidden for user with this credentials");
-            $removeError->throwException(ResponseStatusCode::FORBIDDEN);
+            $securityError->setLogin("Forbidden for user with this credentials");
+            $securityError->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
         return $me;

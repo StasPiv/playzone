@@ -10,11 +10,15 @@ namespace ApiBundle\Controller;
 
 use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
+use CoreBundle\Model\Request\Call\CallGetRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Call\CallPutAcceptRequest;
 use CoreBundle\Processor\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Put;
+use FOS\RestBundle\Controller\Annotations\Post;
 
 /**
  * Class CallController
@@ -23,22 +27,50 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
  */
 class CallController extends BaseController
 {
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getAction(Request $request)
+    {
+        return $this->process($request, new CallGetRequest());
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function postSendAction(Request $request)
     {
         return $this->process($request, new CallPostSendRequest());
     }
 
-    public function deleteRemoveAction(Request $request)
+    /**
+     * @param Request $request
+     * @param $call_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function deleteRemoveAction(Request $request, $call_id)
     {
         return $this->process($request, new CallDeleteRemoveRequest());
     }
 
-    public function putAcceptAction(Request $request)
+    /**
+     * @param Request $request
+     * @param $call_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function putAcceptAction(Request $request, $call_id)
     {
         return $this->process($request, new CallPutAcceptRequest());
     }
 
-    public function deleteDeclineAction(Request $request)
+    /**
+     * @param Request $request
+     * @param $call_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function deleteDeclineAction(Request $request, $call_id)
     {
         return $this->process($request, new CallDeleteDeclineRequest());
     }

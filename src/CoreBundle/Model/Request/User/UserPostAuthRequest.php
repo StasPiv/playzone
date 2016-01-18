@@ -8,10 +8,11 @@
 
 namespace CoreBundle\Model\Request\User;
 
+use CoreBundle\Model\Request\SecurityRequestInterface;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class UserPostAuthRequest extends UserRequest
+class UserPostAuthRequest extends UserRequest implements SecurityRequestInterface
 {
     /**
      * @var string
@@ -36,6 +37,14 @@ class UserPostAuthRequest extends UserRequest
      * )
      */
     private $password;
+
+    /**
+     * @var string
+     *
+     * @JMS\Expose
+     * @JMS\Type("string")
+     */
+    private $token;
 
     /**
      * @return string
@@ -67,5 +76,21 @@ class UserPostAuthRequest extends UserRequest
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
     }
 }

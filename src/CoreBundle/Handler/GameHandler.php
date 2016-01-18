@@ -80,10 +80,6 @@ class GameHandler implements GameProcessorInterface
      */
     private function getGamesForUser(GameGetListRequest $listRequest, User $user)
     {
-        if ($listRequest->getStatus() == GameStatus::CALL) {
-            return $this->container->get("core.handler.game.call")->getCalls($user, $listRequest->getCallType());
-        }
-
         $games = $this->manager
             ->createQuery(
                 "SELECT g FROM CoreBundle:Game g
@@ -124,7 +120,7 @@ class GameHandler implements GameProcessorInterface
      * @param User $user
      * @param Game $game
      */
-    private function defineUserMoveAndOpponentForGame(User $user, Game $game)
+    public function defineUserMoveAndOpponentForGame(User $user, Game $game)
     {
         $game->setUserMove($game->getUserToMove() == $user);
 

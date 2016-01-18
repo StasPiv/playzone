@@ -8,19 +8,27 @@
 
 namespace ApiBundle\Tests\Controller;
 
+use Doctrine\Common\DataFixtures\Executor\AbstractExecutor;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 
+/**
+ * Class BaseControllerTest
+ * @package ApiBundle\Tests\Controller
+ *
+ * @method AbstractExecutor loadFixtures(array $fixtures)
+ */
 class BaseControllerTest extends WebTestCase
 {
     protected $fixtures;
 
     /**
-     * @param string $uri
+     * @param string $baseUri
      */
-    protected function testFromJson($uri)
+    protected function testFromJson($baseUri)
     {
         $client = static::createClient();
-        $action = str_replace('/', '.', $uri);
+        $action = preg_replace('/\/\{\w+\}/', '', $baseUri);
+        $action = str_replace('/', '.', $action);
 
         $directoryName = $client->getContainer()->get('kernel')->getRootDir() . '/../tests/ApiBundle/Controller/test_cases/';
         $testData = json_decode(
@@ -48,7 +56,20 @@ class BaseControllerTest extends WebTestCase
                 $client->getContainer()->get("session")->set($name, $value);
             }
 
-            $client->request($data['method'], '/' . $uri, $request);
+            $requestUri = $baseUri;
+
+            foreach ($request as $name => $value) {
+                if (is_array($value)) {
+                    continue;
+                }
+
+                $requestUri = str_replace('{' . $name . '}', $value, $baseUri, $count);
+                if ($count) {
+                    unset($request[$name]);
+                }
+            }
+
+            $client->request($data['method'], '/' . $requestUri, $request);
             $expectedResponse = $data['response'];
             $errorMessage = "Failed $caseName.\nExpected response: " . json_encode($expectedResponse) . ".\nActual response: {$client->getResponse()->getContent()}.";
             $this->assertEquals(

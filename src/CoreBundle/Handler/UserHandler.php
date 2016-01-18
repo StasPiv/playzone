@@ -82,8 +82,6 @@ class UserHandler implements UserProcessorInterface
 
         $this->saveUser($user);
 
-        $user->setToken($this->generateValidUserToken($user));
-
         return $user;
     }
 
@@ -96,7 +94,6 @@ class UserHandler implements UserProcessorInterface
     {
         if ($authRequest->getToken()) {
             $user = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($authRequest, $authError);
-            $user->setToken($this->generateValidUserToken($user));
             return $user;
         }
 
@@ -112,8 +109,6 @@ class UserHandler implements UserProcessorInterface
         }
 
         $this->container->get("core.handler.error")->throwExceptionIfHasErrors($authError, ResponseStatusCode::FORBIDDEN);
-
-        $user->setToken($this->generateValidUserToken($user));
 
         return $user;
     }
@@ -138,15 +133,6 @@ class UserHandler implements UserProcessorInterface
     }
 
     /**
-     * @param User $user
-     * @return string
-     */
-    private function generateValidUserToken($user)
-    {
-        return md5($user->getLogin() . $user->getPassword());
-    }
-
-    /**
      * @param $login
      * @param $token
      * @return User
@@ -159,7 +145,7 @@ class UserHandler implements UserProcessorInterface
             return null;
         }
 
-        if ($this->generateValidUserToken($user) !== $token) {
+        if ($user->getToken() !== $token) {
             return null;
         }
 

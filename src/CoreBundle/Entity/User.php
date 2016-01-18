@@ -180,13 +180,6 @@ class User
 
     /**
      * @JMS\Expose
-     * @JMS\SerializedName("token")
-     * @JMS\Type("string")
-     */
-    private $token;
-
-    /**
-     * @JMS\Expose
      * @JMS\SerializedName("isAuth")
      * @JMS\Type("boolean")
      */
@@ -660,19 +653,14 @@ class User
     }
 
     /**
-     * @return mixed
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("token")
+     *
+     * @return string
      */
     public function getToken()
     {
-        return $this->token;
-    }
-
-    /**
-     * @param mixed $token
-     */
-    public function setToken($token)
-    {
-        $this->token = $token;
+        return md5($this->getLogin() . $this->getPassword());
     }
 
     /**

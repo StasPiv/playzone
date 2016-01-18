@@ -6,7 +6,7 @@
 playzoneControllers.controller('TopRegisterCtrl', function ($scope, $rootScope, $cookies) {
     $scope.logout = function() {
         $cookies.remove("user_login");
-        $cookies.remove("user_password");
+        $cookies.remove("user_token");
         $rootScope.user = {};
     }
 });

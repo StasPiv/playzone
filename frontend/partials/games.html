@@ -39,7 +39,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <input class="button" value="OK" type="submit" data-ng-click="sendCall()">
+                    <input class="button" value="OK" type="submit" data-ng-click="sendCall(call, calls_from_me)">
                 </td>
             </tr>
             </tbody>
@@ -56,7 +56,7 @@
         <th>{{ "Color" | translate }}</th>
         <th width="20%">&nbsp;</th>
     </tr>
-    <tr ng-repeat="call in games.call_from_me">
+    <tr ng-repeat="call in calls_from_me" ng-if="call.id">
         <td>
             <a href="">{{ call.game.id }}</a>
         </td>
@@ -70,7 +70,7 @@
             <div class="color_pic" style="background-color: {{ call.game.color }};"></div>
         </td>
         <td>
-            <a href="" class="button remove" ng-click="removeCall(call)">{{ "Remove" | translate }}</a>
+            <a href="" class="button remove" ng-click="call.$delete();">{{ "Remove" | translate }}</a>
         </td>
     </tr>
 </table>
@@ -83,7 +83,7 @@
         <th>{{ "Color" | translate }}</th>
         <th width="20%">&nbsp;</th>
     </tr>
-    <tr ng-repeat="call in games.call_to_me">
+    <tr ng-repeat="call in calls_to_me" ng-if="call.id">
         <td>
             <a href="">{{ call.game.id }}</a>
         </td>
@@ -97,11 +97,11 @@
             <div class="color_pic" style="background-color: {{ call.game.color }};"></div>
         </td>
         <td>
-            <a href="" class="button accept" ng-click="acceptCall(call)">{{ "Accept" | translate }}</a>&nbsp;&nbsp;<a href="" class="button remove" ng-click="declineCall(call)">{{ "Decline" | translate }}</a>
+            <a href="" class="button accept" ng-click="acceptCall(call)">{{ "Accept" | translate }}</a>&nbsp;&nbsp;<a href="" class="button remove" ng-click="call.$decline()">{{ "Decline" | translate }}</a>
         </td>
     </tr>
 </table>
-<h1>{{ "Current games" | translate }} ({{ games.current.length }})</h1>
+<h1>{{ "Current games" | translate }} ({{ current.length }})</h1>
 <table class="games current">
     <thead>
     <tr>
@@ -118,7 +118,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="game in games.current">
+    <tr ng-repeat="game in current">
         <td>
             <a href="/play/{{ game.id }}">{{ game.id }}</a>
         </td>

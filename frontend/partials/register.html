@@ -6,7 +6,7 @@
             {{ 'Enter e-mail' | translate }}:
         </td>
         <td>
-            <input type="text" name="email" autocomplete="off" ng-model="user.email" />
+            <input type="text" name="email" autocomplete="off" ng-model="$root.user.email" />
         </td>
         <td class="error">
             {{errors.email | translate}}

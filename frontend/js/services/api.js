@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneServices.factory('ApiService', function(EnvService) {
+playzoneServices.factory('ApiService', function(EnvService, $rootScope) {
     var API_URL,
         registerUrl,
         authUrl,
@@ -45,6 +45,22 @@ playzoneServices.factory('ApiService', function(EnvService) {
     }
 
     return {
+        getSecurityParams: function() {
+            return {
+                login: $rootScope.user.login,
+                token: $rootScope.user.token
+            }
+        },
+        transformResponse: function (data) {
+            var response = angular.fromJson(data);
+
+            if (response.data) {
+                return response.data;
+            }
+
+            return response;
+        },
+        base_url : API_URL,
         register : registerUrl,
         auth : authUrl,
         get_time_controls : getTimeControlsUrl,

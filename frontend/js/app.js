@@ -6,26 +6,20 @@
 var playzoneApp = angular.module('playzoneApp', [
     'ngRoute',
     'ngCookies',
+    'ngResource',
     'playzoneControllers',
     'playzoneServices',
     'pascalprecht.translate'
-]).run(['$http', '$rootScope', '$cookies', 'UserService', 'TimeControlService', function($http, $rootScope, $cookies, UserService, TimeControlService) {
-    $rootScope.user = {};
+]).run(['$http', '$rootScope', '$cookies', 'UserRest', function($http, $rootScope, $cookies, UserRest) {
 
-    if ($cookies.get("user_login") && $cookies.get("user_password")) {
-        UserService.auth({
-            user: {
-                "login" : $cookies.get("user_login"),
-                "password" : $cookies.get("user_password")
-            },
-            success: function() {
+    $rootScope.user = new UserRest({
+        login: $cookies.get("user_login"),
+        token: $cookies.get("user_token"),
+        password: $cookies.get("user_token")
+    });
 
-            },
-            error: function() {
+    $rootScope.user.$auth();
 
-            }
-        });
-    }
 }]);
 
 var checkIfUnauthorized = function ($q, $rootScope, $location) {

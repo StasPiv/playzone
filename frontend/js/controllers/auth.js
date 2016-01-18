@@ -3,20 +3,20 @@
  */
 'use strict';
 
-playzoneControllers.controller('AuthCtrl', function ($scope, $rootScope, $http, $location, UserService) {
-    $rootScope.user = {};
+playzoneControllers.controller('AuthCtrl', function ($scope, $rootScope, $http, $location, UserRest, CookieService) {
+    $rootScope.user = new UserRest();
     $scope.errors = {};
 
     $scope.auth = function() {
-        UserService.auth({
-            user: $scope.user,
-            success: function(data) {
+        $rootScope.user.$auth().then(
+            function() {
                 $scope.errors = {};
+                CookieService.rememberUser($rootScope.user);
                 $location.path('/');
             },
-            error: function(data) {
-                $scope.errors = data.errors;
+            function(response) {
+                $scope.errors = response.data.errors;
             }
-        });
+        );
     }
 });

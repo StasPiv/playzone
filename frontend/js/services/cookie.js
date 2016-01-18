@@ -10,7 +10,7 @@ playzoneServices.factory('CookieService', function($cookies) {
             expireDate.setDate(expireDate.getDate() + 365*20);
 
             $cookies.put('user_login', user.login, {'expires': expireDate});
-            $cookies.put('user_password', user.password, {'expires': expireDate});
+            $cookies.put('user_token', user.token, {'expires': expireDate});
         }
     };
 });

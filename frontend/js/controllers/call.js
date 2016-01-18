@@ -3,8 +3,8 @@
  */
 'use strict';
 
-playzoneControllers.controller('CallCtrl', function ($scope, TimeControlService, CallService, GameService) {
-    TimeControlService.initTimeControls($scope);
+playzoneControllers.controller('CallCtrl', function ($scope, TimecontrolRest, CallRest) {
+    $scope.timecontrols = TimecontrolRest.query();
 
     $scope.colors = [
         {id: 'random', name: 'Random'},
@@ -12,16 +12,19 @@ playzoneControllers.controller('CallCtrl', function ($scope, TimeControlService,
         {id: 'black', name: 'Black'}
     ];
 
-    $scope.sendCall = function() {
-        CallService.sendCall({
-            call: $scope.call,
-            success: function() {
+    $scope.call = new CallRest;
+
+    $scope.sendCall = function(call, calls_from_me) {
+        call.$send().then(
+            function(response) {
                 $scope.errors = {};
-                GameService.initCallsFromMe($scope);
+                angular.forEach(response.data, function(value, key) {
+                    calls_from_me.push(new CallRest(value));
+                });
             },
-            error: function(data) {
-                $scope.errors = data.errors;
+            function (response) {
+                $scope.errors = response.data.errors;
             }
-        });
+        );
     };
 });

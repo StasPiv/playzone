@@ -3,20 +3,22 @@
  */
 'use strict';
 
-playzoneControllers.controller('RegisterCtrl', function ($scope, $rootScope, $http, $location, UserService) {
+playzoneControllers.controller('RegisterCtrl', function ($scope, $rootScope, $http, $location, CookieService, UserRest) {
+
     $rootScope.user = {};
     $scope.errors = {};
 
     $scope.register = function() {
-        UserService.register({
-            user: $scope.user,
-            success: function(data) {
+        $rootScope.user = new UserRest($scope.user);
+        $rootScope.user.$register().then(
+            function() {
                 $scope.errors = {};
+                CookieService.rememberUser($rootScope.user);
                 $location.path('/');
             },
-            error: function(data) {
-                $scope.errors = data.errors;
+            function(response) {
+                $scope.errors = response.data.errors;
             }
-        });
+        );
     }
 });

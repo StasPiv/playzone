@@ -3,49 +3,14 @@
  */
 'use strict';
 
-playzoneControllers.controller('GamesCtrl', function ($scope, GameService, CallService) {
-    $scope.games = {};
-    GameService.initCallsFromMe($scope);
-    GameService.initCallsToMe($scope);
-    GameService.initCurrentGames($scope);
-
-    $scope.removeCall = function(call) {
-        CallService.removeCall({
-            call: call,
-            success: function() {
-                $scope.errors = {};
-                GameService.initCallsFromMe($scope);
-            },
-            error: function(data) {
-                $scope.errors = data.errors;
-            }
-        });
-    };
+playzoneControllers.controller('GamesCtrl', function ($scope, CallRest, GameRest) {
+    $scope.calls_from_me = CallRest.query({type: "from"});
+    $scope.calls_to_me = CallRest.query({type: "to"});
+    $scope.current = GameRest.query({status: "play", user:"me"});
 
     $scope.acceptCall = function(call) {
-        CallService.acceptCall({
-            call: call,
-            success: function() {
-                $scope.errors = {};
-                GameService.initCallsToMe($scope);
-                GameService.initCurrentGames($scope);
-            },
-            error: function(data) {
-                $scope.errors = data.errors;
-            }
-        });
-    };
-
-    $scope.declineCall = function(call) {
-        CallService.declineCall({
-            call: call,
-            success: function() {
-                $scope.errors = {};
-                GameService.initCallsToMe($scope);
-            },
-            error: function(data) {
-                $scope.errors = data.errors;
-            }
+        call.$accept().then(function(response) {
+            $scope.current.push(response.data);
         });
     };
 });

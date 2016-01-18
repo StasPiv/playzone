@@ -11,6 +11,10 @@ namespace ApiBundle\Tests\Controller;
 
 class CallControllerTest extends BaseControllerTest
 {
+    public function testCall()
+    {
+        $this->testFromJson('call');
+    }
 
     public function testCallSend()
     {
@@ -19,16 +23,16 @@ class CallControllerTest extends BaseControllerTest
 
     public function testCallRemove()
     {
-        $this->testFromJson('call/remove');
+        $this->testFromJson('call/{call_id}/remove');
     }
 
     public function testCallAccept()
     {
-        $this->testFromJson('call/accept');
+        $this->testFromJson('call/{call_id}/accept');
     }
 
     public function testCallDecline()
     {
-        $this->testFromJson('call/decline');
+        $this->testFromJson('call/{call_id}/decline');
     }
 }

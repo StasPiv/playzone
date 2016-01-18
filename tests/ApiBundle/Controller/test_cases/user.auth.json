@@ -2,75 +2,94 @@
   "fixtures": [
     "CoreBundle\\DataFixtures\\ORM\\UserFixtures"
   ],
-  "login_not_found" : {
-    "method" : "POST",
-    "request" : {
+  "login_not_found": {
+    "method": "POST",
+    "request": {
       "login": "FakeLogin",
       "password": "1234567"
     },
-    "response" : {
-      "status" : 403,
-      "errors" : {
-        "login" : "The login is not found"
+    "response": {
+      "status": 403,
+      "errors": {
+        "login": "The login is not found"
       },
-      "errorMessage":"Authorization failed"
+      "errorMessage": "Authorization failed"
     }
   },
-  "password_not_correct" : {
-    "method" : "POST",
-    "request" : {
+  "password_not_correct": {
+    "method": "POST",
+    "request": {
       "login": "TestLogin",
       "password": "1234567"
     },
-    "response" : {
-      "status" : 403,
-      "errors" : {
-        "password" : "The password is not correct"
+    "response": {
+      "status": 403,
+      "errors": {
+        "password": "The password is not correct"
       },
-      "errorMessage":"Authorization failed"
+      "errorMessage": "Authorization failed"
     }
   },
-  "empty_login_and_password" : {
-    "method" : "POST",
-    "request" : {
-
+  "empty_login_and_password": {
+    "method": "POST",
+    "request": {
     },
-    "response" : {
-      "status" : 400,
-      "errors" : {
-        "login" : "Enter login",
-        "password" : "Enter password"
+    "response": {
+      "status": 400,
+      "errors": {
+        "login": "Enter login",
+        "password": "Enter password"
       },
-      "errorMessage":"Authorization failed"
+      "errorMessage": "Authorization failed"
     }
   },
-  "empty_password" : {
-    "method" : "POST",
-    "request" : {
-      "login" : "TestLogin"
+  "empty_password": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin"
     },
-    "response" : {
-      "status" : 400,
-      "errors" : {
-        "password" : "Enter password"
+    "response": {
+      "status": 400,
+      "errors": {
+        "password": "Enter password"
       },
-      "errorMessage":"Authorization failed"
+      "errorMessage": "Authorization failed"
     }
   },
-  "correct" : {
-    "method" : "POST",
-    "request" : {
+  "correct": {
+    "method": "POST",
+    "request": {
       "login": "TestLogin",
       "password": "123456"
     },
-    "response" : {
-      "status" : 200,
-      "data" : {
-        "login" : "TestLogin",
-        "email" : "test-login@yandex.ru",
-        "rating" : 2243,
-        "class" : "D",
-        "token" : "aba37b62d15cc5f8671fd3d1b034c354"
+    "response": {
+      "status": 200,
+      "data": {
+        "login": "TestLogin",
+        "email": "test-login@yandex.ru",
+        "rating": 2243,
+        "class": "D",
+        "token": "aba37b62d15cc5f8671fd3d1b034c354",
+        "isAuth": true
+      }
+    }
+  },
+  "correct_with_token": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "password": "aba37b62d15cc5f8671fd3d1b034c354",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "login": "TestLogin",
+        "email": "test-login@yandex.ru",
+        "rating": 2243,
+        "class": "D",
+        "token": "aba37b62d15cc5f8671fd3d1b034c354",
+        "isAuth": true
       }
     }
   }

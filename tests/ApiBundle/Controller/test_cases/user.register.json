@@ -209,7 +209,9 @@
         "login": "UnitTestLogin",
         "email": "unittest@yandex.ru",
         "rating": 2200,
-        "class": "N"
+        "class": "N",
+        "token": "c85d6dde87a2515a00b87e18ebf7d08f",
+        "isAuth": true
       },
       "errorMessage": "Registration failed"
     }

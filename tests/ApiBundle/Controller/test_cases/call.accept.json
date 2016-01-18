@@ -84,6 +84,14 @@
           "class": "D",
           "rating": 2443
         },
+        "user_move": false,
+        "opponent": {
+          "login": "Petro",
+          "email": "petro@yandex.ru",
+          "class": "D",
+          "rating": 2443
+        },
+        "color": "black",
         "pgn": "1",
         "pgn_alt": "1",
         "status": "play",

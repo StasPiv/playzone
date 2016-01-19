@@ -12,7 +12,7 @@ use CoreBundle\Model\Request\SecurityRequestInterface;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CallPutAcceptRequest extends CallRequest implements SecurityRequestInterface
+class CallDeleteAcceptRequest extends CallRequest implements SecurityRequestInterface
 {
     /**
      * @var string

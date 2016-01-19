@@ -6,7 +6,7 @@
     "CoreBundle\\DataFixtures\\ORM\\CallFixtures"
   ],
   "login_and_token_is_incorrect": {
-    "method": "PUT",
+    "method": "DELETE",
     "request": {
       "login": "TestLogin",
       "token": "bba37b62d15cc5f8671fd3d1b034c354",
@@ -23,7 +23,7 @@
     }
   },
   "call_is_not_found": {
-    "method": "PUT",
+    "method": "DELETE",
     "request": {
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
@@ -37,7 +37,7 @@
     }
   },
   "not_my_call": {
-    "method": "PUT",
+    "method": "DELETE",
     "request": {
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
@@ -54,7 +54,7 @@
     }
   },
   "correct": {
-    "method": "PUT",
+    "method": "DELETE",
     "request": {
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",

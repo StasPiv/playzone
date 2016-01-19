@@ -15,7 +15,7 @@ use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallGetRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
-use CoreBundle\Model\Request\Call\CallPutAcceptRequest;
+use CoreBundle\Model\Request\Call\CallDeleteAcceptRequest;
 
 interface CallProcessorInterface
 {
@@ -41,11 +41,11 @@ interface CallProcessorInterface
     public function processDeleteRemove(CallDeleteRemoveRequest $removeRequest, CallDeleteRemoveRequest $removeError);
 
     /**
-     * @param CallPutAcceptRequest $acceptRequest
-     * @param CallPutAcceptRequest $acceptError
+     * @param CallDeleteAcceptRequest $acceptRequest
+     * @param CallDeleteAcceptRequest $acceptError
      * @return Game
      */
-    public function processPutAccept(CallPutAcceptRequest $acceptRequest, CallPutAcceptRequest $acceptError);
+    public function processDeleteAccept(CallDeleteAcceptRequest $acceptRequest, CallDeleteAcceptRequest $acceptError);
 
     /**
      * @param CallDeleteDeclineRequest $declineRequest

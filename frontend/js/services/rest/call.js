@@ -22,7 +22,7 @@ playzoneServices.factory('CallRest', function($resource, ApiService) {
                 url: ApiService.base_url + 'call/:id/remove'
             },
             accept: {
-                method: 'PUT',
+                method: 'DELETE',
                 url: ApiService.base_url + 'call/:id/accept'
             },
             decline: {

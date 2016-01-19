@@ -12,7 +12,7 @@ use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallGetRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
-use CoreBundle\Model\Request\Call\CallPutAcceptRequest;
+use CoreBundle\Model\Request\Call\CallDeleteAcceptRequest;
 use CoreBundle\Processor\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -60,9 +60,9 @@ class CallController extends BaseController
      * @param $call_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function putAcceptAction(Request $request, $call_id)
+    public function deleteAcceptAction(Request $request, $call_id)
     {
-        return $this->process($request, new CallPutAcceptRequest());
+        return $this->process($request, new CallDeleteAcceptRequest());
     }
 
     /**

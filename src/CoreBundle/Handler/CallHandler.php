@@ -13,7 +13,7 @@ use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallGetRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
-use CoreBundle\Model\Request\Call\CallPutAcceptRequest;
+use CoreBundle\Model\Request\Call\CallDeleteAcceptRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
@@ -176,11 +176,11 @@ class CallHandler implements CallProcessorInterface
     }
 
     /**
-     * @param CallPutAcceptRequest $acceptRequest
-     * @param CallPutAcceptRequest $acceptError
+     * @param CallDeleteAcceptRequest $acceptRequest
+     * @param CallDeleteAcceptRequest $acceptError
      * @return Game
      */
-    public function processPutAccept(CallPutAcceptRequest $acceptRequest, CallPutAcceptRequest $acceptError)
+    public function processDeleteAccept(CallDeleteAcceptRequest $acceptRequest, CallDeleteAcceptRequest $acceptError)
     {
         $me = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($acceptRequest, $acceptError);
 

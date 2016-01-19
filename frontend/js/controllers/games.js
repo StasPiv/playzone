@@ -9,8 +9,13 @@ playzoneControllers.controller('GamesCtrl', function ($scope, CallRest, GameRest
     $scope.current = GameRest.query({status: "play", user:"me"});
 
     $scope.acceptCall = function(call) {
-        call.$accept().then(function(response) {
-            $scope.current.push(response.data);
-        });
+        CallRest.accept(
+            {},
+            call,
+            function(response) {
+                $scope.current.push(response);
+                $scope.calls_to_me.splice( $scope.calls_to_me.indexOf(call), 1 );
+            }
+        );
     };
 });

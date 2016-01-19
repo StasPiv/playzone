@@ -51,15 +51,6 @@ playzoneServices.factory('ApiService', function(EnvService, $rootScope) {
                 token: $rootScope.user.token
             }
         },
-        transformResponse: function (data) {
-            var response = angular.fromJson(data);
-
-            if (response.data) {
-                return response.data;
-            }
-
-            return response;
-        },
         base_url : API_URL,
         register : registerUrl,
         auth : authUrl,

@@ -15,7 +15,7 @@ playzoneControllers.controller('AuthCtrl', function ($scope, $rootScope, $http, 
                 $location.path('/');
             },
             function(response) {
-                $scope.errors = response.data.errors;
+                $scope.errors = response.data;
             }
         );
     }

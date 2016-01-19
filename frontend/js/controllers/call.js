@@ -12,18 +12,19 @@ playzoneControllers.controller('CallCtrl', function ($scope, TimecontrolRest, Ca
         {id: 'black', name: 'Black'}
     ];
 
-    $scope.call = new CallRest;
-
-    $scope.sendCall = function(call, calls_from_me) {
-        call.$send().then(
+    $scope.sendCall = function(call) {
+        CallRest.send(
+            {},
+            call,
             function(response) {
-                $scope.errors = {};
-                angular.forEach(response.data, function(value, key) {
-                    calls_from_me.push(new CallRest(value));
+                angular.forEach(response, function(value) {
+                    $scope.calls_from_me.push(value);
                 });
+                call.player = ""; // to prevent duplicate calls
+                $scope.errors = {};
             },
-            function (response) {
-                $scope.errors = response.data.errors;
+            function(response) {
+                $scope.errors = response.data;
             }
         );
     };

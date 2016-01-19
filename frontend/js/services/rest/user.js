@@ -10,13 +10,11 @@ playzoneServices.factory('UserRest', function($resource, $rootScope, ApiService)
         {
             auth: {
                 method: 'POST',
-                url: ApiService.base_url + 'user/auth',
-                transformResponse: ApiService.transformResponse
+                url: ApiService.base_url + 'user/auth'
             },
             register: {
                 method: 'POST',
-                url: ApiService.base_url + 'user/register',
-                transformResponse: ApiService.transformResponse
+                url: ApiService.base_url + 'user/register'
             }
         }
     );

@@ -15,7 +15,6 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
         {
             query: {
                 url: ApiService.base_url + 'game/list',
-                transformResponse: ApiService.transformResponse,
                 isArray:true
             }
         }

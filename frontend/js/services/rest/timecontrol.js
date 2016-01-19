@@ -10,9 +10,6 @@ playzoneServices.factory('TimecontrolRest', function($resource, $rootScope, ApiS
         {
             query: {
                 url: ApiService.base_url + 'timecontrols',
-                transformResponse: function (data) {
-                    return angular.fromJson(data).data;
-                },
                 isArray:true
             }
         }

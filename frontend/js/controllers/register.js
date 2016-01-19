@@ -17,7 +17,7 @@ playzoneControllers.controller('RegisterCtrl', function ($scope, $rootScope, $ht
                 $location.path('/');
             },
             function(response) {
-                $scope.errors = response.data.errors;
+                $scope.errors = response.data;
             }
         );
     }

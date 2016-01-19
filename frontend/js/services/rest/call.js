@@ -15,7 +15,6 @@ playzoneServices.factory('CallRest', function($resource, ApiService) {
         {
             query: {
                 url: ApiService.base_url + 'call',
-                transformResponse: ApiService.transformResponse,
                 isArray:true
             },
             delete: {
@@ -33,12 +32,7 @@ playzoneServices.factory('CallRest', function($resource, ApiService) {
             send: {
                 method: 'POST',
                 url: ApiService.base_url + 'call/send',
-                transformRequest: function (request) {
-                    if (request.data !== undefined) {
-                        delete request.data; // remove data because we are calling this from non-call object
-                    }
-                    return angular.toJson(request);
-                }
+                isArray:true
             }
         }
     );

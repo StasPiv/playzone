@@ -19,7 +19,6 @@ use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
 use CoreBundle\Entity\Timecontrol;
 use CoreBundle\Entity\User;
-use CoreBundle\Exception\Handler\GameCallHandlerException;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Model\Call\CallType;
 use CoreBundle\Processor\CallProcessorInterface;
@@ -75,14 +74,7 @@ class CallHandler implements CallProcessorInterface
                 break;
         }
 
-        $calls = $this->repository->findBy([$fieldForUser => $me]);
-
-        foreach ($calls as $call) {
-            /** @var GameCall $call */
-            $this->container->get("core.handler.game")->defineUserColorForGame($me, $call->getGame());
-        }
-
-        return $calls;
+        return $this->getUserCalls($me, $fieldForUser);
     }
 
     /**
@@ -255,5 +247,22 @@ class CallHandler implements CallProcessorInterface
         $this->manager->flush();
 
         return $call;
+    }
+
+    /**
+     * @param $me
+     * @param $fieldForUser
+     * @return GameCall[]
+     */
+    private function getUserCalls($me, $fieldForUser = 'fromUser')
+    {
+        $calls = $this->repository->findBy([$fieldForUser => $me]);
+
+        foreach ($calls as $call) {
+            /** @var GameCall $call */
+            $this->container->get("core.handler.game")->defineUserColorForGame($me, $call->getGame());
+        }
+
+        return $calls;
     }
 }

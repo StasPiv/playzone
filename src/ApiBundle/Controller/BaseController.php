@@ -27,36 +27,6 @@ abstract class BaseController extends FOSRestController
     abstract protected function getProcessor();
 
     /**
-     * Converts view into a response object.
-     *
-     * Not necessary to use, if you are using the "ViewResponseListener", which
-     * does this conversion automatically in kernel event "onKernelView".
-     *
-     * @param View $view
-     *
-     * @return Response
-     */
-    protected function handleView(View $view)
-    {
-        $view->setData(
-            array_merge(
-                ['status' => $view->getStatusCode()],
-                $view->getData()
-            )
-        );
-        $response = parent::handleView($view);
-
-        if (!isset($_SERVER['HTTP_HOST'])) {
-            return $response;
-        }
-
-        $allowedDomain = 'http://' . preg_replace('/^(api\.)/', '', $_SERVER['HTTP_HOST']);
-        $response->headers->set('Access-Control-Allow-Origin', $allowedDomain);
-
-        return $response;
-    }
-
-    /**
      * @param Request $request
      * @return array
      */
@@ -107,22 +77,17 @@ abstract class BaseController extends FOSRestController
 
             $this->container->get("core.handler.error")->throwExceptionIfHasErrors($errorRequestObject, ResponseStatusCode::BAD_FORMAT);
 
-            $data['data'] = $this->getProcessor()->$actionName($requestObject, $errorRequestObject);
+            $data = $this->getProcessor()->$actionName($requestObject, $errorRequestObject);
 
             $statusCode = $successStatusCode;
         } catch (ProcessorException $exception) {
-            $data['errors'] = $exception->getRequestError();
-            if ($this->container->get('kernel')->getEnvironment() != 'prod') {
-                $data['errorFile'] = $exception->getFile();
-                $data['errorLine'] = $exception->getLine();
-            }
+            $data = $exception->getRequestError();
             $statusCode = $exception->getCode();
         } catch (\Exception $exception) {
-            $data['errors'] = [];
             $data['errorMessage'] = $exception->getMessage();
             if ($this->container->get('kernel')->getEnvironment() != 'prod') {
-                $data['errorFile'] = $exception->getFile();
-                $data['errorLine'] = $exception->getLine();
+                $data['debug']['errorFile'] = $exception->getFile();
+                $data['debug']['errorLine'] = $exception->getLine();
             }
             $statusCode = ResponseStatusCode::ISE;
         }

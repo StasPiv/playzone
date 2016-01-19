@@ -80,24 +80,17 @@ class BaseControllerTest extends WebTestCase
 
             $actualResponse = json_decode($client->getResponse()->getContent(), true);
 
-            if (isset($expectedResponse['errors'])) {
-                $this->assertArrayHasKey("errors", $actualResponse, $errorMessage);
-
+            if (intval($expectedResponse['status'] / 100) == 4) { // error responses
                 $this->assertEmpty(array_diff_assoc($expectedResponse['errors'],
-                    $actualResponse['errors']),
+                    $actualResponse),
                     $errorMessage);
-                $this->assertEmpty(array_diff_assoc($actualResponse['errors'],
+                $this->assertEmpty(array_diff_assoc($actualResponse,
                     $expectedResponse['errors']),
                     $errorMessage);
             }
 
-            if (isset($expectedResponse['data'])) {
-                $this->assertArrayHasKey("data", $actualResponse, $errorMessage);
-
-                $expectedData = $expectedResponse['data'];
-                $actualData = $actualResponse['data'];
-
-                $this->assertActualContainsExpected($actualData, $expectedData, $errorMessage);
+            if (intval($expectedResponse['status'] / 100) == 2) { // successful responses
+                $this->assertActualContainsExpected($actualResponse, $expectedResponse['data'], $errorMessage);
             }
 
             if (isset($data['session'])) {

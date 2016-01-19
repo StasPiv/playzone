@@ -12,9 +12,7 @@ use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
-use CoreBundle\Entity\GameCall;
 use CoreBundle\Entity\Timecontrol;
-use CoreBundle\Exception\Processor\GameProcessorException;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\User\UserType;
@@ -70,15 +68,15 @@ class GameHandler implements GameProcessorInterface
             $listError->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
-        return $this->getGamesForUser($listRequest, $user);
+        return $this->getGamesForUser($user, $listRequest->getStatus());
     }
 
     /**
-     * @param GameGetListRequest $listRequest
      * @param User $user
-     * @return Game[]
+     * @param null $status
+     * @return \CoreBundle\Entity\Game[]
      */
-    private function getGamesForUser(GameGetListRequest $listRequest, User $user)
+    public function getGamesForUser(User $user, $status)
     {
         $games = $this->manager
             ->createQuery(
@@ -86,7 +84,7 @@ class GameHandler implements GameProcessorInterface
                           WHERE (g.userWhite = :user OR g.userBlack = :user) AND g.status = :status
                           ORDER BY g.id ASC"
             )
-            ->setParameter("status", $listRequest->getStatus())
+            ->setParameter("status", $status)
             ->setParameter("user", $user)
             ->getResult();
 

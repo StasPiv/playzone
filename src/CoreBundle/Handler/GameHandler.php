@@ -98,6 +98,41 @@ class GameHandler implements GameProcessorInterface
 
     /**
      * @param User $user
+     * @param int $gameId
+     * @return Game
+     */
+    public function getUserGame(User $user, $gameId)
+    {
+        $game = $this->repository->find($gameId);
+
+        if (!$game instanceof Game) {
+            throw new GameHandlerException("Game is not found");
+        }
+
+        $this->defineUserColorForGame($user, $game);
+        $this->defineUserMoveAndOpponentForGame($user, $game);
+
+        return $game;
+    }
+
+    /**
+     * @param string $login
+     * @param int $gameId
+     * @return Game
+     */
+    public function getUserGameByLogin($login, $gameId)
+    {
+        $user = $this->container->get("core.handler.user")->getRepository()->findOneBy(["login" => $login]);
+
+        if (!$user instanceof User) {
+            throw new GameHandlerException("User is not found");
+        }
+
+        return $this->getUserGame($user, $gameId);
+    }
+
+    /**
+     * @param User $user
      * @param Game $game
      */
     public function defineUserColorForGame(User $user, Game $game)

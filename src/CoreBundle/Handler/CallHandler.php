@@ -8,6 +8,7 @@
 
 namespace CoreBundle\Handler;
 
+use CoreBundle\Exception\Handler\GameCallHandlerException;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
@@ -250,17 +251,42 @@ class CallHandler implements CallProcessorInterface
     }
 
     /**
-     * @param $me
-     * @param $fieldForUser
-     * @return GameCall[]
+     * @param $login
+     * @param string $fieldForUser
+     * @param array $callIds
+     * @return \CoreBundle\Entity\GameCall[]
      */
-    private function getUserCalls($me, $fieldForUser = 'fromUser')
+    public function getUserCallsByLogin($login, $fieldForUser = 'fromUser', array $callIds = [])
     {
-        $calls = $this->repository->findBy([$fieldForUser => $me]);
+        $user = $this->container->get("core.handler.user")->getRepository()
+                                ->findOneBy(["login" => $login]);
+
+        if (!$user instanceof User) {
+            throw new GameCallHandlerException("User $login is not found");
+        }
+
+        return $this->getUserCalls($user, $fieldForUser, $callIds);
+    }
+
+    /**
+     * @param $user
+     * @param string $fieldForUser
+     * @param array $callIds
+     * @return \CoreBundle\Entity\GameCall[]
+     */
+    private function getUserCalls($user, $fieldForUser = 'fromUser', array $callIds = [])
+    {
+        $filter = [$fieldForUser => $user];
+
+        if (!empty($callIds)) {
+            $filter['id'] = $callIds;
+        }
+
+        $calls = $this->repository->findBy($filter);
 
         foreach ($calls as $call) {
             /** @var GameCall $call */
-            $this->container->get("core.handler.game")->defineUserColorForGame($me, $call->getGame());
+            $this->container->get("core.handler.game")->defineUserColorForGame($user, $call->getGame());
         }
 
         return $calls;

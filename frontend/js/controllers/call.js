@@ -17,11 +17,21 @@ playzoneControllers.controller('CallCtrl', function ($scope, TimecontrolRest, Ca
             {},
             call,
             function(response) {
+                var newCallIds = [];
                 angular.forEach(response, function(value) {
                     $scope.calls_from_me.push(value);
+                    newCallIds.push(value.id);
                 });
                 $scope.errors = {};
-                WebsocketService.sendDataToLogins('call_send', response, [call.player]);
+
+                WebsocketService.sendDataToLogins(
+                    'call_send',
+                    {
+                        login: call.player,
+                        call_ids: newCallIds
+                    },
+                    [call.player]
+                );
                 call.player = ""; // to prevent duplicate calls
             },
             function(response) {

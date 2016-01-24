@@ -10,7 +10,7 @@ playzoneServices.factory('WebsocketService', function($websocket) {
 
     dataStream.onMessage(
         function(message) {
-            console.log(message);
+
         }
     );
 
@@ -37,7 +37,6 @@ playzoneServices.factory('WebsocketService', function($websocket) {
         },
         send: function(data) {
             var dataToSend = angular.toJson(data);
-            console.log(data);
             dataStream.send(dataToSend);
         },
         introduction: function(user) {

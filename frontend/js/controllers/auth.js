@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('AuthCtrl', function ($scope, $rootScope, $http, $location, UserRest, CookieService) {
+playzoneControllers.controller('AuthCtrl', function ($scope, $rootScope, $http, $location, UserRest, CookieService, WebsocketService) {
     $rootScope.user = new UserRest();
     $scope.errors = {};
 
@@ -13,6 +13,7 @@ playzoneControllers.controller('AuthCtrl', function ($scope, $rootScope, $http, 
                 $scope.errors = {};
                 CookieService.rememberUser($rootScope.user);
                 $location.path('/');
+                WebsocketService.introduction($rootScope.user);
             },
             function(response) {
                 $scope.errors = response.data;

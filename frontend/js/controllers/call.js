@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('CallCtrl', function ($scope, TimecontrolRest, CallRest) {
+playzoneControllers.controller('CallCtrl', function ($scope, TimecontrolRest, CallRest, WebsocketService) {
     $scope.timecontrols = TimecontrolRest.query();
 
     $scope.colors = [
@@ -20,8 +20,9 @@ playzoneControllers.controller('CallCtrl', function ($scope, TimecontrolRest, Ca
                 angular.forEach(response, function(value) {
                     $scope.calls_from_me.push(value);
                 });
-                call.player = ""; // to prevent duplicate calls
                 $scope.errors = {};
+                WebsocketService.sendDataToLogins('call_send', response, [call.player]);
+                call.player = ""; // to prevent duplicate calls
             },
             function(response) {
                 $scope.errors = response.data;

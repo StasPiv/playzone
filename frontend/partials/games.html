@@ -70,7 +70,7 @@
             <div class="color_pic" style="background-color: {{ call.game.color }};"></div>
         </td>
         <td>
-            <a href="" class="button remove" ng-click="call.$delete();">{{ "Remove" | translate }}</a>
+            <a href="" class="button remove" ng-click="deleteCall(call);">{{ "Remove" | translate }}</a>
         </td>
     </tr>
 </table>
@@ -97,7 +97,7 @@
             <div class="color_pic" style="background-color: {{ call.game.color }};"></div>
         </td>
         <td>
-            <a href="" class="button accept" ng-click="acceptCall(call)">{{ "Accept" | translate }}</a>&nbsp;&nbsp;<a href="" class="button remove" ng-click="call.$decline()">{{ "Decline" | translate }}</a>
+            <a href="" class="button accept" ng-click="acceptCall(call)">{{ "Accept" | translate }}</a>&nbsp;&nbsp;<a href="" class="button remove" ng-click="declineCall(call)">{{ "Decline" | translate }}</a>
         </td>
     </tr>
 </table>

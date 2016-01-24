@@ -7,10 +7,11 @@ var playzoneApp = angular.module('playzoneApp', [
     'ngRoute',
     'ngCookies',
     'ngResource',
+    'ngWebSocket',
     'playzoneControllers',
     'playzoneServices',
     'pascalprecht.translate'
-]).run(['$http', '$rootScope', '$cookies', 'UserRest', function($http, $rootScope, $cookies, UserRest) {
+]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'WebsocketService', function ($http, $rootScope, $cookies, UserRest, WebsocketService) {
 
     $rootScope.user = new UserRest({
         login: $cookies.get("user_login"),
@@ -18,8 +19,11 @@ var playzoneApp = angular.module('playzoneApp', [
         password: $cookies.get("user_token")
     });
 
-    $rootScope.user.$auth();
-
+    $rootScope.user.$auth().then(
+        function() {
+            WebsocketService.introduction($rootScope.user);
+        }
+    );
 }]);
 
 var checkIfUnauthorized = function ($q, $rootScope, $location) {
@@ -30,4 +34,4 @@ var checkIfUnauthorized = function ($q, $rootScope, $location) {
 
 var playzoneControllers = angular.module('playzoneControllers', []);
 
-var playzoneServices = angular.module('playzoneServices',[]);
+var playzoneServices = angular.module('playzoneServices', []);

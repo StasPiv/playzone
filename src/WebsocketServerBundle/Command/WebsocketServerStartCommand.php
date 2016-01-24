@@ -14,8 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Ratchet\App as RatchetApp;
-use Ratchet\Server\EchoServer;
-use WebsocketServerBundle\Service\ChatServer;
+use WebsocketServerBundle\Service\PlayzoneServer;
 
 class WebsocketServerStartCommand extends ContainerAwareCommand
 {
@@ -40,8 +39,9 @@ class WebsocketServerStartCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $app = new RatchetApp($input->getArgument('host'), $input->getArgument('port'));
-        $app->route('/chat', new ChatServer(), ['*']);
-        $app->route('/echo', new EchoServer, array('*'));
+        $playzoneServer = new PlayzoneServer();
+        $playzoneServer->setContainer($this->getContainer());
+        $app->route('/', $playzoneServer, ['*']);
         $output->writeln("Server starting on {$input->getArgument('host')}:{$input->getArgument('port')}...");
         $app->run();
     }

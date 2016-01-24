@@ -97,10 +97,10 @@ class PlayzoneMessage
     }
 
     /**
-     * @param array $data
+     * @param mixed $data
      * @return $this
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         $this->data = $data;
 
@@ -117,7 +117,7 @@ class PlayzoneMessage
 
     /**
      * @param array $logins
-     * @return PlayzoneHandlerMessage
+     * @return $this
      */
     public function setLogins($logins)
     {

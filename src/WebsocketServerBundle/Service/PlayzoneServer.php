@@ -190,9 +190,14 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
      */
     private function send(PlayzoneMessage $messageObject, ConnectionInterface $connection)
     {
-        $connection->send(
-            $this->container->get('jms_serializer')->serialize($messageObject, 'json')
-        );
+        try {
+            $this->container->get("ws.handler.client.message")->prepareMessageForUsers($messageObject);
+            $connection->send(
+                $this->container->get('jms_serializer')->serialize($messageObject, 'json')
+            );
+        } catch (\Exception $exception) {
+            $connection->send($exception->getMessage() . ' ' . $exception->getFile() . ' ' . $exception->getLine());
+        }
     }
 
     /**

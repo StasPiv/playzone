@@ -1,3 +1,4 @@
 services:
-    #websocket_server.service.chat.server:
-        #class: WebsocketServerBundle\Service\ChatServer
+    ws.handler.client.message:
+        class: WebsocketServerBundle\Handler\ClientMessageHandler
+        arguments: ['@service_container']

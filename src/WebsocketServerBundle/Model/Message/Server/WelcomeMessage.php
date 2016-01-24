@@ -47,6 +47,7 @@ class WelcomeMessage extends PlayzoneMessage
      *
      * @JMS\VirtualProperty()
      * @JMS\SerializedName("message")
+     * @return string
      */
     public function getMessage()
     {

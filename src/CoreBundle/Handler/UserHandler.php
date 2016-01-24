@@ -72,7 +72,7 @@ class UserHandler implements UserProcessorInterface
             $registerError->setPasswordRepeat('The password repeat should be the same');
         }
 
-        $this->container->get("core.handler.error")->throwExceptionIfHasErrors($registerError, ResponseStatusCode::FORBIDDEN);
+        $this->container->get("core.service.error")->throwExceptionIfHasErrors($registerError, ResponseStatusCode::FORBIDDEN);
 
         $user = new User();
 
@@ -93,7 +93,7 @@ class UserHandler implements UserProcessorInterface
     public function processPostAuth(UserPostAuthRequest $authRequest, UserPostAuthRequest $authError)
     {
         if ($authRequest->getToken()) {
-            $user = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($authRequest, $authError);
+            $user = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($authRequest, $authError);
             return $user;
         }
 
@@ -108,7 +108,7 @@ class UserHandler implements UserProcessorInterface
                 break;
         }
 
-        $this->container->get("core.handler.error")->throwExceptionIfHasErrors($authError, ResponseStatusCode::FORBIDDEN);
+        $this->container->get("core.service.error")->throwExceptionIfHasErrors($authError, ResponseStatusCode::FORBIDDEN);
 
         return $user;
     }

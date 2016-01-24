@@ -60,7 +60,7 @@ class CallHandler implements CallProcessorInterface
      */
     public function processGet(CallGetRequest $getRequest, CallGetRequest $getError)
     {
-        $me = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($getRequest, $getError);
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($getRequest, $getError);
 
         switch ($getRequest->getType()) {
             case CallType::FROM:
@@ -103,7 +103,7 @@ class CallHandler implements CallProcessorInterface
      */
     public function processPostSend(CallPostSendRequest $sendRequest, CallPostSendRequest $sendError)
     {
-        $me = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($sendRequest, $sendError);
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($sendRequest, $sendError);
 
         /** @var User $opponent */
         $opponent = $this->container->get("core.handler.user")->getRepository()->findOneByLogin($sendRequest->getPlayer());
@@ -147,7 +147,7 @@ class CallHandler implements CallProcessorInterface
      */
     public function processDeleteRemove(CallDeleteRemoveRequest $removeRequest, CallDeleteRemoveRequest $removeError)
     {
-        $me = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($removeRequest, $removeError);
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($removeRequest, $removeError);
 
         $call = $this->repository->find($removeRequest->getCallId());
 
@@ -182,7 +182,7 @@ class CallHandler implements CallProcessorInterface
      */
     public function processDeleteAccept(CallDeleteAcceptRequest $acceptRequest, CallDeleteAcceptRequest $acceptError)
     {
-        $me = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($acceptRequest, $acceptError);
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($acceptRequest, $acceptError);
 
         $call = $this->repository->find($acceptRequest->getCallId());
 
@@ -222,7 +222,7 @@ class CallHandler implements CallProcessorInterface
         CallDeleteDeclineRequest $declineRequest,
         CallDeleteDeclineRequest $declineError
     ) {
-        $me = $this->container->get("core.handler.security")->getMeIfCredentialsIsOk($declineRequest, $declineError);
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($declineRequest, $declineError);
 
         $call = $this->repository->find($declineRequest->getCallId());
 

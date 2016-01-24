@@ -6,14 +6,14 @@
  * Time: 15:39
  */
 
-namespace CoreBundle\Handler;
+namespace CoreBundle\Service;
 
 use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\Request\RequestInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class ErrorHandler
+class ErrorService
 {
     use ContainerAwareTrait;
 

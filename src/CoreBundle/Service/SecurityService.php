@@ -6,7 +6,7 @@
  * Time: 21:02
  */
 
-namespace CoreBundle\Handler;
+namespace CoreBundle\Service;
 
 use CoreBundle\Entity\User;
 use CoreBundle\Model\Request\SecurityRequestInterface;
@@ -14,7 +14,7 @@ use CoreBundle\Model\Response\ResponseStatusCode;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class SecurityHandler
+class SecurityService
 {
     use ContainerAwareTrait;
 
@@ -32,20 +32,20 @@ class SecurityHandler
      * @param SecurityRequestInterface $securityError
      * @return User
      */
-    public function getMeIfCredentialsIsOk(
+    public function getUserIfCredentialsIsOk(
         SecurityRequestInterface $securityRequest,
         SecurityRequestInterface $securityError
     ) {
-        $me = $this->container->get("core.handler.user")->getUserByLoginAndToken(
+        $user = $this->container->get("core.handler.user")->getUserByLoginAndToken(
             $securityRequest->getLogin(),
             $securityRequest->getToken()
         );
 
-        if (!$me instanceof User) {
+        if (!$user instanceof User) {
             $securityError->setLogin("Forbidden for user with this credentials");
             $securityError->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
-        return $me;
+        return $user;
     }
 }

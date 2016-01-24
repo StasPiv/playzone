@@ -75,7 +75,7 @@ abstract class BaseController extends FOSRestController
                 $errorRequestObject->{'set'.ucfirst($error->getPropertyPath())}($error->getMessage());
             }
 
-            $this->container->get("core.handler.error")->throwExceptionIfHasErrors($errorRequestObject, ResponseStatusCode::BAD_FORMAT);
+            $this->container->get("core.service.error")->throwExceptionIfHasErrors($errorRequestObject, ResponseStatusCode::BAD_FORMAT);
 
             $data = $this->getProcessor()->$actionName($requestObject, $errorRequestObject);
 

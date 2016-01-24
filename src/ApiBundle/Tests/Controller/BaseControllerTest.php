@@ -17,7 +17,7 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
  *
  * @method AbstractExecutor loadFixtures(array $fixtures)
  */
-class BaseControllerTest extends WebTestCase
+abstract class BaseControllerTest extends WebTestCase
 {
     protected $fixtures;
 

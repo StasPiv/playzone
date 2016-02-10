@@ -28,6 +28,14 @@ playzoneApp.config(['$routeProvider',
                 templateUrl: 'partials/games.html',
                 controller: 'GamesCtrl'
             }).
+            when('/play/:gameId', {
+                templateUrl: 'partials/play.html',
+                controller: 'PlayCtrl'
+            }).
+            when('/show/:gameId', {
+                templateUrl: 'partials/show.html',
+                controller: 'ShowCtrl'
+            }).
             otherwise({
                 redirectTo: '/'
             });

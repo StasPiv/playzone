@@ -120,7 +120,7 @@
     <tbody>
     <tr ng-repeat="game in current">
         <td>
-            <a href="/play/{{ game.id }}">{{ game.id }}</a>
+            <a href="/#/play/{{ game.id }}">{{ game.id }}</a>
         </td>
         <td>
             <a href="">{{ game.timecontrol.name }}</a>
@@ -146,8 +146,8 @@
             {{ game.diff }}
         </td>
         <td>
-            <span style="display: none">1</span><a ng-show="game.user_move" href="/play/{{ game.id }}/show/" class="button domove">{{ "Do move" | translate }}</a>
-            <span style="display: none">2</span><a ng-show="!game.user_move" href="/play/{{ game.id }}/show/" class="button">{{ "See" | translate }}</a>
+            <a ng-show="game.user_move" href="/#/play/{{ game.id }}" class="button domove">{{ "Do move" | translate }}</a>
+            <a ng-show="!game.user_move" href="/#/show/{{ game.id }}" class="button">{{ "See" | translate }}</a>
         </td>
         <td class="last_move" title="{{ game.time_last_move }}">
             {{ game.last_move }}

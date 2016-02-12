@@ -9,6 +9,7 @@
 namespace ApiBundle\Controller;
 
 use CoreBundle\Model\Request\Game\GameGetListRequest;
+use CoreBundle\Model\Request\Game\GameGetRequest;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +25,11 @@ class GameController extends BaseController
     public function getListAction(Request $request)
     {
         return $this->process($request, new GameGetListRequest());
+    }
+
+    public function getAction(Request $request)
+    {
+        return $this->process($request, new GameGetRequest());
     }
 
     /**

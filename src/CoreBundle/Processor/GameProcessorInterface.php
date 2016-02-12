@@ -8,11 +8,8 @@
 
 namespace CoreBundle\Processor;
 
-
 use CoreBundle\Model\Request\Game\GameGetListRequest;
-use CoreBundle\Model\Request\Game\GamePostCallRequest;
-use CoreBundle\Entity\Game;
-use CoreBundle\Entity\GameCall;
+use CoreBundle\Model\Request\Game\GameGetRequest;
 
 interface GameProcessorInterface extends ProcessorInterface
 {
@@ -22,4 +19,11 @@ interface GameProcessorInterface extends ProcessorInterface
      * @return \CoreBundle\Entity\Game[]
      */
     public function processGetList(GameGetListRequest $listRequest, GameGetListRequest $listError);
+
+    /**
+     * @param GameGetRequest $gameRequest
+     * @param GameGetRequest $gameError
+     * @return mixed
+     */
+    public function processGet(GameGetRequest $gameRequest, GameGetRequest $gameError);
 }

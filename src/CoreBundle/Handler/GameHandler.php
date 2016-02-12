@@ -10,6 +10,7 @@ namespace CoreBundle\Handler;
 
 use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
+use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\Timecontrol;
@@ -72,6 +73,25 @@ class GameHandler implements GameProcessorInterface
     }
 
     /**
+     * @param GameGetRequest $gameRequest
+     * @param GameGetRequest $gameError
+     * @return mixed
+     */
+    public function processGet(GameGetRequest $gameRequest, GameGetRequest $gameError)
+    {
+        $game = $this->repository->find($gameRequest->getId());
+
+        if (!$gameRequest->getLogin()) {
+            return $game;
+        }
+
+        $user = $this->container->get("core.handler.user")
+                     ->getUserByLoginAndToken($gameRequest->getLogin(), $gameRequest->getToken());
+
+        return $this->getUserGame($user, $game);
+    }
+
+    /**
      * @param User $user
      * @param null $status
      * @return \CoreBundle\Entity\Game[]
@@ -101,7 +121,7 @@ class GameHandler implements GameProcessorInterface
      * @param int $gameId
      * @return Game
      */
-    public function getUserGame(User $user, $gameId)
+    public function getUserGameByGameId(User $user, $gameId)
     {
         $game = $this->repository->find($gameId);
 
@@ -109,10 +129,7 @@ class GameHandler implements GameProcessorInterface
             throw new GameHandlerException("Game is not found");
         }
 
-        $this->defineUserColorForGame($user, $game);
-        $this->defineUserMoveAndOpponentForGame($user, $game);
-
-        return $game;
+        return $this->getUserGame($user, $game);
     }
 
     /**
@@ -120,7 +137,7 @@ class GameHandler implements GameProcessorInterface
      * @param int $gameId
      * @return Game
      */
-    public function getUserGameByLogin($login, $gameId)
+    public function getUserGameByUserLoginAndGameId($login, $gameId)
     {
         $user = $this->container->get("core.handler.user")->getRepository()->findOneBy(["login" => $login]);
 
@@ -128,7 +145,7 @@ class GameHandler implements GameProcessorInterface
             throw new GameHandlerException("User is not found");
         }
 
-        return $this->getUserGame($user, $gameId);
+        return $this->getUserGameByGameId($user, $gameId);
     }
 
     /**
@@ -199,6 +216,19 @@ class GameHandler implements GameProcessorInterface
             ->setUserToMove($game->getUserWhite());
 
         $this->container->get("core.handler.game")->defineUserColorForGame($me, $game);
+
+        return $game;
+    }
+
+    /**
+     * @param User $user
+     * @param Game $game
+     * @return Game
+     */
+    public function getUserGame(User $user, Game $game)
+    {
+        $this->defineUserColorForGame($user, $game);
+        $this->defineUserMoveAndOpponentForGame($user, $game);
 
         return $game;
     }

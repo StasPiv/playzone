@@ -18,8 +18,7 @@
     "angular-translate-loader-url": "master",
     "angular-translate-loader-static-files": "master",
     "angular-translate-storage-local": "master",
-    "angular-translate-storage-cookie": "master",
-    "pgnviewer-chesstempo": "https://github.com/StasPiv/pgnviewer-chesstempo.git"
+    "angular-translate-storage-cookie": "master"
   },
   "resolutions": {
     "angular": "1.4.8",

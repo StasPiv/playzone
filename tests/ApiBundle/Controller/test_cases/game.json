@@ -1,0 +1,99 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\TimecontrolFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures"
+  ],
+  "correct_not_mine": {
+    "method": "GET",
+    "request": {
+      "reference": {
+        "name": "id",
+        "value": "game-0"
+      }
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "user_white": {
+          "login": "Stas",
+          "email": "piv1986@yandex.ru",
+          "class": "N",
+          "rating": 2200
+        },
+        "user_black": {
+          "login": "TestLogin",
+          "email": "test-login@yandex.ru",
+          "class": "D",
+          "rating": 2243
+        },
+        "pgn": "1",
+        "pgn_alt": "1",
+        "status": "play",
+        "rate": false,
+        "time_white": 20,
+        "time_black": 30,
+        "timecontrol": {
+          "id": 1,
+          "name": "10\/10no"
+        },
+        "time_last_move": "1970-01-01T00:00:00+0200",
+        "time_over": false
+      }
+    }
+  },
+  "correct_mine": {
+    "method": "GET",
+    "request": {
+      "reference": {
+        "name": "id",
+        "value": "game-0"
+      },
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "user_white": {
+          "login": "Stas",
+          "email": "piv1986@yandex.ru",
+          "class": "N",
+          "rating": 2200
+        },
+        "user_black": {
+          "login": "TestLogin",
+          "email": "test-login@yandex.ru",
+          "class": "D",
+          "rating": 2243
+        },
+        "user_to_move": {
+          "login": "TestLogin",
+          "email": "test-login@yandex.ru",
+          "class": "D",
+          "rating": 2243
+        },
+        "user_move": true,
+        "opponent": {
+          "login": "Stas",
+          "email": "piv1986@yandex.ru",
+          "class": "N",
+          "rating": 2200
+        },
+        "color": "black",
+        "pgn": "1",
+        "pgn_alt": "1",
+        "status": "play",
+        "rate": false,
+        "time_white": 20,
+        "time_black": 30,
+        "timecontrol": {
+          "id": 1,
+          "name": "10\/10no"
+        },
+        "time_last_move": "1970-01-01T00:00:00+0200",
+        "time_over": false
+      }
+    }
+  }
+}

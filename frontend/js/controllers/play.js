@@ -3,8 +3,14 @@
  */
 'use strict';
 
-playzoneControllers.controller('PlayCtrl', function ($scope) {
+playzoneControllers.controller('PlayCtrl', function ($scope, $routeParams, GameRest) {
     $scope.boardConfig = {
-        position: 'start'
+        pieceType: 'leipzig'
     };
+
+    $scope.game = GameRest.get(
+        {
+            id: $routeParams.gameId
+        }
+    );
 });

@@ -18,6 +18,6 @@ class GameControllerTest extends BaseControllerTest
 
     public function testGame()
     {
-        $this->testFromJson('game');
+        $this->testFromJson('game/{id}');
     }
 }

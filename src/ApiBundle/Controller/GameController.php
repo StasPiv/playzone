@@ -27,7 +27,7 @@ class GameController extends BaseController
         return $this->process($request, new GameGetListRequest());
     }
 
-    public function getAction(Request $request)
+    public function getAction(Request $request, $id)
     {
         return $this->process($request, new GameGetRequest());
     }

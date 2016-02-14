@@ -81,12 +81,21 @@ class GameHandler implements GameProcessorInterface
     {
         $game = $this->repository->find($gameRequest->getId());
 
+        if (!$game instanceof Game) {
+            $gameError->setId("Game is not found");
+            $gameError->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
         if (!$gameRequest->getLogin()) {
             return $game;
         }
 
         $user = $this->container->get("core.handler.user")
                      ->getUserByLoginAndToken($gameRequest->getLogin(), $gameRequest->getToken());
+
+        if (!in_array($user, [$game->getUserWhite(), $game->getUserBlack()])) {
+            return $game;
+        }
 
         return $this->getUserGame($user, $game);
     }

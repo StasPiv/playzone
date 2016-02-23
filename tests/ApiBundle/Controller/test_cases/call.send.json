@@ -8,7 +8,7 @@
     "request": {
       "player": "Stas",
       "color": {
-        "id": "white"
+        "id": "w"
       },
       "timecontrol": {
         "id": 1
@@ -30,7 +30,7 @@
       "token": "bba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
       "color": {
-        "id": "white"
+        "id": "w"
       },
       "timecontrol": {
         "id": 1
@@ -52,7 +52,7 @@
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas2",
       "color": {
-        "id": "white"
+        "id": "w"
       },
       "timecontrol": {
         "id": 1
@@ -74,7 +74,7 @@
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
       "color": {
-        "id": "white"
+        "id": "w"
       },
       "timecontrol": {
         "id": 666
@@ -96,7 +96,7 @@
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
       "color": {
-        "id": "white"
+        "id": "w"
       },
       "games_count": 2
     },
@@ -136,7 +136,7 @@
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
       "color": {
-        "id": "white"
+        "id": "w"
       },
       "timecontrol": {
         "id": 1
@@ -156,7 +156,7 @@
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
       "color": {
-        "id": "white"
+        "id": "w"
       },
       "timecontrol": {
         "id": 1
@@ -177,7 +177,7 @@
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
       "color": {
-        "id": "white"
+        "id": "w"
       },
       "timecontrol": {
         "id": 1
@@ -211,7 +211,7 @@
               "class": "N",
               "rating": 2200
             },
-            "color": "white"
+            "color": "w"
           }
         }
       ]
@@ -224,7 +224,7 @@
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "player": "Stas",
       "color": {
-        "id": "white"
+        "id": "w"
       },
       "timecontrol": {
         "id": 1
@@ -258,7 +258,7 @@
               "class": "N",
               "rating": 2200
             },
-            "color": "white"
+            "color": "w"
           }
         },
         {
@@ -285,7 +285,7 @@
               "class": "N",
               "rating": 2200
             },
-            "color": "white"
+            "color": "w"
           }
         }
       ]

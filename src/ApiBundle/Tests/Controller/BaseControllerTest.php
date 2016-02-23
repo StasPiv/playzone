@@ -124,6 +124,9 @@ abstract class BaseControllerTest extends WebTestCase
             if (is_array(($expectedChunk))) {
                 $this->assertActualContainsExpected($actualData[$key], $expectedChunk, $errorMessage);
                 $multiDimensional = true;
+            } else {
+                $this->assertEquals($expectedChunk, $actualData[$key],
+                    $errorMessage . PHP_EOL . "`$key` is not correct");
             }
         }
 

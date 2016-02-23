@@ -10,9 +10,9 @@ namespace CoreBundle\Model\Game;
 
 class GameColor
 {
-    const WHITE = "white";
+    const WHITE = "w";
 
-    const BLACK = "black";
+    const BLACK = "b";
 
     const RANDOM = "random";
 }

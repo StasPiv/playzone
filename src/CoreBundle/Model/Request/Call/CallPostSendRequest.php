@@ -57,7 +57,7 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
      * @JMS\Expose()
      * @JMS\Type("string")
      *
-     * @Assert\Choice(choices = {"white", "black", "random"}, message = "Color is incorrect")
+     * @Assert\Choice(choices = {"w", "b", "random"}, message = "Color is incorrect")
      */
     private $color;
 

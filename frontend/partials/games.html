@@ -147,7 +147,7 @@
         </td>
         <td>
             <a ng-show="game.user_move" href="/#/play/{{ game.id }}" class="button domove">{{ "Do move" | translate }}</a>
-            <a ng-show="!game.user_move" href="/#/show/{{ game.id }}" class="button">{{ "See" | translate }}</a>
+            <a ng-show="!game.user_move" href="/#/play/{{ game.id }}" class="button">{{ "See" | translate }}</a>
         </td>
         <td class="last_move" title="{{ game.time_last_move }}">
             {{ game.last_move }}

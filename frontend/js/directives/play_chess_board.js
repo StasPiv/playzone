@@ -6,8 +6,9 @@
  * controller scope. Otherwise we will get error (undefined scope.game).
  *
  * Important to note:
- * scope.game - application angular rest model.
- * element.game - library game (with pgn functions etc.)
+ * scope.game - application angular rest model with information about current game.
+ * element.game - chess.js plugin (with pgn functions etc.)
+ * element.board - chessboard.js plugin (without move validation, just board interface)
  */
 playzoneControllers.directive('playChessBoard', function () {
     return {
@@ -17,10 +18,28 @@ playzoneControllers.directive('playChessBoard', function () {
                 function() {
                     element.loadBoard(scope.boardConfig);
                     element.loadPgn(scope.game.pgn);
+
+                    if (scope.game.color === 'b') {
+                        element.board.flip();
+                    }
                 }
             );
+
+            element.onDragStart = function () {
+                return element.game.turn() === scope.game.color;
+            };
+
+            element.onMove = function (move) {
+                scope.channel.send(move);
+            };
+
+            scope.channel.onmessage = function (move) {
+                element.game.move(move);
+                element.board.position(element.game.fen());
+                element.updateStatus();
+            };
         }
-    }
+    };
 });
 
 

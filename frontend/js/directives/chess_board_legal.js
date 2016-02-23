@@ -19,6 +19,9 @@ playzoneControllers.directive('chessBoardLegal', function () {
             // do not pick up pieces if the game is over
             // only pick up pieces for the side to move
             var onDragStart = function(source, piece, position, orientation) {
+                if (element.onDragStart && !element.onDragStart()) {
+                    return false;
+                }
                 if (element.game.game_over() === true ||
                     (element.game.turn() === 'w' && piece.search(/^b/) !== -1) ||
                     (element.game.turn() === 'b' && piece.search(/^w/) !== -1)) {
@@ -28,16 +31,21 @@ playzoneControllers.directive('chessBoardLegal', function () {
 
             var onDrop = function(source, target) {
                 // see if the move is legal
-                var move = element.game.move({
+                var moveObject = {
                     from: source,
                     to: target,
                     promotion: 'q' // NOTE: always promote to a queen for example simplicity
-                });
+                };
+                var move = element.game.move(moveObject);
 
                 // illegal move
                 if (move === null) return 'snapback';
 
                 element.updateStatus();
+
+                if (element.onMove) {
+                    element.onMove(moveObject);
+                }
             };
 
             // update the board position after the piece snap
@@ -82,6 +90,7 @@ playzoneControllers.directive('chessBoardLegal', function () {
             element.loadBoard = function (userConfig) {
                 element.board = ChessBoard(element.data('board'), {
                     draggable: true,
+                    moveSpeed: 1,
                     position: 'start',
                     onDragStart: onDragStart,
                     onDrop: onDrop,

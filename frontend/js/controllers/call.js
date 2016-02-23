@@ -8,8 +8,8 @@ playzoneControllers.controller('CallCtrl', function ($scope, TimecontrolRest, Ca
 
     $scope.colors = [
         {id: 'random', name: 'Random'},
-        {id: 'white', name: 'White'},
-        {id: 'black', name: 'Black'}
+        {id: 'w', name: 'White'},
+        {id: 'b', name: 'Black'}
     ];
 
     $scope.sendCall = function(call) {

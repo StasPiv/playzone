@@ -1,0 +1,519 @@
+//colors
+$color_catskill_white_approx: #f1f5f8;
+$color_blumine_approx: #2b587a;
+$color_horizon_approx: #5980a9;
+$white:  white;
+$color_ship_cove_approx: #789abf;
+$red: red;
+$color_japanese_laurel_approx: green;
+$green: #0f0;
+$color_de_york_approx: #8c8;
+$color_ghost_approx: #c0cad5;
+$black: #000000;
+
+//fonts
+$font_0: tahoma;
+$font_1: arial;
+$font_2: verdana;
+$font_3: sans-serif;
+$font_4: Lucida Sans;
+
+//@extend-elements
+//original selectors
+//input[type="text"], input[type="password"]
+%extend_1 {
+  background: none repeat scroll 0 0 $white;
+  border: 1px solid $color_ghost_approx;
+  color: $black;
+  margin: 0;
+  padding: 3px;
+}
+
+//original selectors
+//.errorMessage, .successMessage
+%extend_2 {
+  text-align: center;
+  border: 1px solid $black;
+  padding: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  position: relative;
+}
+
+//original selectors
+//.errorMessage .close, .successMessage .close
+%extend_3 {
+  color: $color_horizon_approx;
+  cursor: pointer;
+  display: block;
+  position: absolute;
+  right: 10px;
+  top: 2px;
+}
+
+//original selectors
+//.tournament_table th, .games_table th
+%extend_4 {
+  text-align: left;
+  padding: 3px;
+  width: auto!important;
+  min-width: 40px;
+}
+
+
+* {
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: $font_0, $font_1, $font_2, $font_3, $font_4;
+  background-color: $color_catskill_white_approx;
+}
+a {
+  color: $color_blumine_approx;
+  cursor: pointer;
+  text-decoration: none;
+  outline: medium none;
+  font-size: inherit;
+  &:hover {
+    text-decoration: underline;
+    outline: medium none;
+  }
+}
+h1 {
+  color: $color_horizon_approx;
+  font-weight: normal;
+  margin: 5px 0;
+  font-size: 26px;
+  &.title_game {
+    border-bottom: 1px solid;
+    margin: 5px 0 11px;
+    padding: 5px;
+    text-align: center;
+    a {
+      font-weight: bold;
+    }
+  }
+}
+h2 {
+  color: $color_horizon_approx;
+  font-size: 16px;
+}
+.clear {
+  clear: both;
+}
+.content {
+  width: 1000px;
+  margin: auto;
+}
+.header {
+  height: 100px;
+  padding: 10px;
+  position: relative;
+  .menu {
+    left: 230px;
+    margin-top: 77px;
+    position: absolute;
+    top: -4px;
+    ul li {
+      cursor: default;
+      display: inline;
+      float: left;
+      margin-left: 10px;
+      padding: 10px;
+      text-align: center;
+      width: 157px;
+      height: 20px;
+      ul {
+        display: none;
+        li {
+          border-top: 2px solid $white;
+          height: 20px;
+          margin-left: -11px;
+          opacity: 0.9;
+          position: relative;
+          z-index: 1;
+        }
+      }
+    }
+  }
+  .register {
+    font-size: 14px;
+    position: absolute;
+    right: 20px;
+    top: 31px;
+    .enter {
+      font-weight: bold;
+    }
+  }
+  .language {
+    position: absolute;
+    right: 19px;
+    top: 10px;
+  }
+  .rest {
+    position: absolute;
+    right: 20px;
+    top: 32px;
+  }
+}
+.button {
+  border: 1px solid $color_ship_cove_approx;
+  background-color: $color_horizon_approx;
+  color: $white;
+  cursor: pointer;
+  a {
+    color: $white;
+    display: block;
+    height: 100%;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  &.remove {
+    padding: 0 5px;
+    background-color: $red;
+  }
+  &.accept {
+    padding: 0 5px;
+    background-color: $color_japanese_laurel_approx;
+  }
+  &.domove {
+    padding: 0 5px;
+    background-color: $color_japanese_laurel_approx;
+  }
+}
+.middle {
+  .teasers {
+    margin: auto;
+    width: 100%;
+    td {
+      padding: 10px;
+    }
+    .teaser {
+      margin: auto;
+      width: 200px;
+      height: 200px;
+      cursor: pointer;
+      text-align: center;
+    }
+  }
+  .games {
+    width: 100%;
+    margin: 10px 0;
+    border-collapse: collapse;
+    tr {
+      &:nth-child(2n) {
+      }
+      &:nth-child(2n + 1) {
+        background-color: $color_ship_cove_approx;
+        * {
+          color: $white;
+        }
+      }
+    }
+    td {
+      text-align: center;
+      padding: 2px;
+      &.last_move {
+        text-align: left;
+        padding-left: 10px;
+      }
+    }
+  }
+}
+.pagination {
+  width: 100px;
+  margin: auto;
+  height: 36px;
+  ul {
+    list-style: none;
+    margin-bottom: 10px;
+    li {
+      float: left;
+      border: 1px solid;
+      //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+      border-radius: 8px;
+      margin: 2px;
+      padding: 3px;
+    }
+  }
+}
+.apply_filter {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.apply-call {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.call_form {
+  display: none;
+}
+.filter {
+  position: fixed;
+  width: 360px;
+  height: auto;
+  padding: 5px;
+  top: 50%;
+  left: 50%;
+  margin-top: -200px;
+  margin-left: -150px;
+  background-color: $white;
+  border: 1px solid;
+  z-index: 1;
+  table {
+    margin: auto;
+    td {
+      padding: 2px;
+    }
+    input[type="submit"] {
+      float: right;
+      width: 50px;
+    }
+  }
+}
+.footer {
+  height: 150px;
+  .overlay {
+    display: none;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.6;
+    position: fixed;
+    background-color: $color_horizon_approx;
+  }
+}
+.ct-black-square {
+  background-color: $color_horizon_approx;
+}
+.ct-black-square-grey {
+  background-color: $color_horizon_approx;
+}
+.ct-white-square {
+  background-color: $white;
+}
+.ct-white-square-grey {
+  background-color: $white;
+}
+.ct-to-square {
+  background: none repeat scroll 0 0 $green;
+}
+.ct-from-square {
+  background: none repeat scroll 0 0 $color_de_york_approx;
+}
+#playzone-container {
+  float: left;
+}
+#playzone-moves {
+  padding: 5px;
+}
+.action {
+  padding: 5px;
+  width: 368px;
+  .button {
+    padding: 4px;
+    &.draw {
+      background-color: $color_japanese_laurel_approx;
+    }
+    &.draw_accept {
+      background-color: $color_japanese_laurel_approx;
+      font-weight: bold;
+    }
+    &.resign {
+      background-color: $red;
+    }
+  }
+}
+.register {
+  &.inner {
+    display: none;
+  }
+  &.outer {
+    display: none;
+  }
+}
+input[type="text"] {
+  @extend %extend_1;
+}
+input[type="password"] {
+  @extend %extend_1;
+}
+.error {
+  color: $red;
+}
+.errorMessage {
+  @extend %extend_2;
+  color: $red;
+  .close {
+    @extend %extend_3;
+  }
+}
+.successMessage {
+  @extend %extend_2;
+  color: $color_japanese_laurel_approx;
+  .close {
+    @extend %extend_3;
+  }
+}
+.promotion {
+  display: none;
+  position: fixed;
+  height: 49px;
+  width: 220px;
+  background-color: $color_blumine_approx;
+}
+.board-piece-start-style {
+  cursor: pointer;
+}
+.tournament_table {
+  border-collapse: collapse;
+  td {
+    border: 1px solid $color_blumine_approx;
+    padding: 2px;
+  }
+  th {
+    border: 1px solid $color_blumine_approx;
+    padding: 2px;
+    @extend %extend_4;
+  }
+  tr {
+    margin: 0;
+    padding: 0;
+  }
+}
+.games_table {
+  border-collapse: collapse;
+  width: auto;
+  th {
+    @extend %extend_4;
+    padding: 5px 10px;
+  }
+  td {
+    padding: 5px 10px;
+  }
+}
+.logo {
+  border: none;
+}
+.download_games {
+  font-weight: bold;
+  text-align: center;
+}
+.rating_table {
+  width: 100%;
+  margin: 10px 0;
+  border-collapse: collapse;
+  td {
+    border: 1px solid $black;
+    padding: 2px;
+  }
+}
+.chat {
+  float: right;
+  margin: 10px 0;
+  width: 449px;
+  textarea {
+    width: 446px;
+    border: 1px $color_horizon_approx solid;
+  }
+  .send {
+    margin: 3px 0;
+  }
+}
+#all_messages {
+  height: auto;
+  border: 1px $color_horizon_approx solid;
+  padding: 2px;
+  max-height: 200px;
+  overflow: scroll;
+  div {
+    border-top: 1px dashed;
+    padding: 3px;
+    &:first-child {
+      border: none;
+    }
+  }
+}
+.player_profile {
+  margin: 10px 0;
+  &.tournaments td {
+    padding: 5px;
+  }
+}
+.color_pic {
+  border: 1px solid $black;
+  margin: auto;
+  width: 10px;
+  height: 10px;
+}
+.send_manual_move {
+  margin-top: 14px;
+  h2 {
+    display: inline;
+  }
+  #manual_move {
+    width: 102px;
+  }
+}
+.recover_table {
+  border-collapse: collapse;
+  td {
+    border: 1px solid $black;
+    padding: 5px;
+  }
+}
+.rest {
+  display: none;
+}
+.online_player {
+  border: 2px solid $color_japanese_laurel_approx;
+  padding: 2px;
+  display: block;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 17px;
+}
+.server_statictic {
+  border-collapse: collapse;
+  tr td {
+    border: 1px solid;
+    padding: 3px;
+    &:first-child {
+      text-align: left;
+    }
+  }
+}
+.board_settings {
+  float: left;
+  width: 441px;
+  .custom_settings {
+    display: none;
+  }
+}
+table.register {
+  margin-top: 10px;
+  td {
+    padding: 5px 0;
+  }
+  .error {
+    color: $red;
+  }
+  &.register td {
+    padding: 5px;
+  }
+}
+th.header {
+  border: 1px solid $white;
+  cursor: pointer;
+  height: 40px;
+  padding: 2px;
+  border-bottom-width: 3px;
+}
+.game_image_content .tab {
+  display: none;
+  &:first-child {
+    display: block;
+  }
+}

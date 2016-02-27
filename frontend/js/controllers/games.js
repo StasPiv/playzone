@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('GamesCtrl', function ($scope, CallRest, GameRest, WebsocketService) {
+playzoneControllers.controller('GamesCtrl', function ($scope, CallRest, GameRest, WebsocketService, WebRTCService) {
     $scope.calls_from_me = CallRest.query({type: "from"});
     $scope.calls_to_me = CallRest.query({type: "to"});
     $scope.current = GameRest.query({status: "play", user:"me"});
@@ -21,6 +21,7 @@ playzoneControllers.controller('GamesCtrl', function ($scope, CallRest, GameRest
             );
             $scope.current.push(response);
             $scope.calls_to_me.pullById(call.id);
+            WebRTCService.joinGameRoom(call.game.id);
         });
     };
 
@@ -72,4 +73,13 @@ playzoneControllers.controller('GamesCtrl', function ($scope, CallRest, GameRest
     WebsocketService.addListener("listen_deleted_calls", "call_delete", function(data) {
         $scope.calls_to_me.pullById(data.call_id);
     });
+
+    // WebRTC
+    $scope.calls_from_me.$promise.then(
+        function (calls) {
+            angular.forEach(calls, function(call) {
+                WebRTCService.createGameRoom(call.game.id);
+            });
+        }
+    );
 });

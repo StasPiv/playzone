@@ -105,8 +105,6 @@ playzoneControllers.directive('chessBoardLegal', function () {
                 element.board.position(element.game.fen());
                 element.updateStatus();
             };
-
-            //element.loadBoard({pieceType:'merida'})
         }
     }
 });

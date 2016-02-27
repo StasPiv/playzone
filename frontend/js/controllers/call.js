@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('CallCtrl', function ($scope, TimecontrolRest, CallRest, WebsocketService) {
+playzoneControllers.controller('CallCtrl', function ($scope, TimecontrolRest, CallRest, WebsocketService, WebRTCService) {
     $scope.timecontrols = TimecontrolRest.query();
 
     $scope.colors = [
@@ -18,9 +18,10 @@ playzoneControllers.controller('CallCtrl', function ($scope, TimecontrolRest, Ca
             call,
             function(response) {
                 var newCallIds = [];
-                angular.forEach(response, function(value) {
-                    $scope.calls_from_me.push(value);
-                    newCallIds.push(value.id);
+                angular.forEach(response, function(call) {
+                    $scope.calls_from_me.push(call);
+                    newCallIds.push(call.id);
+                    WebRTCService.createGameRoom(call.game.id);
                 });
                 $scope.errors = {};
 

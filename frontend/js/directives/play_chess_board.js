@@ -10,7 +10,7 @@
  * element.game - chess.js plugin (with pgn functions etc.)
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
-playzoneControllers.directive('playChessBoard', function () {
+playzoneControllers.directive('playChessBoard', function (WebRTCService) {
     return {
         restrict: 'C',
         link: function(scope, element) {
@@ -30,14 +30,16 @@ playzoneControllers.directive('playChessBoard', function () {
             };
 
             element.onMove = function (move) {
-                scope.channel.send(move);
+                WebRTCService.sendMessage(move);
             };
 
-            scope.channel.onmessage = function (move) {
-                element.game.move(move);
-                element.board.position(element.game.fen());
-                element.updateStatus();
-            };
+            WebRTCService.addMessageListener(
+                function (move) {
+                    element.game.move(move);
+                    element.board.position(element.game.fen());
+                    element.updateStatus();
+                }
+            );
         }
     };
 });

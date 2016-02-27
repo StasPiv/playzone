@@ -3,7 +3,8 @@
         <table>
             <tbody>
             <tr>
-                <td style="color:red;" colspan="2">{{ 'Personal calls do not affect the rating' | translate }}</td>
+                <td class="warning" colspan="2">{{ 'Personal calls do not affect the rating' |
+                    translate }}</td>
             </tr>
             <tr ng-class="{ error: errors.player }">
                 <td><label for="login_enemy">{{ 'Player' | translate }}:</label></td>
@@ -67,7 +68,7 @@
             <a href="/#/profile/{{ call.to_user.id }}">{{ call.to_user.login }}</a>
         </td>
         <td>
-            <div class="color_pic" style="background-color: {{ call.game.color }};"></div>
+            <div class="color_pic {{ call.game.color }}"></div>
         </td>
         <td>
             <a href="" class="button remove" ng-click="deleteCall(call);">{{ "Remove" | translate }}</a>
@@ -94,7 +95,7 @@
             <a href="/#/profile/{{ call.from_user.id }}">{{ call.from_user.login }}</a>
         </td>
         <td>
-            <div class="color_pic" style="background-color: {{ call.game.color }};"></div>
+            <div class="color_pic {{ call.game.color }}"></div>
         </td>
         <td>
             <a href="" class="button accept" ng-click="acceptCall(call)">{{ "Accept" | translate }}</a>&nbsp;&nbsp;<a href="" class="button remove" ng-click="declineCall(call)">{{ "Decline" | translate }}</a>
@@ -134,7 +135,7 @@
             <a ng-show="!game.opponent_online" href="/profile/{{ game.opponent.id }}">{{ game.opponent.login }}</a>
         </td>
         <td>
-            <div class="color_pic" style="background-color: {{ game.color }};"></div>
+            <div class="color_pic {{ game.color }}"></div>
         </td>
         <td>
             <span style="background-color: yellow">{{ game.rest_mine }}</span>

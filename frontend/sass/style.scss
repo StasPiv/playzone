@@ -272,6 +272,9 @@ h2 {
       width: 50px;
     }
   }
+  .warning {
+    color:$red;
+  }
 }
 .footer {
   height: 150px;
@@ -448,6 +451,12 @@ input[type="password"] {
   margin: auto;
   width: 10px;
   height: 10px;
+  &.w {
+    background-color: $white;
+  }
+  &.b {
+    background-color: $black;
+  }
 }
 .send_manual_move {
   margin-top: 14px;

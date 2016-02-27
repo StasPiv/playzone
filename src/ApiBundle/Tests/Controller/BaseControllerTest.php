@@ -8,6 +8,7 @@
 
 namespace ApiBundle\Tests\Controller;
 
+use ApiBundle\Exception\Tests\Controller\BaseControllerTestException;
 use Doctrine\Common\DataFixtures\Executor\AbstractExecutor;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 
@@ -31,14 +32,24 @@ abstract class BaseControllerTest extends WebTestCase
         $action = str_replace('/', '.', $action);
 
         $directoryName = $client->getContainer()->get('kernel')->getRootDir() . '/../tests/ApiBundle/Controller/test_cases/';
+
+        $fullPathToTestFile = $directoryName . $action . '.json';
+        if (!file_exists($fullPathToTestFile)) {
+            throw new BaseControllerTestException("File $fullPathToTestFile is required for this test");
+        }
+
         $testData = json_decode(
-            file_get_contents($directoryName . $action . '.json'),
+            file_get_contents($fullPathToTestFile),
             true
         );
 
         if (isset($testData["fixtures"])) {
             $this->fixtures = $this->loadFixtures($testData["fixtures"])->getReferenceRepository();
             unset($testData["fixtures"]);
+        }
+
+        if (empty($testData)) {
+            throw new BaseControllerTestException("There are not test cases in $fullPathToTestFile");
         }
 
         foreach ($testData as $caseName => $data) {
@@ -63,7 +74,7 @@ abstract class BaseControllerTest extends WebTestCase
                     continue;
                 }
 
-                $requestUri = str_replace('{' . $name . '}', $value, $baseUri, $count);
+                $requestUri = str_replace('{' . $name . '}', $value, $requestUri, $count);
                 if ($count) {
                     unset($request[$name]);
                 }

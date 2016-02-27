@@ -19,6 +19,7 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\Post;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 /**
  * Class CallController
@@ -37,6 +38,19 @@ class CallController extends BaseController
     }
 
     /**
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Post call to another player",
+     *  filters={
+     *      {"name"="login", "dataType"="string", "description"="Your name"},
+     *      {"name"="token", "dataType"="string", "description"="Your token"},
+     *      {"name"="player", "dataType"="string"},
+     *      {"name"="color", "dataType"="string"},
+     *      {"name"="timecontrol", "dataType"="integer"},
+     *      {"name"="games_count", "dataType"="integer"}
+     *  }
+     * )
+     *
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */

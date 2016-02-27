@@ -25,7 +25,8 @@
         "cboden/ratchet": "dev-master",
         "friendsofsymfony/rest-bundle": "dev-master",
         "jms/serializer-bundle": "dev-master",
-        "nelmio/cors-bundle": "^1.4"
+        "nelmio/cors-bundle": "^1.4",
+        "nelmio/api-doc-bundle": "^2.11"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

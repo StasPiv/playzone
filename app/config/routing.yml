@@ -22,3 +22,7 @@ call_api:
     prefix:   /
     defaults: {_format: json}
 
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
+

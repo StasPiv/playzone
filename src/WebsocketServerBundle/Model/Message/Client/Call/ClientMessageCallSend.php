@@ -26,7 +26,7 @@ class ClientMessageCallSend
      * @JMS\Expose()
      * @JMS\Type("array")
      */
-    private $callIds;
+    private $callIds = [];
 
     /**
      * @return string

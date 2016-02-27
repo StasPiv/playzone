@@ -4,36 +4,37 @@
 'use strict';
 
 playzoneServices.factory('WebsocketService', function($websocket) {
-    var listeners = [];
+    var listenersMap = {};
     // Open a WebSocket connection
     var dataStream = $websocket('ws://localhost:1234/');
 
     dataStream.onMessage(
         function(message) {
+            var receivedMessage = angular.fromJson(message.data);
 
+            if (!receivedMessage.method || !receivedMessage.data) {
+                return;
+            }
+
+            if (!listenersMap[receivedMessage.method]) {
+                return;
+            }
+
+            angular.forEach(listenersMap[receivedMessage.method], function (callback) {
+                callback(receivedMessage.data);
+            });
         }
     );
 
     return {
         addListener: function(listenerName, methodToListen, callback) {
-            if (listeners.indexOf(listenerName) !== -1) {
-                return;
-            }
             if (typeof callback !== 'function') {
                 return;
             }
-            dataStream.onMessage(
-                function (message) {
-                    var receivedMessage = angular.fromJson(message.data);
-
-                    if (receivedMessage.method !== methodToListen) {
-                        return;
-                    }
-
-                    callback(receivedMessage.data);
-                }
-            );
-            listeners.push(listenerName);
+            if (!listenersMap[methodToListen]) {
+                listenersMap[methodToListen] = {};
+            }
+            listenersMap[methodToListen][listenerName] = callback;
         },
         send: function(data) {
             var dataToSend = angular.toJson(data);

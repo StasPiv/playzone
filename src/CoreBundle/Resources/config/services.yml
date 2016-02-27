@@ -17,3 +17,5 @@ services:
     core.service.security:
         class: CoreBundle\Service\SecurityService
         arguments: ['@service_container']
+    core.service.chess:
+        class: CoreBundle\Service\ChessService

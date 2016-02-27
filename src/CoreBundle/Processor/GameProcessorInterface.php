@@ -10,6 +10,7 @@ namespace CoreBundle\Processor;
 
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
+use CoreBundle\Model\Request\Game\GamePostPgnRequest;
 
 interface GameProcessorInterface extends ProcessorInterface
 {
@@ -23,7 +24,14 @@ interface GameProcessorInterface extends ProcessorInterface
     /**
      * @param GameGetRequest $gameRequest
      * @param GameGetRequest $gameError
-     * @return mixed
+     * @return \CoreBundle\Entity\Game
      */
     public function processGet(GameGetRequest $gameRequest, GameGetRequest $gameError);
+
+    /**
+     * @param GamePostPgnRequest $pgnRequest
+     * @param GamePostPgnRequest $pgnError
+     * @return \CoreBundle\Entity\Game
+     */
+    public function processPostPgn(GamePostPgnRequest $pgnRequest, GamePostPgnRequest $pgnError);
 }

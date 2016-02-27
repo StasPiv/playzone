@@ -11,6 +11,7 @@ namespace CoreBundle\Handler;
 use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
+use CoreBundle\Model\Request\Game\GamePostPgnRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\Timecontrol;
@@ -98,6 +99,41 @@ class GameHandler implements GameProcessorInterface
         }
 
         return $this->getUserGame($user, $game);
+    }
+
+    /**
+     * @param GamePostPgnRequest $pgnRequest
+     * @param GamePostPgnRequest $pgnError
+     * @return \CoreBundle\Entity\Game
+     */
+    public function processPostPgn(GamePostPgnRequest $pgnRequest, GamePostPgnRequest $pgnError)
+    {
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($pgnRequest, $pgnError);
+
+        $game = $this->repository->find($pgnRequest->getId());
+
+        if (!$game instanceof Game) {
+            $pgnError->setId("Game is not found");
+            $pgnError->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        if (!in_array($me, [$game->getUserWhite(), $game->getUserBlack()])) {
+            $pgnError->setId("Game is not mine");
+            $pgnError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        $pgn = $this->container->get("core.service.chess")->decodePgn($pgnRequest->getPgn());
+
+        if (!$this->container->get("core.service.chess")->isValidPgn($pgn)) {
+            $pgnError->setPgn("Pgn is incorrect");
+            $pgnError->throwException(ResponseStatusCode::BAD_FORMAT);
+        }
+
+        $game->setPgn($pgn);
+
+        $this->manager->flush($game);
+
+        return $game;
     }
 
     /**

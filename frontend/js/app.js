@@ -10,7 +10,8 @@ var playzoneApp = angular.module('playzoneApp', [
     'ngWebSocket',
     'playzoneControllers',
     'playzoneServices',
-    'pascalprecht.translate'
+    'pascalprecht.translate',
+    'LocalStorageModule'
 ]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'WebsocketService', function ($http, $rootScope, $cookies, UserRest, WebsocketService) {
 
     $rootScope.user = new UserRest({

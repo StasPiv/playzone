@@ -15,6 +15,7 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use CoreBundle\Processor\GameProcessorInterface;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 /**
  * Class GameController
@@ -33,6 +34,21 @@ class GameController extends BaseController
         return $this->process($request, new GameGetRequest());
     }
 
+    /**
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Save pgn",
+     *  filters={
+     *      {"name"="login", "dataType"="string", "description"="Your name"},
+     *      {"name"="token", "dataType"="string", "description"="Your token"},
+     *      {"name"="pgn", "dataType"="string"}
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
     public function postPgnAction(Request $request, $id)
     {
         return $this->process($request, new GamePostPgnRequest());

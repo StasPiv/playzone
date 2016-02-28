@@ -17,7 +17,11 @@ module.exports = function (config) {
             'frontend/bower_components/angular-translate-storage-local/angular-translate-storage-local.js',
             'frontend/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
             'frontend/bower_components/angular-resource/angular-resource.js',
+            'frontend/bower_components/angular-local-storage/dist/angular-local-storage.js',
             'frontend/bower_components/jquery/dist/jquery.js',
+            'http://playzone-angular.lc:8080/socket.io/socket.io.js',
+            'http://playzone-angular.lc:8080/reliable-signaler/signaler.js',
+            'http://playzone-angular.lc:8080/DataChannel.js',
             'frontend/js/**/*.js',
             'frontend/test/unit/**/*.js'
         ],

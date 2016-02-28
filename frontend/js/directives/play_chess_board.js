@@ -10,14 +10,15 @@
  * element.game - chess.js plugin (with pgn functions etc.)
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
-playzoneControllers.directive('playChessBoard', function (WebRTCService) {
+playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLocalStorageService) {
     return {
         restrict: 'C',
         link: function(scope, element) {
             scope.game.$promise.then(
                 function() {
                     element.loadBoard(scope.boardConfig);
-                    element.loadPgn(scope.game.pgn);
+                    var localStoredPgn = ChessLocalStorageService.getPgn(scope.game.id);
+                    element.loadPgn(localStoredPgn ? localStoredPgn : scope.game.pgn);
 
                     if (scope.game.color === 'b') {
                         element.board.flip();
@@ -37,6 +38,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService) {
                 function (move) {
                     element.game.move(move);
                     element.board.position(element.game.fen());
+                    ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
                     element.updateStatus();
                 }
             );

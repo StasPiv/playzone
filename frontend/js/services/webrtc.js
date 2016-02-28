@@ -13,6 +13,7 @@ playzoneServices.factory('WebRTCService', function() {
                 channel.userid = roomid;
                 channel.transmitRoomOnce = true;
                 channel.open(roomid);
+                console.log('channel is open',roomid);
             });
         },
         joinRoom: function (roomid) {
@@ -24,6 +25,7 @@ playzoneServices.factory('WebRTCService', function() {
                     id: roomid,
                     owner: roomid
                 });
+                console.log('channel is connected',roomid);
             });
         },
         addMessageListener: function (callback) {

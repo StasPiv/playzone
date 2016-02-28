@@ -31,14 +31,27 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
             };
 
             element.onMove = function (move) {
-                WebRTCService.sendMessage(move);
+                WebRTCService.sendMessage({
+                    gameId: scope.game.id,
+                    move: move
+                });
+                ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
             };
 
             WebRTCService.addMessageListener(
-                function (move) {
-                    element.game.move(move);
-                    element.board.position(element.game.fen());
+                function (webRTCMessage) {
+                    if (!webRTCMessage.gameId || webRTCMessage.gameId !== scope.game.id) {
+                        return;
+                    }
+
+                    element.game.move(webRTCMessage.move);
                     ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
+
+                    if (!element.board) {
+                        return;
+                    }
+
+                    element.board.position(element.game.fen());
                     element.updateStatus();
                 }
             );

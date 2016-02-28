@@ -8,6 +8,7 @@
 
 namespace WebsocketServerBundle\Service;
 
+use CoreBundle\Entity\User;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 use Symfony\Component\DependencyInjection\Container;
@@ -178,6 +179,10 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
     private function sendToUsers(PlayzoneMessage $messageObject)
     {
         foreach ($this->users as $callUser) {
+            if (!$callUser->getPlayzoneUser() instanceof User) {
+                continue;
+            }
+
             if (in_array($callUser->getPlayzoneUser()->getLogin(), $messageObject->getLogins())) {
                 $this->send($messageObject, $callUser->getConnection());
             }

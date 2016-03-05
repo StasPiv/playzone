@@ -133,7 +133,7 @@ class GameHandler implements GameProcessorInterface
 
         $this->manager->flush($game);
 
-        return $game;
+        return $this->getUserGame($me, $game);
     }
 
     /**

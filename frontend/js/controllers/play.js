@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest) {
+playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService) {
     $scope.boardConfig = {
         pieceType: 'leipzig'
     };
@@ -13,4 +13,6 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
             id: $routeParams.gameId
         }
     );
+
+    WebRTCService.joinOrCreateGameRoom($routeParams.gameId);
 });

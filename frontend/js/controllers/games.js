@@ -21,7 +21,6 @@ playzoneControllers.controller('GamesCtrl', function ($scope, CallRest, GameRest
             );
             $scope.current.push(response);
             $scope.calls_to_me.pullById(call.id);
-            WebRTCService.joinGameRoom(call.game.id);
         });
     };
 
@@ -78,7 +77,7 @@ playzoneControllers.controller('GamesCtrl', function ($scope, CallRest, GameRest
     $scope.calls_from_me.$promise.then(
         function (calls) {
             angular.forEach(calls, function(call) {
-                WebRTCService.createGameRoom(call.game.id);
+
             });
         }
     );

@@ -18,7 +18,13 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                 function() {
                     element.loadBoard(scope.boardConfig);
                     var localStoredPgn = ChessLocalStorageService.getPgn(scope.game.id);
-                    element.loadPgn(localStoredPgn ? localStoredPgn : scope.game.pgn);
+
+                    if (!localStoredPgn || localStoredPgn.length < scope.game.pgn.length) {
+                        ChessLocalStorageService.setPgn(scope.game.id, scope.game.pgn);
+                        localStoredPgn = scope.game.pgn;
+                    }
+
+                    element.loadPgn(localStoredPgn);
 
                     if (scope.game.color === 'b') {
                         element.board.flip();

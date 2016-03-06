@@ -15,4 +15,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     );
 
     WebRTCService.joinOrCreateGameRoom($routeParams.gameId);
+    WebRTCService.addCallBackLeaveRoom($routeParams.gameId, function () {
+        $scope.game.$savePgn();
+    });
 });

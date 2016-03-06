@@ -42,6 +42,8 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                     move: move
                 });
                 ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
+                scope.game.pgn = element.game.pgn();
+                scope.game.$savePgn();
             };
 
             WebRTCService.addMessageListener(
@@ -51,6 +53,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                     }
 
                     element.game.move(webRTCMessage.move);
+                    scope.game.pgn = element.game.pgn();
                     ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
 
                     if (!element.board) {

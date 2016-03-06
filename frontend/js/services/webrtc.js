@@ -9,6 +9,8 @@ playzoneServices.factory('WebRTCService', function() {
 
     var roomMap = {};
 
+    var leaveRoomHandlers = {};
+
     return {
         createRoom: function (roomid) {
             signaler.createNewRoomOnServer(roomid, function () {
@@ -16,10 +18,12 @@ playzoneServices.factory('WebRTCService', function() {
                 channel.transmitRoomOnce = true;
                 channel.open(roomid);
                 console.log('I open a channel',roomid);
+                roomMap[roomid] = {owner: true};
             });
         },
         joinRoom: function (roomid) {
             var webRTC = this;
+            channel.onleave = webRTC.leaveRoomHandler.bind(webRTC);
             signaler.getRoomFromServer(roomid, function (roomid) {
                 if (!!roomMap[roomid]) {
                     return;
@@ -33,17 +37,19 @@ playzoneServices.factory('WebRTCService', function() {
                 });
                 console.log('I join to a channel',roomid);
                 roomMap[roomid] = {owner: false};
-                channel.onleave = webRTC.ownerLeaveGame.bind(webRTC);
             });
         },
-        ownerLeaveGame: function (ownerId) {
-            if (ownerId.indexOf(this.getPrefixGameRoomName()) !== 0) {
-                return;
+        leaveRoomHandler: function (userId) {
+            if (userId.indexOf(this.getPrefixGameRoomName()) === 0) {
+                console.log("owner left game");
+                if (roomMap[userId] && roomMap[userId].owner === false) {
+                    delete roomMap[userId]; // remove room if owner was left
+                    this.joinRoom(userId); // wait until he is back (recursion on server side)
+                }
             }
-            console.log("owner left game");
-            if (roomMap[ownerId] && roomMap[ownerId].owner === false) {
-                delete roomMap[ownerId]; // remove room if owner was left
-            }
+            angular.forEach(leaveRoomHandlers, function (callback) {
+                callback();
+            });
         },
         addMessageListener: function (callback) {
             if (typeof callback === 'function') {
@@ -66,18 +72,14 @@ playzoneServices.factory('WebRTCService', function() {
             var gameRoomId = this.getGameRoomName(gameId);
             var webRTC = this;
             this.joinRoom(gameRoomId);
-            setTimeout(function () { // create game room if it does not exist
+            setTimeout(function () { // create game room if haven't joined
                 if (!roomMap[gameRoomId]) {
                     webRTC.createRoom(gameRoomId);
-                    roomMap[gameRoomId] = {owner: true};
                 }
             }, 500);
-            setInterval(function () { // try to reconnect if owner was left
-                if (!!roomMap[gameRoomId]) {
-                    return;
-                }
-                webRTC.joinRoom(gameRoomId);
-            }, 500);
+        },
+        addCallBackLeaveRoom: function (id, callback) {
+            leaveRoomHandlers[id] = callback;
         }
     };
 });

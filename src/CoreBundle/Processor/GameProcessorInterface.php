@@ -11,6 +11,7 @@ namespace CoreBundle\Processor;
 use CoreBundle\Entity\Game;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
+use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Game\GamePutResignRequest;
@@ -51,4 +52,11 @@ interface GameProcessorInterface extends ProcessorInterface
      * @return Game
      */
     public function processPutOfferdraw(GamePutOfferdrawRequest $drawRequest, GamePutOfferdrawRequest $drawError);
+
+    /**
+     * @param GamePutAcceptdrawRequest $drawRequest
+     * @param GamePutAcceptdrawRequest $drawError
+     * @return Game
+     */
+    public function processPutAcceptdraw(GamePutAcceptdrawRequest $drawRequest, GamePutAcceptdrawRequest $drawError);
 }

@@ -97,21 +97,28 @@
     "response": {
       "status": 200,
       "data": {
-        "user_white": {
-          "login": "Stas",
-          "email": "piv1986@yandex.ru",
-          "class": "N",
-          "rating": 2200
-        },
-        "user_black": {
-          "login": "TestLogin",
-          "email": "test-login@yandex.ru",
-          "class": "D",
-          "rating": 2243
-        },
         "status": "end",
         "result_white": 0,
         "result_black": 1
+      }
+    }
+  },
+  "correct_result_black_resigned": {
+    "method": "PUT",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "id",
+        "value": "game-real-pgn"
+      }
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "status": "end",
+        "result_white": 1,
+        "result_black": 0
       }
     }
   }

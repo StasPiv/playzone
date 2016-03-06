@@ -10,6 +10,7 @@ namespace ApiBundle\Controller;
 
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
+use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Game\GamePutResignRequest;
@@ -92,6 +93,25 @@ class GameController extends BaseController
     public function putOfferdrawAction(Request $request, $id)
     {
         return $this->process($request, new GamePutOfferdrawRequest());
+    }
+
+    /**
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Resign game",
+     *  filters={
+     *      {"name"="login", "dataType"="string", "description"="Your name"},
+     *      {"name"="token", "dataType"="string", "description"="Your token"}
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    public function putAcceptdrawAction(Request $request, $id)
+    {
+        return $this->process($request, new GamePutAcceptdrawRequest());
     }
 
     /**

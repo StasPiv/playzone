@@ -12,8 +12,7 @@
       "reference": {
         "name": "id",
         "value": "game-0"
-      },
-      "pgn": "abrakadabra"
+      }
     },
     "response": {
       "status": 403,
@@ -54,40 +53,75 @@
       }
     }
   },
-  "incorrect_pgn": {
+  "acceptdraw_but_not_offered": {
     "method": "PUT",
     "request": {
-      "login": "TestLogin",
-      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "login": "Stas",
+      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
       "reference": {
         "name": "id",
-        "value": "game-0"
-      },
-      "pgn": "abrakadabra"
+        "value": "game-real-pgn"
+      }
     },
     "response": {
-      "status": 400,
+      "status": 403,
       "errors": {
-        "pgn":"Pgn is incorrect"
+        "id":"Draw was not offered by opponent"
       }
     }
   },
-  "correct_pgn_ruy_lopez": {
+  "black_acceptdraw_but_white_not_offered": {
     "method": "PUT",
     "request": {
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
       "reference": {
         "name": "id",
-        "value": "game-0"
-      },
-      "pgn": "MS5lNCBlNSAyLk5mMyBOYzYgMy5CYjUgYTY="
+        "value": "game-real-black-offer-draw"
+      }
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "id":"Draw was not offered by opponent"
+      }
+    }
+  },
+  "correct_result_white_acceptdraw": {
+    "method": "PUT",
+    "request": {
+      "login": "Stas",
+      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
+      "reference": {
+        "name": "id",
+        "value": "game-real-black-offer-draw"
+      }
     },
     "response": {
       "status": 200,
       "data": {
-        "pgn": "1.e4 e5 2.Nf3 Nc6 3.Bb5 a6",
-        "draw": ""
+        "status": "end",
+        "result_white": 0.5,
+        "result_black": 0.5
+      }
+    }
+  },
+  "correct_result_black_acceptdraw": {
+    "method": "PUT",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "id",
+        "value": "game-real-white-offer-draw"
+      }
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "status": "end",
+        "result_white": 0.5,
+        "result_black": 0.5
       }
     }
   }

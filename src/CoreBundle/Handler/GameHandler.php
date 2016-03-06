@@ -11,6 +11,7 @@ namespace CoreBundle\Handler;
 use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
+use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Game\GamePutResignRequest;
@@ -131,7 +132,7 @@ class GameHandler implements GameProcessorInterface
             $pgnError->throwException(ResponseStatusCode::BAD_FORMAT);
         }
 
-        $game->setPgn($pgn);
+        $game->setPgn($pgn)->setDraw("");
 
         $this->manager->flush($game);
 
@@ -201,6 +202,42 @@ class GameHandler implements GameProcessorInterface
             case $me == $game->getUserWhite():
                 $game->setDraw(GameColor::WHITE);
                 break;
+        }
+
+        $this->manager->flush($game);
+
+        return $this->getUserGame($me, $game);
+    }
+
+    /**
+     * @param GamePutAcceptdrawRequest $drawRequest
+     * @param GamePutAcceptdrawRequest $drawError
+     * @return Game
+     */
+    public function processPutAcceptdraw(GamePutAcceptdrawRequest $drawRequest, GamePutAcceptdrawRequest $drawError)
+    {
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($drawRequest, $drawError);
+
+        $game = $this->repository->find($drawRequest->getId());
+
+        if (!$game instanceof Game) {
+            $drawError->setId("Game is not found");
+            $drawError->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        if (!in_array($me, [$game->getUserWhite(), $game->getUserBlack()])) {
+            $drawError->setId("Game is not mine");
+            $drawError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        switch (true) {
+            case $me == $game->getUserBlack() && $game->getDraw() == GameColor::WHITE:
+            case $me == $game->getUserWhite() && $game->getDraw() == GameColor::BLACK:
+                $game->setResultWhite(0.5)->setResultBlack(0.5)->setStatus(GameStatus::END);
+                break;
+            default:
+                $drawError->setId("Draw was not offered by opponent");
+                $drawError->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
         $this->manager->flush($game);

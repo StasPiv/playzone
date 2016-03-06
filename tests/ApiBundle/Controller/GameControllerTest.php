@@ -35,4 +35,9 @@ class GameControllerTest extends BaseControllerTest
     {
         $this->testFromJson('game/{id}/offerdraw');
     }
+
+    public function testGameAcceptdraw()
+    {
+        $this->testFromJson('game/{id}/acceptdraw');
+    }
 }

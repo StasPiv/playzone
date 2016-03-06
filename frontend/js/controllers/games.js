@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('GamesCtrl', function ($scope, CallRest, GameRest, WebsocketService, WebRTCService) {
+playzoneControllers.controller('GamesCtrl', function ($scope, $location, CallRest, GameRest, WebsocketService, WebRTCService) {
     $scope.calls_from_me = CallRest.query({type: "from"});
     $scope.calls_to_me = CallRest.query({type: "to"});
     $scope.current = GameRest.query({status: "play", user:"me"});
@@ -21,6 +21,7 @@ playzoneControllers.controller('GamesCtrl', function ($scope, CallRest, GameRest
             );
             $scope.current.push(response);
             $scope.calls_to_me.pullById(call.id);
+            $location.path( '/play/' + call.game.id );
         });
     };
 
@@ -63,6 +64,7 @@ playzoneControllers.controller('GamesCtrl', function ($scope, CallRest, GameRest
     WebsocketService.addListener("listen_accepted_calls", "call_accept", function(data) {
         $scope.calls_from_me.pullById(data.call_id);
         $scope.current.push(new GameRest(data.game));
+        $location.path( '/play/' + data.game.id );
     });
 
     WebsocketService.addListener("listen_declined_calls", "call_decline", function(data) {

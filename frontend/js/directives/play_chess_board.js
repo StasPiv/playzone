@@ -52,6 +52,10 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                         return;
                     }
 
+                    if (webRTCMessage.draw) {
+                        return;
+                    }
+
                     element.game.move(webRTCMessage.move);
                     scope.game.pgn = element.game.pgn();
                     ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
@@ -62,7 +66,8 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
 
                     element.board.position(element.game.fen());
                     element.updateStatus();
-                }
+                },
+                'move'
             );
         }
     };

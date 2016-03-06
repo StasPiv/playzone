@@ -8,6 +8,13 @@ playzoneServices.factory('WebRTCService', function() {
     var signaler = initReliableSignaler(channel, ':8080/');
     var roomMap = {};
     var leaveRoomHandlers = {};
+    var onMessageHandlers = {};
+
+    channel.onmessage = function (message) {
+        angular.forEach(onMessageHandlers, function (callback) {
+            callback(message);
+        });
+    };
 
     return {
         createRoom: function (roomid) {
@@ -51,9 +58,9 @@ playzoneServices.factory('WebRTCService', function() {
                 callback();
             });
         },
-        addMessageListener: function (callback) {
+        addMessageListener: function (callback, type) {
             if (typeof callback === 'function') {
-                channel.onmessage = callback;
+                onMessageHandlers[type] = callback;
             }
         },
         sendMessage: function (message) {

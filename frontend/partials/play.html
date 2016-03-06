@@ -1,4 +1,11 @@
-<div class="play-chess-board chess-board-legal" data-board="board">
-    <div id="board" style="width: 400px"></div>
-    <div class="pgn"></div>
+<div id="playroom">
+    <div class="play-chess-board chess-board-legal" data-board="board">
+        <div id="board"></div>
+        <div class="pgn"></div>
+        <div class="clear">&nbsp;</div>
+        <div class="action" ng-controller="PlayActionCtrl">
+            <span ng-if="allowOfferDraw" class="button draw" ng-click="draw()">{{ "Draw" | translate }}</span>
+            <span class="button resign" ng-click="resign()">{{ "Resign" | translate }}</span>
+        </div>
+    </div>
 </div>

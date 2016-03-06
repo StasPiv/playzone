@@ -314,12 +314,16 @@ h2 {
   padding: 5px;
 }
 .action {
-  padding: 5px;
-  width: 368px;
+  width: 400px;
+  text-align: center;
   .button {
     padding: 4px;
     &.draw {
       background-color: $color_japanese_laurel_approx;
+      margin-right: 10px;
+      &.offered {
+        font-weight: bold;
+      }
     }
     &.draw_accept {
       background-color: $color_japanese_laurel_approx;
@@ -524,5 +528,17 @@ th.header {
   display: none;
   &:first-child {
     display: block;
+  }
+}
+.play-chess-board {
+  #board {
+    width: 400px;
+    float: left;
+  }
+  .pgn {
+    float: left;
+    margin-left: 5px;
+    padding-left: 400px;
+    position: absolute;
   }
 }

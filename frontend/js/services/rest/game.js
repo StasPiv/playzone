@@ -30,6 +30,39 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
                         }
                     );
                 }
+            },
+            resign: {
+                method: 'PUT',
+                url: ApiService.base_url + 'game/:id/resign',
+                transformRequest: function (data) {
+                    return angular.toJson(
+                        {
+
+                        }
+                    );
+                }
+            },
+            offerDraw: {
+                method: 'PUT',
+                url: ApiService.base_url + 'game/:id/offerdraw',
+                transformRequest: function (data) {
+                    return angular.toJson(
+                        {
+
+                        }
+                    );
+                }
+            },
+            acceptDraw: {
+                method: 'PUT',
+                url: ApiService.base_url + 'game/:id/acceptdraw',
+                transformRequest: function (data) {
+                    return angular.toJson(
+                        {
+
+                        }
+                    );
+                }
             }
         }
     );

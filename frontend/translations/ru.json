@@ -92,5 +92,8 @@
   "Download my current games in PGN": "Скачать свои текущие партии в PGN",
   "Do move": "Сделать ход",
   "See": "Посмотреть",
-  "match": "матч"
+  "match": "матч",
+  "Draw": "Ничья",
+  "Resign": "Сдаться",
+  "Opponent has been resigned. Congratulations!": "Ваш соперник сдался. Поздравляем!"
 }

@@ -11,6 +11,7 @@ namespace CoreBundle\Handler;
 use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
+use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Game\GamePutResignRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
@@ -164,6 +165,41 @@ class GameHandler implements GameProcessorInterface
                 break;
             case $me == $game->getUserWhite():
                 $game->setResultWhite(0)->setResultBlack(1)->setStatus(GameStatus::END);
+                break;
+        }
+
+        $this->manager->flush($game);
+
+        return $this->getUserGame($me, $game);
+    }
+
+    /**
+     * @param GamePutOfferdrawRequest $drawRequest
+     * @param GamePutOfferdrawRequest $drawError
+     * @return Game
+     */
+    public function processPutOfferdraw(GamePutOfferdrawRequest $drawRequest, GamePutOfferdrawRequest $drawError)
+    {
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($drawRequest, $drawError);
+
+        $game = $this->repository->find($drawRequest->getId());
+
+        if (!$game instanceof Game) {
+            $drawError->setId("Game is not found");
+            $drawError->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        if (!in_array($me, [$game->getUserWhite(), $game->getUserBlack()])) {
+            $drawError->setId("Game is not mine");
+            $drawError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        switch (true) {
+            case $me == $game->getUserBlack():
+                $game->setDraw(GameColor::BLACK);
+                break;
+            case $me == $game->getUserWhite():
+                $game->setDraw(GameColor::WHITE);
                 break;
         }
 

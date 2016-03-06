@@ -184,6 +184,17 @@ class Game
     private $opponent;
 
     /**
+     * @var string
+     *
+     * @JMS\Expose
+     * @JMS\SerializedName("draw")
+     * @JMS\Type("string")
+     *
+     * @ORM\Column(type="text", length=1, nullable=true)
+     */
+    private $draw;
+
+    /**
      * Get id
      *
      * @return int
@@ -603,6 +614,25 @@ class Game
     public function setOpponent($opponent)
     {
         $this->opponent = $opponent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDraw()
+    {
+        return $this->draw;
+    }
+
+    /**
+     * @param mixed $draw
+     * @return Game
+     */
+    public function setDraw($draw)
+    {
+        $this->draw = $draw;
+
+        return $this;
     }
 }
 

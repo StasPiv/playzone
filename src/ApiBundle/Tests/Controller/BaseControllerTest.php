@@ -101,6 +101,7 @@ abstract class BaseControllerTest extends WebTestCase
             }
 
             if (intval($expectedResponse['status'] / 100) == 2) { // successful responses
+                $this->assertNotEmpty($actualResponse, $errorMessage);
                 $this->assertActualContainsExpected($actualResponse, $expectedResponse['data'], $errorMessage);
             }
 

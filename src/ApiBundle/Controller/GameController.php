@@ -11,6 +11,7 @@ namespace ApiBundle\Controller;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
+use CoreBundle\Model\Request\Game\GamePutResignRequest;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,6 +53,25 @@ class GameController extends BaseController
     public function putPgnAction(Request $request, $id)
     {
         return $this->process($request, new GamePutPgnRequest());
+    }
+
+    /**
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Resign game",
+     *  filters={
+     *      {"name"="login", "dataType"="string", "description"="Your name"},
+     *      {"name"="token", "dataType"="string", "description"="Your token"}
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    public function putResignAction(Request $request, $id)
+    {
+        return $this->process($request, new GamePutResignRequest());
     }
 
     /**

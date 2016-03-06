@@ -12,6 +12,7 @@ use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
+use CoreBundle\Model\Request\Game\GamePutResignRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\Timecontrol;
@@ -130,6 +131,41 @@ class GameHandler implements GameProcessorInterface
         }
 
         $game->setPgn($pgn);
+
+        $this->manager->flush($game);
+
+        return $this->getUserGame($me, $game);
+    }
+
+    /**
+     * @param GamePutResignRequest $resignRequest
+     * @param GamePutResignRequest $resignError
+     * @return \CoreBundle\Entity\Game
+     */
+    public function processPutResign(GamePutResignRequest $resignRequest, GamePutResignRequest $resignError)
+    {
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($resignRequest, $resignError);
+
+        $game = $this->repository->find($resignRequest->getId());
+
+        if (!$game instanceof Game) {
+            $resignError->setId("Game is not found");
+            $resignError->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        if (!in_array($me, [$game->getUserWhite(), $game->getUserBlack()])) {
+            $resignError->setId("Game is not mine");
+            $resignError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        switch (true) {
+            case $me == $game->getUserBlack():
+                $game->setResultWhite(1)->setResultBlack(0)->setStatus(GameStatus::END);
+                break;
+            case $me == $game->getUserWhite():
+                $game->setResultWhite(0)->setResultBlack(1)->setStatus(GameStatus::END);
+                break;
+        }
 
         $this->manager->flush($game);
 

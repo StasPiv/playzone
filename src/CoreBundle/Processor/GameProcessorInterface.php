@@ -11,6 +11,7 @@ namespace CoreBundle\Processor;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
+use CoreBundle\Model\Request\Game\GamePutResignRequest;
 
 interface GameProcessorInterface extends ProcessorInterface
 {
@@ -34,4 +35,11 @@ interface GameProcessorInterface extends ProcessorInterface
      * @return \CoreBundle\Entity\Game
      */
     public function processPutPgn(GamePutPgnRequest $pgnRequest, GamePutPgnRequest $pgnError);
+
+    /**
+     * @param GamePutResignRequest $resignRequest
+     * @param GamePutResignRequest $resignError
+     * @return \CoreBundle\Entity\Game
+     */
+    public function processPutResign(GamePutResignRequest $resignRequest, GamePutResignRequest $resignError);
 }

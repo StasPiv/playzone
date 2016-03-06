@@ -10,7 +10,7 @@ namespace ApiBundle\Controller;
 
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
-use CoreBundle\Model\Request\Game\GamePostPgnRequest;
+use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,9 +49,9 @@ class GameController extends BaseController
      * @param $id
      * @return Response
      */
-    public function postPgnAction(Request $request, $id)
+    public function putPgnAction(Request $request, $id)
     {
-        return $this->process($request, new GamePostPgnRequest());
+        return $this->process($request, new GamePutPgnRequest());
     }
 
     /**

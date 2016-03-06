@@ -5,7 +5,7 @@
     "CoreBundle\\DataFixtures\\ORM\\GameFixtures"
   ],
   "incorrect_token": {
-    "method": "POST",
+    "method": "PUT",
     "request": {
       "login": "TestLogin",
       "token": "bba37b62d15cc5f8671fd3d1b034c354",
@@ -23,7 +23,7 @@
     }
   },
   "game_is_not_found": {
-    "method": "POST",
+    "method": "PUT",
     "request": {
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
@@ -38,7 +38,7 @@
     }
   },
   "game_is_not_mine": {
-    "method": "POST",
+    "method": "PUT",
     "request": {
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
@@ -56,7 +56,7 @@
     }
   },
   "incorrect_pgn": {
-    "method": "POST",
+    "method": "PUT",
     "request": {
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
@@ -74,7 +74,7 @@
     }
   },
   "correct_pgn_ruy_lopez": {
-    "method": "POST",
+    "method": "PUT",
     "request": {
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",

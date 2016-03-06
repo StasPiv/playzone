@@ -21,13 +21,12 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
                 url: ApiService.base_url + 'game/:id'
             },
             savePgn: {
-                method: 'POST',
+                method: 'PUT',
                 url: ApiService.base_url + 'game/:id/pgn',
                 transformRequest: function (data) {
                     return angular.toJson(
                         {
-                            pgn: window.btoa(data.pgn),
-                            id: data.id
+                            pgn: window.btoa(data.pgn)
                         }
                     );
                 }

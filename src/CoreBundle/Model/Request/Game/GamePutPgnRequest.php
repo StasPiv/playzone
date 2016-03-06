@@ -12,7 +12,7 @@ use CoreBundle\Model\Request\SecurityRequestInterface;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class GamePostPgnRequest extends GameRequest implements SecurityRequestInterface
+class GamePutPgnRequest extends GameRequest implements SecurityRequestInterface
 {
     /**
      * @var int
@@ -55,7 +55,7 @@ class GamePostPgnRequest extends GameRequest implements SecurityRequestInterface
 
     /**
      * @param int $id
-     * @return GamePostPgnRequest
+     * @return GamePutPgnRequest
      */
     public function setId($id)
     {
@@ -112,7 +112,7 @@ class GamePostPgnRequest extends GameRequest implements SecurityRequestInterface
 
     /**
      * @param string $pgn
-     * @return GamePostPgnRequest
+     * @return GamePutPgnRequest
      */
     public function setPgn($pgn)
     {

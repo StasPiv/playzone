@@ -11,7 +11,7 @@ namespace CoreBundle\Handler;
 use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
-use CoreBundle\Model\Request\Game\GamePostPgnRequest;
+use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\Timecontrol;
@@ -102,11 +102,11 @@ class GameHandler implements GameProcessorInterface
     }
 
     /**
-     * @param GamePostPgnRequest $pgnRequest
-     * @param GamePostPgnRequest $pgnError
+     * @param GamePutPgnRequest $pgnRequest
+     * @param GamePutPgnRequest $pgnError
      * @return \CoreBundle\Entity\Game
      */
-    public function processPostPgn(GamePostPgnRequest $pgnRequest, GamePostPgnRequest $pgnError)
+    public function processPutPgn(GamePutPgnRequest $pgnRequest, GamePutPgnRequest $pgnError)
     {
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($pgnRequest, $pgnError);
 

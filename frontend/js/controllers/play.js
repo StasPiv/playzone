@@ -14,8 +14,16 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         }
     );
 
-    WebRTCService.joinOrCreateGameRoom($routeParams.gameId);
-    WebRTCService.addCallBackLeaveRoom($routeParams.gameId, function () {
-        $scope.game.$savePgn();
-    });
+    $scope.game.$promise.then(
+        function () {
+            if ($scope.game.color === 'w') {
+                WebRTCService.createGameRoom($scope.game.id);
+            } else {
+                WebRTCService.joinGameRoom($scope.game.id);
+                WebRTCService.addCallBackLeaveRoom($routeParams.gameId, function () {
+                    $scope.game.$savePgn();
+                });
+            }
+        }
+    );
 });

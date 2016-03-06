@@ -6,9 +6,7 @@
 playzoneServices.factory('WebRTCService', function() {
     var channel = new DataChannel();
     var signaler = initReliableSignaler(channel, ':8080/');
-
     var roomMap = {};
-
     var leaveRoomHandlers = {};
 
     return {
@@ -22,8 +20,7 @@ playzoneServices.factory('WebRTCService', function() {
             });
         },
         joinRoom: function (roomid) {
-            var webRTC = this;
-            channel.onleave = webRTC.leaveRoomHandler.bind(webRTC);
+            channel.onleave = this.leaveRoomHandler.bind(this);
             signaler.getRoomFromServer(roomid, function (roomid) {
                 if (!!roomMap[roomid]) {
                     return;
@@ -39,8 +36,11 @@ playzoneServices.factory('WebRTCService', function() {
                 roomMap[roomid] = {owner: false};
             });
         },
+        isOwnerOfGameRoom: function (userId) {
+            return userId.indexOf(this.getPrefixGameRoomName()) === 0;
+        },
         leaveRoomHandler: function (userId) {
-            if (userId.indexOf(this.getPrefixGameRoomName()) === 0) {
+            if (this.isOwnerOfGameRoom(userId)) {
                 console.log("owner left game");
                 if (roomMap[userId] && roomMap[userId].owner === false) {
                     delete roomMap[userId]; // remove room if owner was left
@@ -68,15 +68,8 @@ playzoneServices.factory('WebRTCService', function() {
         createGameRoom: function (gameId) {
             this.createRoom(this.getGameRoomName(gameId));
         },
-        joinOrCreateGameRoom: function (gameId) {
-            var gameRoomId = this.getGameRoomName(gameId);
-            var webRTC = this;
-            this.joinRoom(gameRoomId);
-            setTimeout(function () { // create game room if haven't joined
-                if (!roomMap[gameRoomId]) {
-                    webRTC.createRoom(gameRoomId);
-                }
-            }, 500);
+        joinGameRoom: function (gameId) {
+            this.joinRoom(this.getGameRoomName(gameId));
         },
         addCallBackLeaveRoom: function (id, callback) {
             leaveRoomHandlers[id] = callback;

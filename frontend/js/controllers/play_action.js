@@ -51,7 +51,6 @@ playzoneControllers.controller('PlayActionCtrl', function ($scope, $rootScope, $
                                         gameId: $scope.game.id,
                                         draw: "accept"
                                     });
-                                    window.alert(translations.Draw + "!");
                                 }
                             );
                         }

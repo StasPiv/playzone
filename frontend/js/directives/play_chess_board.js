@@ -48,6 +48,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
 
             WebRTCService.addMessageListener(
                 function (webRTCMessage) {
+                    console.log('webRTCMessage', webRTCMessage);
                     if (!webRTCMessage.gameId || webRTCMessage.gameId !== scope.game.id) {
                         return;
                     }

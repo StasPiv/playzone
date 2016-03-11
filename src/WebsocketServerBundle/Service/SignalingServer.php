@@ -12,7 +12,7 @@ use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SignalerServer implements MessageComponentInterface
+class SignalingServer implements MessageComponentInterface
 {
     /** @var OutputInterface */
     private $output;
@@ -44,14 +44,16 @@ class SignalerServer implements MessageComponentInterface
         foreach ($this->subscribers as $roomSubscribers) {
             /** @var ConnectionInterface[] $roomSubscribers */
             foreach ($roomSubscribers as $name => $suscriber) {
-                if ($suscriber == $conn) {
+                if ($suscriber['connection'] == $conn) {
+                    $this->getOutput()->writeln("close $name");
                     unset($roomSubscribers[$name]);
                 }
             }
         }
 
         foreach ($this->owners as $roomId => $owner) {
-            if ($owner == $conn) {
+            if ($owner['connection'] == $conn) {
+                $this->getOutput()->writeln("close $roomId");
                 unset($this->owners[$roomId]);
             }
         }
@@ -81,71 +83,42 @@ class SignalerServer implements MessageComponentInterface
         var_dump($jsonMessage);
 
         $room = $jsonMessage['room'];
-        $name = $jsonMessage['name'];
-        $this->getOutput()->writeln($jsonMessage['action']);
         switch ($jsonMessage['action']) {
-            case 'join':
-                $this->subscribers[$room][$name] = $from;
+            case 'owner-enter':
+                $this->addOwnerWithOffer($from, $jsonMessage);
+
+                if (!isset($this->subscribers[$room])) {
+                    break;
+                }
+
+                foreach ($this->subscribers[$room] as $subscriber) {
+                    /** @var ConnectionInterface $subscriberConnection */
+                    $subscriberConnection = $subscriber['connection'];
+                    $this->sendOwnerOffer($subscriberConnection, $room);
+                }
+                break;
+            case 'subscriber-send-data':
+                var_dump('owners count: ' . count($this->owners));
                 if (isset($this->owners[$room])) {
-                    $from->send(json_encode([
-                        'action' => 'you-are-joined',
-                        'room' => $room
-                    ]));
-                    $this->owners[$room]->send(json_encode([
-                        'action' => 'subscriber-joined',
-                        'room' => $room
-                    ]));
-                } else {
-                    $from->send(json_encode([
-                        'action' => 'not-created-yet',
-                        'room' => $room
-                    ]));
+                    /** @var ConnectionInterface $ownerConnection */
+                    $ownerConnection = $this->owners[$room]['connection'];
+                    $this->sendSubscriberAnswer($ownerConnection, $jsonMessage);
                 }
                 break;
-            case 'create':
-                $this->owners[$room] = $from;
-                $from->send(json_encode([
-                    'action' => 'created-by-you',
-                    'room' => $room
-                ]));
-                /** @var ConnectionInterface[] $roomSubscribers */
-                $roomSubscribers = $this->subscribers[$room];
-                foreach ($roomSubscribers as $subscriber) {
-                    $subscriber->send(json_encode([
-                        'action' => 'offer-from-owner',
-                        'room' => $room,
-                        'offerSDP' => $jsonMessage['offer']['sdp']
-                    ]));
-                }
-                break;
-            case 'join-and-prepare-answer':
+            case 'subscriber-enter':
                 if (isset($this->owners[$room])) {
-                    $this->owners[$room]->send(json_encode([
-                        'action' => 'answer-from-subscriber',
-                        'room' => $room,
-                        'answerSDP' => $jsonMessage['answer']['sdp']
-                    ]));
+                    //$this->sendOwnerOffer($from, $room);
+                    /** @var ConnectionInterface $ownerConnection */
+                    $ownerConnection = $this->owners[$room]['connection'];
+                    $ownerConnection->send(json_encode([
+                        'action' => 'subscriber-entered',
+                        'room' => $jsonMessage['room'],
+                        'name' => $jsonMessage['name']
+                    ]));;
                 }
-                break;
-            case 'ice-candidate-from-subscriber':
-                if (isset($this->owners[$room])) {
-                    $this->owners[$room]->send(json_encode([
-                        'action' => 'subscriber-sent-ice-candidate',
-                        'room' => $room,
-                        'candidate' => $jsonMessage['candidate']
-                    ]));
-                }
-                break;
-            case 'ice-candidate-from-owner':
-                /** @var ConnectionInterface[] $roomSubscribers */
-                $roomSubscribers = $this->subscribers[$room];
-                foreach ($roomSubscribers as $subscriber) {
-                    $subscriber->send(json_encode([
-                        'action' => 'owner-sent-ice-candidate',
-                        'room' => $room,
-                        'candidate' => $jsonMessage['candidate']
-                    ]));
-                }
+                $this->subscribers[$room][$jsonMessage['name']] = [
+                    'connection' => $from
+                ];
                 break;
         }
     }
@@ -160,13 +133,53 @@ class SignalerServer implements MessageComponentInterface
 
     /**
      * @param OutputInterface $output
-     * @return SignalerServer
+     * @return SignalingServer
      */
     public function setOutput($output)
     {
         $this->output = $output;
 
         return $this;
+    }
+
+    /**
+     * @param ConnectionInterface $subscriberConnection
+     * @param $room
+     */
+    private function sendOwnerOffer(ConnectionInterface $subscriberConnection, $room)
+    {
+        $subscriberConnection->send(json_encode([
+            'action' => 'offer-from-owner',
+            'room' => $room,
+            'candidate' => $this->owners[$room]['candidate'],
+            'offerSdpDescription' => $this->owners[$room]['offerSdpDescription']
+        ]));
+    }
+
+    /**
+     * @param ConnectionInterface $ownerConnection
+     * @param $jsonMessage
+     */
+    private function sendSubscriberAnswer(ConnectionInterface $ownerConnection, $jsonMessage)
+    {
+        $ownerConnection->send(json_encode([
+            'action' => 'answer-from-subscriber',
+            'candidate' => $jsonMessage['candidate'],
+            'answerSdpDescription' => $jsonMessage['answerSdpDescription']
+        ]));
+    }
+
+    /**
+     * @param ConnectionInterface $from
+     * @param $jsonMessage
+     */
+    private function addOwnerWithOffer(ConnectionInterface $from, $jsonMessage)
+    {
+        $this->owners[$jsonMessage['room']] = [
+            'offerSdpDescription' => $jsonMessage['offerSdpDescription'],
+            'candidate' => $jsonMessage['candidate'],
+            'connection' => $from
+        ];
     }
 
 }

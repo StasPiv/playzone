@@ -5,74 +5,159 @@
 
 playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
     var wsSignaler = $websocket('ws://localhost:1234/signaler');
-    var ownerConnection,
-        subscriberConnection,
-        receiveChannel;
+
+    function createNewOffer() {
+        ownerConnection.createOffer().then(function (offer) {
+            offerSdpDescription = offer.sdp;
+            return ownerConnection.setLocalDescription(offer);
+        }, function (error) {
+            console.log('create offer error', error);
+        })
+            .then(function () {
+
+            }, function (error) {
+                console.log('second error', error);
+            })
+            .catch(function (error) {
+                console.log('third error', error);
+            });
+    }
+
+    function createAnswer() {
+        subscriberConnection.createAnswer().then(
+            function (answer) {
+                answerSdpDescription = answer.sdp;
+                return subscriberConnection.setLocalDescription(answer);
+            }, function (error) {
+                console.log('create answer error', error);
+            }
+        )
+            .then(function () {
+
+            }, function (error) {
+                console.log('create answer promise second error', error);
+            })
+            .catch(function (error) {
+                console.log('create answer promise third error', error);
+            });
+    }
+
+    function setRemoteDescriptionAndIceCandidateToOwner(receivedMessage) {
+        console.log('owner setRemoteDescription');
+        ownerConnection.setRemoteDescription(new RTCSessionDescription({
+            type: 'answer',
+            sdp: receivedMessage.answerSdpDescription
+        }));
+        console.log('owner addIceCandidate');
+        ownerConnection.addIceCandidate(new RTCIceCandidate({
+            sdpMLineIndex: 0,
+            candidate: receivedMessage.candidate
+        }), onAddIceCandidateSuccess, onAddIceCandidateError);
+    }
+
+    wsSignaler.onMessage(function (webSocketMessage) {
+        console.log(webSocketMessage);
+        var receivedMessage = angular.fromJson(webSocketMessage.data);
+
+        switch (receivedMessage.action) {
+            case 'offer-from-owner':
+                createSubscriberConnectionAndChannel(receivedMessage.room);
+
+                console.log('subscriber setRemoteDescription');
+                subscriberConnection.setRemoteDescription(new RTCSessionDescription(
+                    {
+                        type: 'offer',
+                        sdp: receivedMessage.offerSdpDescription
+                    }
+                ));
+
+                createAnswer();
+
+                console.log('subscriber addIceCandidate');
+                subscriberConnection.addIceCandidate(new RTCIceCandidate({
+                    sdpMLineIndex: 0,
+                    candidate: receivedMessage.candidate
+                }), onAddIceCandidateSuccess, onAddIceCandidateError);
+
+                break;
+            case 'answer-from-subscriber':
+                setRemoteDescriptionAndIceCandidateToOwner(receivedMessage);
+                break;
+            case 'subscriber-entered':
+                createOwnerConnectionAndChannel(receivedMessage.room);
+                createNewOffer();
+                break;
+        }
+    });
+
+    var receiveChannel;
     var leaveRoomHandlers = {};
     var onMessageHandlers = {};
+    var ownerConnection,
+        subscriberConnection;
 
-    var isChrome = !!navigator.webkitGetUserMedia;
-    var isFirefox = !!navigator.mozGetUserMedia;
-    var chromeVersion = !!navigator.mozGetUserMedia ? 0 : parseInt(navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)[2]);
+    var sendChannel;
 
-    var iceServers = [];
+    var ownerCandidate,
+        offerSdpDescription,
+        answerSdpDescription;
 
-    var channel;
+    function getICEServers() {
+        var isChrome = !!navigator.webkitGetUserMedia;
+        var isFirefox = !!navigator.mozGetUserMedia;
+        var chromeVersion = !!navigator.mozGetUserMedia ? 0 : parseInt(navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)[2]);
+        var iceServers = [];
+        if (isFirefox) {
+            iceServers.push({
+                url: 'stun:23.21.150.121'
+            });
 
-    var preparedOfferSdpDescription;
-    var preparedSubscriberCandidate;
-    var preparedOwnerCandidate;
+            iceServers.push({
+                url: 'stun:stun.services.mozilla.com'
+            });
+        }
 
-    if (isFirefox) {
-        iceServers.push({
-            url: 'stun:23.21.150.121'
-        });
+        if (isChrome) {
+            iceServers.push({
+                url: 'stun:stun.l.google.com:19302'
+            });
 
-        iceServers.push({
-            url: 'stun:stun.services.mozilla.com'
-        });
-    }
+            iceServers.push({
+                url: 'stun:stun.anyfirewall.com:3478'
+            });
+        }
 
-    if (isChrome) {
-        iceServers.push({
-            url: 'stun:stun.l.google.com:19302'
-        });
+        if (isChrome && chromeVersion < 28) {
+            iceServers.push({
+                url: 'turn:homeo@turn.bistri.com:80?transport=udp',
+                credential: 'homeo'
+            });
 
-        iceServers.push({
-            url: 'stun:stun.anyfirewall.com:3478'
-        });
-    }
+            iceServers.push({
+                url: 'turn:homeo@turn.bistri.com:80?transport=tcp',
+                credential: 'homeo'
+            });
+        }
 
-    if (isChrome && chromeVersion < 28) {
-        iceServers.push({
-            url: 'turn:homeo@turn.bistri.com:80?transport=udp',
-            credential: 'homeo'
-        });
+        if (isChrome && chromeVersion >= 28) {
+            iceServers.push({
+                url: 'turn:turn.bistri.com:80?transport=udp',
+                credential: 'homeo',
+                username: 'homeo'
+            });
 
-        iceServers.push({
-            url: 'turn:homeo@turn.bistri.com:80?transport=tcp',
-            credential: 'homeo'
-        });
-    }
+            iceServers.push({
+                url: 'turn:turn.bistri.com:80?transport=tcp',
+                credential: 'homeo',
+                username: 'homeo'
+            });
 
-    if (isChrome && chromeVersion >= 28) {
-        iceServers.push({
-            url: 'turn:turn.bistri.com:80?transport=udp',
-            credential: 'homeo',
-            username: 'homeo'
-        });
-
-        iceServers.push({
-            url: 'turn:turn.bistri.com:80?transport=tcp',
-            credential: 'homeo',
-            username: 'homeo'
-        });
-
-        iceServers.push({
-            url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-            credential: 'webrtc',
-            username: 'webrtc'
-        });
+            iceServers.push({
+                url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+                credential: 'webrtc',
+                username: 'webrtc'
+            });
+        }
     }
 
     function onAddIceCandidateSuccess() {
@@ -88,245 +173,105 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
         trace('Receive channel state is: ' + readyState);
     }
 
-    wsSignaler.onMessage(
-        function (webSocketMessage) {
-            var receivedMessage = angular.fromJson(webSocketMessage.data);
-            console.log(receivedMessage);
-            var room = receivedMessage.room;
-            // TODO: implement open, connect and join to datachannel
-            switch (receivedMessage.action) {
-                case 'created':
-                    console.log('I open a channel',room);
-                    break;
-                case 'subscriber-joined':
-                    //wsSignaler.send({
-                    //    room: room,
-                    //    action: 'create',
-                    //    name: $rootScope.user.login,
-                    //    offer: preparedOfferSdpDescription
-                    //});
-                    //wsSignaler.send({
-                    //    action: 'ice-candidate-from-owner',
-                    //    room: room,
-                    //    name: $rootScope.user.login,
-                    //    candidate: {
-                    //        sdpMLineIndex: preparedOwnerCandidate.sdpMLineIndex,
-                    //        candidate: preparedOwnerCandidate.candidate
-                    //    }
-                    //});
-                    break;
-                case 'offer-from-owner':
-                    console.log('Owner sent offer',room);
-                    window.subscriberConnection = subscriberConnection =
-                        new RTCPeerConnection({
-                            iceServers: iceServers
-                        });
+    function createSubscriberConnectionAndChannel(room) {
+        subscriberConnection = new RTCPeerConnection({
+            iceServers: getICEServers()
+        });
 
-                    if (preparedSubscriberCandidate) {
-                        wsSignaler.send({
-                            action: 'ice-candidate-from-subscriber',
-                            room: room,
-                            name: $rootScope.user.login,
-                            candidate: {
-                                sdpMLineIndex: preparedSubscriberCandidate.sdpMLineIndex,
-                                candidate: preparedSubscriberCandidate.candidate
-                            }
-                        });
-                        break;
-                    }
-
-                    channel = subscriberConnection.createDataChannel('sendDataChannel');
-
-                    channel.onmessage = function (message) {
-                        console.log('Receive: ' + message);
-                        angular.forEach(
-                            onMessageHandlers,
-                            function (callback) {
-                                callback(message);
-                            }
-                        )
-                    };
-
-                    subscriberConnection.onicecandidate = function (event) {
-                        trace('subscriber ice callback');
-                        if (event.candidate) {
-                            preparedSubscriberCandidate = event.candidate;
-                            wsSignaler.send({
-                                action: 'ice-candidate-from-subscriber',
-                                room: room,
-                                name: $rootScope.user.login,
-                                candidate: {
-                                    sdpMLineIndex: event.candidate.sdpMLineIndex,
-                                    candidate: event.candidate.candidate
-                                }
-                            });
-                            trace('Remote ICE candidate: \n ' + event.candidate.candidate);
-                        }
-                    };
-
-                    subscriberConnection.ondatachannel = function (event) {
-                        trace('Receive Channel Callback');
-                        receiveChannel = event.channel;
-                        receiveChannel.onmessage = function (event) {
-                            trace('Received Message');
-                            console.log('Receive: ', event);
-                            angular.forEach(
-                                onMessageHandlers,
-                                function (callback) {
-                                    console.log('need to move');
-                                    callback(angular.fromJson(event.data));
-                                }
-                            )
-                        };
-                        receiveChannel.onopen = onReceiveChannelStateChange;
-                        receiveChannel.onclose = onReceiveChannelStateChange;
-                    };
-
-                    console.log('offerSDP', receivedMessage.offerSDP);
-                    subscriberConnection.setRemoteDescription(
-                        new RTCSessionDescription(
-                            {
-                                type: 'offer',
-                                sdp: receivedMessage.offerSDP
-                            }
-                        )
-                    );
-                    channel = subscriberConnection.createDataChannel('sendDataChannel');
-                    trace('Created send data channel');
-                    subscriberConnection.createAnswer(
-                        function (answerSdpDescription) {
-                            subscriberConnection.setLocalDescription(answerSdpDescription);
-                            trace('Answer from remoteConnection \n' + answerSdpDescription.sdp);
-                            wsSignaler.send({
-                                room: room,
-                                action: 'join-and-prepare-answer',
-                                name: $rootScope.user.login,
-                                answer: answerSdpDescription
-                            });
-                        },
-                        function (error) {
-                            trace('Failed to create session description: ' + error.toString());
-                        }
-                    );
-                    break;
-                case 'answer-from-subscriber':
-                    console.log('Subscriber sent answer',room);
-                    ownerConnection.setRemoteDescription(
-                        new RTCSessionDescription(
-                            {
-                                type: 'answer',
-                                sdp: receivedMessage.answerSDP
-                            }
-                        )
-                    );
-                    break;
-                case 'subscriber-sent-ice-candidate':
-                    console.log('Subscriber sent ice candidate',room);
-                    console.log('receivedMessage.candidate', receivedMessage.candidate);
-                    ownerConnection.addIceCandidate(
-                        new RTCIceCandidate({
-                            sdpMLineIndex: receivedMessage.candidate.sdpMLineIndex,
-                            candidate: receivedMessage.candidate.candidate
-                        }),
-                        onAddIceCandidateSuccess, onAddIceCandidateError
-                    );
-                    break;
-                case 'owner-sent-ice-candidate':
-                    console.log('Owner sent ice candidate',room);
-                    console.log('receivedMessage.candidate', receivedMessage.candidate);
-                    subscriberConnection.addIceCandidate(
-                        new RTCIceCandidate({
-                            sdpMLineIndex: receivedMessage.candidate.sdpMLineIndex,
-                            candidate: receivedMessage.candidate.candidate
-                        }),
-                        onAddIceCandidateSuccess, onAddIceCandidateError
-                    );
-                    break;
+        subscriberConnection.onicecandidate = function (event) {
+            if (!event.candidate) {
+                return;
             }
-        }
-    );
+
+            console.log('candidate', event.candidate.candidate);
+            console.log('answerSdpDescription', answerSdpDescription);
+            ownerCandidate = event.candidate;
+
+            wsSignaler.send({
+                action: 'subscriber-send-data',
+                room: room,
+                name: $rootScope.user.login,
+                answerSdpDescription: answerSdpDescription,
+                candidate: event.candidate.candidate
+            });
+        };
+
+        subscriberConnection.ondatachannel = function (event) {
+            trace('Receive Channel Callback');
+            receiveChannel = event.channel;
+            receiveChannel.onmessage = function (event) {
+                trace('Received Message');
+                console.log('Receive: ', event);
+                angular.forEach(
+                    onMessageHandlers,
+                    function (callback) {
+                        console.log('need to move');
+                        callback(angular.fromJson(event.data));
+                    }
+                )
+            };
+            receiveChannel.onopen = onReceiveChannelStateChange;
+            receiveChannel.onclose = onReceiveChannelStateChange;
+        };
+
+        console.log('subscriber create send channel');
+        sendChannel = subscriberConnection.createDataChannel('Send data channel');
+    }
+
+    function createOwnerConnectionAndChannel(room) {
+        ownerConnection = new RTCPeerConnection({
+            iceServers: getICEServers()
+        });
+
+        ownerConnection.onicecandidate = function (event) {
+            if (!event.candidate) {
+                return;
+            }
+
+            console.log('candidate', event.candidate.candidate);
+            console.log('offerSdpDescription', offerSdpDescription);
+            ownerCandidate = event.candidate;
+
+            wsSignaler.send({
+                action: 'owner-enter',
+                room: room,
+                offerSdpDescription: offerSdpDescription,
+                candidate: event.candidate.candidate
+            });
+        };
+
+        ownerConnection.ondatachannel = function (event) {
+            trace('Receive Channel Callback');
+            receiveChannel = event.channel;
+            receiveChannel.onmessage = function (event) {
+                trace('Received Message');
+                trace(event.data);
+                console.log('Receive: ', event);
+                angular.forEach(
+                    onMessageHandlers,
+                    function (callback) {
+                        console.log('need to move');
+                        callback(angular.fromJson(event.data));
+                    }
+                )
+            };
+            receiveChannel.onopen = onReceiveChannelStateChange;
+            receiveChannel.onclose = onReceiveChannelStateChange;
+        };
+
+        sendChannel = ownerConnection.createDataChannel('Send data channel');
+    }
 
     return {
         createRoom: function (room) {
-            window.ownerConnection = ownerConnection =
-                new RTCPeerConnection({
-                    iceServers: iceServers
-                });
-            trace('Created local peer connection object localConnection');
-
-            ownerConnection.onicecandidate = function (event) {
-                trace('owner ice callback');
-                if (event.candidate) {
-                    preparedOwnerCandidate = event.candidate;
-                    wsSignaler.send({
-                        action: 'ice-candidate-from-owner',
-                        room: room,
-                        name: $rootScope.user.login,
-                        candidate: {
-                            sdpMLineIndex: event.candidate.sdpMLineIndex,
-                            candidate: event.candidate.candidate
-                        }
-                    });
-
-                    trace('Owner ICE candidate: \n' + event.candidate.candidate);
-                }
-            };
-
-            ownerConnection.ondatachannel = function (event) {
-                trace('Receive Channel Callback');
-                receiveChannel = event.channel;
-                receiveChannel.onmessage = function (event) {
-                    trace('Received Message');
-                    trace(event.data);
-                    console.log('Receive: ', event);
-                    angular.forEach(
-                        onMessageHandlers,
-                        function (callback) {
-                            console.log('need to move');
-                            callback(angular.fromJson(event.data));
-                        }
-                    )
-                };
-                receiveChannel.onopen = onReceiveChannelStateChange;
-                receiveChannel.onclose = onReceiveChannelStateChange;
-            };
-
-            function onSendChannelStateChange() {
-                var readyState = channel.readyState;
-                trace('Send channel state is: ' + readyState);
-            }
-
-            channel = ownerConnection.createDataChannel('sendDataChannel');
-            trace('Created send data channel');
-
-            channel.onopen = onSendChannelStateChange;
-            channel.onclose = onSendChannelStateChange;
-
-            trace('Created remote peer connection object remoteConnection');
-
-            console.log(ownerConnection);
-            ownerConnection.createOffer(
-                function (offerSdpDescription) {
-                    trace('create offer callback');
-                    ownerConnection.setLocalDescription(offerSdpDescription);
-                    wsSignaler.send({
-                        room: room,
-                        action: 'create',
-                        name: $rootScope.user.login,
-                        offer: offerSdpDescription
-                    });
-                    preparedOfferSdpDescription = offerSdpDescription;
-                    trace('Offer from localConnection \n' + offerSdpDescription.sdp);
-                },
-                function (error) {
-                    trace('Failed to create session description: ' + error.toString());
-                }
-            );
+            createOwnerConnectionAndChannel(room);
+            createNewOffer();
         },
-        joinRoom: function (roomid) {
+        joinRoom: function (room) {
+            //createSubscriberConnectionAndChannel(room);
             wsSignaler.send({
-                room: roomid,
-                action: 'join',
+                room: room,
+                action: 'subscriber-enter',
                 name: $rootScope.user.login
             });
         },
@@ -341,8 +286,7 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
             }
         },
         sendMessage: function (message) {
-            console.log(message);
-            var sendChannel = channel || receiveChannel;
+            console.log(sendChannel);
             sendChannel.send(JSON.stringify(message));
         },
         getPrefixGameRoomName: function () {

@@ -10,6 +10,7 @@ playzoneServices.factory('WebsocketService', function($websocket) {
 
     dataStream.onMessage(
         function(message) {
+            console.log(message, '4');
             var receivedMessage = angular.fromJson(message.data);
 
             if (!receivedMessage.method || !receivedMessage.data) {
@@ -37,7 +38,9 @@ playzoneServices.factory('WebsocketService', function($websocket) {
             listenersMap[methodToListen][listenerName] = callback;
         },
         send: function(data) {
+            console.log(data);
             var dataToSend = angular.toJson(data);
+            console.log(dataToSend);
             dataStream.send(dataToSend);
         },
         introduction: function(user) {
@@ -59,6 +62,31 @@ playzoneServices.factory('WebsocketService', function($websocket) {
                     method: method,
                     logins: logins,
                     data: data
+                }
+            )
+        },
+        subscribeToGame: function(gameId) {
+            console.log('subscribeToGame');
+            this.send(
+                {
+                    scope: 'subscribe_to_game',
+                    method: 'subscribe_to_game',
+                    data: {
+                        game_id: gameId
+                    }
+                }
+            )
+        },
+        sendGameToObservers: function(gameId, encodedPgn) {
+            console.log('sendGameToObservers');
+            this.send(
+                {
+                    scope: 'send_to_game_observers',
+                    method: 'send_pgn_to_observers',
+                    data: {
+                        game_id: gameId,
+                        encoded_pgn: encodedPgn
+                    }
                 }
             )
         }

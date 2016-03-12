@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService) {
+playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService) {
     $scope.boardConfig = {
         pieceType: 'leipzig'
     };
@@ -16,13 +16,18 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
 
     $scope.game.$promise.then(
         function () {
-            if ($scope.game.color === 'w') {
-                WebRTCService.createGameRoom($scope.game.id);
-            } else {
-                WebRTCService.joinGameRoom($scope.game.id);
-                WebRTCService.addCallBackLeaveRoom($scope.game.id, function () {
-                    $scope.game.$savePgn();
-                });
+            switch ($scope.game.color) {
+                case 'w':
+                    WebRTCService.createGameRoom($scope.game.id);
+                    break;
+                case 'b':
+                    WebRTCService.joinGameRoom($scope.game.id);
+                    WebRTCService.addCallBackLeaveRoom($scope.game.id, function () {
+                        $scope.game.$savePgn();
+                    });
+                    break;
+                default:
+                    WebsocketService.subscribeToGame(scope.game.id);
             }
         }
     );

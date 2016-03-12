@@ -244,7 +244,7 @@ h2 {
   margin-bottom: 10px;
 }
 .apply-call {
-  text-align: center;
+  text-align: left;
   margin-bottom: 10px;
 }
 .call_form {
@@ -312,27 +312,6 @@ h2 {
 }
 #playzone-moves {
   padding: 5px;
-}
-.action {
-  width: 400px;
-  text-align: center;
-  .button {
-    padding: 4px;
-    &.draw {
-      background-color: $color_japanese_laurel_approx;
-      margin-right: 10px;
-      &.offered {
-        font-weight: bold;
-      }
-    }
-    &.draw_accept {
-      background-color: $color_japanese_laurel_approx;
-      font-weight: bold;
-    }
-    &.resign {
-      background-color: $red;
-    }
-  }
 }
 .register {
   &.inner {
@@ -530,14 +509,40 @@ th.header {
     display: block;
   }
 }
-.play-chess-board {
-  #board {
-    width: 400px;
-    float: left;
+#playroom {
+  h1 {
+    font-size: 20px;
   }
-  .pgn {
-    float: left;
-    margin-left: 5px;
+  .play-chess-board {
+    #board {
+      width: 400px;
+      float: left;
+    }
+    .pgn {
+      float: left;
+      margin-left: 5px;
+      width: 400px;
+    }
+  }
+  .action {
     width: 400px;
+    text-align: center;
+    .button {
+      padding: 4px;
+      &.draw {
+        background-color: $color_japanese_laurel_approx;
+        margin-right: 10px;
+        &.offered {
+          font-weight: bold;
+        }
+      }
+      &.draw_accept {
+        background-color: $color_japanese_laurel_approx;
+        font-weight: bold;
+      }
+      &.resign {
+        background-color: $red;
+      }
+    }
   }
 }

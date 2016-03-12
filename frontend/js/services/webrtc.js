@@ -74,7 +74,7 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
     }
 
     wsSignaler.onMessage(function (webSocketMessage) {
-        console.log(webSocketMessage);
+        console.log(webSocketMessage, '1');
         var receivedMessage = angular.fromJson(webSocketMessage.data);
 
         switch (receivedMessage.action) {
@@ -207,7 +207,7 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
                 angular.forEach(
                     onMessageHandlers,
                     function (callback) {
-                        console.log('need to move');
+                        console.log('need to move', '2');
                         callback(angular.fromJson(event.data));
                     }
                 )
@@ -252,7 +252,7 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
                 angular.forEach(
                     onMessageHandlers,
                     function (callback) {
-                        console.log('need to move');
+                        console.log('need to move', '2');
                         callback(angular.fromJson(event.data));
                     }
                 )

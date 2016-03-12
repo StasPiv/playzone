@@ -59,7 +59,7 @@
     </tr>
     <tr ng-repeat="call in calls_from_me" ng-if="call.id">
         <td>
-            <a href="">{{ call.game.id }}</a>
+            <a href="" ng-click="deleteCall(call);">{{ call.game.id }}</a>
         </td>
         <td>
             <a href="">{{ call.game.timecontrol.name }}</a>
@@ -86,7 +86,7 @@
     </tr>
     <tr ng-repeat="call in calls_to_me" ng-if="call.id">
         <td>
-            <a href="">{{ call.game.id }}</a>
+            <a href="" ng-click="acceptCall(call)">{{ call.game.id }}</a>
         </td>
         <td>
             <a href="">{{ call.game.timecontrol.name }}</a>

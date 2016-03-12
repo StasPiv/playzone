@@ -10,7 +10,7 @@
  * element.game - chess.js plugin (with pgn functions etc.)
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
-playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLocalStorageService) {
+playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLocalStorageService, WebsocketService) {
     return {
         restrict: 'C',
         link: function(scope, element) {
@@ -29,6 +29,23 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                     if (scope.game.color === 'b') {
                         element.board.flip();
                     }
+
+                    if (!scope.game.color) {
+                        WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
+                            console.log('listener should do move');
+                            var receivedPgn = window.atob(data.encoded_pgn);
+                            console.log(receivedPgn);
+
+                            if (receivedPgn.length < scope.game.pgn.length) {
+                                return;
+                            }
+
+                            scope.game.pgn = receivedPgn;
+                            element.game.load_pgn(receivedPgn);
+                            element.board.position(element.game.fen());
+                            element.updateStatus();
+                        });
+                    }
                 }
             );
 
@@ -44,6 +61,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                 ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
                 scope.game.pgn = element.game.pgn();
                 scope.game.$savePgn();
+                WebsocketService.sendGameToObservers(scope.game.id, window.btoa(scope.game.pgn));
             };
 
             WebRTCService.addMessageListener(

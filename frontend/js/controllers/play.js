@@ -27,7 +27,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
                     });
                     break;
                 default:
-                    WebsocketService.subscribeToGame(scope.game.id);
+                    WebsocketService.subscribeToGame($scope.game.id);
             }
         }
     );

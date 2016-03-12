@@ -44,13 +44,22 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                             element.game.load_pgn(receivedPgn);
                             element.board.position(element.game.fen());
                             element.updateStatus();
+
+                            if (element.game.game_over()) {
+                                setTimeout(
+                                    function () {
+                                        scope.game.$get();
+                                    },
+                                    1500
+                                );
+                            }
                         });
                     }
                 }
             );
 
             element.onDragStart = function () {
-                return element.game.turn() === scope.game.color;
+                return scope.game.status == 'play' && element.game.turn() === scope.game.color;
             };
 
             element.onMove = function (move) {
@@ -62,6 +71,23 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                 scope.game.pgn = element.game.pgn();
                 scope.game.$savePgn();
                 WebsocketService.sendGameToObservers(scope.game.id, window.btoa(scope.game.pgn));
+
+                if (element.game.game_over()) {
+                    switch (true) {
+                        case element.game.in_checkmate():
+                            break;
+                        default:
+                            scope.game.$offerDraw();
+                            break;
+                    }
+
+                    setTimeout(
+                        function () {
+                            scope.game.$get();
+                        },
+                        1500
+                    );
+                }
             };
 
             WebRTCService.addMessageListener(
@@ -85,6 +111,17 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
 
                     element.board.position(element.game.fen());
                     element.updateStatus();
+
+                    if (element.game.game_over()) {
+                        switch (true) {
+                            case element.game.in_checkmate():
+                                scope.game.$resign();
+                                break;
+                            default:
+                                scope.game.$acceptDraw();
+                                break;
+                        }
+                    }
                 },
                 'move'
             );

@@ -58,7 +58,7 @@ playzoneControllers.controller('PlayActionCtrl', function ($scope, $rootScope, $
                     break;
                 case 'accept':
                     $translate(['Draw']).then(function (translations) {
-                        window.alert(translations.Draw + "!");
+                        $scope.game.$get();
                     });
                     break;
             }
@@ -74,6 +74,7 @@ playzoneControllers.controller('PlayActionCtrl', function ($scope, $rootScope, $
 
             $translate(["Opponent has been resigned. Congratulations!"]).then(function (translations) {
                 window.alert(translations["Opponent has been resigned. Congratulations!"]);
+                $scope.game.$get();
             });
         },
         'resign'

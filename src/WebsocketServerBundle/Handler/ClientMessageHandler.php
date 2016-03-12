@@ -15,6 +15,7 @@ use WebsocketServerBundle\Model\Message\Client\Call\ClientMessageCallAccept;
 use WebsocketServerBundle\Model\Message\Client\Call\ClientMessageCallDecline;
 use WebsocketServerBundle\Model\Message\Client\Call\ClientMessageCallDelete;
 use WebsocketServerBundle\Model\Message\Client\Call\ClientMessageCallSend;
+use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSubscribe;
 use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageMethod;
 use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageScope;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
@@ -46,6 +47,9 @@ class ClientMessageHandler
                 break;
             case PlayzoneClientMessageMethod::CALL_DELETE:
                 $this->prepareCallDelete($playzoneMessage);
+                break;
+            case PlayzoneClientMessageMethod::SEND_PGN_TO_OBSERVERS:
+                // do nothing. send game as we receive it
                 break;
         }
     }

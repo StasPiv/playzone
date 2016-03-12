@@ -43,6 +43,16 @@ class AnswerFromSubscriberServerMessage implements ServerMessageInterface
      *
      * @Assert\NotBlank()
      */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @JMS\Expose()
+     * @JMS\Type("string")
+     *
+     * @Assert\NotBlank()
+     */
     private $answerSdpDescription;
 
     /**
@@ -117,6 +127,25 @@ class AnswerFromSubscriberServerMessage implements ServerMessageInterface
     public function setCandidate($candidate)
     {
         $this->candidate = $candidate;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return AnswerFromSubscriberServerMessage
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
 
         return $this;
     }

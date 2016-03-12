@@ -237,6 +237,7 @@ class GameSignalerServer implements SignalerServerInterface
             (new AnswerFromSubscriberServerMessage())->setRoom($subscriberSendDataMessage->getRoom())
                 ->setCandidate($subscriberSendDataMessage->getCandidate())
                 ->setAnswerSdpDescription($subscriberSendDataMessage->getAnswerSdpDescription())
+                ->setName($subscriberSendDataMessage->getName())
         );
     }
 

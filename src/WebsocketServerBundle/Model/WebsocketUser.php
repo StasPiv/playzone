@@ -15,7 +15,7 @@ use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 use WebsocketServerBundle\Exception\PlayzoneServerException;
 
-class CallUser implements SecurityRequestInterface
+class WebsocketUser implements SecurityRequestInterface
 {
     /**
      * @var ConnectionInterface
@@ -53,6 +53,11 @@ class CallUser implements SecurityRequestInterface
      * @JMS\Type("CoreBundle\Entity\User")
      */
     private $playzoneUser;
+
+    /**
+     * @var array
+     */
+    private $gamesToListenMap = [];
 
     /**
      * @return ConnectionInterface
@@ -129,5 +134,18 @@ class CallUser implements SecurityRequestInterface
     public function throwException($code)
     {
         throw new PlayzoneServerException($this->getLogin(), $code);
+    }
+
+    public function addGameToListen($gameId)
+    {
+        $this->gamesToListenMap[$gameId] = $gameId;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGamesToListenMap()
+    {
+        return $this->gamesToListenMap;
     }
 }

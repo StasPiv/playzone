@@ -8,11 +8,23 @@
 
 namespace WebsocketServerBundle\Model\Message\Client;
 
+use MyCLabs\Enum\Enum;
 
-class PlayzoneClientMessageMethod
+/**
+ * Class PlayzoneClientMessageMethod
+ * @package WebsocketServerBundle\Model\Message\Client
+ *
+ * @method static PlayzoneClientMessageMethod CALL_ACCEPT()
+ * @method static PlayzoneClientMessageMethod CALL_SEND()
+ * @method static PlayzoneClientMessageMethod CALL_DELETE()
+ * @method static PlayzoneClientMessageMethod CALL_DECLINE()
+ * @method static PlayzoneClientMessageMethod SEND_PGN_TO_OBSERVERS()
+ */
+class PlayzoneClientMessageMethod extends Enum
 {
     const CALL_ACCEPT = 'call_accept';
     const CALL_SEND = 'call_send';
     const CALL_DELETE = 'call_delete';
     const CALL_DECLINE = 'call_decline';
+    const SEND_PGN_TO_OBSERVERS = 'send_pgn_to_observers';
 }

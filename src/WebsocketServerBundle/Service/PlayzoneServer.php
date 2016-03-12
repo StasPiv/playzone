@@ -15,16 +15,19 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use WebsocketServerBundle\Exception\PlayzoneServerException;
+use WebsocketServerBundle\Model\GameObserver;
+use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSend;
+use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSubscribe;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
 use WebsocketServerBundle\Model\Message\Server\AskIntroduction;
-use WebsocketServerBundle\Model\CallUser;
+use WebsocketServerBundle\Model\WebsocketUser;
 use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageScope;
 use WebsocketServerBundle\Model\Message\Server\WelcomeMessage;
 
 class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterface
 {
     /**
-     * @var CallUser[]
+     * @var WebsocketUser[]
      */
     private $users;
 
@@ -57,10 +60,10 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
      */
     public function onOpen(ConnectionInterface $conn)
     {
-        $callUser = new CallUser();
-        $callUser->setConnection($conn);
-        $this->users->attach($callUser);
-        $this->send(new AskIntroduction(), $callUser->getConnection());
+        $wsUser = new WebsocketUser();
+        $wsUser->setConnection($conn);
+        $this->users->attach($wsUser);
+        $this->send(new AskIntroduction(), $wsUser->getConnection());
     }
 
     /**
@@ -110,6 +113,13 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                     break;
                 case PlayzoneClientMessageScope::SEND_TO_USERS:
                     $this->sendToUsers($messageObject);
+                    break;
+                case PlayzoneClientMessageScope::SEND_TO_GAME_OBSERVERS:
+                    $this->sendToGameObservers($messageObject);
+                    break;
+                case PlayzoneClientMessageScope::SUBSCRIBE_TO_GAME:
+                    $this->addGameForListen($messageObject, $from);
+                    break;
             }
         } catch (\Exception $exception) {
             $from->send($exception->getMessage());
@@ -122,22 +132,22 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
      */
     private function addUser(ConnectionInterface $from, $data)
     {
-        $newCallUser = $this->getObjectFromJson(json_encode($data), 'WebsocketServerBundle\Model\CallUser');
+        $newWsUser = $this->getObjectFromJson(json_encode($data), 'WebsocketServerBundle\Model\WebsocketUser');
 
-        if (!$newCallUser instanceof CallUser) {
-            throw new PlayzoneServerException("This is not CallUser instance in data");
+        if (!$newWsUser instanceof WebsocketUser) {
+            throw new PlayzoneServerException("This is not WebsocketUser instance in data");
         }
 
-        if ($this->container->get('validator')->validate($newCallUser)->count() > 0) {
+        if ($this->container->get('validator')->validate($newWsUser)->count() > 0) {
             throw new PlayzoneServerException("Validator found some errors");
         }
 
-        $playzoneUser = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($newCallUser, clone $newCallUser);
+        $playzoneUser = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($newWsUser, clone $newWsUser);
 
-        foreach ($this->users as $callUser) {
-            if ($callUser->getConnection() == $from) {
-                $callUser->setPlayzoneUser($playzoneUser);
-                $this->send(new WelcomeMessage($callUser->getPlayzoneUser()->getLogin()), $from);
+        foreach ($this->users as $wsUser) {
+            if ($wsUser->getConnection() == $from) {
+                $wsUser->setPlayzoneUser($playzoneUser);
+                $this->send(new WelcomeMessage($wsUser->getPlayzoneUser()->getLogin()), $from);
             }
         }
     }
@@ -178,13 +188,30 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
      */
     private function sendToUsers(PlayzoneMessage $messageObject)
     {
-        foreach ($this->users as $callUser) {
-            if (!$callUser->getPlayzoneUser() instanceof User) {
+        foreach ($this->users as $wsUser) {
+            if (!$wsUser->getPlayzoneUser() instanceof User) {
                 continue;
             }
 
-            if (in_array($callUser->getPlayzoneUser()->getLogin(), $messageObject->getLogins())) {
-                $this->send($messageObject, $callUser->getConnection());
+            if (in_array($wsUser->getPlayzoneUser()->getLogin(), $messageObject->getLogins())) {
+                $this->send($messageObject, $wsUser->getConnection());
+            }
+        }
+    }
+
+    /**
+     * @param PlayzoneMessage $messageObject
+     */
+    private function sendToGameObservers(PlayzoneMessage $messageObject)
+    {
+        /** @var ClientMessageGameSend $gameSendMessage */
+        $gameSendMessage = $this->getObjectFromJson(json_encode($messageObject->getData()),
+            'WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSend');
+
+        foreach ($this->users as $wsUser) {
+            if (isset($wsUser->getGamesToListenMap()[$gameSendMessage->getGameId()])) {
+                $messageObject->setMethod("game_pgn_" . $gameSendMessage->getGameId());
+                $this->send($messageObject, $wsUser->getConnection());
             }
         }
     }
@@ -208,10 +235,27 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
     /**
      * @param string $jsonObject
      * @param string $fullClassName
-     * @return CallUser|PlayzoneMessage
+     * @return WebsocketUser|PlayzoneMessage
      */
     private function getObjectFromJson($jsonObject, $fullClassName)
     {
         return $this->container->get('jms_serializer')->deserialize($jsonObject, $fullClassName, 'json');
+    }
+
+    /**
+     * @param PlayzoneMessage $messageObject
+     * @param ConnectionInterface $from
+     */
+    private function addGameForListen(PlayzoneMessage $messageObject, ConnectionInterface $from)
+    {
+        /** @var ClientMessageGameSubscribe $gameSubscribeMessage */
+        $gameSubscribeMessage = $this->getObjectFromJson(json_encode($messageObject->getData()),
+            'WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSubscribe');
+
+        foreach ($this->users as $wsUser) {
+            if ($wsUser->getConnection() == $from) {
+                $wsUser->addGameToListen($gameSubscribeMessage->getGameId());
+            }
+        }
     }
 }

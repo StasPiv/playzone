@@ -8,7 +8,7 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
 
     function createNewOffer() {
         ownerConnection.createOffer().then(function (offer) {
-            offerSdpDescription = offer.sdp;
+            offerSdpSescription = offer.sdp;
             return ownerConnection.setLocalDescription(offer);
         }, function (error) {
             console.log('create offer error', error);
@@ -26,7 +26,7 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
     function createAnswer() {
         subscriberConnection.createAnswer().then(
             function (answer) {
-                answerSdpDescription = answer.sdp;
+                answerSdpSescription = answer.sdp;
                 return subscriberConnection.setLocalDescription(answer);
             }, function (error) {
                 console.log('create answer error', error);
@@ -46,10 +46,28 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
         console.log('owner setRemoteDescription');
         ownerConnection.setRemoteDescription(new RTCSessionDescription({
             type: 'answer',
-            sdp: receivedMessage.answerSdpDescription
+            sdp: receivedMessage.answer_sdp_description
         }));
         console.log('owner addIceCandidate');
         ownerConnection.addIceCandidate(new RTCIceCandidate({
+            sdpMLineIndex: 0,
+            candidate: receivedMessage.candidate
+        }), onAddIceCandidateSuccess, onAddIceCandidateError);
+    }
+
+    function setRemoteDescriptionAndIceCandidateToSubscriber(receivedMessage) {
+        console.log('subscriber setRemoteDescription');
+        subscriberConnection.setRemoteDescription(new RTCSessionDescription(
+            {
+                type: 'offer',
+                sdp: receivedMessage.offer_sdp_description
+            }
+        ));
+
+        createAnswer();
+
+        console.log('subscriber addIceCandidate');
+        subscriberConnection.addIceCandidate(new RTCIceCandidate({
             sdpMLineIndex: 0,
             candidate: receivedMessage.candidate
         }), onAddIceCandidateSuccess, onAddIceCandidateError);
@@ -62,23 +80,7 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
         switch (receivedMessage.action) {
             case 'offer-from-owner':
                 createSubscriberConnectionAndChannel(receivedMessage.room);
-
-                console.log('subscriber setRemoteDescription');
-                subscriberConnection.setRemoteDescription(new RTCSessionDescription(
-                    {
-                        type: 'offer',
-                        sdp: receivedMessage.offerSdpDescription
-                    }
-                ));
-
-                createAnswer();
-
-                console.log('subscriber addIceCandidate');
-                subscriberConnection.addIceCandidate(new RTCIceCandidate({
-                    sdpMLineIndex: 0,
-                    candidate: receivedMessage.candidate
-                }), onAddIceCandidateSuccess, onAddIceCandidateError);
-
+                setRemoteDescriptionAndIceCandidateToSubscriber(receivedMessage);
                 break;
             case 'answer-from-subscriber':
                 setRemoteDescriptionAndIceCandidateToOwner(receivedMessage);
@@ -99,8 +101,8 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
     var sendChannel;
 
     var ownerCandidate,
-        offerSdpDescription,
-        answerSdpDescription;
+        offerSdpSescription,
+        answerSdpSescription;
 
     function getICEServers() {
         var isChrome = !!navigator.webkitGetUserMedia;
@@ -184,14 +186,14 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
             }
 
             console.log('candidate', event.candidate.candidate);
-            console.log('answerSdpDescription', answerSdpDescription);
+            console.log('answer_sdp_description', answerSdpSescription);
             ownerCandidate = event.candidate;
 
             wsSignaler.send({
                 action: 'subscriber-send-data',
                 room: room,
                 name: $rootScope.user.login,
-                answerSdpDescription: answerSdpDescription,
+                answer_sdp_description: answerSdpSescription,
                 candidate: event.candidate.candidate
             });
         };
@@ -229,13 +231,13 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
             }
 
             console.log('candidate', event.candidate.candidate);
-            console.log('offerSdpDescription', offerSdpDescription);
+            console.log('offer_sdp_description', offerSdpSescription);
             ownerCandidate = event.candidate;
 
             wsSignaler.send({
                 action: 'owner-enter',
                 room: room,
-                offerSdpDescription: offerSdpDescription,
+                offer_sdp_description: offerSdpSescription,
                 candidate: event.candidate.candidate
             });
         };
@@ -268,7 +270,6 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
             createNewOffer();
         },
         joinRoom: function (room) {
-            //createSubscriberConnectionAndChannel(room);
             wsSignaler.send({
                 room: room,
                 action: 'subscriber-enter',

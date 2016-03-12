@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Ratchet\App as RatchetApp;
 use WebsocketServerBundle\Service\PlayzoneServer;
-use WebsocketServerBundle\Service\SignalingServer;
+use WebsocketServerBundle\Service\Signaling\Server\GameSignalerServer;
 
 class WebsocketServerStartCommand extends ContainerAwareCommand
 {
@@ -62,7 +62,7 @@ class WebsocketServerStartCommand extends ContainerAwareCommand
      */
     private function addSignalerServer(RatchetApp $app, OutputInterface $output)
     {
-        $signalerServer = new SignalingServer();
+        $signalerServer = $this->getContainer()->get("ws.service.signaling.server_game");
         $signalerServer->setOutput($output);
         $app->route('/signaler', $signalerServer, ['*']);
     }

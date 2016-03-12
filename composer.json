@@ -26,11 +26,13 @@
         "friendsofsymfony/rest-bundle": "dev-master",
         "jms/serializer-bundle": "dev-master",
         "nelmio/cors-bundle": "^1.4",
-        "nelmio/api-doc-bundle": "^2.11"
+        "nelmio/api-doc-bundle": "^2.11",
+        "myclabs/php-enum": "^1.4"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^2.7",
+        "phpunit/phpunit-mock-objects": "dev-master",
         "phpunit/phpunit": "dev-master",
         "phpunit/php-invoker": "dev-master",
         "phpunit/dbunit": "~1.2",

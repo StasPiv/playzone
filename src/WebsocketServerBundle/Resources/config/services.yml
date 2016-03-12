@@ -2,3 +2,11 @@ services:
     ws.handler.client.message:
         class: WebsocketServerBundle\Handler\ClientMessageHandler
         arguments: ['@service_container']
+    ws.service.signaling.client_message_factory:
+        class: WebsocketServerBundle\Service\Signaling\ClientMessageFactory
+        calls:
+            - [setContainer, ['@service_container']]
+    ws.service.signaling.server_game:
+        class: WebsocketServerBundle\Service\Signaling\Server\GameSignalerServer
+        calls:
+            - [setContainer, ['@service_container']]

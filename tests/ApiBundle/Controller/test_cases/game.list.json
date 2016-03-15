@@ -62,8 +62,6 @@
           "pgn_alt": "1",
           "status": "play",
           "rate": false,
-          "time_white": 20,
-          "time_black": 30,
           "timecontrol": {
             "id": 1,
             "name": "10\/10no"
@@ -102,8 +100,6 @@
           "pgn_alt": "1",
           "status": "play",
           "rate": true,
-          "time_white": 20,
-          "time_black": 30,
           "timecontrol": {
             "id": 2,
             "name": "20\/10no"

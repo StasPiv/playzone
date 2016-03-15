@@ -87,7 +87,59 @@
       "status": 200,
       "data": {
         "pgn": "1.e4 e5 2.Nf3 Nc6 3.Bb5 a6",
-        "draw": ""
+        "draw": "",
+        "user_to_move": {
+          "login": "Stas"
+        }
+      }
+    }
+  },
+  "correct_pgn_ruy_lopez_and_time": {
+    "method": "PUT",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "id",
+        "value": "game-0"
+      },
+      "pgn": "MS5lNCBlNSAyLk5mMyBOYzYgMy5CYjUgYTY=",
+      "time_white": 456,
+      "time_black": 321
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "pgn": "1.e4 e5 2.Nf3 Nc6 3.Bb5 a6",
+        "draw": "",
+        "time_white": 456,
+        "time_black": 321
+      }
+    }
+  },
+  "correct_fix_result_when_time_is_over": {
+    "method": "PUT",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "id",
+        "value": "game-0"
+      },
+      "pgn": "MS5lNCBlNSAyLk5mMyBOYzYgMy5CYjUgYTY=",
+      "time_white": 234,
+      "time_black": 0
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "pgn": "1.e4 e5 2.Nf3 Nc6 3.Bb5 a6",
+        "draw": "",
+        "time_white": 234,
+        "time_black": 0,
+        "result_white": 1,
+        "result_black": 0,
+        "status": "end"
       }
     }
   }

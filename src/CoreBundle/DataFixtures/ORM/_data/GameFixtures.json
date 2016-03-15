@@ -9,8 +9,8 @@
     "pgn_alt": "1",
     "status": "play",
     "rate": false,
-    "time_white": 20,
-    "time_black": 30,
+    "time_white": 180000,
+    "time_black": 180000,
     "time_last_move": "yesterday"
   },
   {
@@ -23,8 +23,8 @@
     "pgn_alt": "1",
     "status": "play",
     "rate": false,
-    "time_white": 20,
-    "time_black": 30,
+    "time_white": 180000,
+    "time_black": 180000,
     "time_last_move": "yesterday"
   },
   {
@@ -37,8 +37,8 @@
     "pgn_alt": "1",
     "status": "play",
     "rate": true,
-    "time_white": 20,
-    "time_black": 30,
+    "time_white": 180000,
+    "time_black": 180000,
     "time_last_move": "yesterday"
   },
   {
@@ -51,8 +51,8 @@
     "pgn_alt": "1",
     "status": "call",
     "rate": true,
-    "time_white": 20,
-    "time_black": 30,
+    "time_white": 180000,
+    "time_black": 180000,
     "time_last_move": "yesterday"
   },
   {
@@ -65,8 +65,8 @@
     "pgn_alt": "1",
     "status": "call",
     "rate": true,
-    "time_white": 20,
-    "time_black": 30,
+    "time_white": 180000,
+    "time_black": 180000,
     "time_last_move": "yesterday"
   },
   {
@@ -79,8 +79,8 @@
     "pgn_alt": "1",
     "status": "play",
     "rate": false,
-    "time_white": 20,
-    "time_black": 30,
+    "time_white": 180000,
+    "time_black": 180000,
     "time_last_move": "yesterday"
   },
   {
@@ -93,8 +93,8 @@
     "pgn_alt": "1",
     "status": "play",
     "rate": false,
-    "time_white": 20,
-    "time_black": 30,
+    "time_white": 180000,
+    "time_black": 180000,
     "time_last_move": "yesterday",
     "draw": "b"
   },
@@ -108,8 +108,8 @@
     "pgn_alt": "1",
     "status": "play",
     "rate": false,
-    "time_white": 20,
-    "time_black": 30,
+    "time_white": 180000,
+    "time_black": 180000,
     "time_last_move": "yesterday",
     "draw": "w"
   }

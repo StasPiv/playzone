@@ -46,6 +46,22 @@ class GamePutPgnRequest extends GameRequest implements SecurityRequestInterface
     private $pgn;
 
     /**
+     * @var int
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     */
+    private $timeWhite;
+
+    /**
+     * @var int
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     */
+    private $timeBlack;
+
+    /**
      * @return int
      */
     public function getId()
@@ -117,6 +133,44 @@ class GamePutPgnRequest extends GameRequest implements SecurityRequestInterface
     public function setPgn($pgn)
     {
         $this->pgn = $pgn;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeWhite()
+    {
+        return $this->timeWhite;
+    }
+
+    /**
+     * @param int $timeWhite
+     * @return GamePutPgnRequest
+     */
+    public function setTimeWhite($timeWhite)
+    {
+        $this->timeWhite = $timeWhite;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeBlack()
+    {
+        return $this->timeBlack;
+    }
+
+    /**
+     * @param int $timeBlack
+     * @return GamePutPgnRequest
+     */
+    public function setTimeBlack($timeBlack)
+    {
+        $this->timeBlack = $timeBlack;
 
         return $this;
     }

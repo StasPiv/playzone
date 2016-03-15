@@ -109,14 +109,14 @@ class Game
      *
      * @ORM\Column(name="time_white", type="integer")
      */
-    private $timeWhite = 0;
+    private $timeWhite = 180000;
 
     /**
      * @var int
      *
      * @ORM\Column(name="time_black", type="integer")
      */
-    private $timeBlack = 0;
+    private $timeBlack = 180000;
 
     /**
      * @var Timecontrol

@@ -211,6 +211,8 @@
               "class": "N",
               "rating": 2200
             },
+            "time_white": 180000,
+            "time_black": 180000,
             "color": "w"
           }
         }
@@ -258,6 +260,8 @@
               "class": "N",
               "rating": 2200
             },
+            "time_white": 180000,
+            "time_black": 180000,
             "color": "w"
           }
         },
@@ -285,6 +289,8 @@
               "class": "N",
               "rating": 2200
             },
+            "time_white": 180000,
+            "time_black": 180000,
             "color": "w"
           }
         }

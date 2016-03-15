@@ -132,7 +132,19 @@ class GameHandler implements GameProcessorInterface
             $pgnError->throwException(ResponseStatusCode::BAD_FORMAT);
         }
 
-        $game->setPgn($pgn)->setDraw("");
+        $game->setPgn($pgn)
+             ->setDraw("")
+             ->setTimeWhite($pgnRequest->getTimeWhite())
+             ->setTimeBlack($pgnRequest->getTimeBlack())
+             ->setUserToMove($me == $game->getUserWhite() ? $game->getUserBlack() : $game->getUserWhite());
+
+        if ($game->getTimeWhite() <= 0) {
+            $game->setResultWhite(0)->setResultBlack(1)->setStatus(GameStatus::END);
+        }
+
+        if ($game->getTimeBlack() <= 0) {
+            $game->setResultWhite(1)->setResultBlack(0)->setStatus(GameStatus::END);
+        }
 
         $this->manager->flush($game);
 

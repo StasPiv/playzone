@@ -119,7 +119,9 @@
               "email": "test-login@yandex.ru",
               "class": "D",
               "rating": 2243
-            }
+            },
+            "time_white": 180000,
+            "time_black": 180000
           }
         }
       ]

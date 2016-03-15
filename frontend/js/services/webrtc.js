@@ -288,7 +288,7 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
         },
         sendMessage: function (message) {
             console.log(sendChannel);
-            sendChannel.send(JSON.stringify(message));
+            sendChannel && sendChannel.send(JSON.stringify(message));
         },
         getPrefixGameRoomName: function () {
             return 'pfgame';

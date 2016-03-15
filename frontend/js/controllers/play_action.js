@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('PlayActionCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, $translate, $location) {
+playzoneControllers.controller('PlayActionCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService) {
     $scope.resign = function () {
         $scope.game.$resign().then(
             function () {
@@ -15,10 +15,16 @@ playzoneControllers.controller('PlayActionCtrl', function ($scope, $rootScope, $
         );
     };
 
-    $scope.allowOfferDraw = true;
-
     $scope.draw = function () {
-        if (!$scope.allowOfferDraw) {
+        if ($scope.opponentOfferDraw) {
+            $scope.game.$acceptDraw().then(
+                function () {
+                    WebRTCService.sendMessage({
+                        gameId: $scope.game.id,
+                        draw: 'accept'
+                    });
+                }
+            );
             return;
         }
 
@@ -26,40 +32,25 @@ playzoneControllers.controller('PlayActionCtrl', function ($scope, $rootScope, $
             function () {
                 WebRTCService.sendMessage({
                     gameId: $scope.game.id,
-                    draw: "offer"
+                    draw: 'offer'
                 });
-                $scope.allowOfferDraw = false; // to prevent "draw annoying" popups for opponent
             }
         );
     };
 
     WebRTCService.addMessageListener(
         function (webRTCMessage) {
+            $scope.opponentOfferDraw = false;
             if (!webRTCMessage.gameId || webRTCMessage.gameId !== $scope.game.id || !webRTCMessage.draw) {
                 return;
             }
 
             switch (webRTCMessage.draw) {
                 case 'offer':
-                    $scope.allowOfferDraw = true;
-                    $translate(['Draw']).then(function (translations) {
-                        var acceptDraw = window.confirm(translations.Draw + "?");
-                        if (acceptDraw) {
-                            $scope.game.$acceptDraw().then(
-                                function () {
-                                    WebRTCService.sendMessage({
-                                        gameId: $scope.game.id,
-                                        draw: "accept"
-                                    });
-                                }
-                            );
-                        }
-                    });
+                    $scope.opponentOfferDraw = true;
                     break;
                 case 'accept':
-                    $translate(['Draw']).then(function (translations) {
-                        $scope.game.$get();
-                    });
+                    $scope.game.$get();
                     break;
             }
         },
@@ -72,10 +63,7 @@ playzoneControllers.controller('PlayActionCtrl', function ($scope, $rootScope, $
                 return;
             }
 
-            $translate(["Opponent has been resigned. Congratulations!"]).then(function (translations) {
-                window.alert(translations["Opponent has been resigned. Congratulations!"]);
-                $scope.game.$get();
-            });
+            $scope.game.$get();
         },
         'resign'
     );

@@ -26,12 +26,25 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
                 transformRequest: function (data) {
                     return angular.toJson(
                         {
-                            pgn: window.btoa(data.pgn)
+                            pgn: window.btoa(data.pgn),
+                            time_white: data.time_white,
+                            time_black: data.time_black
                         }
                     );
                 }
             },
             resign: {
+                method: 'PUT',
+                url: ApiService.base_url + 'game/:id/resign',
+                transformRequest: function (data) {
+                    return angular.toJson(
+                        {
+
+                        }
+                    );
+                }
+            },
+            timeLost: { // TODO: need to implement separate rest method
                 method: 'PUT',
                 url: ApiService.base_url + 'game/:id/resign',
                 transformRequest: function (data) {

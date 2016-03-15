@@ -10,7 +10,7 @@ playzoneServices.factory('WebsocketService', function($websocket) {
 
     dataStream.onMessage(
         function(message) {
-            console.log(message, '4');
+            console.log('test');
             var receivedMessage = angular.fromJson(message.data);
 
             if (!receivedMessage.method || !receivedMessage.data) {

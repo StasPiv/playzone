@@ -1,0 +1,5 @@
+<div ng-class="{'zeitnot': time.ms < zeitnot}" class="timer">
+    <span ng-if="time.days">{{time.days}} {{'days'|translate}} </span>
+    <span ng-if="time.ms >= zeitnot">{{time.time}}</span>
+    <span ng-if="time.ms < zeitnot">{{time.beforeComaMs}}.{{time.afterComaMs}}</span>
+</div>

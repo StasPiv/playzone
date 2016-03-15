@@ -95,5 +95,7 @@
   "match": "матч",
   "Draw": "Ничья",
   "Resign": "Сдаться",
-  "Opponent has been resigned. Congratulations!": "Ваш соперник сдался. Поздравляем!"
+  "You won! Congratulations!": "Вы победили! Поздравляем!",
+  "days": "д",
+  "hours": "ч"
 }

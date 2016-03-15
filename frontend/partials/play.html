@@ -2,11 +2,13 @@
     <h1>{{game.user_white.login}} - {{game.user_black.login}}</h1>
     <h2 ng-if="game.status == 'end'">{{game.result_white}} - {{game.result_black}}</h2>
     <div class="play-chess-board chess-board-legal" data-board="board">
+        <div class="chess-timer" data-time="opponent_time_format" data-zeitnot="gameConfig.zeitnotLimit"></div>
         <div id="board"></div>
         <div class="pgn"></div>
         <div class="clear">&nbsp;</div>
+        <div class="chess-timer" data-time="my_time_format" data-zeitnot="gameConfig.zeitnotLimit"></div>
         <div class="action" ng-controller="PlayActionCtrl" ng-if="game.status == 'play'">
-            <span ng-if="allowOfferDraw" class="button draw" ng-click="draw()">{{ "Draw" | translate }}</span>
+            <span ng-class="{'offered': opponentOfferDraw}" class="button draw" ng-click="draw()">{{ "Draw" | translate }}</span>
             <span class="button resign" ng-click="resign()">{{ "Resign" | translate }}</span>
         </div>
     </div>

@@ -10,7 +10,7 @@
  * element.game - chess.js plugin (with pgn functions etc.)
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
-playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLocalStorageService, WebsocketService) {
+playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLocalStorageService, WebsocketService, $interval) {
     return {
         restrict: 'C',
         link: function(scope, element) {
@@ -59,18 +59,22 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
             );
 
             element.onDragStart = function () {
-                return scope.game.status == 'play' && element.game.turn() === scope.game.color;
+                return scope.game.status === 'play' && element.game.turn() === scope.game.color;
             };
 
             element.onMove = function (move) {
                 WebRTCService.sendMessage({
                     gameId: scope.game.id,
-                    move: move
+                    move: move,
+                    my_time: scope.my_time,
+                    opponent_time: scope.opponent_time
                 });
                 ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
                 scope.game.pgn = element.game.pgn();
-                scope.game.$savePgn();
+                scope.savePgnAndTime();
                 WebsocketService.sendGameToObservers(scope.game.id, window.btoa(scope.game.pgn));
+
+                scope.my_move = false;
 
                 if (element.game.game_over()) {
                     switch (true) {
@@ -101,7 +105,13 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                         return;
                     }
 
+                    scope.my_move = true;
+
                     element.game.move(webRTCMessage.move);
+
+                    // synchronize times (no lag compensation here)
+                    webRTCMessage.opponent_time && (scope.my_time = webRTCMessage.opponent_time);
+
                     scope.game.pgn = element.game.pgn();
                     ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
 
@@ -115,12 +125,16 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                     if (element.game.game_over()) {
                         switch (true) {
                             case element.game.in_checkmate():
-                                scope.game.$resign();
+                                scope.resign();
                                 break;
                             default:
                                 scope.game.$acceptDraw();
                                 break;
                         }
+                    }
+
+                    if (scope.game.my_time < 0) {
+                        scope.resign();
                     }
                 },
                 'move'

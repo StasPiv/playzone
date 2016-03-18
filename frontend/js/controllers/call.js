@@ -23,12 +23,12 @@ playzoneControllers.controller('CallCtrl', function ($scope, CallRest, Websocket
                 WebsocketService.sendDataToLogins(
                     'call_send',
                     {
-                        login: call.player,
+                        login: call && call.player ? call.player : "",
                         call_ids: newCallIds
                     },
-                    [call.player]
+                    call && call.player ? [call.player] : []
                 );
-                call.player = ""; // to prevent duplicate calls
+                call && (call.player = ""); // to prevent duplicate calls
             },
             function(response) {
                 $scope.errors = response.data;

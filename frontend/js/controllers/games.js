@@ -34,7 +34,7 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $location, CallRes
                     {
                         call_id: deletedCallId
                     },
-                    [call.to_user.login]
+                    [call.to_user ? call.to_user.login : '']
                 );
             }
         );

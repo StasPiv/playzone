@@ -48,7 +48,7 @@
             <a href="/#/profile/{{ call.to_user.id }}">{{ call.to_user.login }}</a>
         </td>
         <td>
-            <div class="color_pic {{ call.game.color }}"></div>
+            <div class="color_pic {{ call.game_params.color }}"></div>
         </td>
         <td>
             <a href="" class="button remove" ng-click="deleteCall(call);">{{ "Remove" | translate }}</a>
@@ -71,10 +71,12 @@
             <a href="/#/profile/{{ call.from_user.id }}">{{ call.from_user.login }}</a>
         </td>
         <td>
-            <div class="color_pic {{ call.game.color }}"></div>
+            <div class="color_pic {{ call.game_params.color }}"></div>
         </td>
         <td>
-            <a href="" class="button accept" ng-click="acceptCall(call)">{{ "Accept" | translate }}</a>&nbsp;&nbsp;<a href="" class="button remove" ng-click="declineCall(call)">{{ "Decline" | translate }}</a>
+            <a href="" class="button accept" ng-click="acceptCall(call)">{{ "Accept" | translate }}</a>&nbsp;&nbsp;<a
+                href="" ng-if="call.to_user.id == $root.user.id" class="button remove" ng-click="declineCall(call)">{{
+            "Decline" | translate }}</a>
         </td>
     </tr>
 </table>

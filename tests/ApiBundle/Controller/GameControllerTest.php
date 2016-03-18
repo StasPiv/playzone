@@ -13,31 +13,31 @@ class GameControllerTest extends BaseControllerTest
 {
     public function testList()
     {
-        $this->testFromJson('game/list');
+        $this->assertFromJson('game/list');
     }
 
     public function testGame()
     {
-        $this->testFromJson('game/{id}');
+        $this->assertFromJson('game/{id}');
     }
 
     public function testGamePgn()
     {
-        $this->testFromJson('game/{id}/pgn');
+        $this->assertFromJson('game/{id}/pgn');
     }
 
     public function testGameResign()
     {
-        $this->testFromJson('game/{id}/resign');
+        $this->assertFromJson('game/{id}/resign');
     }
 
     public function testGameOfferdraw()
     {
-        $this->testFromJson('game/{id}/offerdraw');
+        $this->assertFromJson('game/{id}/offerdraw');
     }
 
     public function testGameAcceptdraw()
     {
-        $this->testFromJson('game/{id}/acceptdraw');
+        $this->assertFromJson('game/{id}/acceptdraw');
     }
 }

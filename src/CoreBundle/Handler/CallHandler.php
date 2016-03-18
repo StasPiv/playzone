@@ -9,6 +9,7 @@
 namespace CoreBundle\Handler;
 
 use CoreBundle\Exception\Handler\GameCallHandlerException;
+use CoreBundle\Model\Game\GameParams;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
 use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
@@ -80,13 +81,15 @@ class CallHandler implements CallProcessorInterface
     /**
      * @param User $me
      * @param User $opponent can be null - in this case common call will be created
+     * @param GameParams $gameParams
      * @return GameCall
      */
-    public function createGameCall(User $me, $opponent)
+    public function createGameCall(User $me, $opponent, GameParams $gameParams)
     {
         $call = new GameCall();
 
-        $call->setFromUser($me);
+        $call->setFromUser($me)
+             ->setGameParams($gameParams);
 
         if ($opponent) {
             $call->setToUser($opponent);
@@ -124,15 +127,14 @@ class CallHandler implements CallProcessorInterface
             );
         }
 
-        $newCalls = [];
+        $gameParams = new GameParams();
+        $gameParams->setColor(new GameColor($sendRequest->getColor()));
 
-        for ($i = 0; $i < $sendRequest->getGamesCount(); $i++) {
-            $newCalls[] = $this->createGameCall($me, $opponent);
-        }
+        $gameCall = $this->createGameCall($me, $opponent, $gameParams);
 
         $this->manager->flush();
 
-        return $newCalls;
+        return $gameCall;
     }
 
     /**
@@ -155,13 +157,6 @@ class CallHandler implements CallProcessorInterface
             $removeError->setLogin("This is not your call");
             $removeError->throwException(ResponseStatusCode::FORBIDDEN);
         }
-
-        if ($call->getGame()->getStatus() != GameStatus::CALL) {
-            $removeError->setCallId("Game is not call already");
-            $removeError->throwException(ResponseStatusCode::FORBIDDEN);
-        }
-
-        $this->container->get("core.handler.game")->defineUserColorForGame($me, $call->getGame());
 
         $this->manager->remove($call);
 
@@ -187,7 +182,8 @@ class CallHandler implements CallProcessorInterface
         }
 
         $this->manager->remove($call);
-        $game = $this->container->get("core.handler.game")->createMyGame($me, $call->getFromUser(), GameColor::WHITE);
+        $game = $this->container->get("core.handler.game")->createMyGame($call->getFromUser(), $me,
+            $call->getGameParams()->getColor()->getValue());
         $game->setStatus(GameStatus::PLAY);
 
         $this->manager->persist($game);
@@ -222,13 +218,7 @@ class CallHandler implements CallProcessorInterface
             $declineError->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
-        if ($call->getGame()->getStatus() != GameStatus::CALL) {
-            $declineError->setCallId("The call is already accepted");
-            $declineError->throwException(ResponseStatusCode::FORBIDDEN);
-        }
-
         $this->manager->remove($call);
-        $this->manager->remove($call->getGame());
 
         $this->manager->flush();
 
@@ -267,13 +257,6 @@ class CallHandler implements CallProcessorInterface
             $filter['id'] = $callIds;
         }
 
-        $calls = $this->repository->findBy($filter);
-
-        foreach ($calls as $call) {
-            /** @var GameCall $call */
-            $this->container->get("core.handler.game")->defineUserColorForGame($user, $call->getGame());
-        }
-
-        return $calls;
+        return $this->repository->findBy($filter);
     }
 }

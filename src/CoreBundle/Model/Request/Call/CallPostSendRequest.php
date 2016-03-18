@@ -58,25 +58,6 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
     private $color;
 
     /**
-     * @var integer
-     *
-     * @JMS\Expose()
-     * @JMS\Type("string")
-     *
-     * @Assert\Range(
-     *      min = 1,
-     *      max = 10,
-     *      minMessage = "Minimum {{ limit }} games to match",
-     *      maxMessage = "Maximum {{ limit }} games to match"
-     * )
-     *
-     * @Assert\NotBlank(
-     *      message = "Enter games count"
-     * )
-     */
-    private $gamesCount;
-
-    /**
      * @return string
      */
     public function getLogin()
@@ -86,10 +67,12 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
 
     /**
      * @param string $login
+     * @return $this
      */
     public function setLogin($login)
     {
         $this->login = $login;
+        return $this;
     }
 
     /**
@@ -138,21 +121,5 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
     public function setColor($color)
     {
         $this->color = $color;
-    }
-
-    /**
-     * @return int
-     */
-    public function getGamesCount()
-    {
-        return $this->gamesCount;
-    }
-
-    /**
-     * @param int $gamesCount
-     */
-    public function setGamesCount($gamesCount)
-    {
-        $this->gamesCount = $gamesCount;
     }
 }

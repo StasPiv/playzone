@@ -75,41 +75,6 @@
       }
     }
   },
-  "empty_games_count": {
-    "method": "POST",
-    "request": {
-      "login": "TestLogin",
-      "token": "aba37b62d15cc5f8671fd3d1b034c354",
-      "player": "Stas",
-      "color": {
-        "id": "w"
-      }
-    },
-    "response": {
-      "status": 400,
-      "errors": {
-        "games_count":"Enter games count"
-      }
-    }
-  },
-  "incorrect_games_count": {
-    "method": "POST",
-    "request": {
-      "login": "TestLogin",
-      "token": "aba37b62d15cc5f8671fd3d1b034c354",
-      "player": "Stas",
-      "color": {
-        "id": "w"
-      },
-      "games_count": 11
-    },
-    "response": {
-      "status": 400,
-      "errors": {
-        "games_count":"Maximum 10 games to match"
-      }
-    }
-  },
   "correct_call": {
     "method": "POST",
     "request": {
@@ -123,16 +88,17 @@
     },
     "response": {
       "status": 200,
-      "data": [
-        {
-          "to_user": {
-            "login": "Stas",
-            "email": "piv1986@yandex.ru",
-            "class": "N",
-            "rating": 2200
-          }
+      "data": {
+        "to_user": {
+          "login": "Stas",
+          "email": "piv1986@yandex.ru",
+          "class": "N",
+          "rating": 2200
+        },
+        "game_params": {
+          "color": "w"
         }
-      ]
+      }
     }
   },
   "correct_call_2_games": {
@@ -148,24 +114,14 @@
     },
     "response": {
       "status": 200,
-      "data": [
-        {
-          "to_user": {
-            "login": "Stas",
-            "email": "piv1986@yandex.ru",
-            "class": "N",
-            "rating": 2200
-          }
-        },
-        {
-          "to_user": {
-            "login": "Stas",
-            "email": "piv1986@yandex.ru",
-            "class": "N",
-            "rating": 2200
-          }
+      "data": {
+        "to_user": {
+          "login": "Stas",
+          "email": "piv1986@yandex.ru",
+          "class": "N",
+          "rating": 2200
         }
-      ]
+      }
     }
   },
   "correct_call_to_all": {
@@ -180,16 +136,14 @@
     },
     "response": {
       "status": 200,
-      "data": [
-        {
-          "from_user": {
-            "login": "TestLogin",
-            "email": "test-login@yandex.ru",
-            "class": "D",
-            "rating": 2243
-          }
+      "data": {
+        "from_user": {
+          "login": "TestLogin",
+          "email": "test-login@yandex.ru",
+          "class": "D",
+          "rating": 2243
         }
-      ]
+      }
     }
   }
 }

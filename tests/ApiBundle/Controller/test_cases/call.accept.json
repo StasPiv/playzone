@@ -49,38 +49,34 @@
       "status": 200,
       "data": {
         "user_white": {
-          "login": "Petro",
-          "email": "petro@yandex.ru",
-          "class": "D",
-          "rating": 2443
-        },
-        "user_black": {
           "login": "TestLogin",
           "email": "test-login@yandex.ru",
           "class": "D",
           "rating": 2243
         },
-        "user_to_move": {
+        "user_black": {
           "login": "Petro",
           "email": "petro@yandex.ru",
           "class": "D",
           "rating": 2443
         },
-        "user_move": false,
+        "user_to_move": {
+          "login": "TestLogin",
+          "email": "test-login@yandex.ru",
+          "class": "D",
+          "rating": 2243
+        },
+        "user_move": true,
         "opponent": {
           "login": "Petro",
           "email": "petro@yandex.ru",
           "class": "D",
           "rating": 2443
         },
-        "color": "b",
-        "pgn": "1",
-        "pgn_alt": "1",
+        "color": "w",
         "status": "play",
-        "rate": true,
         "time_white": 180000,
         "time_black": 180000,
-        "time_last_move": "1970-01-01T00:00:00+0200",
         "time_over": false
       }
     }

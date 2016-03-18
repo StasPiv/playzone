@@ -30,7 +30,6 @@
         "pgn_alt": "1",
         "status": "play",
         "rate": false,
-        "time_last_move": "1970-01-01T00:00:00+0200",
         "time_over": false
       }
     }
@@ -78,7 +77,6 @@
         "pgn_alt": "1",
         "status": "play",
         "rate": false,
-        "time_last_move": "1970-01-01T00:00:00+0200",
         "time_over": false
       }
     }

@@ -25,7 +25,7 @@ abstract class BaseControllerTest extends WebTestCase
     /**
      * @param string $baseUri
      */
-    protected function testFromJson($baseUri)
+    protected function assertFromJson($baseUri)
     {
         $client = static::createClient();
         $action = preg_replace('/\/\{\w+\}/', '', $baseUri);

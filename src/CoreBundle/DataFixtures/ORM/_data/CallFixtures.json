@@ -3,12 +3,16 @@
     "referenceName": "game-call-0",
     "fromUser": "user-test-login",
     "toUser": "user-stas",
-    "game": "game-for-call-0"
+    "game_params": {
+      "color": "w"
+    }
   },
   {
     "referenceName": "game-call-1",
     "fromUser": "user-petro",
     "toUser": "user-test-login",
-    "game": "game-for-call-1"
+    "game_params": {
+      "color": "b"
+    }
   }
 ]

@@ -11,6 +11,8 @@ namespace CoreBundle\DataFixtures\ORM;
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
 use CoreBundle\Entity\User;
+use CoreBundle\Model\Game\GameColor;
+use CoreBundle\Model\Game\GameParams;
 
 class CallFixtures extends AbstractPlayzoneFixtures
 {
@@ -29,12 +31,12 @@ class CallFixtures extends AbstractPlayzoneFixtures
         $toUser = $this->getReference($data['toUser']);
 
         $gameCall->setFromUser($fromUser)
-            ->setToUser($toUser);
+                 ->setToUser($toUser);
 
-        if (!empty($data['game'])) {
-            /** @var Game $game */
-            $game = $this->getReference($data['game']);
-            $gameCall->setGame($game);
+        if (isset($data["game_params"])) {
+            $gameParams = new GameParams();
+            $gameParams->setColor(new GameColor($data["game_params"]["color"]));
+            $gameCall->setGameParams($gameParams);
         }
 
         return $gameCall;

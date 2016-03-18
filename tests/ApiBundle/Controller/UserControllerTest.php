@@ -12,16 +12,16 @@ class UserControllerTest extends BaseControllerTest
 {
     public function testRegister()
     {
-        $this->testFromJson('user/register');
+        $this->assertFromJson('user/register');
     }
 
     public function testAuth()
     {
-        $this->testFromJson('user/auth');
+        $this->assertFromJson('user/auth');
     }
 
     public function testList()
     {
-        $this->testFromJson('user/list');
+        $this->assertFromJson('user/list');
     }
 }

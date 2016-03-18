@@ -70,21 +70,6 @@
           "email": "piv1986@yandex.ru",
           "class": "N",
           "rating": 2200
-        },
-        "game" : {
-          "user_white": {
-            "login": "TestLogin",
-            "email": "test-login@yandex.ru",
-            "class": "D",
-            "rating": 2243
-          },
-          "user_black": {
-            "login": "Stas",
-            "email": "piv1986@yandex.ru",
-            "class": "N",
-            "rating": 2200
-          },
-          "color": "w"
         }
       }
     }

@@ -13,26 +13,26 @@ class CallControllerTest extends BaseControllerTest
 {
     public function testCall()
     {
-        $this->testFromJson('call');
+        $this->assertFromJson('call');
     }
 
     public function testCallSend()
     {
-        $this->testFromJson('call/send');
+        $this->assertFromJson('call/send');
     }
 
     public function testCallRemove()
     {
-        $this->testFromJson('call/{call_id}/remove');
+        $this->assertFromJson('call/{call_id}/remove');
     }
 
     public function testCallAccept()
     {
-        $this->testFromJson('call/{call_id}/accept');
+        $this->assertFromJson('call/{call_id}/accept');
     }
 
     public function testCallDecline()
     {
-        $this->testFromJson('call/{call_id}/decline');
+        $this->assertFromJson('call/{call_id}/decline');
     }
 }

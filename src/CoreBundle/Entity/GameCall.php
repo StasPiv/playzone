@@ -2,6 +2,7 @@
 
 namespace CoreBundle\Entity;
 
+use CoreBundle\Model\Game\GameParams;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 
@@ -47,16 +48,15 @@ class GameCall
     private $toUser;
 
     /**
-     * @var Game
+     * @var GameParams
      *
      * @JMS\Expose
-     * @JMS\Type("CoreBundle\Entity\Game")
-     * @JMS\SerializedName("game")
+     * @JMS\Type("CoreBundle\Model\Game\GameParams")
+     * @JMS\SerializedName("game_params")
      *
-     * @ORM\ManyToOne(targetEntity="Game", cascade={"all"}, fetch="EAGER")
-     * @ORM\JoinColumn(name="id_game", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ORM\Column(name="game_params", type="object")
      */
-    private $game;
+    private $gameParams;
 
 
     /**
@@ -118,27 +118,22 @@ class GameCall
     }
 
     /**
-     * Set game
-     *
-     * @param Game $game
-     *
-     * @return GameCall
+     * @return GameParams
      */
-    public function setGame(Game $game)
+    public function getGameParams()
     {
-        $this->game = $game;
-
-        return $this;
+        return $this->gameParams;
     }
 
     /**
-     * Get game
-     *
-     * @return Game
+     * @param GameParams $gameParams
+     * @return GameCall
      */
-    public function getGame()
+    public function setGameParams($gameParams)
     {
-        return $this->game;
+        $this->gameParams = $gameParams;
+
+        return $this;
     }
 }
 

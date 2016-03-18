@@ -17,7 +17,6 @@ use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Game\GamePutResignRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
-use CoreBundle\Entity\Timecontrol;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\User\UserType;
@@ -354,12 +353,11 @@ class GameHandler implements GameProcessorInterface
 
     /**
      * @param User $me
-     * @param User $opponent
-     * @param Timecontrol $timecontrol
+     * @param User $opponent can be null - in this case common call will be created
      * @param $myColor
      * @return Game
      */
-    public function createMyGame(User $me, User $opponent, Timecontrol $timecontrol, $myColor)
+    public function createMyGame(User $me, User $opponent, $myColor)
     {
         $game = new Game();
 
@@ -377,7 +375,6 @@ class GameHandler implements GameProcessorInterface
         }
 
         $game->setStatus(GameStatus::CALL)
-            ->setTimecontrol($timecontrol)
             ->setTimeLastMove(new \DateTime())
             ->setUserToMove($game->getUserWhite());
 

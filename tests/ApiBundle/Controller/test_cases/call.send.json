@@ -1,6 +1,5 @@
 {
   "fixtures": [
-    "CoreBundle\\DataFixtures\\ORM\\TimecontrolFixtures",
     "CoreBundle\\DataFixtures\\ORM\\UserFixtures"
   ],
   "login_and_token_is_required": {
@@ -9,9 +8,6 @@
       "player": "Stas",
       "color": {
         "id": "w"
-      },
-      "timecontrol": {
-        "id": 1
       },
       "games_count": 2
     },
@@ -32,9 +28,6 @@
       "color": {
         "id": "w"
       },
-      "timecontrol": {
-        "id": 1
-      },
       "games_count": 2
     },
     "response": {
@@ -54,9 +47,6 @@
       "color": {
         "id": "w"
       },
-      "timecontrol": {
-        "id": 1
-      },
       "games_count": 2
     },
     "response": {
@@ -67,47 +57,6 @@
       "errorMessage": "User is not found"
     }
   },
-  "timecontrol_is_not_found": {
-    "method": "POST",
-    "request": {
-      "login": "TestLogin",
-      "token": "aba37b62d15cc5f8671fd3d1b034c354",
-      "player": "Stas",
-      "color": {
-        "id": "w"
-      },
-      "timecontrol": {
-        "id": 666
-      },
-      "games_count": 2
-    },
-    "response": {
-      "status": 404,
-      "errors": {
-        "timecontrol": "Timecontrol is not found"
-      },
-      "errorMessage": "Timecontrol is not found"
-    }
-  },
-  "timecontrol_is_empty": {
-    "method": "POST",
-    "request": {
-      "login": "TestLogin",
-      "token": "aba37b62d15cc5f8671fd3d1b034c354",
-      "player": "Stas",
-      "color": {
-        "id": "w"
-      },
-      "games_count": 2
-    },
-    "response": {
-      "status": 400,
-      "errors": {
-        "timecontrol": "Enter timecontrol"
-      },
-      "errorMessage": "Enter timecontrol"
-    }
-  },
   "incorrect_color": {
     "method": "POST",
     "request": {
@@ -116,9 +65,6 @@
       "player": "Stas",
       "color": {
         "id": "ewhite"
-      },
-      "timecontrol": {
-        "id": 1
       },
       "games_count": 2
     },
@@ -137,9 +83,6 @@
       "player": "Stas",
       "color": {
         "id": "w"
-      },
-      "timecontrol": {
-        "id": 1
       }
     },
     "response": {
@@ -157,9 +100,6 @@
       "player": "Stas",
       "color": {
         "id": "w"
-      },
-      "timecontrol": {
-        "id": 1
       },
       "games_count": 11
     },
@@ -179,9 +119,6 @@
       "color": {
         "id": "w"
       },
-      "timecontrol": {
-        "id": 1
-      },
       "games_count": 1
     },
     "response": {
@@ -193,27 +130,6 @@
             "email": "piv1986@yandex.ru",
             "class": "N",
             "rating": 2200
-          },
-          "game" : {
-            "timecontrol": {
-              "id": 1,
-              "name": "10\/10no"
-            },
-            "user_white": {
-              "login": "TestLogin",
-              "email": "test-login@yandex.ru",
-              "class": "D",
-              "rating": 2243
-            },
-            "user_black": {
-              "login": "Stas",
-              "email": "piv1986@yandex.ru",
-              "class": "N",
-              "rating": 2200
-            },
-            "time_white": 180000,
-            "time_black": 180000,
-            "color": "w"
           }
         }
       ]
@@ -228,9 +144,6 @@
       "color": {
         "id": "w"
       },
-      "timecontrol": {
-        "id": 1
-      },
       "games_count": 2
     },
     "response": {
@@ -242,27 +155,6 @@
             "email": "piv1986@yandex.ru",
             "class": "N",
             "rating": 2200
-          },
-          "game" : {
-            "timecontrol": {
-              "id": 1,
-              "name": "10\/10no"
-            },
-            "user_white": {
-              "login": "TestLogin",
-              "email": "test-login@yandex.ru",
-              "class": "D",
-              "rating": 2243
-            },
-            "user_black": {
-              "login": "Stas",
-              "email": "piv1986@yandex.ru",
-              "class": "N",
-              "rating": 2200
-            },
-            "time_white": 180000,
-            "time_black": 180000,
-            "color": "w"
           }
         },
         {
@@ -271,27 +163,30 @@
             "email": "piv1986@yandex.ru",
             "class": "N",
             "rating": 2200
-          },
-          "game" : {
-            "timecontrol": {
-              "id": 1,
-              "name": "10\/10no"
-            },
-            "user_white": {
-              "login": "TestLogin",
-              "email": "test-login@yandex.ru",
-              "class": "D",
-              "rating": 2243
-            },
-            "user_black": {
-              "login": "Stas",
-              "email": "piv1986@yandex.ru",
-              "class": "N",
-              "rating": 2200
-            },
-            "time_white": 180000,
-            "time_black": 180000,
-            "color": "w"
+          }
+        }
+      ]
+    }
+  },
+  "correct_call_to_all": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "color": {
+        "id": "w"
+      },
+      "games_count": 1
+    },
+    "response": {
+      "status": 200,
+      "data": [
+        {
+          "from_user": {
+            "login": "TestLogin",
+            "email": "test-login@yandex.ru",
+            "class": "D",
+            "rating": 2243
           }
         }
       ]

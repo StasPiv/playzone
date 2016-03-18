@@ -18,7 +18,6 @@ use CoreBundle\Model\Request\Call\CallDeleteAcceptRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
-use CoreBundle\Entity\Timecontrol;
 use CoreBundle\Entity\User;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Model\Call\CallType;
@@ -80,17 +79,18 @@ class CallHandler implements CallProcessorInterface
 
     /**
      * @param User $me
-     * @param User $opponent
-     * @param Game $game
+     * @param User $opponent can be null - in this case common call will be created
      * @return GameCall
      */
-    public function createGameCall(User $me, User $opponent, Game $game)
+    public function createGameCall(User $me, $opponent)
     {
         $call = new GameCall();
 
-        $call->setFromUser($me)
-            ->setToUser($opponent)
-            ->setGame($game);
+        $call->setFromUser($me);
+
+        if ($opponent) {
+            $call->setToUser($opponent);
+        }
 
         $this->manager->persist($call);
 
@@ -106,19 +106,16 @@ class CallHandler implements CallProcessorInterface
     {
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($sendRequest, $sendError);
 
-        /** @var User $opponent */
-        $opponent = $this->container->get("core.handler.user")->getRepository()->findOneByLogin($sendRequest->getPlayer());
+        if ($sendRequest->getPlayer()) {
+            /** @var User $opponent */
+            $opponent = $this->container->get("core.handler.user")->getRepository()->findOneByLogin($sendRequest->getPlayer());
 
-        if (!$opponent instanceof User) {
-            $sendError->setPlayer("Opponent with this login is not found");
-            $sendError->throwException(ResponseStatusCode::NOT_FOUND);
-        }
-
-        $timecontrol = $this->container->get("core.handler.timecontrol")->getRepository()->find($sendRequest->getTimecontrol());
-
-        if (!$timecontrol instanceof Timecontrol) {
-            $sendError->setTimecontrol("Timecontrol is not found");
-            $sendError->throwException(ResponseStatusCode::NOT_FOUND);
+            if (!$opponent instanceof User) {
+                $sendError->setPlayer("Opponent with this login is not found");
+                $sendError->throwException(ResponseStatusCode::NOT_FOUND);
+            }
+        } else {
+            $opponent = null;
         }
 
         if (!$sendRequest->getColor() || $sendRequest->getColor() == GameColor::RANDOM) {
@@ -130,10 +127,7 @@ class CallHandler implements CallProcessorInterface
         $newCalls = [];
 
         for ($i = 0; $i < $sendRequest->getGamesCount(); $i++) {
-            $game = $this->container->get("core.handler.game")->createMyGame($me, $opponent, $timecontrol,
-                $sendRequest->getColor());
-            $newCalls[] = $this->createGameCall($me, $opponent, $game);
-            $this->manager->persist($game);
+            $newCalls[] = $this->createGameCall($me, $opponent);
         }
 
         $this->manager->flush();
@@ -192,26 +186,17 @@ class CallHandler implements CallProcessorInterface
             $acceptError->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
-        if ($call->getToUser() != $me) {
-            $acceptError->setLogin("This is not call to you");
-            $acceptError->throwException(ResponseStatusCode::FORBIDDEN);
-        }
-
-        if ($call->getGame()->getStatus() != GameStatus::CALL) {
-            $acceptError->setCallId("The call is already accepted");
-            $acceptError->throwException(ResponseStatusCode::FORBIDDEN);
-        }
-
         $this->manager->remove($call);
-        $call->getGame()->setStatus(GameStatus::PLAY);
+        $game = $this->container->get("core.handler.game")->createMyGame($me, $call->getFromUser(), GameColor::WHITE);
+        $game->setStatus(GameStatus::PLAY);
 
-        $this->manager->persist($call->getGame());
+        $this->manager->persist($game);
         $this->manager->flush();
 
-        $this->container->get("core.handler.game")->defineUserColorForGame($me, $call->getGame());
-        $this->container->get("core.handler.game")->defineUserMoveAndOpponentForGame($me, $call->getGame());
+        $this->container->get("core.handler.game")->defineUserColorForGame($me, $game);
+        $this->container->get("core.handler.game")->defineUserMoveAndOpponentForGame($me, $game);
 
-        return $call->getGame();
+        return $game;
     }
 
     /**

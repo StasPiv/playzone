@@ -1,7 +1,6 @@
 {
   "fixtures": [
     "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
-    "CoreBundle\\DataFixtures\\ORM\\TimecontrolFixtures",
     "CoreBundle\\DataFixtures\\ORM\\GameFixtures"
   ],
   "incorrect_token": {

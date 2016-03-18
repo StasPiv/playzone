@@ -1,7 +1,6 @@
 {
   "fixtures": [
     "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
-    "CoreBundle\\DataFixtures\\ORM\\TimecontrolFixtures",
     "CoreBundle\\DataFixtures\\ORM\\GameFixtures"
   ],
   "correct_not_mine": {
@@ -31,10 +30,6 @@
         "pgn_alt": "1",
         "status": "play",
         "rate": false,
-        "timecontrol": {
-          "id": 1,
-          "name": "10\/10no"
-        },
         "time_last_move": "1970-01-01T00:00:00+0200",
         "time_over": false
       }
@@ -83,10 +78,6 @@
         "pgn_alt": "1",
         "status": "play",
         "rate": false,
-        "timecontrol": {
-          "id": 1,
-          "name": "10\/10no"
-        },
         "time_last_move": "1970-01-01T00:00:00+0200",
         "time_over": false
       }

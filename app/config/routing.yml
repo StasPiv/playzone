@@ -4,12 +4,6 @@ user_api:
     prefix:   /
     defaults: {_format: json}
 
-timecontrol_api:
-    resource: "@ApiBundle/Controller/TimecontrolController.php"
-    type:     rest
-    prefix:   /
-    defaults: {_format: json}
-
 game_api:
     resource: "@ApiBundle/Controller/GameController.php"
     type:     rest

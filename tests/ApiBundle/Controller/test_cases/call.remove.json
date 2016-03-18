@@ -1,7 +1,6 @@
 {
   "fixtures": [
     "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
-    "CoreBundle\\DataFixtures\\ORM\\TimecontrolFixtures",
     "CoreBundle\\DataFixtures\\ORM\\GameFixtures",
     "CoreBundle\\DataFixtures\\ORM\\CallFixtures"
   ],
@@ -73,10 +72,6 @@
           "rating": 2200
         },
         "game" : {
-          "timecontrol": {
-            "id": 1,
-            "name": "10\/10no"
-          },
           "user_white": {
             "login": "TestLogin",
             "email": "test-login@yandex.ru",

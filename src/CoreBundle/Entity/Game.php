@@ -119,18 +119,6 @@ class Game
     private $timeBlack = 180000;
 
     /**
-     * @var Timecontrol
-     *
-     * @JMS\Expose
-     * @JMS\Type("CoreBundle\Entity\Timecontrol")
-     * @JMS\SerializedName("timecontrol")
-     *
-     * @ORM\ManyToOne(targetEntity="Timecontrol", fetch="EAGER")
-     * @ORM\JoinColumn(name="id_timecontrol", referencedColumnName="id", nullable=false)
-     */
-    private $timecontrol;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="time_last_move", type="time")
@@ -451,25 +439,6 @@ class Game
     public function getTimeBlack()
     {
         return $this->timeBlack;
-    }
-
-    /**
-     * @return Timecontrol
-     */
-    public function getTimecontrol()
-    {
-        return $this->timecontrol;
-    }
-
-    /**
-     * @param Timecontrol $timecontrol
-     * @return $this
-     */
-    public function setTimecontrol($timecontrol)
-    {
-        $this->timecontrol = $timecontrol;
-
-        return $this;
     }
 
     /**

@@ -44,10 +44,6 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
      * @JMS\Expose()
      * @JMS\Type("string")
      *
-     * @Assert\NotBlank(
-     *     message = "Enter player"
-     * )
-     *
      */
     private $player;
 
@@ -60,18 +56,6 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
      * @Assert\Choice(choices = {"w", "b", "random"}, message = "Color is incorrect")
      */
     private $color;
-
-    /**
-     * @var integer
-     *
-     * @JMS\Expose()
-     * @JMS\Type("string")
-     *
-     * @Assert\NotBlank(
-     *     message = "Enter timecontrol"
-     * )
-     */
-    private $timecontrol;
 
     /**
      * @var integer
@@ -154,22 +138,6 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
     public function setColor($color)
     {
         $this->color = $color;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTimecontrol()
-    {
-        return $this->timecontrol;
-    }
-
-    /**
-     * @param int $timecontrol
-     */
-    public function setTimecontrol($timecontrol)
-    {
-        $this->timecontrol = $timecontrol;
     }
 
     /**

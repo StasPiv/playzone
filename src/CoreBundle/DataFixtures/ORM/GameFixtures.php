@@ -10,7 +10,6 @@ namespace CoreBundle\DataFixtures\ORM;
 
 
 use CoreBundle\Entity\Game;
-use CoreBundle\Entity\Timecontrol;
 use CoreBundle\Entity\User;
 
 class GameFixtures extends AbstractPlayzoneFixtures
@@ -39,13 +38,10 @@ class GameFixtures extends AbstractPlayzoneFixtures
         $userBlack = $this->getReference($data['user_black']);
         /** @var User $userToMove */
         $userToMove = $this->getReference($data['user_to_move']);
-        /** @var Timecontrol $timecontrol */
-        $timecontrol = $this->getReference($data['timecontrol']);
 
         $game->setUserWhite($userWhite)
             ->setUserBlack($userBlack)
             ->setUserToMove($userToMove)
-            ->setTimecontrol($timecontrol)
             ->setPgn($data['pgn'])
             ->setPgnAlt($data['pgn_alt'])
             ->setStatus($data['status'])

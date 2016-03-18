@@ -1,7 +1,6 @@
 {
   "fixtures": [
     "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
-    "CoreBundle\\DataFixtures\\ORM\\TimecontrolFixtures",
     "CoreBundle\\DataFixtures\\ORM\\GameFixtures",
     "CoreBundle\\DataFixtures\\ORM\\CallFixtures"
   ],
@@ -33,23 +32,6 @@
       "status": 404,
       "errors": {
         "call_id": "Call is not found"
-      }
-    }
-  },
-  "not_my_call": {
-    "method": "DELETE",
-    "request": {
-      "login": "TestLogin",
-      "token": "aba37b62d15cc5f8671fd3d1b034c354",
-      "reference": {
-        "name": "call_id",
-        "value": "game-call-0"
-      }
-    },
-    "response": {
-      "status": 403,
-      "errors": {
-        "login": "This is not call to you"
       }
     }
   },
@@ -98,10 +80,6 @@
         "rate": true,
         "time_white": 180000,
         "time_black": 180000,
-        "timecontrol": {
-          "id": 2,
-          "name": "20\/10no"
-        },
         "time_last_move": "1970-01-01T00:00:00+0200",
         "time_over": false
       }

@@ -42,7 +42,7 @@ class GameCall
      * @JMS\SerializedName("to_user")
      *
      * @ORM\ManyToOne(targetEntity="User", fetch="EAGER")
-     * @ORM\JoinColumn(name="id_call_to", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="id_call_to", referencedColumnName="id", nullable=true)
      */
     private $toUser;
 

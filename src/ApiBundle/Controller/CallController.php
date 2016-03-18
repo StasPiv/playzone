@@ -46,7 +46,6 @@ class CallController extends BaseController
      *      {"name"="token", "dataType"="string", "description"="Your token"},
      *      {"name"="player", "dataType"="string"},
      *      {"name"="color", "dataType"="string"},
-     *      {"name"="timecontrol", "dataType"="integer"},
      *      {"name"="games_count", "dataType"="integer"}
      *  }
      * )

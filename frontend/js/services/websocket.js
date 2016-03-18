@@ -77,6 +77,15 @@ playzoneServices.factory('WebsocketService', function($websocket) {
                 }
             )
         },
+        /**
+         * Pass only first param (gameId) to fix result on observers' side
+         *
+         * @param gameId
+         * @param encodedPgn
+         * @param timeWhite
+         * @param timeBlack
+         * @param my_move
+         */
         sendGameToObservers: function(gameId, encodedPgn, timeWhite, timeBlack, my_move) {
             console.log('sendGameToObservers');
             this.send(

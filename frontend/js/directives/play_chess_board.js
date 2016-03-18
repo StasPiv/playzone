@@ -33,6 +33,12 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                     if (!scope.game.color) {
                         WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
                             console.log('listener should do move');
+
+                            if (!data.encoded_pgn) { // it means that game is finished
+                                scope.game.$get();
+                                return;
+                            }
+
                             var receivedPgn = window.atob(data.encoded_pgn);
                             console.log(receivedPgn);
 

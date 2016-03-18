@@ -20,7 +20,11 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
 
     $scope.game.$promise.then(
         function () {
-            $scope.my_move = $rootScope.user.id === $scope.game.user_to_move.id;
+            if ($scope.game.color === 'b') {
+                $scope.my_move = $rootScope.user.id === $scope.game.user_to_move.id;
+            } else {
+                $scope.my_move = $scope.game.user_white.id === $scope.game.user_to_move.id;
+            }
 
             $scope.my_time = $scope.game.color === 'w' ? $scope.game.time_white : $scope.game.time_black;
             $scope.opponent_time = $scope.game.color === 'b' ? $scope.game.time_white : $scope.game.time_black;

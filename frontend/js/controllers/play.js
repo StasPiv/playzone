@@ -73,6 +73,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
                     gameId: $scope.game.id,
                     resign: true
                 });
+                WebsocketService.sendGameToObservers($scope.game.id);
             }
         );
     };

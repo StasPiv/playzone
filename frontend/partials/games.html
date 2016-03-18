@@ -22,22 +22,6 @@
                     </select>
                 </td>
             </tr>
-            <tr ng-class="{ error: errors.timecontrol }">
-                <td><label for="timecontrol">{{ 'Time control' | translate }}:</label></td>
-                <td>
-                    <select
-                            id="timecontrol"
-                            data-ng-model="call.timecontrol"
-                            ng-options="timecontrol.name for timecontrol in timecontrols track by timecontrol.id">
-                    </select>
-                </td>
-            </tr>
-            <tr ng-class="{ error: errors.games_count }">
-                <td><label for="count">{{ 'The game count'| translate }}:</label></td>
-                <td>
-                    <input type="text" id="count" value="1" size="2" ng-model="call.games_count" />
-                </td>
-            </tr>
             <tr>
                 <td colspan="2">
                     <input class="button" value="OK" type="submit" data-ng-click="sendCall(call)">
@@ -52,17 +36,13 @@
 <table class="games">
     <tr>
         <th>№</th>
-        <th>{{ "Time control" | translate }}</th>
         <th>{{ "To user" | translate }}</th>
         <th>{{ "Color" | translate }}</th>
         <th width="20%">&nbsp;</th>
     </tr>
     <tr ng-repeat="call in calls_from_me" ng-if="call.id">
         <td>
-            <a href="" ng-click="deleteCall(call);">{{ call.game.id }}</a>
-        </td>
-        <td>
-            <a href="">{{ call.game.timecontrol.name }}</a>
+            <a href="" ng-click="deleteCall(call);">{{ call.id }}</a>
         </td>
         <td>
             <a href="/#/profile/{{ call.to_user.id }}">{{ call.to_user.login }}</a>
@@ -79,17 +59,13 @@
 <table class="games">
     <tr>
         <th>№</th>
-        <th>{{ "Time control" | translate }}</th>
         <th>{{ "From user" | translate }}</th>
         <th>{{ "Color" | translate }}</th>
         <th width="20%">&nbsp;</th>
     </tr>
     <tr ng-repeat="call in calls_to_me" ng-if="call.id">
         <td>
-            <a href="" ng-click="acceptCall(call)">{{ call.game.id }}</a>
-        </td>
-        <td>
-            <a href="">{{ call.game.timecontrol.name }}</a>
+            <a href="" ng-click="acceptCall(call)">{{ call.id }}</a>
         </td>
         <td>
             <a href="/#/profile/{{ call.from_user.id }}">{{ call.from_user.login }}</a>
@@ -107,7 +83,6 @@
     <thead>
     <tr>
         <th>№</th>
-        <th>{{ "TC" | translate }}</th>
         <th>{{ "Tournament" | translate }}</th>
         <th>{{ "Opponent" | translate }}</th>
         <th>{{ "Color" | translate }}</th>
@@ -122,9 +97,6 @@
     <tr ng-repeat="game in current">
         <td>
             <a href="/#/play/{{ game.id }}">{{ game.id }}</a>
-        </td>
-        <td>
-            <a href="">{{ game.timecontrol.name }}</a>
         </td>
         <td>
             <a ng-show="game.id_tournament" href="/tournaments/{{ game.id_tournament }}/show/">#{{ game.id_tournament }}</a>

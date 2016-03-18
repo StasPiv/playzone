@@ -31,8 +31,7 @@ playzoneServices.factory('CallRest', function($resource, ApiService) {
             },
             send: {
                 method: 'POST',
-                url: ApiService.base_url + 'call/send',
-                isArray:true
+                url: ApiService.base_url + 'call/send'
             }
         }
     );

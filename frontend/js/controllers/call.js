@@ -3,9 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('CallCtrl', function ($scope, TimecontrolRest, CallRest, WebsocketService) {
-    $scope.timecontrols = TimecontrolRest.query();
-
+playzoneControllers.controller('CallCtrl', function ($scope, CallRest, WebsocketService) {
     $scope.colors = [
         {id: 'random', name: 'Random'},
         {id: 'w', name: 'White'},
@@ -16,12 +14,10 @@ playzoneControllers.controller('CallCtrl', function ($scope, TimecontrolRest, Ca
         CallRest.send(
             {},
             call,
-            function(response) {
+            function(responseCall) {
                 var newCallIds = [];
-                angular.forEach(response, function(call) {
-                    $scope.calls_from_me.push(call);
-                    newCallIds.push(call.id);
-                });
+                $scope.calls_from_me.push(responseCall);
+                newCallIds.push(responseCall.id);
                 $scope.errors = {};
 
                 WebsocketService.sendDataToLogins(

@@ -11,7 +11,6 @@ describe('call controller', function () {
         $httpBackend = _$httpBackend_;
         $httpBackend.expectGET('translations/en.json').respond();
         $httpBackend.expectPOST(ApiService.auth).respond();
-        $httpBackend.expectGET(ApiService.timecontrols).respond();
         $httpBackend.expectPOST(ApiService.post_call).respond([
             {
                 id: 2,
@@ -38,7 +37,6 @@ describe('call controller', function () {
 
         var call = {
             player: "Stas",
-            timecontrol: 1,
             color: "w"
         };
         scope.sendCall(call);

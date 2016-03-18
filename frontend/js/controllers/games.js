@@ -9,19 +9,19 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $location, CallRes
     $scope.current = GameRest.query({status: "play", user:"me"});
 
     $scope.acceptCall = function(call) {
-        CallRest.accept({},call, function(response) {
+        CallRest.accept({},call, function(responseGame) {
             WebsocketService.sendDataToLogins(
                 'call_accept',
                 {
-                    game_id: call.game.id,
+                    game_id: responseGame.id,
                     login: call.from_user.login,
                     call_id: call.id
                 },
                 [call.from_user.login]
             );
-            $scope.current.push(response);
+            $scope.current.push(responseGame);
             $scope.calls_to_me.pullById(call.id);
-            $location.path( '/play/' + call.game.id );
+            $location.path( '/play/' + responseGame.id );
         });
     };
 

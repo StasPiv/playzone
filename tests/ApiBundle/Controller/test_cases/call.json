@@ -82,6 +82,20 @@
             "email": "petro@yandex.ru",
             "class": "D",
             "rating": 2443
+          },
+          "game_params": {
+            "color": "b"
+          }
+        },
+        {
+          "from_user": {
+            "login": "Petro",
+            "email": "petro@yandex.ru",
+            "class": "D",
+            "rating": 2443
+          },
+          "game_params": {
+            "color": "w"
           }
         }
       ]

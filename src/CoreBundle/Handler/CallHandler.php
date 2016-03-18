@@ -233,6 +233,10 @@ class CallHandler implements CallProcessorInterface
      */
     public function getUserCallsByLogin($login, $fieldForUser = 'fromUser', array $callIds = [])
     {
+        if (!$login) {
+            return $this->repository->findBy(['toUser' => null]);
+        }
+
         $user = $this->container->get("core.handler.user")->getRepository()
                                 ->findOneBy(["login" => $login]);
 
@@ -255,6 +259,10 @@ class CallHandler implements CallProcessorInterface
 
         if (!empty($callIds)) {
             $filter['id'] = $callIds;
+        }
+
+        if ($fieldForUser == 'toUser') {
+            $filter['toUser'] = [null, $user];
         }
 
         return $this->repository->findBy($filter);

@@ -193,7 +193,8 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                 continue;
             }
 
-            if (in_array($wsUser->getPlayzoneUser()->getLogin(), $messageObject->getLogins())) {
+            if (empty($messageObject->getLogins()) || in_array($wsUser->getPlayzoneUser()->getLogin(),
+                $messageObject->getLogins())) {
                 $this->send($messageObject, $wsUser->getConnection());
             }
         }

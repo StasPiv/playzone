@@ -14,5 +14,12 @@
     "game_params": {
       "color": "b"
     }
+  },
+  {
+    "referenceName": "game-call-1",
+    "fromUser": "user-petro",
+    "game_params": {
+      "color": "w"
+    }
   }
 ]

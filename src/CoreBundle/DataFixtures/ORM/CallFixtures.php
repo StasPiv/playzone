@@ -27,11 +27,13 @@ class CallFixtures extends AbstractPlayzoneFixtures
         /** @var User $fromUser */
         $fromUser = $this->getReference($data['fromUser']);
 
-        /** @var User $toUser */
-        $toUser = $this->getReference($data['toUser']);
+        $gameCall->setFromUser($fromUser);
 
-        $gameCall->setFromUser($fromUser)
-                 ->setToUser($toUser);
+        if (isset($data['toUser'])) {
+            /** @var User $toUser */
+            $toUser = $this->getReference($data['toUser']);
+            $gameCall->setToUser($toUser);
+        }
 
         if (isset($data["game_params"])) {
             $gameParams = new GameParams();

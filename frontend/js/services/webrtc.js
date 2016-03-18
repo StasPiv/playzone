@@ -6,6 +6,18 @@
 playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
     var wsSignaler = $websocket('ws://localhost:1234/signaler');
 
+    var receiveChannel;
+    var leaveRoomHandlers = {};
+    var onMessageHandlers = {};
+    var ownerConnection,
+        subscriberConnection;
+
+    var sendChannel;
+
+    var ownerCandidate,
+        offerSdpSescription,
+        answerSdpSescription;
+
     function createNewOffer() {
         ownerConnection.createOffer().then(function (offer) {
             offerSdpSescription = offer.sdp;
@@ -92,76 +104,6 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
         }
     });
 
-    var receiveChannel;
-    var leaveRoomHandlers = {};
-    var onMessageHandlers = {};
-    var ownerConnection,
-        subscriberConnection;
-
-    var sendChannel;
-
-    var ownerCandidate,
-        offerSdpSescription,
-        answerSdpSescription;
-
-    function getICEServers() {
-        var isChrome = !!navigator.webkitGetUserMedia;
-        var isFirefox = !!navigator.mozGetUserMedia;
-        var chromeVersion = !!navigator.mozGetUserMedia ? 0 : parseInt(navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)[2]);
-        var iceServers = [];
-        if (isFirefox) {
-            iceServers.push({
-                url: 'stun:23.21.150.121'
-            });
-
-            iceServers.push({
-                url: 'stun:stun.services.mozilla.com'
-            });
-        }
-
-        if (isChrome) {
-            iceServers.push({
-                url: 'stun:stun.l.google.com:19302'
-            });
-
-            iceServers.push({
-                url: 'stun:stun.anyfirewall.com:3478'
-            });
-        }
-
-        if (isChrome && chromeVersion < 28) {
-            iceServers.push({
-                url: 'turn:homeo@turn.bistri.com:80?transport=udp',
-                credential: 'homeo'
-            });
-
-            iceServers.push({
-                url: 'turn:homeo@turn.bistri.com:80?transport=tcp',
-                credential: 'homeo'
-            });
-        }
-
-        if (isChrome && chromeVersion >= 28) {
-            iceServers.push({
-                url: 'turn:turn.bistri.com:80?transport=udp',
-                credential: 'homeo',
-                username: 'homeo'
-            });
-
-            iceServers.push({
-                url: 'turn:turn.bistri.com:80?transport=tcp',
-                credential: 'homeo',
-                username: 'homeo'
-            });
-
-            iceServers.push({
-                url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-                credential: 'webrtc',
-                username: 'webrtc'
-            });
-        }
-    }
-
     function onAddIceCandidateSuccess() {
         trace('AddIceCandidate success.');
     }
@@ -176,9 +118,7 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
     }
 
     function createSubscriberConnectionAndChannel(room) {
-        subscriberConnection = new RTCPeerConnection({
-            iceServers: getICEServers()
-        });
+        subscriberConnection = new RTCPeerConnection();
 
         subscriberConnection.onicecandidate = function (event) {
             if (!event.candidate) {
@@ -221,9 +161,7 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
     }
 
     function createOwnerConnectionAndChannel(room) {
-        ownerConnection = new RTCPeerConnection({
-            iceServers: getICEServers()
-        });
+        ownerConnection = new RTCPeerConnection();
 
         ownerConnection.onicecandidate = function (event) {
             if (!event.candidate) {

@@ -40,6 +40,10 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                                 return;
                             }
 
+                            scope.my_time = data.time_white;
+                            scope.opponent_time = data.time_black;
+                            scope.my_move = data.my_move;
+
                             scope.game.pgn = receivedPgn;
                             element.game.load_pgn(receivedPgn);
                             element.board.position(element.game.fen());
@@ -72,7 +76,14 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                 ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
                 scope.game.pgn = element.game.pgn();
                 scope.savePgnAndTime();
-                WebsocketService.sendGameToObservers(scope.game.id, window.btoa(scope.game.pgn));
+
+                WebsocketService.sendGameToObservers(
+                    scope.game.id,
+                    window.btoa(scope.game.pgn),
+                    scope.game.color === 'w' ? scope.my_time : scope.opponent_time,
+                    scope.game.color === 'b' ? scope.my_time : scope.opponent_time,
+                    scope.game.color !== 'w'
+                );
 
                 scope.my_move = false;
 

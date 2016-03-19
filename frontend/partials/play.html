@@ -4,7 +4,7 @@
     <div class="play-chess-board chess-board-legal" data-board="board">
         <div class="chess-timer" data-time="opponent_time_format" data-zeitnot="gameConfig.zeitnotLimit"></div>
         <div id="board"></div>
-        <div class="pgn"></div>
+        <div ng-if="game.status == 'end'" class="pgn"></div>
         <div class="clear">&nbsp;</div>
         <div class="chess-timer" data-time="my_time_format" data-zeitnot="gameConfig.zeitnotLimit"></div>
         <div class="action" ng-controller="PlayActionCtrl" ng-if="game.status == 'play'">

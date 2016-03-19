@@ -98,5 +98,65 @@
         }
       ]
     }
+  },
+  "all_current_games": {
+    "method": "GET",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "user": "all",
+      "status": "play"
+    },
+    "response": {
+      "status": 200,
+      "data": [
+        {
+          "user_white": {
+            "login": "Stas",
+            "email": "piv1986@yandex.ru",
+            "class": "N",
+            "rating": 2200
+          },
+          "user_black": {
+            "login": "TestLogin",
+            "email": "test-login@yandex.ru",
+            "class": "D",
+            "rating": 2243
+          },
+          "user_to_move": {
+            "login": "TestLogin",
+            "email": "test-login@yandex.ru",
+            "class": "D",
+            "rating": 2243
+          },
+          "status": "play",
+          "rate": false,
+          "time_over": false
+        },
+        {
+          "user_white": {
+            "login": "Stas",
+            "email": "piv1986@yandex.ru",
+            "class": "N",
+            "rating": 2200
+          },
+          "user_black": {
+            "login": "Petro",
+            "email": "petro@yandex.ru",
+            "class": "D",
+            "rating": 2443
+          },
+          "user_to_move": {
+            "login": "Petro",
+            "email": "petro@yandex.ru",
+            "class": "D",
+            "rating": 2443
+          },
+          "status": "play",
+          "rate": false,
+          "time_over": false
+        }
+      ]
+    }
   }
 }

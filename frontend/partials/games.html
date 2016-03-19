@@ -85,14 +85,9 @@
     <thead>
     <tr>
         <th>№</th>
-        <th>{{ "Tournament" | translate }}</th>
-        <th>{{ "Opponent" | translate }}</th>
-        <th>{{ "Color" | translate }}</th>
-        <th>{{ "Your time" | translate }}</th>
-        <th>{{ "Opponent time" | translate }}</th>
-        <th>{{ "From last move" | translate }}</th>
+        <th>{{ "White" | translate }}</th>
+        <th>{{ "Black" | translate }}</th>
         <th width="15%">{{ "Action" | translate }}</th>
-        <th>{{ "Move" | translate }}</th>
     </tr>
     </thead>
     <tbody>
@@ -101,31 +96,14 @@
             <a href="/#/play/{{ game.id }}">{{ game.id }}</a>
         </td>
         <td>
-            <a ng-show="game.id_tournament" href="/tournaments/{{ game.id_tournament }}/show/">#{{ game.id_tournament }}</a>
-            <a ng-show="!game.id_tournament" href="/play/{{ game.id }}">{{ "match" | translate }}</a>
+            <span>{{ game.user_white.login }}</span>
         </td>
         <td>
-            <a ng-show="game.opponent_online" class="online_player" title="{{ 'Player online' | translate }}" href="/profile/{{ game.opponent.id }}">{{ game.opponent.id }}</a>
-            <a ng-show="!game.opponent_online" href="/profile/{{ game.opponent.id }}">{{ game.opponent.login }}</a>
-        </td>
-        <td>
-            <div class="color_pic {{ game.color }}"></div>
-        </td>
-        <td>
-            <span style="background-color: yellow">{{ game.rest_mine }}</span>
-        </td>
-        <td>
-            <span style="background-color: yellow; color:black;">{{ game.rest_opponent }}</span>
-        </td>
-        <td>
-            {{ game.diff }}
+            <span>{{ game.user_black.login }}</span>
         </td>
         <td>
             <a ng-show="game.user_move" href="/#/play/{{ game.id }}" class="button domove">{{ "Do move" | translate }}</a>
             <a ng-show="!game.user_move" href="/#/play/{{ game.id }}" class="button">{{ "See" | translate }}</a>
-        </td>
-        <td class="last_move" title="{{ game.time_last_move }}">
-            {{ game.last_move }}
         </td>
     </tr>
     </tbody>

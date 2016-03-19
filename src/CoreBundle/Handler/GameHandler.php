@@ -60,19 +60,22 @@ class GameHandler implements GameProcessorInterface
      */
     public function processGetList(GameGetListRequest $listRequest, GameGetListRequest $listError)
     {
-        if ($listRequest->getUser() != UserType::ME) {
-            return [];
+        switch ($listRequest->getUser()) {
+            case UserType::ME:
+                $user = $this->container->get("core.handler.user")
+                    ->getUserByLoginAndToken($listRequest->getLogin(), $listRequest->getToken());
+
+                if (!$user instanceof User) {
+                    $listError->setLogin("Need to pass correct login and token for getting game list for current user");
+                    $listError->throwException(ResponseStatusCode::FORBIDDEN);
+                }
+
+                return $this->getGamesForUser($user, $listRequest->getStatus());
+            case UserType::ALL:
+                return $this->repository->findBy(['status' => $listRequest->getStatus()]);
+            default:
+                return [];
         }
-
-        $user = $this->container->get("core.handler.user")
-            ->getUserByLoginAndToken($listRequest->getLogin(), $listRequest->getToken());
-
-        if (!$user instanceof User) {
-            $listError->setLogin("Need to pass correct login and token for getting game list for current user");
-            $listError->throwException(ResponseStatusCode::FORBIDDEN);
-        }
-
-        return $this->getGamesForUser($user, $listRequest->getStatus());
     }
 
     /**

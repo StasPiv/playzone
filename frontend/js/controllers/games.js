@@ -6,7 +6,7 @@
 playzoneControllers.controller('GamesCtrl', function ($scope, $location, CallRest, GameRest, WebsocketService, WebRTCService) {
     $scope.calls_from_me = CallRest.query({type: "from"});
     $scope.calls_to_me = CallRest.query({type: "to"});
-    $scope.current = GameRest.query({status: "play", user:"me"});
+    $scope.current = GameRest.query({status: "play", user:"all"});
 
     $scope.acceptCall = function(call) {
         CallRest.accept({},call, function(responseGame) {

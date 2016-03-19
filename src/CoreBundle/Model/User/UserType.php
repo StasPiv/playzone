@@ -12,4 +12,5 @@ namespace CoreBundle\Model\User;
 class UserType
 {
     const ME = "me";
+    const ALL = "all";
 }

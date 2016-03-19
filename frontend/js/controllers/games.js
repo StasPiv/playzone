@@ -19,6 +19,13 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $location, CallRes
                 },
                 [call.from_user.login]
             );
+            WebsocketService.sendDataToLogins(
+                'call_delete',
+                {
+                    call_id: call.id
+                },
+                []
+            );
             $scope.current.push(responseGame);
             $scope.calls_to_me.pullById(call.id);
             $location.path( '/play/' + responseGame.id );

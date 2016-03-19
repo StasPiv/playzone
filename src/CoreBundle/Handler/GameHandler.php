@@ -118,7 +118,7 @@ class GameHandler implements GameProcessorInterface
             $pgnError->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
-        if (!in_array($me, [$game->getUserWhite(), $game->getUserBlack()])) {
+        if (!$this->isMyGame($game, $me)) {
             $pgnError->setId("Game is not mine");
             $pgnError->throwException(ResponseStatusCode::FORBIDDEN);
         }
@@ -165,7 +165,7 @@ class GameHandler implements GameProcessorInterface
             $resignError->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
-        if (!in_array($me, [$game->getUserWhite(), $game->getUserBlack()])) {
+        if (!$this->isMyGame($game, $me)) {
             $resignError->setId("Game is not mine");
             $resignError->throwException(ResponseStatusCode::FORBIDDEN);
         }
@@ -200,7 +200,7 @@ class GameHandler implements GameProcessorInterface
             $drawError->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
-        if (!in_array($me, [$game->getUserWhite(), $game->getUserBlack()])) {
+        if (!$this->isMyGame($game, $me)) {
             $drawError->setId("Game is not mine");
             $drawError->throwException(ResponseStatusCode::FORBIDDEN);
         }
@@ -235,7 +235,7 @@ class GameHandler implements GameProcessorInterface
             $drawError->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
-        if (!in_array($me, [$game->getUserWhite(), $game->getUserBlack()])) {
+        if (!$this->isMyGame($game, $me)) {
             $drawError->setId("Game is not mine");
             $drawError->throwException(ResponseStatusCode::FORBIDDEN);
         }

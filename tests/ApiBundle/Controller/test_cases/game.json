@@ -26,11 +26,10 @@
           "class": "D",
           "rating": 2243
         },
-        "pgn": "1",
-        "pgn_alt": "1",
         "status": "play",
         "rate": false,
-        "time_over": false
+        "time_over": false,
+        "mine": false
       }
     }
   },
@@ -73,11 +72,10 @@
           "rating": 2200
         },
         "color": "b",
-        "pgn": "1",
-        "pgn_alt": "1",
         "status": "play",
         "rate": false,
-        "time_over": false
+        "time_over": false,
+        "mine": true
       }
     }
   }

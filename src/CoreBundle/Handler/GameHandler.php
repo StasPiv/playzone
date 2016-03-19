@@ -386,6 +386,7 @@ class GameHandler implements GameProcessorInterface
      */
     public function getUserGame(User $user, Game $game)
     {
+        $game->setMine(true);
         $this->defineUserColorForGame($user, $game);
         $this->defineUserMoveAndOpponentForGame($user, $game);
 

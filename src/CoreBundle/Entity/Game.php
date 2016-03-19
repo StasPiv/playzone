@@ -156,6 +156,14 @@ class Game
     private $color;
 
     /**
+     * @var bool
+     *
+     * @JMS\Expose
+     * @JMS\Type("boolean")
+     */
+    private $mine = false;
+
+    /**
      * @var boolean
      *
      * @JMS\Expose
@@ -551,6 +559,25 @@ class Game
     public function setColor($color)
     {
         $this->color = $color;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMine()
+    {
+        return $this->mine;
+    }
+
+    /**
+     * @param bool $mine
+     * @return Game
+     */
+    public function setMine($mine)
+    {
+        $this->mine = $mine;
+
+        return $this;
     }
 
     /**

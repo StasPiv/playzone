@@ -301,19 +301,12 @@ class GameHandler implements GameProcessorInterface
     }
 
     /**
-     * @param string $login
      * @param int $gameId
      * @return Game
      */
-    public function getUserGameByUserLoginAndGameId($login, $gameId)
+    public function getGameByGameId($gameId)
     {
-        $user = $this->container->get("core.handler.user")->getRepository()->findOneBy(["login" => $login]);
-
-        if (!$user instanceof User) {
-            throw new GameHandlerException("User is not found");
-        }
-
-        return $this->getUserGameByGameId($user, $gameId);
+        return $this->repository->find($gameId);
     }
 
     /**

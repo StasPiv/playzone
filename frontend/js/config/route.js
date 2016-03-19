@@ -7,8 +7,8 @@ playzoneApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
             when('/', {
-                templateUrl: 'partials/home.html',
-                controller: 'HomeCtrl'
+                templateUrl: 'partials/games.html',
+                controller: 'GamesCtrl'
             }).
             when('/register', {
                 templateUrl: 'partials/register.html',

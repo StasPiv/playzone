@@ -109,7 +109,7 @@ class ClientMessageHandler
 
         $serverCallAccept = new ServerMessageCallAccept();
         $serverCallAccept->setGame(
-            $this->container->get("core.handler.game")->getUserGameByUserLoginAndGameId($data->getLogin(), $data->getGameId())
+            $this->container->get("core.handler.game")->getGameByGameId($data->getGameId())
         );
         $serverCallAccept->setCallId($data->getCallId());
 

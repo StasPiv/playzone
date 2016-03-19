@@ -56,7 +56,9 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $location, CallRes
 
     WebsocketService.addListener("listen_sent_calls", "call_send", function(data) {
         angular.forEach(data, function(value) {
-            $scope.calls_to_me.push(new CallRest(value));
+            if (!$scope.calls_to_me.searchById(value.id)) {
+                $scope.calls_to_me.push(new CallRest(value));
+            }
         });
     });
 
@@ -73,5 +75,12 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $location, CallRes
 
     WebsocketService.addListener("listen_deleted_calls", "call_delete", function(data) {
         $scope.calls_to_me.pullById(data.call_id);
+    });
+
+    WebsocketService.addListener("listen_finished_games", "game_finish", function(data) {
+        var game = $scope.current.searchById(data.game_id);
+        if (game) {
+            game.$get();
+        }
     });
 });

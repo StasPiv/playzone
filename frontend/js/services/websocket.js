@@ -87,7 +87,15 @@ playzoneServices.factory('WebsocketService', function($websocket) {
          * @param my_move
          */
         sendGameToObservers: function(gameId, encodedPgn, timeWhite, timeBlack, my_move) {
-            console.log('sendGameToObservers');
+            if (!encodedPgn) {
+                this.sendDataToLogins(
+                    'game_finish',
+                    {
+                        game_id: gameId
+                    },
+                    []
+                );
+            }
             this.send(
                 {
                     scope: 'send_to_game_observers',

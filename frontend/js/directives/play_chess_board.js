@@ -121,7 +121,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                         return;
                     }
 
-                    if (webRTCMessage.draw) {
+                    if (webRTCMessage.draw || webRTCMessage.resign) {
                         return;
                     }
 
@@ -142,19 +142,20 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                     element.board.position(element.game.fen());
                     element.updateStatus();
 
-                    if (scope.game.my_time < 0) {
-                        scope.resign();
-                    }
-
                     if (element.game.game_over()) {
                         switch (true) {
                             case element.game.in_checkmate():
+                                console.log(webRTCMessage);
                                 scope.resign();
                                 break;
                             default:
                                 scope.game.$acceptDraw();
                                 break;
                         }
+                    }
+
+                    if (scope.game.my_time < 0) {
+                        scope.resign();
                     }
                 },
                 'move'

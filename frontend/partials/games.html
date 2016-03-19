@@ -30,14 +30,13 @@
             </tbody>
         </table>
     </div>
-    <div class="apply-call" data-open-popup=".call_form"><a data-ng-click="sendCall(call)">{{ 'Call on the game' | translate }}</a></div>
+    <div class="apply-call open-popup" data-open-popup=".call_form"><a>{{ 'Call on the game' | translate }}</a></div>
 </div>
 <h1>{{ "Your calls" | translate }}</h1>
 <table class="games">
     <tr>
         <th>№</th>
         <th>{{ "To user" | translate }}</th>
-        <th>{{ "Color" | translate }}</th>
         <th width="20%">&nbsp;</th>
     </tr>
     <tr ng-repeat="call in calls_from_me" ng-if="call.id">
@@ -45,10 +44,7 @@
             <a href="" ng-click="deleteCall(call);">{{ call.id }}</a>
         </td>
         <td>
-            <a href="/#/profile/{{ call.to_user.id }}">{{ call.to_user.login }}</a>
-        </td>
-        <td>
-            <div class="color_pic {{ call.game_params.color }}"></div>
+            {{ call.to_user.login ? call.to_user.login : "To all" | translate }}
         </td>
         <td>
             <a href="" class="button remove" ng-click="deleteCall(call);">{{ "Remove" | translate }}</a>
@@ -60,7 +56,6 @@
     <tr>
         <th>№</th>
         <th>{{ "From user" | translate }}</th>
-        <th>{{ "Color" | translate }}</th>
         <th width="20%">&nbsp;</th>
     </tr>
     <tr ng-repeat="call in calls_to_me" ng-if="call.id && call.from_user.id != $root.user.id">
@@ -69,9 +64,6 @@
         </td>
         <td>
             <a href="/#/profile/{{ call.from_user.id }}">{{ call.from_user.login }}</a>
-        </td>
-        <td>
-            <div class="color_pic {{ call.game_params.color }}"></div>
         </td>
         <td>
             <a href="" class="button accept" ng-click="acceptCall(call)">{{ "Accept" | translate }}</a>&nbsp;&nbsp;<a
@@ -87,6 +79,7 @@
         <th>№</th>
         <th>{{ "White" | translate }}</th>
         <th>{{ "Black" | translate }}</th>
+        <th>{{ "Result" | translate }}</th>
         <th width="15%">{{ "Action" | translate }}</th>
     </tr>
     </thead>
@@ -100,6 +93,9 @@
         </td>
         <td>
             <span>{{ game.user_black.login }}</span>
+        </td>
+        <td>
+            <span>{{ game.result_white }} - {{ game.result_black }}</span>
         </td>
         <td>
             <a ng-show="game.user_move" href="/#/play/{{ game.id }}" class="button domove">{{ "Do move" | translate }}</a>

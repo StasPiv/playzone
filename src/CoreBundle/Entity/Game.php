@@ -555,10 +555,12 @@ class Game
 
     /**
      * @param string $color
+     * @return $this
      */
     public function setColor($color)
     {
         $this->color = $color;
+        return $this;
     }
 
     /**
@@ -606,10 +608,12 @@ class Game
 
     /**
      * @param User $opponent
+     * @return $this
      */
     public function setOpponent($opponent)
     {
         $this->opponent = $opponent;
+        return $this;
     }
 
     /**

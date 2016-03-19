@@ -18,6 +18,7 @@ use WebsocketServerBundle\Exception\PlayzoneServerException;
 use WebsocketServerBundle\Model\GameObserver;
 use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSend;
 use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSubscribe;
+use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageMethod;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
 use WebsocketServerBundle\Model\Message\Server\AskIntroduction;
 use WebsocketServerBundle\Model\WebsocketUser;
@@ -63,7 +64,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         $wsUser = new WebsocketUser();
         $wsUser->setConnection($conn);
         $this->users->attach($wsUser);
-        $this->send(new AskIntroduction(), $wsUser->getConnection());
+        $this->send(new AskIntroduction(), $wsUser);
     }
 
     /**
@@ -147,7 +148,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         foreach ($this->users as $wsUser) {
             if ($wsUser->getConnection() == $from) {
                 $wsUser->setPlayzoneUser($playzoneUser);
-                $this->send(new WelcomeMessage($wsUser->getPlayzoneUser()->getLogin()), $from);
+                $this->send(new WelcomeMessage($wsUser->getPlayzoneUser()->getLogin()), $wsUser);
             }
         }
     }
@@ -195,7 +196,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
 
             if (empty($messageObject->getLogins()) || in_array($wsUser->getPlayzoneUser()->getLogin(),
                 $messageObject->getLogins())) {
-                $this->send($messageObject, $wsUser->getConnection());
+                $this->send($messageObject, $wsUser);
             }
         }
     }
@@ -212,24 +213,24 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         foreach ($this->users as $wsUser) {
             if (isset($wsUser->getGamesToListenMap()[$gameSendMessage->getGameId()])) {
                 $messageObject->setMethod("game_pgn_" . $gameSendMessage->getGameId());
-                $this->send($messageObject, $wsUser->getConnection());
+                $this->send($messageObject, $wsUser);
             }
         }
     }
 
     /**
      * @param PlayzoneMessage $messageObject
-     * @param ConnectionInterface $connection
+     * @param WebsocketUser $wsUser
      */
-    private function send(PlayzoneMessage $messageObject, ConnectionInterface $connection)
+    private function send(PlayzoneMessage $messageObject, WebsocketUser $wsUser)
     {
         try {
-            $this->container->get("ws.handler.client.message")->prepareMessageForUsers($messageObject);
-            $connection->send(
+            $this->container->get("ws.handler.client.message")->prepareMessageForUser($messageObject, $wsUser);
+            $wsUser->getConnection()->send(
                 $this->container->get('jms_serializer')->serialize($messageObject, 'json')
             );
         } catch (\Exception $exception) {
-            $connection->send($exception->getMessage() . ' ' . $exception->getFile() . ' ' . $exception->getLine());
+            $wsUser->getConnection()->send($exception->getMessage() . ' ' . $exception->getFile() . ' ' . $exception->getLine());
         }
     }
 

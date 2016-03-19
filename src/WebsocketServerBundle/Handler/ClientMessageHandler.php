@@ -20,6 +20,7 @@ use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageMethod;
 use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageScope;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
 use WebsocketServerBundle\Model\Message\Server\Call\ServerMessageCallAccept;
+use WebsocketServerBundle\Model\WebsocketUser;
 
 class ClientMessageHandler
 {
@@ -32,8 +33,9 @@ class ClientMessageHandler
 
     /**
      * @param PlayzoneMessage $playzoneMessage
+     * @param WebsocketUser $wsUser
      */
-    public function prepareMessageForUsers(PlayzoneMessage $playzoneMessage)
+    public function prepareMessageForUser(PlayzoneMessage $playzoneMessage, WebsocketUser $wsUser)
     {
         switch ($playzoneMessage->getMethod()) {
             case PlayzoneClientMessageMethod::CALL_SEND:
@@ -43,7 +45,7 @@ class ClientMessageHandler
                 $this->prepareCallDecline($playzoneMessage);
                 break;
             case PlayzoneClientMessageMethod::CALL_ACCEPT:
-                $this->prepareCallAccept($playzoneMessage);
+                $this->prepareCallAccept($playzoneMessage, $wsUser);
                 break;
             case PlayzoneClientMessageMethod::CALL_DELETE:
                 $this->prepareCallDelete($playzoneMessage);
@@ -98,8 +100,9 @@ class ClientMessageHandler
 
     /**
      * @param PlayzoneMessage $playzoneMessage
+     * @param WebsocketUser $wsUser
      */
-    private function prepareCallAccept(PlayzoneMessage $playzoneMessage)
+    private function prepareCallAccept(PlayzoneMessage $playzoneMessage, WebsocketUser $wsUser)
     {
         $data = $this->getClientMessageObject($playzoneMessage, 'Call\ClientMessageCallAccept');
 
@@ -108,9 +111,9 @@ class ClientMessageHandler
         }
 
         $serverCallAccept = new ServerMessageCallAccept();
-        $serverCallAccept->setGame(
-            $this->container->get("core.handler.game")->getGameByGameId($data->getGameId())
-        );
+        $game = $this->container->get("core.handler.game")->getGameById($data->getGameId(), $wsUser->getPlayzoneUser());
+        $serverCallAccept->setGame($game);
+        $serverCallAccept->setGameId($data->getGameId());
         $serverCallAccept->setCallId($data->getCallId());
 
         $playzoneMessage->setData(

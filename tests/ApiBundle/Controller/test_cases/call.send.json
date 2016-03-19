@@ -96,7 +96,7 @@
           "rating": 2200
         },
         "game_params": {
-          "color": "w"
+          "color": "b"
         }
       }
     }
@@ -142,6 +142,9 @@
           "email": "test-login@yandex.ru",
           "class": "D",
           "rating": 2243
+        },
+        "game_params": {
+          "color": "b"
         }
       }
     }

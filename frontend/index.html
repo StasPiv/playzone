@@ -57,7 +57,7 @@
 <body>
     <div class="content">
         <div class="header">
-            <a href="#/"><img src="images/logo.png" /></a>
+            <a href="#/games/"><img src="images/logo.png" /></a>
 
             <div class="menu" ng-controller="TopMenuCtrl">
                 <ul>
@@ -79,14 +79,10 @@
                     <a href="/#/register">{{ 'Sign Up' | translate }}</a> / <span class="enter"><a href="/#/auth">{{ 'Sign In' | translate }}</a></span>
                 </div>
                 <div class="for-authorized" ng-if="$root.user.isAuth">
-                    <span>{{ 'Login' | translate }}: <b><a href="/#/profile">{{$root.user.login}}</a></b></span>.
+                    <span>{{ 'Login' | translate }}: <b>{{$root.user.login}}</b></span>.
                     <span class="rating">{{ 'Rating' | translate }}: <b>{{$root.user.rating}}</b>. {{ 'Class' | translate }}: <b>{{$root.user.class}}</b></span>.
                     <br/>
                     <span style="float:right;">
-                        <span style="color:red;">
-                            <a target="_blank" href="http://immortalchess.net/forum/private.php?do=newpm&u=87"><strong>{{ 'Ask question' | translate }}</strong></a>
-                        </span> |
-                        <span><a href="/#/profile"><strong>{{ 'Settings' | translate }}</strong></a></span> |
                         <span class="enter"><a href="/#/logout" ng-click="logout()">{{ 'Logout' | translate }}</a></span>
                     </span>
                 </div>

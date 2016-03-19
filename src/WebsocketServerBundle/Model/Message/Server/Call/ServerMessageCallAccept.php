@@ -31,6 +31,14 @@ class ServerMessageCallAccept
     private $callId;
 
     /**
+     * @var int
+     *
+     * @JMS\Expose()
+     * @JMS\Type("integer")
+     */
+    private $gameId;
+
+    /**
      * @return Game
      */
     public function getGame()
@@ -60,5 +68,24 @@ class ServerMessageCallAccept
     public function setCallId($callId)
     {
         $this->callId = $callId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGameId()
+    {
+        return $this->gameId;
+    }
+
+    /**
+     * @param int $gameId
+     * @return ServerMessageCallAccept
+     */
+    public function setGameId($gameId)
+    {
+        $this->gameId = $gameId;
+
+        return $this;
     }
 }

@@ -30,7 +30,7 @@
             </tbody>
         </table>
     </div>
-    <div class="apply-call open-popup" data-open-popup=".call_form"><a>{{ 'Call on the game' | translate }}</a></div>
+    <div class="apply-call" data-open-popup=".call_form"><a data-ng-click="sendCall(call)">{{ 'Call on the game' | translate }}</a></div>
 </div>
 <h1>{{ "Your calls" | translate }}</h1>
 <table class="games">
@@ -63,7 +63,7 @@
         <th>{{ "Color" | translate }}</th>
         <th width="20%">&nbsp;</th>
     </tr>
-    <tr ng-repeat="call in calls_to_me" ng-if="call.id">
+    <tr ng-repeat="call in calls_to_me" ng-if="call.id && call.from_user.id != $root.user.id">
         <td>
             <a href="" ng-click="acceptCall(call)">{{ call.id }}</a>
         </td>

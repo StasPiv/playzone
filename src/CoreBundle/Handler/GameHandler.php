@@ -99,11 +99,7 @@ class GameHandler implements GameProcessorInterface
         $user = $this->container->get("core.handler.user")
                      ->getUserByLoginAndToken($gameRequest->getLogin(), $gameRequest->getToken());
 
-        if (!in_array($user, [$game->getUserWhite(), $game->getUserBlack()])) {
-            return $game;
-        }
-
-        return $this->getUserGame($user, $game);
+        return $this->getUserGame($game, $user);
     }
 
     /**
@@ -150,7 +146,7 @@ class GameHandler implements GameProcessorInterface
 
         $this->manager->flush($game);
 
-        return $this->getUserGame($me, $game);
+        return $this->getUserGame($game, $me);
     }
 
     /**
@@ -185,7 +181,7 @@ class GameHandler implements GameProcessorInterface
 
         $this->manager->flush($game);
 
-        return $this->getUserGame($me, $game);
+        return $this->getUserGame($game, $me);
     }
 
     /**
@@ -220,7 +216,7 @@ class GameHandler implements GameProcessorInterface
 
         $this->manager->flush($game);
 
-        return $this->getUserGame($me, $game);
+        return $this->getUserGame($game, $me);
     }
 
     /**
@@ -256,7 +252,7 @@ class GameHandler implements GameProcessorInterface
 
         $this->manager->flush($game);
 
-        return $this->getUserGame($me, $game);
+        return $this->getUserGame($game, $me);
     }
 
     /**
@@ -297,16 +293,23 @@ class GameHandler implements GameProcessorInterface
             throw new GameHandlerException("Game is not found");
         }
 
-        return $this->getUserGame($user, $game);
+        return $this->getUserGame($game, $user);
     }
 
     /**
      * @param int $gameId
+     * @param User $user
      * @return Game
      */
-    public function getGameByGameId($gameId)
+    public function getGameById($gameId, User $user = null)
     {
-        return $this->repository->find($gameId);
+        $game = $this->repository->find($gameId);
+        
+        if (!$game instanceof Game) {
+            return null;
+        }
+        
+        return $this->getUserGame($game, $user);
     }
 
     /**
@@ -380,16 +383,33 @@ class GameHandler implements GameProcessorInterface
     }
 
     /**
-     * @param User $user
      * @param Game $game
+     * @param User $user
      * @return Game
      */
-    public function getUserGame(User $user, Game $game)
+    public function getUserGame(Game $game, User $user = null)
     {
+        $game->setMine(false)
+             ->setUserMove(false);
+
+        if (!$user instanceof User || !$this->isMyGame($game, $user)) {
+            return $game;
+        }
+
         $game->setMine(true);
         $this->defineUserColorForGame($user, $game);
         $this->defineUserMoveAndOpponentForGame($user, $game);
 
         return $game;
+    }
+
+    /**
+     * @param Game $game
+     * @param User $user
+     * @return bool
+     */
+    private function isMyGame(Game $game, User $user)
+    {
+        return in_array($user, [$game->getUserWhite(), $game->getUserBlack()]);
     }
 }

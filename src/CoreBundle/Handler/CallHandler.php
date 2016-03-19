@@ -128,7 +128,9 @@ class CallHandler implements CallProcessorInterface
         }
 
         $gameParams = new GameParams();
-        $gameParams->setColor(new GameColor($sendRequest->getColor()));
+        $gameParams->setColor(
+            $this->getOpponentColor(new GameColor($sendRequest->getColor()))
+        );
 
         $gameCall = $this->createGameCall($me, $opponent, $gameParams);
 
@@ -182,17 +184,33 @@ class CallHandler implements CallProcessorInterface
         }
 
         $this->manager->remove($call);
-        $game = $this->container->get("core.handler.game")->createMyGame($call->getFromUser(), $me,
-            $call->getGameParams()->getColor()->getValue());
+        $game = $this->container->get("core.handler.game")->createMyGame(
+            $call->getFromUser(),
+            $me,
+            $this->getOpponentColor($call->getGameParams()->getColor())->getValue()
+        );
         $game->setStatus(GameStatus::PLAY);
 
         $this->manager->persist($game);
         $this->manager->flush();
 
-        $this->container->get("core.handler.game")->defineUserColorForGame($me, $game);
-        $this->container->get("core.handler.game")->defineUserMoveAndOpponentForGame($me, $game);
+        return $this->container->get("core.handler.game")->getUserGame($game, $me);
+    }
 
-        return $game;
+    /**
+     * @param GameColor $color
+     * @return GameColor
+     */
+    private function getOpponentColor(GameColor $color)
+    {
+        switch ($color) {
+            case GameColor::WHITE():
+                return GameColor::BLACK();
+            case GameColor::BLACK():
+                return GameColor::WHITE();
+            default:
+                return GameColor::WHITE();
+        }
     }
 
     /**

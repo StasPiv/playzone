@@ -14,14 +14,6 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $location, CallRes
                 'call_accept',
                 {
                     game_id: responseGame.id,
-                    login: call.from_user.login,
-                    call_id: call.id
-                },
-                [call.from_user.login]
-            );
-            WebsocketService.sendDataToLogins(
-                'call_delete',
-                {
                     call_id: call.id
                 },
                 []
@@ -70,8 +62,9 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $location, CallRes
 
     WebsocketService.addListener("listen_accepted_calls", "call_accept", function(data) {
         $scope.calls_from_me.pullById(data.call_id);
+        $scope.calls_to_me.pullById(data.call_id);
         $scope.current.push(new GameRest(data.game));
-        $location.path( '/play/' + data.game.id );
+        data.game.mine && $location.path( '/play/' + data.game.id );
     });
 
     WebsocketService.addListener("listen_declined_calls", "call_decline", function(data) {
@@ -81,13 +74,4 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $location, CallRes
     WebsocketService.addListener("listen_deleted_calls", "call_delete", function(data) {
         $scope.calls_to_me.pullById(data.call_id);
     });
-
-    // WebRTC
-    $scope.calls_from_me.$promise.then(
-        function (calls) {
-            angular.forEach(calls, function(call) {
-
-            });
-        }
-    );
 });

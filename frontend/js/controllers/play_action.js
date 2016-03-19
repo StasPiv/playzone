@@ -4,18 +4,6 @@
 'use strict';
 
 playzoneControllers.controller('PlayActionCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService) {
-    $scope.resign = function () {
-        $scope.game.$resign().then(
-            function () {
-                WebRTCService.sendMessage({
-                    gameId: $scope.game.id,
-                    resign: true
-                });
-                WebsocketService.sendGameToObservers($scope.game.id);
-            }
-        );
-    };
-
     $scope.draw = function () {
         if ($scope.opponentOfferDraw) {
             $scope.game.$acceptDraw().then(

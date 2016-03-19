@@ -66,6 +66,18 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         }
     );
 
+    $scope.resign = function () {
+        $scope.game.$resign().then(
+            function () {
+                WebRTCService.sendMessage({
+                    gameId: $scope.game.id,
+                    resign: true
+                });
+                WebsocketService.sendGameToObservers($scope.game.id);
+            }
+        );
+    };
+
     $scope.timeLost = function () {
         $scope.game.$timeLost().then(
             function () {

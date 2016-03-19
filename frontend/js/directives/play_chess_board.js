@@ -113,6 +113,9 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
 
             WebRTCService.addMessageListener(
                 function (webRTCMessage) {
+                    if (scope.game.status !== 'play') {
+                        return;
+                    }
                     console.log('webRTCMessage', webRTCMessage);
                     if (!webRTCMessage.gameId || webRTCMessage.gameId !== scope.game.id) {
                         return;
@@ -139,6 +142,10 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                     element.board.position(element.game.fen());
                     element.updateStatus();
 
+                    if (scope.game.my_time < 0) {
+                        scope.resign();
+                    }
+
                     if (element.game.game_over()) {
                         switch (true) {
                             case element.game.in_checkmate():
@@ -148,10 +155,6 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                                 scope.game.$acceptDraw();
                                 break;
                         }
-                    }
-
-                    if (scope.game.my_time < 0) {
-                        scope.resign();
                     }
                 },
                 'move'

@@ -93,6 +93,10 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     $scope.savePgnAndTime = function () {
         $scope.game.time_white = $scope.game.color === 'w' ? $scope.my_time : $scope.opponent_time;
         $scope.game.time_black = $scope.game.color === 'b' ? $scope.my_time : $scope.opponent_time;
-        $scope.game.$savePgn();
+        $scope.game.$savePgn().then(
+            function () {
+                WebsocketService.sendGameToObservers($scope.game.id);
+            }
+        );
     };
 });

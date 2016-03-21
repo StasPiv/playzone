@@ -5,7 +5,7 @@
     <property name="builddir" value="${workspace}/app/build" />
 
     <target name="build"
-            depends="vendors_install, vendors_update, phpdoc, phpunit"/>
+            depends="vendors_install, vendors_update, migrations"/>
 
     <target name="check-composer-lock">
         <available file="${basedir}/composer.lock" property="composer.lock.present"/>
@@ -29,16 +29,9 @@
         </exec>
     </target>
 
-    <target name="phpdoc" description="Generate API documentation using phpDoc" if="run.statistic">
-        <exec executable="phpdoc">
-            <arg line="-n -d -q '${sourcedir}' --template='clean' -t '${builddir}/docs' --title='Playzone' --ignore='Tests/*,*.yml,*.xml' --ignore-symlinks" />
-        </exec>
-    </target>
-
-    <target name="phpunit" description="Run unit tests with PHPUnit" if="run.statistic">
-        <exec executable="${workspace}/vendor/bin/phpunit" failonerror="false">
-            <arg value="-c" />
-            <arg path="${workspace}/app/phpunit.xml" />
+    <target name="migrate" description="Use doctrine migration to update changes in the database schema" if="run.migration">
+        <exec executable="/opt/php-5.6/bin/php" dir="${basedir}" failonerror="true">
+            <arg line="app/console doctrine:migrations:migrate --no-interaction"/>
         </exec>
     </target>
 </project>

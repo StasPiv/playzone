@@ -1,10 +1,17 @@
-<target name="composer" description="Installing composer dependencies">
-    <exec executable="composer" failonerror="true">
-        <arg value="install" />
-        <arg value="--dev" />
-        <arg value="--prefer-dist" />
-        <arg value="--no-progress" />
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MyProject" default="dist" basedir=".">
+    <description>
+        Playzone
+    </description>
 
-        <env key="SYMFONY_ENV" value="test"/>
-    </exec>
-</target>
+    <target name="composer" description="Installing composer dependencies">
+        <exec executable="composer" failonerror="true">
+            <arg value="install" />
+            <arg value="--dev" />
+            <arg value="--prefer-dist" />
+            <arg value="--no-progress" />
+
+            <env key="SYMFONY_ENV" value="test"/>
+        </exec>
+    </target>
+</project>

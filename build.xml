@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Playzone" default="build" basedir=".">
     <target name="build"
-            depends="vendors_install, vendors_update"/>
+            depends="vendors_install, vendors_update, phpdoc, phpunit"/>
 
     <target name="check-composer-lock">
         <available file="${basedir}/composer.lock" property="composer.lock.present"/>
@@ -22,6 +22,19 @@
             <arg value="-o"/>
             <arg value="--working-dir"/>
             <arg path="${basedir}"/>
+        </exec>
+    </target>
+
+    <target name="phpdoc" description="Generate API documentation using phpDoc" if="run.statistic">
+        <exec executable="phpdoc">
+            <arg line="-n -d -q '${sourcedir}' --template='clean' -t '${builddir}/docs' --title='Dolly' --ignore='Tests/*,*.yml,*.xml' --ignore-symlinks" />
+        </exec>
+    </target>
+
+    <target name="phpunit" description="Run unit tests with PHPUnit" if="run.statistic">
+        <exec executable="phpunit" failonerror="false">
+            <arg value="-c" />
+            <arg path="${workspace}/app/phpunit.xml" />
         </exec>
     </target>
 </project>

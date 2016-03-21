@@ -6,7 +6,7 @@
 playzoneServices.factory('WebsocketService', function($websocket) {
     var listenersMap = {};
     // Open a WebSocket connection
-    var dataStream = $websocket('ws://localhost:1234/');
+    var dataStream = $websocket('ws://ws.playzone.immortalchess.net:8081/');
 
     dataStream.onMessage(
         function(message) {

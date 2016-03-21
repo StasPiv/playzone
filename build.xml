@@ -36,7 +36,7 @@
     </target>
 
     <target name="phpunit" description="Run unit tests with PHPUnit" if="run.statistic">
-        <exec executable="${workspace}/bin/phpunit" failonerror="false">
+        <exec executable="${workspace}/vendor/bin/phpunit" failonerror="false">
             <arg value="-c" />
             <arg path="${workspace}/app/phpunit.xml" />
         </exec>

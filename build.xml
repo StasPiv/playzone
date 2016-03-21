@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Playzone" default="build" basedir=".">
     <property name="workspace" value="${basedir}" />
+    <property name="sourcedir" value="${basedir}/src" />
+    <property name="builddir" value="${workspace}/app/build" />
 
     <target name="build"
             depends="vendors_install, vendors_update, phpdoc, phpunit"/>

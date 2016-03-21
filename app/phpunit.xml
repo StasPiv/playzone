@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- http://phpunit.de/manual/4.1/en/appendixes.configuration.html -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="app/autoload.php"
+>
+    <php>
+        <ini name="error_reporting" value="-1" />
+    </php>
+
+    <testsuites>
+        <testsuite name="Project Test Suite">
+            <directory>../tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <logging>
+        <log type="coverage-html" target="build/coverage" title="Playzone" charset="UTF-8" yui="true" highlight="true"
+             lowUpperBound="35" highLowerBound="70"/>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
+    </logging>
+
+    <php>
+        <server name="KERNEL_DIR" value="app/" />
+    </php>
+
+    <filter>
+        <blacklist>
+            <directory suffix=".js">../src</directory>
+            <directory suffix=".css">../src</directory>
+            <directory suffix=".jpg">../src</directory>
+            <directory suffix=".png">../src</directory>
+            <directory suffix=".twig">../src</directory>
+            <directory suffix=".yml">../src</directory>
+            <directory suffix=".xml">../src</directory>
+            <directory suffix=".json">../src</directory>
+            <directory suffix=".rst">../src</directory>
+            <directory suffix=".xlf">../src</directory>
+            <directory suffix=".eot">../src</directory>
+            <directory suffix=".svg">../src</directory>
+            <directory suffix=".woff">../src</directory>
+            <directory suffix=".woff2">../src</directory>
+            <directory suffix=".ttf">../src</directory>
+        </blacklist>
+        <whitelist>
+            <directory>src</directory>
+            <exclude>
+                <directory>src/*Bundle/Resources</directory>
+                <directory>src/*/*Bundle/Resources</directory>
+                <directory>src/*/Bundle/*Bundle/Resources</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

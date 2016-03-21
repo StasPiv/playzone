@@ -6,7 +6,7 @@
     <property name="frontenddir" value="${workspace}/frontend" />
 
     <target name="build"
-            depends="vendors_install, vendors_update, migrate, npm, bower, cache-prod"/>
+            depends="vendors_install, vendors_update, migrate, npm, bower, cache-prod, gulp"/>
 
     <target name="check-composer-lock">
         <available file="${basedir}/composer.lock" property="composer.lock.present"/>
@@ -58,5 +58,9 @@
         <exec executable="php" dir="${basedir}" failonerror="true">
             <arg line="app/console cache:clear --env=prod"/>
         </exec>
+    </target>
+
+    <target name="gulp" description="Build static files">
+        <exec executable="gulp" dir="${frontenddir}" failonerror="true"></exec>
     </target>
 </project>

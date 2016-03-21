@@ -29,8 +29,8 @@
         </exec>
     </target>
 
-    <target name="migrate" description="Use doctrine migration to update changes in the database schema" if="run.migration">
-        <exec executable="/opt/php-5.6/bin/php" dir="${basedir}" failonerror="true">
+    <target name="migrate" description="Use doctrine migration to update changes in the database schema">
+        <exec executable="php" dir="${basedir}" failonerror="true">
             <arg line="app/console doctrine:migrations:migrate --no-interaction"/>
         </exec>
     </target>

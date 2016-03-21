@@ -3,6 +3,10 @@
     <target name="build"
             depends="vendors_install, vendors_update"/>
 
+    <target name="check-composer-lock">
+        <available file="${basedir}/composer.lock" property="composer.lock.present"/>
+    </target>
+
     <target name="vendors_install" description="Install vendors" depends="check-composer-lock" unless="composer.lock.present">
         <exec executable="composer" failonerror="true">
             <arg value="install"/>

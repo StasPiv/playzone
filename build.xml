@@ -31,12 +31,12 @@
 
     <target name="phpdoc" description="Generate API documentation using phpDoc" if="run.statistic">
         <exec executable="phpdoc">
-            <arg line="-n -d -q '${sourcedir}' --template='clean' -t '${builddir}/docs' --title='Dolly' --ignore='Tests/*,*.yml,*.xml' --ignore-symlinks" />
+            <arg line="-n -d -q '${sourcedir}' --template='clean' -t '${builddir}/docs' --title='Playzone' --ignore='Tests/*,*.yml,*.xml' --ignore-symlinks" />
         </exec>
     </target>
 
     <target name="phpunit" description="Run unit tests with PHPUnit" if="run.statistic">
-        <exec executable="phpunit" failonerror="false">
+        <exec executable="${workspace}/bin/phpunit" failonerror="false">
             <arg value="-c" />
             <arg path="${workspace}/app/phpunit.xml" />
         </exec>

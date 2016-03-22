@@ -39,9 +39,9 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
                         $scope.game.$savePgn();
                     });
                     break;
-                default:
-                    WebsocketService.subscribeToGame($scope.game.id);
             }
+
+            WebsocketService.subscribeToGame($scope.game.id);
 
             $scope.my_time_format = formatTime($scope.my_time, dateFilter);
             $scope.opponent_time_format = formatTime($scope.opponent_time, dateFilter);

@@ -5,6 +5,8 @@
 
 playzoneControllers.controller('PlayActionCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService) {
     $scope.draw = function () {
+        $scope.opponentOfferDraw = $scope.game.draw && $scope.game.draw !== $scope.game.color;
+
         if ($scope.opponentOfferDraw) {
             $scope.game.$acceptDraw().then(
                 function () {
@@ -24,6 +26,7 @@ playzoneControllers.controller('PlayActionCtrl', function ($scope, $rootScope, $
                     gameId: $scope.game.id,
                     draw: 'offer'
                 });
+                WebsocketService.sendGameToObservers($scope.game.id);
             }
         );
     };

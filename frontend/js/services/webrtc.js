@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneServices.factory('WebRTCService', function($websocket, $rootScope, $location) {
+playzoneServices.factory('WebRTCService', function($websocket, $rootScope, $location, WebsocketService) {
     var wsSignalerPath = 'ws://ws.' + $location.host() + ':8081/signaler';
     var wsSignaler = $websocket(wsSignalerPath);
 
@@ -226,8 +226,8 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope, $loca
             }
         },
         sendMessage: function (message) {
-            console.log(sendChannel);
-            sendChannel && sendChannel.send(JSON.stringify(message));
+            return; // disable webRTC for test
+            sendChannel && sendChannel.readyState === 'open' && sendChannel.send(messageJson);
         },
         getPrefixGameRoomName: function () {
             return 'pfgame';

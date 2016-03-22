@@ -48,6 +48,16 @@
         </exec>
     </target>
 
+    <target name="cache-prod" description="Clear cache on production">
+        <exec executable="php" dir="${basedir}" failonerror="true">
+            <arg line="app/console cache:clear --env=prod"/>
+        </exec>
+    </target>
+
+    <target name="gulp" description="Build static files">
+        <exec executable="gulp" dir="${frontenddir}" failonerror="true"></exec>
+    </target>
+
     <target name="killServer">
         <exec executable="pkill">
             <arg line=" php -n -u jenkins"/>
@@ -58,15 +68,5 @@
         <exec executable="php" dir="${basedir}" failonerror="true">
             <arg line="app/console websocket:server:process"/>
         </exec>
-    </target>
-
-    <target name="cache-prod" description="Clear cache on production">
-        <exec executable="php" dir="${basedir}" failonerror="true">
-            <arg line="app/console cache:clear --env=prod"/>
-        </exec>
-    </target>
-
-    <target name="gulp" description="Build static files">
-        <exec executable="gulp" dir="${frontenddir}" failonerror="true"></exec>
     </target>
 </project>

@@ -10,3 +10,8 @@ services:
         class: WebsocketServerBundle\Service\Signaling\Server\GameSignalerServer
         calls:
             - [setContainer, ['@service_container']]
+    ws.playzone.server:
+        class: WebsocketServerBundle\Service\PlayzoneServer
+        arguments: ['@logger']
+        tags:
+            - { name: monolog.logger, channel: ws }

@@ -55,7 +55,7 @@ class WebsocketServerStartCommand extends ContainerAwareCommand
      */
     private function addPlayzoneServer(RatchetApp $app)
     {
-        $playzoneServer = new PlayzoneServer();
+        $playzoneServer = $this->getContainer()->get("ws.playzone.server");
         $playzoneServer->setContainer($this->getContainer());
         $app->route('/', $playzoneServer, ['*']);
     }

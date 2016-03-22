@@ -9,6 +9,7 @@
 namespace WebsocketServerBundle\Service;
 
 use CoreBundle\Entity\User;
+use Monolog\Logger;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 use Symfony\Component\DependencyInjection\Container;
@@ -37,6 +38,9 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
      */
     private $container;
 
+    /** @var Logger */
+    private $logger;
+
     /**
      * PHP 5 allows developers to declare constructor methods for classes.
      * Classes which have a constructor method call this method on each newly-created object,
@@ -47,9 +51,11 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
      *
      * param [ mixed $args [, $... ]]
      * @link http://php.net/manual/en/language.oop5.decon.php
+     * @param Logger $logger
      */
-    public function __construct()
+    public function __construct(Logger $logger)
     {
+        $this->logger = $logger;
         $this->users = new \SplObjectStorage;
     }
 
@@ -90,6 +96,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
      */
     public function onError(ConnectionInterface $conn, \Exception $e)
     {
+        $this->logger->err("Error and close: " . $e->getMessage() . ' ' . $e->getFile() . ' ' . $e->getLine());
         $conn->close();
     }
 
@@ -102,6 +109,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
     public function onMessage(ConnectionInterface $from, $msg)
     {
         try {
+            $this->logger->info("Client: " . $msg);
             $messageObject = $this->getMessageObject($msg);
 
             if ($this->container->get('validator')->validate($messageObject)->count() > 0) {
@@ -123,6 +131,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                     break;
             }
         } catch (\Exception $exception) {
+            $this->logger->err("Error on message: " . $exception->getMessage() . ' ' . $exception->getFile() . ' ' . $exception->getLine());
             $from->send($exception->getMessage());
         }
     }
@@ -226,10 +235,12 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
     {
         try {
             $this->container->get("ws.handler.client.message")->prepareMessageForUser($messageObject, $wsUser);
-            $wsUser->getConnection()->send(
-                $this->container->get('jms_serializer')->serialize($messageObject, 'json')
-            );
+            $message = $this->container->get('jms_serializer')->serialize($messageObject, 'json');
+            $this->logger->info("Server: " . $message);
+            $wsUser->getConnection()->send($message);
         } catch (\Exception $exception) {
+            $this->logger->err("Error on send: " . $exception->getMessage() . ' ' . $exception->getFile() . ' ' . 
+                $exception->getLine());
             $wsUser->getConnection()->send($exception->getMessage() . ' ' . $exception->getFile() . ' ' . $exception->getLine());
         }
     }

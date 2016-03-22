@@ -76,3 +76,10 @@ fos_rest:
         default_format: json
 
 nelmio_api_doc: ~
+
+monolog:
+    handlers:
+        ws:
+            type: stream
+            path: "%kernel.logs_dir%/ws.log"
+            level: info

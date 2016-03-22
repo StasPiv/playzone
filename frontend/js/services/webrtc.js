@@ -226,8 +226,7 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope, $loca
             }
         },
         sendMessage: function (message) {
-            return; // disable webRTC for test
-            sendChannel && sendChannel.readyState === 'open' && sendChannel.send(messageJson);
+            sendChannel && sendChannel.readyState === 'open' && sendChannel.send(JSON.stringify(message));
         },
         getPrefixGameRoomName: function () {
             return 'pfgame';

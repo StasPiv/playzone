@@ -6,7 +6,7 @@
     <property name="frontenddir" value="${workspace}/frontend" />
 
     <target name="build"
-            depends="vendors_install, vendors_update, migrate, npm, bower, cache-prod, gulp"/>
+            depends="vendors_install, vendors_update, migrate, npm, bower, cache-prod, gulp, killServer, startServer"/>
 
     <target name="check-composer-lock">
         <available file="${basedir}/composer.lock" property="composer.lock.present"/>
@@ -48,9 +48,15 @@
         </exec>
     </target>
 
-    <target name="websocket" description="Run ws server">
+    <target name="killServer">
+        <exec executable="pkill">
+            <arg line=" php -n -u jenkins"/>
+        </exec>
+    </target>
+
+    <target name="startServer" description="Run ws server">
         <exec executable="php" dir="${basedir}" failonerror="true">
-            <arg line="app/console websocket:server:start"/>
+            <arg line="app/console websocket:server:process"/>
         </exec>
     </target>
 

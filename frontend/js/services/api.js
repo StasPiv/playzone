@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneServices.factory('ApiService', function(EnvService, $rootScope) {
+playzoneServices.factory('ApiService', function(EnvService, $rootScope, $location) {
     var API_URL,
         registerUrl,
         authUrl,
@@ -29,7 +29,7 @@ playzoneServices.factory('ApiService', function(EnvService, $rootScope) {
             declineCallUrl = API_URL + '/?method=declinecall';
             break;
         case EnvService.prodMode:
-            API_URL = 'http://api.playzone-angular.lc/app_dev.php/';
+            API_URL = 'http://api.' + $location.host() + '/';
             registerUrl = API_URL + 'user/register';
             authUrl = API_URL + 'user/auth';
             getUsersUrl = API_URL + 'user/list';

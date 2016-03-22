@@ -3,10 +3,11 @@
  */
 'use strict';
 
-playzoneServices.factory('WebsocketService', function($websocket) {
+playzoneServices.factory('WebsocketService', function($websocket, $location) {
     var listenersMap = {};
     // Open a WebSocket connection
-    var dataStream = $websocket('ws://ws.playzone.immortalchess.net:8081/');
+    var webSocketPath = 'ws://ws.' + $location.host() + ':8081/';
+    var dataStream = $websocket(webSocketPath);
 
     dataStream.onMessage(
         function(message) {

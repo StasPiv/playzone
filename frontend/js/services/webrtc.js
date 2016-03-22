@@ -3,8 +3,9 @@
  */
 'use strict';
 
-playzoneServices.factory('WebRTCService', function($websocket, $rootScope) {
-    var wsSignaler = $websocket('ws://ws.playzone.immortalchess.net:8081/signaler');
+playzoneServices.factory('WebRTCService', function($websocket, $rootScope, $location) {
+    var wsSignalerPath = 'ws://ws.' + $location.host() + ':8081/signaler';
+    var wsSignaler = $websocket(wsSignalerPath);
 
     var receiveChannel;
     var leaveRoomHandlers = {};

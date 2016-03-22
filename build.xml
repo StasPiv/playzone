@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Playzone" default="build" basedir=".">
+    <property name="workspace" value="${basedir}" />
+    <property name="sourcedir" value="${basedir}/src" />
+    <property name="builddir" value="${workspace}/app/build" />
+    <property name="frontenddir" value="${workspace}/frontend" />
+
+    <target name="build"
+            depends="vendors_install, vendors_update, migrate, npm, bower, cache-prod, gulp"/>
+
+    <target name="check-composer-lock">
+        <available file="${basedir}/composer.lock" property="composer.lock.present"/>
+    </target>
+
+    <target name="vendors_install" description="Install vendors" depends="check-composer-lock" unless="composer.lock.present">
+        <exec executable="composer" failonerror="true">
+            <arg value="install"/>
+            <arg value="-o"/>
+            <arg value="--working-dir"/>
+            <arg path="${basedir}"/>
+        </exec>
+    </target>
+
+    <target name="vendors_update" description="Update vendors" depends="check-composer-lock" if="composer.lock.present">
+        <exec executable="composer" failonerror="true">
+            <arg value="update"/>
+            <arg value="-o"/>
+            <arg value="--working-dir"/>
+            <arg path="${basedir}"/>
+        </exec>
+    </target>
+
+    <target name="migrate" description="Use doctrine migration to update changes in the database schema">
+        <exec executable="php" dir="${basedir}" failonerror="true">
+            <arg line="app/console doctrine:migrations:migrate --no-interaction"/>
+        </exec>
+    </target>
+
+    <target name="npm" description="Install required frontend modules">
+        <exec executable="npm" dir="${frontenddir}" failonerror="true">
+            <arg line="install"/>
+        </exec>
+    </target>
+
+    <target name="bower" description="Install required frontend modules bower">
+        <exec executable="bower" dir="${frontenddir}" failonerror="true">
+            <arg line="update --allow-root -F"/>
+        </exec>
+    </target>
+
+    <target name="websocket" description="Run ws server">
+        <exec executable="php" dir="${basedir}" failonerror="true">
+            <arg line="app/console websocket:server:start"/>
+        </exec>
+    </target>
+
+    <target name="cache-prod" description="Clear cache on production">
+        <exec executable="php" dir="${basedir}" failonerror="true">
+            <arg line="app/console cache:clear --env=prod"/>
+        </exec>
+    </target>
+
+    <target name="gulp" description="Build static files">
+        <exec executable="gulp" dir="${frontenddir}" failonerror="true"></exec>
+    </target>
+</project>

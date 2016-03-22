@@ -3,8 +3,9 @@
  */
 'use strict';
 
-playzoneApp.config(['$routeProvider',
-    function($routeProvider) {
+playzoneApp.config(['$routeProvider', '$locationProvider',
+    function($routeProvider, $locationProvider) {
+        $locationProvider.hashPrefix('');
         $routeProvider.
             when('/', {
                 templateUrl: 'partials/games.html',

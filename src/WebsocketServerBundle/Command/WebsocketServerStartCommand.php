@@ -32,14 +32,20 @@ class WebsocketServerStartCommand extends ContainerAwareCommand
                 'port',
                 InputArgument::OPTIONAL,
                 'Define port',
-                1234
+                8081
+            )
+            ->addArgument(
+                'address',
+                InputArgument::OPTIONAL,
+                'Define port',
+                '0.0.0.0'
             )
             ->setDescription('Starting websocket server in symfony3');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $app = new RatchetApp($input->getArgument('host'), $input->getArgument('port'));
+        $app = new RatchetApp($input->getArgument('host'), $input->getArgument('port'), $input->getArgument('address'));
         $this->addPlayzoneServer($app);
         $this->addSignalerServer($app, $output);
         $output->writeln("Server starting on {$input->getArgument('host')}:{$input->getArgument('port')}...");

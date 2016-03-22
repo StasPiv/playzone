@@ -30,41 +30,44 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                         element.board.flip();
                     }
 
-                    if (!scope.game.color) {
-                        WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
-                            console.log('listener should do move');
+                    WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
+                        console.log('listener should do move');
 
-                            if (!data.encoded_pgn) { // it means that game is finished
-                                scope.game.$get();
-                                return;
-                            }
+                        if (!data.encoded_pgn) { // it means that game is finished
+                            scope.game.$get();
+                            return;
+                        }
 
-                            var receivedPgn = window.atob(data.encoded_pgn);
-                            console.log(receivedPgn);
+                        var receivedPgn = window.atob(data.encoded_pgn);
+                        console.log(receivedPgn);
 
-                            if (receivedPgn.length < scope.game.pgn.length) {
-                                return;
-                            }
+                        if (receivedPgn.length <= scope.game.pgn.length) {
+                            return;
+                        }
 
+                        if (!scope.game.color || scope.game.color === 'w') {
                             scope.my_time = data.time_white;
                             scope.opponent_time = data.time_black;
-                            scope.my_move = data.my_move;
+                        } else {
+                            scope.my_time = data.time_black;
+                            scope.opponent_time = data.time_white;
+                        }
+                        scope.my_move = !scope.my_move;
 
-                            scope.game.pgn = receivedPgn;
-                            element.game.load_pgn(receivedPgn);
-                            element.board.position(element.game.fen());
-                            element.updateStatus();
+                        scope.game.pgn = receivedPgn;
+                        element.game.load_pgn(receivedPgn);
+                        element.board.position(element.game.fen());
+                        element.updateStatus();
 
-                            if (element.game.game_over()) {
-                                setTimeout(
-                                    function () {
-                                        scope.game.$get();
-                                    },
-                                    1500
-                                );
-                            }
-                        });
-                    }
+                        if (element.game.game_over()) {
+                            setTimeout(
+                                function () {
+                                    scope.game.$get();
+                                },
+                                1500
+                            );
+                        }
+                    });
                 }
             );
 

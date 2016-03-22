@@ -8,6 +8,7 @@
 
 namespace CoreBundle\Model\Request\Call;
 
+use CoreBundle\Model\Request\Call\CallSend\Time;
 use CoreBundle\Model\Request\SecurityRequestInterface;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -58,6 +59,14 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
     private $color;
 
     /**
+     * @var Time
+     *
+     * @JMS\Expose()
+     * @JMS\Type("CoreBundle\Model\Request\Call\CallSend\Time")
+     */
+    private $time;
+
+    /**
      * @return string
      */
     public function getLogin()
@@ -85,10 +94,12 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
 
     /**
      * @param string $token
+     * @return $this
      */
     public function setToken($token)
     {
         $this->token = $token;
+        return $this;
     }
 
     /**
@@ -121,5 +132,24 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
     public function setColor($color)
     {
         $this->color = $color;
+    }
+
+    /**
+     * @return Time
+     */
+    public function getTime() : Time
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param Time $time
+     * @return CallPostSendRequest
+     */
+    public function setTime(Time $time) : CallPostSendRequest
+    {
+        $this->time = $time;
+
+        return $this;
     }
 }

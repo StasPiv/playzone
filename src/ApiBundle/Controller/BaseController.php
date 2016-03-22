@@ -107,10 +107,7 @@ abstract class BaseController extends FOSRestController
         $requestParams = $this->getRequestParams($request);
 
         foreach ($requestParams as $index => $param) {
-            if (is_array($param)) { // dropdown from angularjs
-                if (!isset($param['id'])) {
-                    throw new BadRequestHttpException("id is required");
-                }
+            if (is_array($param) && isset($param['id'])) { // dropdown from angularjs
                 $requestParams[$index] = $param['id'];
             }
         }

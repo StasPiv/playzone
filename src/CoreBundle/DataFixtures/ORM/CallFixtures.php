@@ -36,8 +36,13 @@ class CallFixtures extends AbstractPlayzoneFixtures
         }
 
         if (isset($data["game_params"])) {
-            $gameParams = new GameParams();
-            $gameParams->setColor(new GameColor($data["game_params"]["color"]));
+            /** @var GameParams $gameParams */
+            $gameParams = $this->container->get("jms_serializer")->deserialize(
+                json_encode($data["game_params"]),
+                'CoreBundle\Model\Game\GameParams',
+                'json'
+            );
+            
             $gameCall->setGameParams($gameParams);
         }
 

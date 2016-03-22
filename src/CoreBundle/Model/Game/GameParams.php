@@ -64,18 +64,18 @@ class GameParams
     }
 
     /**
-     * @return GameColor
+     * @return int
      */
-    public function getTimeBase()
+    public function getTimeBase() : int
     {
         return $this->timeBase;
     }
 
     /**
-     * @param GameColor $timeBase
+     * @param int $timeBase
      * @return GameParams
      */
-    public function setTimeBase($timeBase)
+    public function setTimeBase(int $timeBase) : GameParams
     {
         $this->timeBase = $timeBase;
 

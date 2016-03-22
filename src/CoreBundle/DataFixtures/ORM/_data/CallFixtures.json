@@ -4,7 +4,8 @@
     "fromUser": "user-test-login",
     "toUser": "user-stas",
     "game_params": {
-      "color": "w"
+      "color": "w",
+      "time_base": 300000
     }
   },
   {
@@ -12,14 +13,16 @@
     "fromUser": "user-petro",
     "toUser": "user-test-login",
     "game_params": {
-      "color": "b"
+      "color": "b",
+      "time_base": 300000
     }
   },
   {
     "referenceName": "game-call-2",
     "fromUser": "user-petro",
     "game_params": {
-      "color": "w"
+      "color": "w",
+      "time_base": 300000
     }
   }
 ]

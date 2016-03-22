@@ -408,7 +408,7 @@ class Game
      *
      * @return Game
      */
-    public function setTimeWhite($timeWhite)
+    public function setTimeWhite(int $timeWhite) : Game
     {
         $this->timeWhite = $timeWhite;
 
@@ -432,7 +432,7 @@ class Game
      *
      * @return Game
      */
-    public function setTimeBlack($timeBlack)
+    public function setTimeBlack(int $timeBlack) : Game
     {
         $this->timeBlack = $timeBlack;
 

@@ -60,10 +60,12 @@ class CallDeleteRemoveRequest extends CallRequest implements SecurityRequestInte
 
     /**
      * @param string $login
+     * @return CallDeleteRemoveRequest
      */
-    public function setLogin($login)
+    public function setLogin($login) : CallDeleteRemoveRequest
     {
         $this->login = $login;
+        return $this;
     }
 
     /**

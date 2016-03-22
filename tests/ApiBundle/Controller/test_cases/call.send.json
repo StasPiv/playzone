@@ -9,6 +9,9 @@
       "color": {
         "id": "w"
       },
+      "time": {
+        "base": 300000
+      },
       "games_count": 2
     },
     "response": {
@@ -27,6 +30,9 @@
       "player": "Stas",
       "color": {
         "id": "w"
+      },
+      "time": {
+        "base": 300000
       },
       "games_count": 2
     },
@@ -47,6 +53,9 @@
       "color": {
         "id": "w"
       },
+      "time": {
+        "base": 300000
+      },
       "games_count": 2
     },
     "response": {
@@ -66,6 +75,9 @@
       "color": {
         "id": "ewhite"
       },
+      "time": {
+        "base": 300000
+      },
       "games_count": 2
     },
     "response": {
@@ -83,6 +95,9 @@
       "player": "Stas",
       "color": {
         "id": "w"
+      },
+      "time": {
+        "base": 300000
       },
       "games_count": 1
     },
@@ -110,6 +125,9 @@
       "color": {
         "id": "w"
       },
+      "time": {
+        "base": 300000
+      },
       "games_count": 2
     },
     "response": {
@@ -132,6 +150,9 @@
       "color": {
         "id": "w"
       },
+      "time": {
+        "base": 300000
+      },
       "games_count": 1
     },
     "response": {
@@ -146,6 +167,52 @@
         "game_params": {
           "color": "b"
         }
+      }
+    }
+  },
+  "correct_call_with_time": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "color": {
+        "id": "w"
+      },
+      "time": {
+        "base": 300000
+      },
+      "games_count": 1
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "from_user": {
+          "login": "TestLogin",
+          "email": "test-login@yandex.ru",
+          "class": "D",
+          "rating": 2243
+        },
+        "game_params": {
+          "color": "b",
+          "time_base": 300000
+        }
+      }
+    }
+  },
+  "incorrect_call_without_time": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "color": {
+        "id": "w"
+      },
+      "games_count": 1
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "time": "Time is required for this request"
       }
     }
   }

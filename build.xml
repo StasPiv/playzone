@@ -5,20 +5,8 @@
     <property name="builddir" value="${workspace}/app/build" />
     <property name="frontenddir" value="${workspace}/frontend" />
 
-    <target name="killServer">
-        <exec executable="pkill">
-            <arg line=" php -n -u jenkins"/>
-        </exec>
-    </target>
-
-    <target name="startServer" description="Run ws server">
-        <exec executable="php" dir="${basedir}" failonerror="true">
-            <arg line="app/console websocket:server:process"/>
-        </exec>
-    </target>
-
     <target name="build"
-            depends="killServer, startServer, vendors_install, vendors_update, migrate, npm, bower, cache-prod, gulp"/>
+            depends="vendors_install, vendors_update, migrate, npm, bower, cache-prod, gulp, killServer, dontKillMe, startServer"/>
 
     <target name="check-composer-lock">
         <available file="${basedir}/composer.lock" property="composer.lock.present"/>
@@ -68,5 +56,23 @@
 
     <target name="gulp" description="Build static files">
         <exec executable="gulp" dir="${frontenddir}" failonerror="true"></exec>
+    </target>
+
+    <target name="killServer">
+        <exec executable="pkill">
+            <arg line=" php -n -u jenkins"/>
+        </exec>
+    </target>
+
+    <target name="dontKillMe" description="Dont kill server">
+        <exec executable="export" dir="${basedir}" failonerror="true">
+            <arg line="BUILD_ID=dontKillMe"/>
+        </exec>
+    </target>
+
+    <target name="startServer" description="Run ws server">
+        <exec executable="php" dir="${basedir}" failonerror="true">
+            <arg line="app/console websocket:server:process"/>
+        </exec>
     </target>
 </project>

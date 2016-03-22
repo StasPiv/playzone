@@ -65,10 +65,8 @@
     </target>
 
     <target name="startServer" description="Run ws server">
-        <record name="log.txt" action="start"/>
         <exec executable="php" dir="${basedir}" failonerror="true">
-            <arg line="app/console websocket:server:process"/>
+            <arg line="app/console websocket:server:start ws.playzone.immortalchess.net &"/>
         </exec>
-        <record name="log.txt" action="stop"/>
     </target>
 </project>

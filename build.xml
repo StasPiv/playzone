@@ -6,7 +6,7 @@
     <property name="frontenddir" value="${workspace}/frontend" />
 
     <target name="build"
-            depends="vendors_install, vendors_update, migrate, npm, bower, cache-prod, gulp, killServer, dontKillMe, startServer"/>
+            depends="vendors_install, vendors_update, migrate, npm, bower, cache-prod, gulp, killServer, startServer"/>
 
     <target name="check-composer-lock">
         <available file="${basedir}/composer.lock" property="composer.lock.present"/>
@@ -64,14 +64,9 @@
         </exec>
     </target>
 
-    <target name="dontKillMe" description="Dont kill server">
-        <exec executable="export" dir="${basedir}" failonerror="true">
-            <arg line="BUILD_ID=dontKillMe"/>
-        </exec>
-    </target>
-
     <target name="startServer" description="Run ws server">
         <exec executable="php" dir="${basedir}" failonerror="true">
+            <env key="BUILD_ID" value="dontKillMe"/>
             <arg line="app/console websocket:server:process"/>
         </exec>
     </target>

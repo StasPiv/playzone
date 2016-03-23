@@ -2,6 +2,7 @@
 # Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
 # http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
+    database_driver: pdo_mysql
     database_host:     127.0.0.1
     database_port:     ~
     database_name:     playzone_symfony
@@ -17,3 +18,15 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+    app_immortalchess.database_driver: pdo_mysql
+    app_immortalchess.database_host: '192.168.102.101'
+    app_immortalchess.database_port: null
+    app_immortalchess.database_name: 'immortalchess'
+    app_immortalchess.database_user: 'immortal223'
+    app_immortalchess.database_password: '31415926535897'
+    app_immortalchess.test.database_driver: pdo_mysql
+    app_immortalchess.test.database_host: 'localhost'
+    app_immortalchess.test.database_port: null
+    app_immortalchess.test.database_name: 'immortalchess'
+    app_immortalchess.test.database_user: 'immortalchess'
+    app_immortalchess.test.database_password: '123456'

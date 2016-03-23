@@ -2418,16 +2418,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v3.0.14",
+            "version": "v3.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "cccf975c565ccd835bddc30a8fea5cdfe3357bf1"
+                "reference": "40431d338da7ab4ef5f9edc1ba4551ea1d4d0782"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/cccf975c565ccd835bddc30a8fea5cdfe3357bf1",
-                "reference": "cccf975c565ccd835bddc30a8fea5cdfe3357bf1",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/40431d338da7ab4ef5f9edc1ba4551ea1d4d0782",
+                "reference": "40431d338da7ab4ef5f9edc1ba4551ea1d4d0782",
                 "shasum": ""
             },
             "require": {
@@ -2476,7 +2476,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2016-03-01 10:50:07"
+            "time": "2016-03-22 12:39:08"
         },
         {
             "name": "sensiolabs/security-checker",
@@ -3688,16 +3688,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "7c293efb29c54f10398e4c9667043c0c3342e1a7"
+                "reference": "1272a24a211075c2664df69cd90e23f65bd7aea1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/7c293efb29c54f10398e4c9667043c0c3342e1a7",
-                "reference": "7c293efb29c54f10398e4c9667043c0c3342e1a7",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/1272a24a211075c2664df69cd90e23f65bd7aea1",
+                "reference": "1272a24a211075c2664df69cd90e23f65bd7aea1",
                 "shasum": ""
             },
             "require": {
-                "pdepend/pdepend": "~2.0",
+                "pdepend/pdepend": "^2.0.4",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -3745,7 +3745,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2016-03-10 17:26:30"
+            "time": "2016-03-22 11:34:36"
         },
         {
             "name": "phpspec/prophecy",
@@ -4161,12 +4161,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6572c14ed74aa0eb2879fea073b62dd17a7b62d0"
+                "reference": "11112cb8939ca3d0c4ffb4799652edbbbec7e7d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6572c14ed74aa0eb2879fea073b62dd17a7b62d0",
-                "reference": "6572c14ed74aa0eb2879fea073b62dd17a7b62d0",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/11112cb8939ca3d0c4ffb4799652edbbbec7e7d5",
+                "reference": "11112cb8939ca3d0c4ffb4799652edbbbec7e7d5",
                 "shasum": ""
             },
             "require": {
@@ -4228,7 +4228,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-03-15 06:01:32"
+            "time": "2016-03-23 10:10:18"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -4236,12 +4236,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "0a6d198af94d02956f2eb8bd59d5ab3166dc85da"
+                "reference": "d31a42fc62b45f99d978f6bb21977e1e9d0d496f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/0a6d198af94d02956f2eb8bd59d5ab3166dc85da",
-                "reference": "0a6d198af94d02956f2eb8bd59d5ab3166dc85da",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/d31a42fc62b45f99d978f6bb21977e1e9d0d496f",
+                "reference": "d31a42fc62b45f99d978f6bb21977e1e9d0d496f",
                 "shasum": ""
             },
             "require": {
@@ -4284,7 +4284,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-03-09 13:33:49"
+            "time": "2016-03-23 17:52:45"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

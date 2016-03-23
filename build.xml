@@ -60,7 +60,7 @@
 
     <target name="killServer">
         <exec executable="pkill">
-            <arg line=" php -n -u jenkins"/>
+            <arg line=" -x php -n -u jenkins"/>
         </exec>
     </target>
 

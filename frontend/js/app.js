@@ -15,9 +15,9 @@ var playzoneApp = angular.module('playzoneApp', [
 ]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'WebsocketService', function ($http, $rootScope, $cookies, UserRest, WebsocketService) {
 
     $rootScope.user = new UserRest({
-        login: $cookies.get("user_login"),
-        token: $cookies.get("user_token"),
-        password: $cookies.get("user_token")
+        login: $rootScope.user ? $rootScope.user.login : $cookies.get("user_login"),
+        token: $rootScope.user ? $rootScope.user.token : $cookies.get("user_token"),
+        password: $rootScope.user ? $rootScope.user.token : $cookies.get("user_token")
     });
 
     $rootScope.user.$auth().then(

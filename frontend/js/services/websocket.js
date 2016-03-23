@@ -9,7 +9,7 @@ playzoneServices.factory('WebsocketService', function($websocket, $location) {
     var webSocketPath = 'ws://ws.' + $location.host() + ':8081/';
     var dataStream = $websocket(webSocketPath);
 
-    dataStream.onmessage(
+    dataStream.onMessage(
         function(message) {
             console.log('test', message);
             var receivedMessage = angular.fromJson(message.data);

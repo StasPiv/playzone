@@ -44,8 +44,12 @@ playzoneServices.factory('ApiService', function(EnvService, $rootScope, $locatio
     return {
         getSecurityParams: function() {
             return {
-                login: $rootScope.user.login,
-                token: $rootScope.user.token
+                login: function () {
+                    return $rootScope.user.login;
+                },
+                token: function () {
+                    return $rootScope.user.token;
+                }
             }
         },
         base_url : API_URL,

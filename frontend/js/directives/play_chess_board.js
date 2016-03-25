@@ -10,36 +10,26 @@
  * element.game - chess.js plugin (with pgn functions etc.)
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
-playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLocalStorageService, WebsocketService, $interval) {
+playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService) {
     return {
         restrict: 'C',
         link: function(scope, element) {
             scope.game.$promise.then(
                 function() {
                     element.loadBoard(scope.boardConfig);
-                    var localStoredPgn = ChessLocalStorageService.getPgn(scope.game.id);
-
-                    if (!localStoredPgn || localStoredPgn.length < scope.game.pgn.length) {
-                        ChessLocalStorageService.setPgn(scope.game.id, scope.game.pgn);
-                        localStoredPgn = scope.game.pgn;
-                    }
-
-                    element.loadPgn(localStoredPgn);
+                    element.loadPgn(scope.game.pgn);
 
                     if (scope.game.color === 'b') {
                         element.board.flip();
                     }
 
                     WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
-                        console.log('listener should do move');
-
                         if (!data.encoded_pgn) { // it means that game is finished
                             scope.game.$get();
                             return;
                         }
 
                         var receivedPgn = window.atob(data.encoded_pgn);
-                        console.log(receivedPgn);
 
                         if (receivedPgn.length <= scope.game.pgn.length) {
                             return;
@@ -69,10 +59,8 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
             element.onMove = function (move) {
                 WebRTCService.sendMessage({
                     gameId: scope.game.id,
-                    move: move,
-                    opponent_time: scope.opponent_time
+                    move: move
                 });
-                ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
                 scope.game.pgn = element.game.pgn();
                 scope.savePgnAndTime();
 
@@ -116,7 +104,6 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
                     element.game.move(webRTCMessage.move);
 
                     scope.game.pgn = element.game.pgn();
-                    ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
 
                     if (!element.board) {
                         return;

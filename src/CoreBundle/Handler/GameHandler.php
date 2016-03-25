@@ -144,6 +144,12 @@ class GameHandler implements GameProcessorInterface
             $game->setResultWhite(1)->setResultBlack(0)->setStatus(GameStatus::END);
         }
 
+        if ($this->container->get("core.service.chess")->isGameInCheckmate($game->getPgn())) {
+            $game->setResultWhite((int)($game->getUserToMove() === $game->getUserBlack()))
+                 ->setResultBlack((int)($game->getUserToMove() === $game->getUserWhite()))
+                 ->setStatus(GameStatus::END);
+        }
+
         $this->manager->flush($game);
 
         return $this->getUserGame($game, $me);

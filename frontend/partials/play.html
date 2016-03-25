@@ -7,7 +7,7 @@
         <div ng-if="game.status == 'end'" class="pgn"></div>
         <div class="clear">&nbsp;</div>
         <div class="chess-timer" data-time="my_time_format" data-zeitnot="gameConfig.zeitnotLimit"></div>
-        <div class="action" ng-controller="PlayActionCtrl" ng-if="game.status == 'play' && game.mine">
+        <div class="action" ng-if="game.status == 'play' && game.mine">
             <span ng-class="{'offered': game.draw && game.draw !== game.color}" class="button draw"
                   ng-click="draw()">{{ "Draw" |
                 translate

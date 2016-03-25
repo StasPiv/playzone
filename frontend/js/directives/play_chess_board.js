@@ -24,8 +24,14 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     }
 
                     WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
-                        if (!data.encoded_pgn) { // it means that game is finished
-                            scope.game.$get();
+                        if (!data.encoded_pgn && scope.game.status === 'play') {
+                            // it means that game is finished or drawn and we have to fix result
+                            scope.game.$get().then( // get game from server
+                                function () {
+                                    scope.game.mine && element.game.game_over() &&
+                                    !element.game.in_checkmate() && scope.draw(); // fix draw
+                                }
+                            );
                             return;
                         }
 
@@ -39,15 +45,6 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                         element.game.load_pgn(receivedPgn);
                         element.board.position(element.game.fen());
                         element.updateStatus();
-
-                        if (element.game.game_over()) {
-                            setTimeout(
-                                function () {
-                                    scope.game.$get();
-                                },
-                                1500
-                            );
-                        }
                     });
                 }
             );
@@ -62,42 +59,14 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     move: move
                 });
                 scope.game.pgn = element.game.pgn();
-                scope.savePgnAndTime();
+                scope.savePgnAndSendToObservers();
 
-                WebsocketService.sendGameToObservers(
-                    scope.game.id,
-                    window.btoa(scope.game.pgn)
-                );
-
-                if (element.game.game_over()) {
-                    switch (true) {
-                        case element.game.in_checkmate():
-                            break;
-                        default:
-                            scope.game.$offerDraw();
-                            break;
-                    }
-
-                    setTimeout(
-                        function () {
-                            scope.game.$get();
-                        },
-                        1500
-                    );
-                }
+                element.game.game_over() && !element.game.in_checkmate() && scope.draw();
             };
 
             WebRTCService.addMessageListener(
                 function (webRTCMessage) {
-                    if (scope.game.status !== 'play') {
-                        return;
-                    }
-                    console.log('webRTCMessage', webRTCMessage);
-                    if (!webRTCMessage.gameId || webRTCMessage.gameId !== scope.game.id) {
-                        return;
-                    }
-
-                    if (webRTCMessage.draw || webRTCMessage.resign) {
+                    if (scope.game.status !== 'play' || !webRTCMessage.gameId || webRTCMessage.gameId !== scope.game.id) {
                         return;
                     }
 
@@ -111,18 +80,6 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                     element.board.position(element.game.fen());
                     element.updateStatus();
-
-                    if (element.game.game_over()) {
-                        switch (true) {
-                            case element.game.in_checkmate():
-                                console.log(webRTCMessage);
-                                scope.resign();
-                                break;
-                            default:
-                                scope.game.$acceptDraw();
-                                break;
-                        }
-                    }
                 },
                 'move'
             );

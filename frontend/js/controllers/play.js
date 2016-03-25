@@ -48,22 +48,33 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         );
     };
 
-    $scope.timeLost = function () {
-        $scope.game.$timeLost().then(
+    $scope.draw = function () {
+        $scope.opponentOfferDraw = $scope.game.draw && $scope.game.draw !== $scope.game.color;
+
+        if ($scope.opponentOfferDraw) {
+            $scope.game.$acceptDraw().then(
+                function () {
+                    WebsocketService.sendGameToObservers($scope.game.id);
+                }
+            );
+            return;
+        }
+
+        $scope.game.$offerDraw().then(
             function () {
-                WebRTCService.sendMessage({
-                    gameId: $scope.game.id,
-                    resign: true
-                });
                 WebsocketService.sendGameToObservers($scope.game.id);
             }
         );
     };
 
-    $scope.savePgnAndTime = function () {
+    $scope.savePgnAndSendToObservers = function () {
         $scope.game.$savePgn().then(
             function () {
-                WebsocketService.sendGameToObservers($scope.game.id);
+                if ($scope.game.status === 'play') {
+                    WebsocketService.sendGameToObservers($scope.game.id, window.btoa($scope.game.pgn));
+                } else {
+                    WebsocketService.sendGameToObservers($scope.game.id);
+                }
             }
         );
     };

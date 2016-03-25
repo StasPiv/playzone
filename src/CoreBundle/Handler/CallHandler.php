@@ -189,8 +189,7 @@ class CallHandler implements CallProcessorInterface
             $me,
             $this->getOpponentColor($call->getGameParams()->getColor())->getValue()
         );
-        $game->setStatus(GameStatus::PLAY);
-
+        
         $this->manager->persist($game);
         $this->manager->flush();
 

@@ -44,12 +44,12 @@
             "rating": 2243
           },
           "user_to_move": {
-            "login": "TestLogin",
-            "email": "test-login@yandex.ru",
-            "class": "D",
-            "rating": 2243
+            "login": "Stas",
+            "email": "piv1986@yandex.ru",
+            "class": "N",
+            "rating": 2200
           },
-          "user_move": true,
+          "user_move": false,
           "opponent": {
             "login": "Stas",
             "email": "piv1986@yandex.ru",
@@ -124,10 +124,10 @@
             "rating": 2243
           },
           "user_to_move": {
-            "login": "TestLogin",
-            "email": "test-login@yandex.ru",
-            "class": "D",
-            "rating": 2243
+            "login": "Stas",
+            "email": "piv1986@yandex.ru",
+            "class": "N",
+            "rating": 2200
           },
           "status": "play",
           "rate": false,
@@ -147,10 +147,10 @@
             "rating": 2443
           },
           "user_to_move": {
-            "login": "Petro",
-            "email": "petro@yandex.ru",
-            "class": "D",
-            "rating": 2443
+            "login": "Stas",
+            "email": "piv1986@yandex.ru",
+            "class": "N",
+            "rating": 2200
           },
           "status": "play",
           "rate": false,

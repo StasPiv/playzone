@@ -373,7 +373,7 @@ class GameHandler implements GameProcessorInterface
                 throw new GameHandlerException("Color is incorrect");
         }
 
-        $game->setStatus(GameStatus::CALL)
+        $game->setStatus(GameStatus::PLAY)
             ->setTimeLastMove(new \DateTime())
             ->setUserToMove($game->getUserWhite());
 

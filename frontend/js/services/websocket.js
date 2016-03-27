@@ -83,10 +83,10 @@ playzoneServices.factory('WebsocketService', function($websocket, $location) {
          *
          * @param gameId
          * @param encodedPgn
-         * @param timeWhite
-         * @param timeBlack
+         * @param opponentTime
+         * @param color
          */
-        sendGameToObservers: function(gameId, encodedPgn, timeWhite, timeBlack) {
+        sendGameToObservers: function (gameId, encodedPgn, opponentTime, color) {
             if (!encodedPgn) {
                 this.sendDataToLogins(
                     'game_finish',
@@ -103,8 +103,8 @@ playzoneServices.factory('WebsocketService', function($websocket, $location) {
                     data: {
                         game_id: gameId,
                         encoded_pgn: encodedPgn,
-                        time_white: timeWhite,
-                        time_black: timeBlack
+                        time: opponentTime,
+                        color: color
                     }
                 }
             )

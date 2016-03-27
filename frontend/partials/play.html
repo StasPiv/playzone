@@ -2,16 +2,30 @@
     <h1>{{game.user_white.login}} - {{game.user_black.login}}</h1>
     <h2 ng-if="game.status == 'end'">{{game.result_white}} - {{game.result_black}}</h2>
     <div class="play-chess-board chess-board-legal" data-board="board">
-        <div class="chess-timer" data-time="opponent_time_format" data-zeitnot="gameConfig.zeitnotLimit"></div>
+        <chess-timer
+                class="white"
+                data-time="game.time_white"
+                data-zeitnot="gameConfig.zeitnotLimit"
+                data-current="game.move_color === 'w'"
+                data-game="game"
+                data-fix-time="savePgnAndSendToObservers()"
+        ></chess-timer>
+        <chess-timer
+                class="black"
+                data-time="game.time_black"
+                data-zeitnot="gameConfig.zeitnotLimit"
+                data-current="game.move_color === 'b'"
+                data-game="game"
+                data-fix-time="savePgnAndSendToObservers()"
+        ></chess-timer>
+        <div class="clear">&nbsp;</div>
         <div id="board"></div>
         <div ng-if="game.status == 'end'" class="pgn"></div>
         <div class="clear">&nbsp;</div>
-        <div class="chess-timer" data-time="my_time_format" data-zeitnot="gameConfig.zeitnotLimit"></div>
         <div class="action" ng-if="game.status == 'play' && game.mine">
-            <span ng-class="{'offered': game.draw && game.draw !== game.color}" class="button draw"
-                  ng-click="draw()">{{ "Draw" |
-                translate
-                }}</span>
+            <span ng-class="{'offered': game.draw && game.draw !== game.color}"
+                  class="button draw"
+                  ng-click="draw()">{{ "Draw" | translate }}</span>
             <span class="button resign" ng-click="resign()">{{ "Resign" | translate }}</span>
         </div>
     </div>

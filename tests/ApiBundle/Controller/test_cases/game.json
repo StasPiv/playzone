@@ -29,7 +29,8 @@
         "status": "play",
         "rate": false,
         "time_over": false,
-        "mine": false
+        "mine": false,
+        "move_color": "w"
       }
     }
   },
@@ -75,7 +76,8 @@
         "status": "play",
         "rate": false,
         "time_over": false,
-        "mine": true
+        "mine": true,
+        "move_color": "w"
       }
     }
   }

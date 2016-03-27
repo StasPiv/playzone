@@ -71,7 +71,10 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         $scope.game.$savePgn().then(
             function () {
                 if ($scope.game.status === 'play') {
-                    WebsocketService.sendGameToObservers($scope.game.id, window.btoa($scope.game.pgn));
+                    var opponentTime = $scope.game.color === 'w' ? 
+                                       $scope.game.time_black :
+                                       $scope.game.time_white;
+                    WebsocketService.sendGameToObservers($scope.game.id, window.btoa($scope.game.pgn), opponentTime, $scope.game.color);
                 } else {
                     WebsocketService.sendGameToObservers($scope.game.id);
                 }

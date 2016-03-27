@@ -35,6 +35,14 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                             return;
                         }
 
+                        scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
+
+                        if (data.color === 'w') {
+                            scope.game.time_black = data.time;
+                        } else {
+                            scope.game.time_white = data.time;
+                        }
+
                         var receivedPgn = window.atob(data.encoded_pgn);
 
                         if (receivedPgn.length <= scope.game.pgn.length) {

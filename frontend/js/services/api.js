@@ -29,7 +29,13 @@ playzoneServices.factory('ApiService', function(EnvService, $rootScope, $locatio
             declineCallUrl = API_URL + '/?method=declinecall';
             break;
         case EnvService.prodMode:
-            API_URL = 'http://api.' + $location.host() + '/';
+            var host = $location.host();
+
+            if (host.indexOf('.lc') !== -1) {
+                host += '/app_dev.php';
+            }
+
+            API_URL = 'http://api.' + host + '/';
             registerUrl = API_URL + 'user/register';
             authUrl = API_URL + 'user/auth';
             getUsersUrl = API_URL + 'user/list';

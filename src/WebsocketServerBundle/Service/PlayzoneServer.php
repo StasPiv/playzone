@@ -124,7 +124,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                     $this->sendToUsers($messageObject);
                     break;
                 case PlayzoneClientMessageScope::SEND_TO_GAME_OBSERVERS:
-                    $this->sendToGameObservers($messageObject);
+                    $this->sendToGameObservers($messageObject, $from);
                     break;
                 case PlayzoneClientMessageScope::SUBSCRIBE_TO_GAME:
                     $this->addGameForListen($messageObject, $from);
@@ -212,15 +212,17 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
 
     /**
      * @param PlayzoneMessage $messageObject
+     * @param ConnectionInterface $from
      */
-    private function sendToGameObservers(PlayzoneMessage $messageObject)
+    private function sendToGameObservers(PlayzoneMessage $messageObject, ConnectionInterface $from)
     {
         /** @var ClientMessageGameSend $gameSendMessage */
         $gameSendMessage = $this->getObjectFromJson(json_encode($messageObject->getData()),
             'WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSend');
 
         foreach ($this->users as $wsUser) {
-            if (isset($wsUser->getGamesToListenMap()[$gameSendMessage->getGameId()])) {
+            if ($wsUser->getConnection() != $from && isset($wsUser->getGamesToListenMap()[$gameSendMessage->getGameId()
+                ])) {
                 $messageObject->setMethod("game_pgn_" . $gameSendMessage->getGameId());
                 $this->send($messageObject, $wsUser);
             }

@@ -12,6 +12,7 @@
  */
 playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService) {
     var highlightLastMove = function (scope, element) {
+        $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
         var history = element.game.history({verbose: true});
         var lastMove = history[history.length - 1];
         $(element).find('.square-' + lastMove.from).addClass(scope.boardConfig.highlightClass);

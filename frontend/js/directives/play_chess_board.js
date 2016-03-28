@@ -11,6 +11,35 @@
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
 playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService) {
+    var highlightLastMove = function (scope, element) {
+        var history = element.game.history({verbose: true});
+        var lastMove = history[history.length - 1];
+        $(element).find('.square-' + lastMove.from).addClass(scope.boardConfig.highlightClass);
+        $(element).find('.square-' + lastMove.to).addClass(scope.boardConfig.highlightClass);
+    };
+
+    var makePreMoveIfExists = function (scope, element) {
+        if (!scope.game.mine || !scope.pre_move) { //premove
+            return;
+        }
+
+        if (!element.game.move(scope.pre_move)) {
+            scope.pre_move = false;
+            return;
+        }
+
+        scope.game.pgn = element.game.pgn();
+
+        if (!element.board) {
+            return;
+        }
+
+        element.board.position(element.game.fen());
+        element.updateStatus();
+        element.onMove(scope.pre_move);
+        scope.pre_move = false;
+    };
+
     return {
         restrict: 'C',
         link: function(scope, element) {
@@ -35,6 +64,8 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                             return;
                         }
 
+                        highlightLastMove(scope, element);
+
                         scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
 
                         if (data.color === 'w') {
@@ -46,6 +77,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                         var receivedPgn = window.atob(data.encoded_pgn);
 
                         if (receivedPgn.length <= scope.game.pgn.length) {
+                            makePreMoveIfExists(scope, element);
                             return;
                         }
 
@@ -53,15 +85,19 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                         element.game.load_pgn(receivedPgn);
                         element.board.position(element.game.fen());
                         element.updateStatus();
+                        
+                        makePreMoveIfExists(scope, element);
                     });
                 }
             );
 
-            element.onDragStart = function () {
+            element.onDragStart = function (source) {
                 return scope.game.status === 'play' && element.game.turn() === scope.game.color;
             };
 
             element.onMove = function (move) {
+                scope.current_move = scope.pre_move = false;
+                $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
                 WebRTCService.sendMessage({
                     gameId: scope.game.id,
                     move: move

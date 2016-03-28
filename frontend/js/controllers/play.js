@@ -5,7 +5,8 @@
 
 playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, $interval, dateFilter) {
     $scope.boardConfig = {
-        pieceType: 'leipzig'
+        pieceType: 'leipzig',
+        highlightClass: 'highlight1-32417'
     };
 
     $scope.gameConfig = {

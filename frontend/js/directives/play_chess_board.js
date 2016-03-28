@@ -64,8 +64,6 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                             return;
                         }
 
-                        highlightLastMove(scope, element);
-
                         scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
 
                         if (data.color === 'w') {
@@ -77,6 +75,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                         var receivedPgn = window.atob(data.encoded_pgn);
 
                         if (receivedPgn.length <= scope.game.pgn.length) {
+                            highlightLastMove(scope, element);
                             makePreMoveIfExists(scope, element);
                             return;
                         }
@@ -85,7 +84,8 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                         element.game.load_pgn(receivedPgn);
                         element.board.position(element.game.fen());
                         element.updateStatus();
-                        
+
+                        highlightLastMove(scope, element);
                         makePreMoveIfExists(scope, element);
                     });
                 }

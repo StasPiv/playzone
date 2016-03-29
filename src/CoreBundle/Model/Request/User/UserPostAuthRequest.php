@@ -56,10 +56,12 @@ class UserPostAuthRequest extends UserRequest implements SecurityRequestInterfac
 
     /**
      * @param string $login
+     * @return $this|string
      */
     public function setLogin($login)
     {
         $this->login = $login;
+        return $this;
     }
 
     /**

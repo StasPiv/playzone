@@ -92,5 +92,23 @@
         "isAuth": true
       }
     }
+  },
+  "correct_from_immortal": {
+    "method": "POST",
+    "request": {
+      "login": "Stanis",
+      "password": "010586"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "login": "Stanis",
+        "email": "loveliverpool@yandex.ru",
+        "rating": 2200,
+        "class": "N",
+        "token": "3d52e11a00cc7463f8d34805f5ff22e5",
+        "isAuth": true
+      }
+    }
   }
 }

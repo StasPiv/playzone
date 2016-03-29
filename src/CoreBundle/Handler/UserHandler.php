@@ -76,9 +76,9 @@ class UserHandler implements UserProcessorInterface
 
         $user = new User();
 
-        $user->setLogin($registerRequest->getLogin());
-        $user->setEmail($registerRequest->getEmail());
-        $user->setPassword($this->generatePasswordHash($registerRequest->getPassword()));
+        $user->setLogin($registerRequest->getLogin())
+             ->setEmail($registerRequest->getEmail())
+             ->setPassword($this->generatePasswordHash($registerRequest->getPassword()));
 
         $this->saveUser($user);
 
@@ -90,22 +90,17 @@ class UserHandler implements UserProcessorInterface
      * @param UserPostAuthRequest $authError
      * @return User
      */
-    public function processPostAuth(UserPostAuthRequest $authRequest, UserPostAuthRequest $authError)
+    public function processPostAuth(UserPostAuthRequest $authRequest, UserPostAuthRequest $authError) : User
     {
         if ($authRequest->getToken()) {
-            $user = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($authRequest, $authError);
-            return $user;
+            return $this->container->get("core.service.security")->getUserIfCredentialsIsOk($authRequest, $authError);
         }
 
-        $user = $this->repository->findOneByLogin($authRequest->getLogin());
+        $user = $this->tryToFindUserInBothDatabases($authRequest, $authError);
 
-        switch (true) {
-            case !$user instanceof User:
-                $authError->setLogin("The login is not found");
-                break;
-            case $user->getPassword() != $this->generatePasswordHash($authRequest->getPassword()):
-                $authError->setPassword("The password is not correct");
-                break;
+        if ($user->getPassword() != $this->generatePasswordHash($authRequest->getPassword())) {
+            $authError->setPassword("The password is not correct");
+            $authError->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
         $this->container->get("core.service.error")->throwExceptionIfHasErrors($authError, ResponseStatusCode::FORBIDDEN);
@@ -161,4 +156,30 @@ class UserHandler implements UserProcessorInterface
         return md5($password);
     }
 
+    /**
+     * @param UserPostAuthRequest $authRequest
+     * @param UserPostAuthRequest $authError
+     * @return User
+     */
+    private function tryToFindUserInBothDatabases(UserPostAuthRequest $authRequest, UserPostAuthRequest $authError) : User
+    {
+        $user = $this->repository->findOneByLogin($authRequest->getLogin());
+
+        if ($user instanceof User) {
+            return $user;
+        }
+
+        $user = $this->container->get('core.service.immortalchessnet')
+                     ->getUser($authRequest->getLogin(),$authRequest->getPassword());
+
+        if (!$user->getEmail()) {
+            $authError->setLogin("The login is not found");
+            $authError->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        $user->setPassword($this->generatePasswordHash($authRequest->getPassword()));
+        $this->saveUser($user);
+
+        return $user;
+    }
 }

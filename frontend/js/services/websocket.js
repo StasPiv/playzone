@@ -3,32 +3,43 @@
  */
 'use strict';
 
-playzoneServices.factory('WebsocketService', function($websocket, $location) {
+playzoneServices.factory('WebsocketService', function($websocket, $location, $interval) {
     var listenersMap = {};
     // Open a WebSocket connection
     var webSocketPath = 'ws://ws.' + $location.host() + ':8081/';
-    var dataStream = $websocket(webSocketPath);
+    var dataStream;
 
-    dataStream.onMessage(
-        function(message) {
-            console.log('test', message);
-            var receivedMessage = angular.fromJson(message.data);
+    function createDataStream() {
+        dataStream = $websocket(webSocketPath);
+        dataStream.onMessage(
+            function (message) {
+                console.log('test', message);
+                var receivedMessage = angular.fromJson(message.data);
 
-            if (!receivedMessage.method || !receivedMessage.data) {
-                return;
+                if (!receivedMessage.method || !receivedMessage.data) {
+                    return;
+                }
+
+                if (!listenersMap[receivedMessage.method]) {
+                    return;
+                }
+
+                angular.forEach(listenersMap[receivedMessage.method], function (callback) {
+                    callback(receivedMessage.data);
+                });
             }
+        );
+    }
 
-            if (!listenersMap[receivedMessage.method]) {
-                return;
-            }
-
-            angular.forEach(listenersMap[receivedMessage.method], function (callback) {
-                callback(receivedMessage.data);
-            });
-        }
-    );
+    createDataStream();
 
     return {
+        reconnect: function (user) {
+            if (dataStream.readyState !== 1) {
+                createDataStream();
+                this.introduction(user);
+            }
+        },
         addListener: function(listenerName, methodToListen, callback) {
             if (typeof callback !== 'function') {
                 return;
@@ -83,11 +94,10 @@ playzoneServices.factory('WebsocketService', function($websocket, $location) {
          *
          * @param gameId
          * @param encodedPgn
-         * @param timeWhite
-         * @param timeBlack
-         * @param my_move
+         * @param opponentTime
+         * @param color
          */
-        sendGameToObservers: function(gameId, encodedPgn, timeWhite, timeBlack, my_move) {
+        sendGameToObservers: function (gameId, encodedPgn, opponentTime, color) {
             if (!encodedPgn) {
                 this.sendDataToLogins(
                     'game_finish',
@@ -104,9 +114,8 @@ playzoneServices.factory('WebsocketService', function($websocket, $location) {
                     data: {
                         game_id: gameId,
                         encoded_pgn: encodedPgn,
-                        time_white: timeWhite,
-                        time_black: timeBlack,
-                        my_move: my_move
+                        time: opponentTime,
+                        color: color
                     }
                 }
             )

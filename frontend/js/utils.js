@@ -19,7 +19,7 @@ var pad = function (num, size) {
     return s.substr(s.length-size);
 };
 
-function formatTime(timeMs, dateFilter) {
+function getBlitzTimeObject(timeMs, dateFilter) {
     var date = new Date(1970, 0, 1);
     date.setMilliseconds(timeMs);
 

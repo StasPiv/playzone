@@ -11,11 +11,9 @@ namespace WebsocketServerBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Ratchet\App as RatchetApp;
 use WebsocketServerBundle\Service\PlayzoneServer;
-use WebsocketServerBundle\Service\Signaling\Server\GameSignalerServer;
 
 class WebsocketServerStartCommand extends ContainerAwareCommand
 {
@@ -57,7 +55,7 @@ class WebsocketServerStartCommand extends ContainerAwareCommand
      */
     private function addPlayzoneServer(RatchetApp $app)
     {
-        $playzoneServer = new PlayzoneServer();
+        $playzoneServer = $this->getContainer()->get("ws.playzone.server");
         $playzoneServer->setContainer($this->getContainer());
         $app->route('/', $playzoneServer, ['*']);
     }

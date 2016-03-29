@@ -10,133 +10,114 @@
  * element.game - chess.js plugin (with pgn functions etc.)
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
-playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLocalStorageService, WebsocketService, $interval) {
+playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService) {
+    var highlightLastMove = function (scope, element) {
+        $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
+        var history = element.game.history({verbose: true});
+        var lastMove = history[history.length - 1];
+        $(element).find('.square-' + lastMove.from).addClass(scope.boardConfig.highlightClass);
+        $(element).find('.square-' + lastMove.to).addClass(scope.boardConfig.highlightClass);
+    };
+
+    var makePreMoveIfExists = function (scope, element) {
+        if (!scope.game.mine || !scope.pre_move) { //premove
+            return;
+        }
+
+        if (!element.game.move(scope.pre_move)) {
+            scope.pre_move = false;
+            return;
+        }
+
+        scope.game.pgn = element.game.pgn();
+
+        if (!element.board) {
+            return;
+        }
+
+        element.board.position(element.game.fen());
+        element.updateStatus();
+        element.onMove(scope.pre_move);
+        scope.pre_move = false;
+    };
+
     return {
         restrict: 'C',
         link: function(scope, element) {
             scope.game.$promise.then(
                 function() {
                     element.loadBoard(scope.boardConfig);
-                    var localStoredPgn = ChessLocalStorageService.getPgn(scope.game.id);
-
-                    if (!localStoredPgn || localStoredPgn.length < scope.game.pgn.length) {
-                        ChessLocalStorageService.setPgn(scope.game.id, scope.game.pgn);
-                        localStoredPgn = scope.game.pgn;
-                    }
-
-                    element.loadPgn(localStoredPgn);
+                    element.loadPgn(scope.game.pgn);
 
                     if (scope.game.color === 'b') {
                         element.board.flip();
                     }
 
                     WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
-                        console.log('listener should do move');
-
-                        if (!data.encoded_pgn) { // it means that game is finished
-                            scope.game.$get();
+                        if (!data.encoded_pgn && scope.game.status === 'play') {
+                            // it means that game is finished or drawn and we have to fix result
+                            scope.game.$get().then( // get game from server
+                                function () {
+                                    scope.game.mine && element.game.game_over() &&
+                                    !element.game.in_checkmate() && scope.draw(); // fix draw
+                                }
+                            );
                             return;
+                        }
+
+                        scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
+
+                        if (data.color === 'w') {
+                            scope.game.time_black = data.time;
+                        } else {
+                            scope.game.time_white = data.time;
                         }
 
                         var receivedPgn = window.atob(data.encoded_pgn);
-                        console.log(receivedPgn);
 
                         if (receivedPgn.length <= scope.game.pgn.length) {
+                            highlightLastMove(scope, element);
+                            makePreMoveIfExists(scope, element);
                             return;
                         }
-
-                        if (!scope.game.color || scope.game.color === 'w') {
-                            scope.my_time = data.time_white;
-                            scope.opponent_time = data.time_black;
-                        } else {
-                            scope.my_time = data.time_black;
-                            scope.opponent_time = data.time_white;
-                        }
-                        scope.my_move = !scope.my_move;
 
                         scope.game.pgn = receivedPgn;
                         element.game.load_pgn(receivedPgn);
                         element.board.position(element.game.fen());
                         element.updateStatus();
 
-                        if (element.game.game_over()) {
-                            setTimeout(
-                                function () {
-                                    scope.game.$get();
-                                },
-                                1500
-                            );
-                        }
+                        highlightLastMove(scope, element);
+                        makePreMoveIfExists(scope, element);
                     });
                 }
             );
 
-            element.onDragStart = function () {
+            element.onDragStart = function (source) {
                 return scope.game.status === 'play' && element.game.turn() === scope.game.color;
             };
 
             element.onMove = function (move) {
+                scope.current_move = scope.pre_move = false;
+                $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
                 WebRTCService.sendMessage({
                     gameId: scope.game.id,
-                    move: move,
-                    my_time: scope.my_time,
-                    opponent_time: scope.opponent_time
+                    move: move
                 });
-                ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
                 scope.game.pgn = element.game.pgn();
-                scope.savePgnAndTime();
+                scope.savePgnAndSendToObservers();
 
-                WebsocketService.sendGameToObservers(
-                    scope.game.id,
-                    window.btoa(scope.game.pgn),
-                    scope.game.color === 'w' ? scope.my_time : scope.opponent_time,
-                    scope.game.color === 'b' ? scope.my_time : scope.opponent_time,
-                    scope.game.color !== 'w'
-                );
-
-                scope.my_move = false;
-
-                if (element.game.game_over()) {
-                    switch (true) {
-                        case element.game.in_checkmate():
-                            break;
-                        default:
-                            scope.game.$offerDraw();
-                            break;
-                    }
-
-                    setTimeout(
-                        function () {
-                            scope.game.$get();
-                        },
-                        1500
-                    );
-                }
+                element.game.game_over() && !element.game.in_checkmate() && scope.draw();
             };
 
             WebRTCService.addMessageListener(
                 function (webRTCMessage) {
-                    if (scope.game.status !== 'play') {
+                    if (scope.game.status !== 'play' || !webRTCMessage.gameId || webRTCMessage.gameId !== scope.game.id) {
                         return;
                     }
-                    console.log('webRTCMessage', webRTCMessage);
-                    if (!webRTCMessage.gameId || webRTCMessage.gameId !== scope.game.id) {
-                        return;
-                    }
-
-                    if (webRTCMessage.draw || webRTCMessage.resign) {
-                        return;
-                    }
-
-                    scope.my_move = true;
 
                     element.game.move(webRTCMessage.move);
 
-                    // synchronize times (no lag compensation here)
-                    webRTCMessage.opponent_time && (scope.my_time = webRTCMessage.opponent_time);
-
                     scope.game.pgn = element.game.pgn();
-                    ChessLocalStorageService.setPgn(scope.game.id, element.game.pgn());
 
                     if (!element.board) {
                         return;
@@ -144,22 +125,6 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, ChessLo
 
                     element.board.position(element.game.fen());
                     element.updateStatus();
-
-                    if (element.game.game_over()) {
-                        switch (true) {
-                            case element.game.in_checkmate():
-                                console.log(webRTCMessage);
-                                scope.resign();
-                                break;
-                            default:
-                                scope.game.$acceptDraw();
-                                break;
-                        }
-                    }
-
-                    if (scope.game.my_time < 0) {
-                        scope.resign();
-                    }
                 },
                 'move'
             );

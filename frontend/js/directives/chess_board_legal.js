@@ -7,6 +7,25 @@
  * This small library is useful for separating drag&drop logic and application logic
  */
 playzoneControllers.directive('chessBoardLegal', function () {
+    function doMoveOnTheBoard(scope, element, to) {
+        scope.current_move.to = to; // move by click&click
+
+        if (!element.game.move(scope.current_move)) {
+            scope.current_move = scope.pre_move = false;
+            return;
+        }
+
+        scope.game.pgn = element.game.pgn();
+
+        if (!element.board) {
+            return;
+        }
+
+        element.board.position(element.game.fen());
+        element.updateStatus();
+        element.onMove(scope.current_move);
+    }
+
     return {
         restrict: 'C',
         link: function(scope, element) {
@@ -19,6 +38,16 @@ playzoneControllers.directive('chessBoardLegal', function () {
             // do not pick up pieces if the game is over
             // only pick up pieces for the side to move
             var onDragStart = function(source, piece, position, orientation) {
+                if (!scope.current_move) {
+                    scope.current_move = { from: source }; // for move click&click
+                } else {
+                    doMoveOnTheBoard(scope, element, source);
+                    return true;
+                }
+
+                if (!scope.pre_move) {
+                    return true;
+                }
                 if (element.onDragStart && !element.onDragStart()) {
                     return false;
                 }
@@ -30,6 +59,9 @@ playzoneControllers.directive('chessBoardLegal', function () {
             };
 
             var onDrop = function(source, target) {
+                if (element.game.turn() !== scope.game.color) {
+                    scope.pre_move = {from: source, to: target};
+                }
                 // see if the move is legal
                 var moveObject = {
                     from: source,
@@ -47,6 +79,14 @@ playzoneControllers.directive('chessBoardLegal', function () {
                     element.onMove(moveObject);
                 }
             };
+
+            $(element).on('click', '[class*="square"]', function () {
+                if (!scope.current_move) {
+                    return;
+                }
+
+                doMoveOnTheBoard(scope, element, $(this).data('square'));
+            });
 
             // update the board position after the piece snap
             // for castling, en passant, pawn promotion

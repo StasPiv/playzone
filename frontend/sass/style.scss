@@ -527,12 +527,39 @@ th.header {
       margin-left: 5px;
       width: 400px;
     }
-    .chess-timer {
-      text-align: center;
-      width: $board_width;
-      font-size: 26px;
-      .timer.zeitnot {
-        color: $red
+    chess-timer {
+      &.white {
+        * {
+          background-color: $white;
+          color: $black;
+        }
+        .timer {
+          border-color: $white;
+        }
+      }
+      &.black {
+        * {
+          background-color: $black;
+          color: $white;
+        }
+        .timer {
+          border-color: $black;
+        }
+      }
+      .timer {
+        width: ($board_width - 8) / 2;
+        float: left;
+        text-align: center;
+        border: 2px solid;
+        &.zeitnot {
+          color: $red
+        }
+        &.active {
+          border-color: $red;
+        }
+        span {
+          font-size: 26px;
+        }
       }
     }
     .action {

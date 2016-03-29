@@ -16,3 +16,7 @@ services:
         arguments: ['@service_container']
     core.service.chess:
         class: CoreBundle\Service\ChessService
+    core.service.immortalchessnet:
+        class: CoreBundle\Service\ImmortalchessnetService
+        calls:
+          - [setContainer, ['@service_container']]

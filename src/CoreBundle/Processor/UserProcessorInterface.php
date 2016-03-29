@@ -31,7 +31,7 @@ interface UserProcessorInterface extends ProcessorInterface
      * @param UserPostAuthRequest $authError
      * @return User
      */
-    public function processPostAuth(UserPostAuthRequest $authRequest, UserPostAuthRequest $authError);
+    public function processPostAuth(UserPostAuthRequest $authRequest, UserPostAuthRequest $authError) : User;
 
     /**
      * @param UserGetListRequest $listRequest

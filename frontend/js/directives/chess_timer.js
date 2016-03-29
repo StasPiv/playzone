@@ -3,12 +3,39 @@
  */
 'use strict';
 
-playzoneControllers.directive('chessTimer', function () {
+playzoneControllers.directive('chessTimer', function (dateFilter, $interval) {
     return {
-        restrict: 'C',
+        link: function (scope, element) {
+            scope.timer = $interval(
+                function () {
+                    if (scope.time === 0) {
+                        $interval.cancel(scope.timer);
+                        scope.fixTime();
+                    }
+
+                    if (scope.game.status === 'end') {
+                        $interval.cancel(scope.timer);
+                    }
+                    
+                    scope.timeFormat = getBlitzTimeObject(scope.time, dateFilter);
+
+                    if (!scope.current) {
+                        return;
+                    }
+
+                    scope.time -= 100;
+                },
+                100
+            );
+        },
+        restrict: 'E',
+        transclude: true,
         scope: {
             time: '=',
-            zeitnot: '='
+            zeitnot: '=',
+            current: '=',
+            game: '=',
+            fixTime: '&fixTime'
         },
         templateUrl: 'partials/chess_timer.html'
     }

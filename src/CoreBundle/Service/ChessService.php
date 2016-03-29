@@ -9,6 +9,8 @@
 namespace CoreBundle\Service;
 
 
+use CoreBundle\Entity\Game;
+
 class ChessService
 {
     /**
@@ -27,5 +29,14 @@ class ChessService
     public function decodePgn($pgnEncoded)
     {
         return base64_decode($pgnEncoded);
+    }
+
+    /**
+     * @param string $pgn
+     * @return bool
+     */
+    public function isGameInCheckmate(string $pgn) : bool
+    {
+        return substr($pgn, -1, 1) === '#';
     }
 }

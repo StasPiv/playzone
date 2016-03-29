@@ -2,6 +2,7 @@
 
 namespace CoreBundle\Entity;
 
+use CoreBundle\Model\Game\GameColor;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 
@@ -633,6 +634,18 @@ class Game
         $this->draw = $draw;
 
         return $this;
+    }
+
+    /**
+     * @JMS\VirtualProperty()
+     * @JMS\SerializedName("move_color")
+     * @JMS\Type("string")
+     *
+     * @return GameColor
+     */
+    public function getMoveColor() : GameColor
+    {
+        return $this->getUserWhite() == $this->getUserToMove() ? GameColor::WHITE() : GameColor::BLACK();
     }
 }
 

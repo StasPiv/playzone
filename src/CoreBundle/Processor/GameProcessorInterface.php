@@ -15,48 +15,49 @@ use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Game\GamePutResignRequest;
+use CoreBundle\Model\Request\RequestError;
 
 interface GameProcessorInterface extends ProcessorInterface
 {
     /**
      * @param GameGetListRequest $listRequest
-     * @param GameGetListRequest $listError
-     * @return Game[]
+     * @param RequestError $listError
+     * @return \CoreBundle\Entity\Game[]
      */
-    public function processGetList(GameGetListRequest $listRequest, GameGetListRequest $listError);
+    public function processGetList(GameGetListRequest $listRequest, RequestError $listError);
 
     /**
      * @param GameGetRequest $gameRequest
-     * @param GameGetRequest $gameError
+     * @param RequestError $gameError
      * @return Game
      */
-    public function processGet(GameGetRequest $gameRequest, GameGetRequest $gameError);
+    public function processGet(GameGetRequest $gameRequest, RequestError $gameError);
 
     /**
      * @param GamePutPgnRequest $pgnRequest
-     * @param GamePutPgnRequest $pgnError
+     * @param RequestError $pgnError
      * @return Game
      */
-    public function processPutPgn(GamePutPgnRequest $pgnRequest, GamePutPgnRequest $pgnError);
+    public function processPutPgn(GamePutPgnRequest $pgnRequest, RequestError $pgnError);
 
     /**
      * @param GamePutResignRequest $resignRequest
-     * @param GamePutResignRequest $resignError
+     * @param RequestError $resignError
      * @return Game
      */
-    public function processPutResign(GamePutResignRequest $resignRequest, GamePutResignRequest $resignError);
+    public function processPutResign(GamePutResignRequest $resignRequest, RequestError $resignError);
 
     /**
      * @param GamePutOfferdrawRequest $drawRequest
-     * @param GamePutOfferdrawRequest $drawError
+     * @param RequestError $drawError
      * @return Game
      */
-    public function processPutOfferdraw(GamePutOfferdrawRequest $drawRequest, GamePutOfferdrawRequest $drawError);
+    public function processPutOfferdraw(GamePutOfferdrawRequest $drawRequest, RequestError $drawError);
 
     /**
      * @param GamePutAcceptdrawRequest $drawRequest
-     * @param GamePutAcceptdrawRequest $drawError
+     * @param RequestError $drawError
      * @return Game
      */
-    public function processPutAcceptdraw(GamePutAcceptdrawRequest $drawRequest, GamePutAcceptdrawRequest $drawError);
+    public function processPutAcceptdraw(GamePutAcceptdrawRequest $drawRequest, RequestError $drawError);
 }

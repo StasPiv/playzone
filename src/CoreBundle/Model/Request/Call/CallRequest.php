@@ -14,11 +14,5 @@ use CoreBundle\Exception\Processor\ProcessorException;
 
 abstract class CallRequest implements RequestInterface
 {
-    /**
-     * @param $code
-     */
-    public function throwException($code)
-    {
-        throw new CallProcessorException($this, $code);
-    }
+    
 }

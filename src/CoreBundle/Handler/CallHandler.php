@@ -16,6 +16,7 @@ use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallGetRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Call\CallDeleteAcceptRequest;
+use CoreBundle\Model\Request\RequestError;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
@@ -56,10 +57,10 @@ class CallHandler implements CallProcessorInterface
 
     /**
      * @param CallGetRequest $getRequest
-     * @param CallGetRequest $getError
-     * @return GameCall[]
+     * @param RequestError $getError
+     * @return \CoreBundle\Entity\GameCall[]
      */
-    public function processGet(CallGetRequest $getRequest, CallGetRequest $getError)
+    public function processGet(CallGetRequest $getRequest, RequestError $getError)
     {
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($getRequest, $getError);
 
@@ -102,10 +103,10 @@ class CallHandler implements CallProcessorInterface
 
     /**
      * @param CallPostSendRequest $sendRequest
-     * @param CallPostSendRequest $sendError
-     * @return GameCall[]
+     * @param RequestError $sendError
+     * @return \CoreBundle\Entity\GameCall[]
      */
-    public function processPostSend(CallPostSendRequest $sendRequest, CallPostSendRequest $sendError)
+    public function processPostSend(CallPostSendRequest $sendRequest, RequestError $sendError)
     {
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($sendRequest, $sendError);
 
@@ -114,7 +115,7 @@ class CallHandler implements CallProcessorInterface
             $opponent = $this->container->get("core.handler.user")->getRepository()->findOneByLogin($sendRequest->getPlayer());
 
             if (!$opponent instanceof User) {
-                $sendError->setPlayer("Opponent with this login is not found");
+                $sendError->addError("player", "Opponent with this login is not found");
                 $sendError->throwException(ResponseStatusCode::NOT_FOUND);
             }
         } else {
@@ -140,22 +141,22 @@ class CallHandler implements CallProcessorInterface
 
     /**
      * @param CallDeleteRemoveRequest $removeRequest
-     * @param CallDeleteRemoveRequest $removeError
+     * @param RequestError $removeError
      * @return GameCall
      */
-    public function processDeleteRemove(CallDeleteRemoveRequest $removeRequest, CallDeleteRemoveRequest $removeError)
+    public function processDeleteRemove(CallDeleteRemoveRequest $removeRequest, RequestError $removeError)
     {
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($removeRequest, $removeError);
 
         $call = $this->repository->find($removeRequest->getCallId());
 
         if (!$call instanceof GameCall) {
-            $removeError->setCallId("Call is not found");
+            $removeError->addError("call_id", "Call is not found");
             $removeError->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
         if ($call->getFromUser() != $me) {
-            $removeError->setLogin("This is not your call");
+            $removeError->addError("login", "This is not your call");
             $removeError->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
@@ -168,17 +169,17 @@ class CallHandler implements CallProcessorInterface
 
     /**
      * @param CallDeleteAcceptRequest $acceptRequest
-     * @param CallDeleteAcceptRequest $acceptError
+     * @param RequestError $acceptError
      * @return Game
      */
-    public function processDeleteAccept(CallDeleteAcceptRequest $acceptRequest, CallDeleteAcceptRequest $acceptError)
+    public function processDeleteAccept(CallDeleteAcceptRequest $acceptRequest, RequestError $acceptError)
     {
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($acceptRequest, $acceptError);
 
         $call = $this->repository->find($acceptRequest->getCallId());
 
         if (!$call instanceof GameCall) {
-            $acceptError->setCallId("Call is not found");
+            $acceptError->addError("call_id", "Call is not found");
             $acceptError->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
@@ -204,36 +205,26 @@ class CallHandler implements CallProcessorInterface
      */
     private function getOpponentColor(GameColor $color)
     {
-        switch ($color) {
-            case GameColor::WHITE():
-                return GameColor::BLACK();
-            case GameColor::BLACK():
-                return GameColor::WHITE();
-            default:
-                return GameColor::WHITE();
-        }
+        return $color == GameColor::WHITE() ? GameColor::BLACK() : GameColor::WHITE();
     }
 
     /**
      * @param CallDeleteDeclineRequest $declineRequest
-     * @param CallDeleteDeclineRequest $declineError
+     * @param RequestError $declineError
      * @return GameCall
      */
-    public function processDeleteDecline(
-        CallDeleteDeclineRequest $declineRequest,
-        CallDeleteDeclineRequest $declineError
-    ) {
+    public function processDeleteDecline(CallDeleteDeclineRequest $declineRequest, RequestError $declineError) {
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($declineRequest, $declineError);
 
         $call = $this->repository->find($declineRequest->getCallId());
 
         if (!$call instanceof GameCall) {
-            $declineError->setCallId("Call is not found");
+            $declineError->addError("call_id", "Call is not found");
             $declineError->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
         if ($call->getToUser() != $me) {
-            $declineError->setLogin("This is not call to you");
+            $declineError->addError("login", "This is not call to you");
             $declineError->throwException(ResponseStatusCode::FORBIDDEN);
         }
 

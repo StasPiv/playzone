@@ -8,10 +8,12 @@
 
 namespace ApiBundle\Controller;
 
+use CoreBundle\Model\Request\RequestError;
 use CoreBundle\Model\Request\RequestInterface;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Processor\ProcessorInterface;
+use Doctrine\Common\Util\Inflector;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,7 +62,11 @@ abstract class BaseController extends FOSRestController
      * @param int $successStatusCode
      * @return Response
      */
-    protected function process(Request $request, RequestInterface $requestObject, $successStatusCode = ResponseStatusCode::OK)
+    protected function process(
+        Request $request, 
+        RequestInterface $requestObject, 
+        $successStatusCode = ResponseStatusCode::OK
+    )
     {
         $data = [];
         try {
@@ -68,11 +74,13 @@ abstract class BaseController extends FOSRestController
             $actionType = str_replace([$requestMethod, 'Action'], '', debug_backtrace()[1]['function']);
             $actionName = 'process' . ucfirst($requestMethod) . ucfirst($actionType);
 
-            $errorRequestObject = clone $requestObject;
+            $errorRequestObject = new RequestError();
+
             $requestObject = $this->fillRequestObjectWithRequest($request, $requestObject);
 
             foreach ($this->container->get('validator')->validate($requestObject) as $error) {
-                $errorRequestObject->{'set'.ucfirst($error->getPropertyPath())}($error->getMessage());
+                /** @var ConstraintViolation $error */
+                $errorRequestObject->addError(strtolower(preg_replace("/([A-Z])/", "_$1", $error->getPropertyPath())), $error->getMessage());
             }
 
             $this->container->get("core.service.error")->throwExceptionIfHasErrors($errorRequestObject, ResponseStatusCode::BAD_FORMAT);
@@ -81,7 +89,7 @@ abstract class BaseController extends FOSRestController
 
             $statusCode = $successStatusCode;
         } catch (ProcessorException $exception) {
-            $data = $exception->getRequestError();
+            $data = $exception->getRequestError()->getErrors();
             $statusCode = $exception->getCode();
         } catch (\Exception $exception) {
             $data['errorMessage'] = $exception->getMessage();
@@ -105,7 +113,7 @@ abstract class BaseController extends FOSRestController
     private function fillRequestObjectWithRequest(Request $request, RequestInterface $requestObject)
     {
         $requestParams = $this->getRequestParams($request);
-
+        
         foreach ($requestParams as $index => $param) {
             if (is_array($param) && isset($param['id'])) { // dropdown from angularjs
                 $requestParams[$index] = $param['id'];
@@ -114,7 +122,7 @@ abstract class BaseController extends FOSRestController
 
         $serializer = $this->container->get('jms_serializer');
         $requestObject = $serializer->deserialize(json_encode($requestParams), get_class($requestObject), 'json');
-
+        
         return $requestObject;
     }
 }

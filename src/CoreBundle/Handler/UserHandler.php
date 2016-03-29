@@ -8,6 +8,7 @@
 
 namespace CoreBundle\Handler;
 
+use CoreBundle\Model\Request\RequestError;
 use CoreBundle\Model\Request\User\UserGetListRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserPostRegisterRequest;
@@ -55,21 +56,21 @@ class UserHandler implements UserProcessorInterface
 
     /**
      * @param UserPostRegisterRequest $registerRequest
-     * @param UserPostRegisterRequest $registerError
+     * @param RequestError $registerError
      * @return User
      */
-    public function processPostRegister(UserPostRegisterRequest $registerRequest, UserPostRegisterRequest $registerError)
+    public function processPostRegister(UserPostRegisterRequest $registerRequest, RequestError $registerError) : User
     {
         if ($this->repository->findOneByEmail($registerRequest->getEmail())) {
-            $registerError->setEmail('This email was already registered');
+            $registerError->addError("email", 'This email was already registered');
         }
 
         if ($this->repository->findOneByLogin($registerRequest->getLogin())) {
-            $registerError->setLogin('This login was already registered');
+            $registerError->addError("login", 'This login was already registered');
         }
 
         if ($registerRequest->getPassword() != $registerRequest->getPasswordRepeat()) {
-            $registerError->setPasswordRepeat('The password repeat should be the same');
+            $registerError->addError("password_repeat", 'The password repeat should be the same');
         }
 
         $this->container->get("core.service.error")->throwExceptionIfHasErrors($registerError, ResponseStatusCode::FORBIDDEN);
@@ -82,15 +83,17 @@ class UserHandler implements UserProcessorInterface
 
         $this->saveUser($user);
 
+        $this->generateUserToken($user);
+
         return $user;
     }
 
     /**
      * @param UserPostAuthRequest $authRequest
-     * @param UserPostAuthRequest $authError
+     * @param RequestError $authError
      * @return User
      */
-    public function processPostAuth(UserPostAuthRequest $authRequest, UserPostAuthRequest $authError) : User
+    public function processPostAuth(UserPostAuthRequest $authRequest, RequestError $authError) : User
     {
         if ($authRequest->getToken()) {
             return $this->container->get("core.service.security")->getUserIfCredentialsIsOk($authRequest, $authError);
@@ -99,11 +102,13 @@ class UserHandler implements UserProcessorInterface
         $user = $this->tryToFindUserInBothDatabases($authRequest, $authError);
 
         if ($user->getPassword() != $this->generatePasswordHash($authRequest->getPassword())) {
-            $authError->setPassword("The password is not correct");
+            $authError->addError("password", "The password is not correct");
             $authError->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
         $this->container->get("core.service.error")->throwExceptionIfHasErrors($authError, ResponseStatusCode::FORBIDDEN);
+
+        $this->generateUserToken($user);
 
         return $user;
     }
@@ -135,6 +140,7 @@ class UserHandler implements UserProcessorInterface
     public function getUserByLoginAndToken($login, $token)
     {
         $user = $this->repository->findOneByLogin($login);
+        $this->generateUserToken($user);
 
         if (!$user instanceof User) {
             return null;
@@ -158,10 +164,10 @@ class UserHandler implements UserProcessorInterface
 
     /**
      * @param UserPostAuthRequest $authRequest
-     * @param UserPostAuthRequest $authError
+     * @param RequestError $authError
      * @return User
      */
-    private function tryToFindUserInBothDatabases(UserPostAuthRequest $authRequest, UserPostAuthRequest $authError) : User
+    private function tryToFindUserInBothDatabases(UserPostAuthRequest $authRequest, RequestError $authError) : User
     {
         $user = $this->repository->findOneByLogin($authRequest->getLogin());
 
@@ -173,7 +179,7 @@ class UserHandler implements UserProcessorInterface
                      ->getUser($authRequest->getLogin(),$authRequest->getPassword());
 
         if (!$user->getEmail()) {
-            $authError->setLogin("The login is not found");
+            $authError->addError("login", "The login is not found");
             $authError->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
@@ -181,5 +187,13 @@ class UserHandler implements UserProcessorInterface
         $this->saveUser($user);
 
         return $user;
+    }
+
+    /**
+     * @param User $user
+     */
+    private function generateUserToken(User $user)
+    {
+        $user->setToken(md5($user->getLogin() . $user->getPassword()));
     }
 }

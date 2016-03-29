@@ -11,9 +11,4 @@ namespace CoreBundle\Model\Request;
 interface RequestInterface
 {
 
-    /**
-     * @param $code
-     * @return
-     */
-    public function throwException($code);
 }

@@ -14,12 +14,5 @@ use CoreBundle\Exception\Processor\ProcessorException;
 
 abstract class GameRequest implements RequestInterface
 {
-    /**
-     * @param $code
-     */
-    public function throwException($code)
-    {
-        throw new GameProcessorException($this, $code);
-    }
-
+    
 }

@@ -138,7 +138,8 @@
             "login": "Stas",
             "email": "piv1986@yandex.ru",
             "class": "N",
-            "rating": 2200
+            "rating": 2200,
+            "token": ""
           },
           "user_black": {
             "login": "Petro",

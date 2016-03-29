@@ -102,7 +102,13 @@ abstract class BaseControllerTest extends WebTestCase
 
             if (intval($expectedResponse['status'] / 100) == 2) { // successful responses
                 $this->assertNotEmpty($actualResponse, $errorMessage);
-                $this->assertActualContainsExpected($actualResponse, $expectedResponse['data'], $errorMessage);
+                try {
+                    $this->assertActualContainsExpected($actualResponse, $expectedResponse['data'], $errorMessage);
+                } catch (\Exception $e) {
+                    file_put_contents(__DIR__ . '/../../../../var/logs/last_fail_actual_response.json',
+                        $client->getResponse()->getContent());
+                    throw $e;
+                }
             }
 
             if (isset($data['session'])) {
@@ -137,8 +143,7 @@ abstract class BaseControllerTest extends WebTestCase
                 $this->assertActualContainsExpected($actualData[$key], $expectedChunk, $errorMessage);
                 $multiDimensional = true;
             } else {
-                $this->assertEquals($expectedChunk, $actualData[$key],
-                    $errorMessage . PHP_EOL . "`$key` is not correct");
+                $this->assertEquals($expectedChunk, $actualData[$key], $errorMessage . PHP_EOL . "`$key` is not correct");
             }
         }
 

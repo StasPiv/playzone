@@ -14,11 +14,5 @@ use CoreBundle\Exception\Processor\UserProcessorException;
 
 abstract class UserRequest implements RequestInterface
 {
-    /**
-     * @param $code
-     */
-    public function throwException($code)
-    {
-        throw new UserProcessorException($this, $code);
-    }
+    
 }

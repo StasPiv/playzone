@@ -63,6 +63,10 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
      *
      * @JMS\Expose()
      * @JMS\Type("CoreBundle\Model\Request\Call\CallSend\Time")
+     *
+     * @Assert\NotBlank(
+     *     message="Time is required for this request"
+     * )
      */
     private $time;
 

@@ -9,6 +9,7 @@
 namespace CoreBundle\Service;
 
 use CoreBundle\Exception\Processor\ProcessorException;
+use CoreBundle\Model\Request\RequestError;
 use CoreBundle\Model\Request\RequestInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -27,17 +28,17 @@ class ErrorService
     }
 
     /**
-     * @param RequestInterface $errorObject
+     * @param RequestError $requestError
      * @param int $code
      * @throws ProcessorException
      */
-    public function throwExceptionIfHasErrors($errorObject, $code)
+    public function throwExceptionIfHasErrors(RequestError $requestError, $code)
     {
-        $className = get_class($errorObject);
+        $className = get_class($requestError);
         $initialState = new $className;
 
-        if ($initialState != $errorObject) {
-            $errorObject->throwException($code);
+        if ($initialState != $requestError) {
+            $requestError->throwException($code);
         }
     }
 }

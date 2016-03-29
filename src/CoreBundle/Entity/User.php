@@ -105,6 +105,14 @@ class User
     private $class = 'N';
 
     /**
+     * @var string
+     *
+     * @JMS\Expose
+     * @JMS\Type("string")
+     */
+    private $token = '';
+
+    /**
      * @var int
      *
      * @ORM\Column(name="rating", type="integer")
@@ -653,14 +661,22 @@ class User
     }
 
     /**
-     * @JMS\VirtualProperty
-     * @JMS\SerializedName("token")
-     *
+     * @param string $token
+     * @return User
+     */
+    public function setToken($token) : User
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
-    public function getToken()
+    public function getToken() : string
     {
-        return md5($this->getLogin() . $this->getPassword());
+        return $this->token;
     }
 
     /**

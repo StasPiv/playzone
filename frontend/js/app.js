@@ -12,7 +12,7 @@ var playzoneApp = angular.module('playzoneApp', [
     'playzoneServices',
     'pascalprecht.translate',
     'LocalStorageModule'
-]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'WebsocketService', function ($http, $rootScope, $cookies, UserRest, WebsocketService) {
+]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'WebsocketService', '$interval', function ($http, $rootScope, $cookies, UserRest, WebsocketService, $interval) {
 
     $rootScope.user = new UserRest({
         login: $rootScope.user ? $rootScope.user.login : $cookies.get("user_login"),
@@ -23,6 +23,12 @@ var playzoneApp = angular.module('playzoneApp', [
     $rootScope.user.$auth().then(
         function() {
             WebsocketService.introduction($rootScope.user);
+            $interval(
+                function () {
+                    WebsocketService.reconnect($rootScope.user);
+                },
+                5000
+            );
         }
     );
 }]);

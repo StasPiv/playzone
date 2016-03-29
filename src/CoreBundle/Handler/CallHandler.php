@@ -187,7 +187,7 @@ class CallHandler implements CallProcessorInterface
         $game = $this->container->get("core.handler.game")->createMyGame(
             $call->getFromUser(),
             $me,
-            $this->getOpponentColor(new GameColor($call->getGameParams()->getColor()))->getValue()
+            $this->getOpponentColor($call->getGameParams()->getColor())
         );
         $game->setStatus(GameStatus::PLAY);
         $game->setTimeWhite($call->getGameParams()->getTimeBase())

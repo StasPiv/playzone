@@ -63,6 +63,13 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $location, CallRes
     });
 
     WebsocketService.addListener("listen_accepted_calls", "call_accept", function(data) {
+        // delete all my calls when somebody accepts my call
+        if ($scope.calls_from_me.searchById(data.call_id)) {
+            angular.forEach($scope.calls_from_me, function (call) {
+                $scope.deleteCall(call);
+            });
+        }
+
         $scope.calls_from_me.pullById(data.call_id);
         $scope.calls_to_me.pullById(data.call_id);
         $scope.current.push(new GameRest(data.game));

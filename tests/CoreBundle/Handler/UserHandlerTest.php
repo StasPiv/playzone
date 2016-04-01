@@ -34,10 +34,9 @@ class UserHandlerTest extends KernelTestCase
 
     public function testGetUserByTokenNull()
     {
-        $this->assertNull(
-            $this->container->get("core.handler.user")->getUserByLoginAndToken(
-                "TestLogin", "sba37b62d15cc5f8671fd3d1b034c354"
-            )
+        $this->expectException('CoreBundle\Exception\Handler\User\TokenNotCorrectException');
+        $this->container->get("core.handler.user")->getUserByLoginAndToken(
+            "TestLogin", "sba37b62d15cc5f8671fd3d1b034c354"
         );
     }
 }

@@ -47,16 +47,16 @@ class GameParams
     /**
      * @return GameColor
      */
-    public function getColor()
+    public function getColor() : GameColor
     {
-        return $this->color;
+        return new GameColor($this->color);
     }
 
     /**
      * @param GameColor $color
      * @return GameParams
      */
-    public function setColor($color)
+    public function setColor(GameColor $color)
     {
         $this->color = $color;
 

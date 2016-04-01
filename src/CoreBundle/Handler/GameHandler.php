@@ -9,13 +9,15 @@
 namespace CoreBundle\Handler;
 
 use CoreBundle\Exception\Handler\GameHandlerException;
+use CoreBundle\Exception\Handler\User\UserHandlerException;
+use CoreBundle\Exception\Processor\ProcessorException;
+use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Game\GamePutResignRequest;
-use CoreBundle\Model\Request\RequestError;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
 use CoreBundle\Model\Game\GameColor;
@@ -32,6 +34,7 @@ use CoreBundle\Entity\User;
 class GameHandler implements GameProcessorInterface
 {
     use ContainerAwareTrait;
+    use ErrorAwareTrait;
 
     /**
      * @var EntityManager
@@ -45,35 +48,26 @@ class GameHandler implements GameProcessorInterface
 
     /**
      * UserHandler constructor.
-     * @param Container $container
      * @param EntityManager $manager
      */
-    public function __construct(Container $container, EntityManager $manager)
+    public function __construct(EntityManager $manager)
     {
-        $this->setContainer($container);
         $this->manager = $manager;
         $this->repository = $this->manager->getRepository('CoreBundle:Game');
     }
 
     /**
      * @param GameGetListRequest $listRequest
-     * @param RequestError $listError
-     * @return \CoreBundle\Entity\Game[]
+     * @return array|Game[]
      */
-    public function processGetList(GameGetListRequest $listRequest, RequestError $listError)
+    public function processGetList(GameGetListRequest $listRequest) : array
     {
         switch ($listRequest->getUser()) {
             case UserType::ME:
-                $user = $this->container->get("core.handler.user")
-                    ->getUserByLoginAndToken($listRequest->getLogin(), $listRequest->getToken());
-
-                if (!$user instanceof User) {
-                    $listError->addError("login",
-                        "Need to pass correct login and token for getting game list for current user");
-                    $listError->throwException(ResponseStatusCode::FORBIDDEN);
-                }
-
-                return $this->getGamesForUser($user, $listRequest->getStatus());
+                return $this->getGamesForUser(
+                    $this->container->get("core.service.security")->getUserIfCredentialsIsOk($listRequest,$this->getRequestError()),
+                    $listRequest->getStatus()
+                );
             case UserType::ALL:
                 return $this->repository->findBy(['status' => $listRequest->getStatus()], ["id" => "ASC"]);
             default:
@@ -83,16 +77,15 @@ class GameHandler implements GameProcessorInterface
 
     /**
      * @param GameGetRequest $gameRequest
-     * @param RequestError $gameError
-     * @return mixed
+     * @return Game
      */
-    public function processGet(GameGetRequest $gameRequest, RequestError $gameError)
+    public function processGet(GameGetRequest $gameRequest) : Game
     {
         $game = $this->repository->find($gameRequest->getId());
 
         if (!$game instanceof Game) {
-            $gameError->addError("id", "Game is not found");
-            $gameError->throwException(ResponseStatusCode::NOT_FOUND);
+            $this->getRequestError()->addError("id", "Game is not found");
+            $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
         if (!$gameRequest->getLogin()) {
@@ -107,30 +100,29 @@ class GameHandler implements GameProcessorInterface
 
     /**
      * @param GamePutPgnRequest $pgnRequest
-     * @param RequestError $pgnError
      * @return Game
      */
-    public function processPutPgn(GamePutPgnRequest $pgnRequest, RequestError $pgnError)
+    public function processPutPgn(GamePutPgnRequest $pgnRequest) : Game
     {
-        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($pgnRequest, $pgnError);
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($pgnRequest, $this->getRequestError());
 
         $game = $this->repository->find($pgnRequest->getId());
 
         if (!$game instanceof Game) {
-            $pgnError->addError("id", "Game is not found");
-            $pgnError->throwException(ResponseStatusCode::NOT_FOUND);
+            $this->getRequestError()->addError("id", "Game is not found");
+            $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
         if (!$this->isMyGame($game, $me)) {
-            $pgnError->addError("id", "Game is not mine");
-            $pgnError->throwException(ResponseStatusCode::FORBIDDEN);
+            $this->getRequestError()->addError("id", "Game is not mine");
+            $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
         $pgn = $this->container->get("core.service.chess")->decodePgn($pgnRequest->getPgn());
 
         if (!$this->container->get("core.service.chess")->isValidPgn($pgn)) {
-            $pgnError->addError("pgn", "Pgn is incorrect");
-            $pgnError->throwException(ResponseStatusCode::BAD_FORMAT);
+            $this->getRequestError()->addError("pgn", "Pgn is incorrect");
+            $this->getRequestError()->throwException(ResponseStatusCode::BAD_FORMAT);
         }
 
         $game->setPgn($pgn)
@@ -160,23 +152,22 @@ class GameHandler implements GameProcessorInterface
 
     /**
      * @param GamePutResignRequest $resignRequest
-     * @param RequestError $resignError
      * @return Game
      */
-    public function processPutResign(GamePutResignRequest $resignRequest, RequestError $resignError)
+    public function processPutResign(GamePutResignRequest $resignRequest) : Game
     {
-        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($resignRequest, $resignError);
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($resignRequest, $this->getRequestError());
 
         $game = $this->repository->find($resignRequest->getId());
 
         if (!$game instanceof Game) {
-            $resignError->addError("id", "Game is not found");
-            $resignError->throwException(ResponseStatusCode::NOT_FOUND);
+            $this->getRequestError()->addError("id", "Game is not found");
+            $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
         if (!$this->isMyGame($game, $me)) {
-            $resignError->addError("id", "Game is not mine");
-            $resignError->throwException(ResponseStatusCode::FORBIDDEN);
+            $this->getRequestError()->addError("id", "Game is not mine");
+            $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
         switch (true) {
@@ -195,23 +186,22 @@ class GameHandler implements GameProcessorInterface
 
     /**
      * @param GamePutOfferdrawRequest $drawRequest
-     * @param RequestError $drawError
      * @return Game
      */
-    public function processPutOfferdraw(GamePutOfferdrawRequest $drawRequest, RequestError $drawError)
+    public function processPutOfferdraw(GamePutOfferdrawRequest $drawRequest) : Game
     {
-        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($drawRequest, $drawError);
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($drawRequest, $this->getRequestError());
 
         $game = $this->repository->find($drawRequest->getId());
 
         if (!$game instanceof Game) {
-            $drawError->addError("id", "Game is not found");
-            $drawError->throwException(ResponseStatusCode::NOT_FOUND);
+            $this->getRequestError()->addError("id", "Game is not found");
+            $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
         if (!$this->isMyGame($game, $me)) {
-            $drawError->addError("id", "Game is not mine");
-            $drawError->throwException(ResponseStatusCode::FORBIDDEN);
+            $this->getRequestError()->addError("id", "Game is not mine");
+            $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
         switch (true) {
@@ -230,23 +220,22 @@ class GameHandler implements GameProcessorInterface
 
     /**
      * @param GamePutAcceptdrawRequest $drawRequest
-     * @param RequestError $drawError
      * @return Game
      */
-    public function processPutAcceptdraw(GamePutAcceptdrawRequest $drawRequest, RequestError $drawError)
+    public function processPutAcceptdraw(GamePutAcceptdrawRequest $drawRequest) : Game
     {
-        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($drawRequest, $drawError);
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($drawRequest, $this->getRequestError());
 
         $game = $this->repository->find($drawRequest->getId());
 
         if (!$game instanceof Game) {
-            $drawError->addError("id", "Game is not found");
-            $drawError->throwException(ResponseStatusCode::NOT_FOUND);
+            $this->getRequestError()->addError("id", "Game is not found");
+            $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
         if (!$this->isMyGame($game, $me)) {
-            $drawError->addError("id", "Game is not mine");
-            $drawError->throwException(ResponseStatusCode::FORBIDDEN);
+            $this->getRequestError()->addError("id", "Game is not mine");
+            $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
         switch (true) {
@@ -255,8 +244,8 @@ class GameHandler implements GameProcessorInterface
                 $game->setResultWhite(0.5)->setResultBlack(0.5)->setStatus(GameStatus::END);
                 break;
             default:
-                $drawError->addError("id", "Draw was not offered by opponent");
-                $drawError->throwException(ResponseStatusCode::FORBIDDEN);
+                $this->getRequestError()->addError("id", "Draw was not offered by opponent");
+                $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
         $this->manager->flush($game);
@@ -267,7 +256,7 @@ class GameHandler implements GameProcessorInterface
     /**
      * @param User $user
      * @param null $status
-     * @return \CoreBundle\Entity\Game[]
+     * @return Game[]
      */
     public function getGamesForUser(User $user, $status)
     {

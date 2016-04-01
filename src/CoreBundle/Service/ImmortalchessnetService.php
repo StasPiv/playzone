@@ -9,6 +9,9 @@
 namespace CoreBundle\Service;
 
 use CoreBundle\Entity\User;
+use CoreBundle\Exception\Handler\User\PasswordNotCorrectException;
+use CoreBundle\Exception\Handler\User\TokenNotCorrectException;
+use CoreBundle\Exception\Handler\User\UserNotFoundException;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -20,36 +23,38 @@ class ImmortalchessnetService
      * @param string $login
      * @param string $password
      * @return User
+     * @throws UserNotFoundException
+     * @throws PasswordNotCorrectException
      */
     public function getUser(string $login, string $password) : User
     {
-        $user = new User();
-        
-        $userData = $this->getUserData($login, $password);
-        
-        if (empty($userData)) {
-            return $user;
+        $userData = $this->getUserData($login);
+
+        if (!$this->checkPassword($userData, $password)) {
+            throw new PasswordNotCorrectException;
         }
 
-        $user->setLogin($userData[0]['username'])
-             ->setEmail($userData[0]['email']);
-        
-        return $user;
+        return (new User())->setLogin($userData['username'])
+                           ->setEmail($userData['email']);
     }
 
     /**
      * @param string $login
-     * @param string $password
-     * @return array
+     * @return array with user data
+     * @throws UserNotFoundException
      */
-    private function getUserData(string $login, string $password) : array
+    private function getUserData(string $login) : array
     {
-        return $this->getConnection()->fetchAll(
-            "SELECT * 
-                FROM `immortalchess`.`user` 
-                WHERE username = '$login' AND usergroupid IN (5,6,7)
-                AND PASSWORD = md5( concat( md5( '$password' ) , salt ) )"
+        $userData = $this->getConnection()->fetchAssoc(
+            "SELECT * FROM `user` 
+             WHERE `username` = '$login' AND `usergroupid` IN (5,6,7)"
         );
+
+        if ($userData === false) {
+            throw new UserNotFoundException;
+        }
+
+        return $userData;
     }
 
     /**
@@ -58,5 +63,15 @@ class ImmortalchessnetService
     private function getConnection() : Connection
     {
         return $this->container->get('doctrine')->getConnection('immortalchess');
+    }
+
+    /**
+     * @param array $userData
+     * @param string $password
+     * @return bool
+     */
+    private function checkPassword(array $userData, string $password) : bool
+    {
+        return $userData['password'] === md5(md5($password) . $userData['salt']);
     }
 }

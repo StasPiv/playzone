@@ -16,42 +16,37 @@ use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallGetRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Call\CallDeleteAcceptRequest;
-use CoreBundle\Model\Request\RequestError;
+use CoreBundle\Model\Request\RequestErrorInterface;
 
 interface CallProcessorInterface
 {
     /**
      * @param CallGetRequest $getRequest
-     * @param RequestError $getError
-     * @return \CoreBundle\Entity\GameCall[]
+     * @return array|\CoreBundle\Entity\GameCall[]
      */
-    public function processGet(CallGetRequest $getRequest, RequestError $getError);
+    public function processGet(CallGetRequest $getRequest) : array;
 
     /**
      * @param CallPostSendRequest $sendRequest
-     * @param RequestError $sendError
-     * @return \CoreBundle\Entity\GameCall[]
+     * @return GameCall
      */
-    public function processPostSend(CallPostSendRequest $sendRequest, RequestError $sendError);
+    public function processPostSend(CallPostSendRequest $sendRequest) : GameCall;
 
     /**
      * @param CallDeleteRemoveRequest $removeRequest
-     * @param RequestError $removeError
      * @return GameCall
      */
-    public function processDeleteRemove(CallDeleteRemoveRequest $removeRequest, RequestError $removeError);
+    public function processDeleteRemove(CallDeleteRemoveRequest $removeRequest) : GameCall;
 
     /**
      * @param CallDeleteAcceptRequest $acceptRequest
-     * @param RequestError $acceptError
      * @return Game
      */
-    public function processDeleteAccept(CallDeleteAcceptRequest $acceptRequest, RequestError $acceptError);
+    public function processDeleteAccept(CallDeleteAcceptRequest $acceptRequest) : Game;
 
     /**
      * @param CallDeleteDeclineRequest $declineRequest
-     * @param RequestError $declineError
      * @return GameCall
      */
-    public function processDeleteDecline(CallDeleteDeclineRequest $declineRequest, RequestError $declineError);
+    public function processDeleteDecline(CallDeleteDeclineRequest $declineRequest) : GameCall;
 }

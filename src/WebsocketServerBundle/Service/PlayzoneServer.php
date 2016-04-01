@@ -9,7 +9,7 @@
 namespace WebsocketServerBundle\Service;
 
 use CoreBundle\Entity\User;
-use CoreBundle\Model\Request\RequestError;
+use CoreBundle\Model\Request\RequestErrorInterface;
 use Monolog\Logger;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
@@ -153,7 +153,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
             throw new PlayzoneServerException("Validator found some errors");
         }
 
-        $playzoneUser = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($newWsUser, new RequestError());
+        $playzoneUser = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($newWsUser, new RequestErrorInterface());
 
         foreach ($this->users as $wsUser) {
             if ($wsUser->getConnection() == $from) {

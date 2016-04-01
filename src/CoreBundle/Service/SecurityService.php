@@ -9,7 +9,10 @@
 namespace CoreBundle\Service;
 
 use CoreBundle\Entity\User;
-use CoreBundle\Model\Request\RequestError;
+use CoreBundle\Exception\Handler\User\UserHandlerException;
+use CoreBundle\Exception\Handler\User\UserNotFoundException;
+use CoreBundle\Exception\Processor\ProcessorException;
+use CoreBundle\Model\Request\RequestErrorInterface;
 use CoreBundle\Model\Request\SecurityRequestInterface;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use Symfony\Component\DependencyInjection\Container;
@@ -30,23 +33,22 @@ class SecurityService
 
     /**
      * @param SecurityRequestInterface $securityRequest
-     * @param RequestError $securityError
+     * @param RequestErrorInterface $securityError
      * @return User
+     * @throws ProcessorException
      */
     public function getUserIfCredentialsIsOk(
         SecurityRequestInterface $securityRequest,
-        RequestError $securityError
-    ) {
-        $user = $this->container->get("core.handler.user")->getUserByLoginAndToken(
-            $securityRequest->getLogin(),
-            $securityRequest->getToken()
-        );
-
-        if (!$user instanceof User) {
+        RequestErrorInterface $securityError) : User
+    {
+        try {
+            return $this->container->get("core.handler.user")->getUserByLoginAndToken(
+                $securityRequest->getLogin(),
+                $securityRequest->getToken()
+            );
+        } catch (UserHandlerException $e) {
             $securityError->addError("login", "Forbidden for user with this credentials");
             $securityError->throwException(ResponseStatusCode::FORBIDDEN);
         }
-
-        return $user;
     }
 }

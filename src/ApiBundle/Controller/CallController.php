@@ -13,7 +13,7 @@ use CoreBundle\Model\Request\Call\CallDeleteRemoveRequest;
 use CoreBundle\Model\Request\Call\CallGetRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Call\CallDeleteAcceptRequest;
-use CoreBundle\Model\Request\Call\CallSend\CallPostSendRequestError;
+use CoreBundle\Model\Request\Call\CallSend\CallPostSendRequestErrorInterface;
 use CoreBundle\Processor\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations\RouteResource;

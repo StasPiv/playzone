@@ -74,22 +74,20 @@ abstract class BaseController extends FOSRestController
             $actionType = str_replace([$requestMethod, 'Action'], '', debug_backtrace()[1]['function']);
             $actionName = 'process' . ucfirst($requestMethod) . ucfirst($actionType);
 
-            $errorRequestObject = new RequestError();
-
             $requestObject = $this->fillRequestObjectWithRequest($request, $requestObject);
 
             foreach ($this->container->get('validator')->validate($requestObject) as $error) {
                 /** @var ConstraintViolation $error */
-                $errorRequestObject->addError(strtolower(preg_replace("/([A-Z])/", "_$1", $error->getPropertyPath())), $error->getMessage());
+                $this->container->get("core.request.error")->addError(strtolower(preg_replace("/([A-Z])/", "_$1", $error->getPropertyPath())), $error->getMessage());
             }
 
-            $this->container->get("core.service.error")->throwExceptionIfHasErrors($errorRequestObject, ResponseStatusCode::BAD_FORMAT);
+            $this->container->get("core.service.error")->throwExceptionIfHasErrors($this->container->get("core.request.error"), ResponseStatusCode::BAD_FORMAT);
 
-            $data = $this->getProcessor()->$actionName($requestObject, $errorRequestObject);
+            $data = $this->getProcessor()->$actionName($requestObject);
 
             $statusCode = $successStatusCode;
         } catch (ProcessorException $exception) {
-            $data = $exception->getRequestError()->getErrors();
+            $data = $exception->getRequestErrorInterface()->getErrors();
             $statusCode = $exception->getCode();
         } catch (\Exception $exception) {
             $data['errorMessage'] = $exception->getMessage();

@@ -15,7 +15,7 @@
     "response": {
       "status": 403,
       "errors": {
-        "login":"Need to pass correct login and token for getting game list for current user"
+        "login":"Forbidden for user with this credentials"
       }
     }
   },

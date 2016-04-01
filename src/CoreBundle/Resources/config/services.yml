@@ -1,13 +1,24 @@
 services:
+    core.request.error:
+        class: CoreBundle\Model\Request\RequestError
     core.handler.user:
         class: CoreBundle\Handler\UserHandler
-        arguments: ['@service_container', '@doctrine.orm.entity_manager']
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+          - [setContainer, ['@service_container']]
+          - [setRequestError, ['@core.request.error']]
     core.handler.game:
         class: CoreBundle\Handler\GameHandler
-        arguments: ['@service_container', '@doctrine.orm.entity_manager']
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+          - [setContainer, ['@service_container']]
+          - [setRequestError, ['@core.request.error']]
     core.handler.game.call:
         class: CoreBundle\Handler\CallHandler
-        arguments: ['@service_container', '@doctrine.orm.entity_manager']
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+          - [setContainer, ['@service_container']]
+          - [setRequestError, ['@core.request.error']]
     core.service.error:
         class: CoreBundle\Service\ErrorService
         arguments: ['@service_container']

@@ -12,7 +12,7 @@ use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Call\CallRequest;
 use CoreBundle\Model\Request\RequestInterface;
 
-class CallPostSendRequestError extends CallRequest
+class CallPostSendRequestErrorInterface extends CallRequest
 {
     /**
      * @var array

@@ -69,7 +69,7 @@ class ClientMessageHandler
 
         $playzoneMessage->setData(
             $this->container->get("core.handler.game.call")->getUserCallsByLogin(
-                $data->getLogin(), "toUser", $data->getCallIds()
+                (string)$data->getLogin(), "toUser", $data->getCallIds()
             )
         );
     }

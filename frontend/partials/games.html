@@ -9,7 +9,7 @@
             <tr ng-class="{ error: errors.player }">
                 <td><label for="login_enemy">{{ 'Player' | translate }}:</label></td>
                 <td>
-                    <input type="text" id="login_enemy" data-ng-model="call.player">
+                    <input type="text" id="login_enemy" data-ng-model="call.player" placeholder="{{ 'To all' | translate }}">
                 </td>
             </tr>
             <tr ng-class="{ error: errors.color }">
@@ -25,7 +25,7 @@
             <tr ng-class="{ error: errors.time }">
                 <td><label for="time_base">{{ 'Time control (minutes)' | translate }}:</label></td>
                 <td>
-                    <input type="number" min="1" max="30" id="time_base" data-ng-model="call.time.base" value="3">
+                    <input type="number" min="1" max="30" id="time_base" data-ng-model="call.time.base_minutes" />
                 </td>
             </tr>
             <tr>

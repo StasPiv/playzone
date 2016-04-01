@@ -10,13 +10,17 @@ playzoneControllers.controller('CallCtrl', function ($scope, CallRest, Websocket
         {id: 'b', name: 'Black'}
     ];
 
+    $scope.call = {
+        time: {
+            base_minutes: 3
+        }
+    };
+
     $scope.sendCall = function(call) {
-        call.time.base *= 1000 * 60; // time passed in ms
         CallRest.send(
             {},
             call,
             function(responseCall) {
-                call.time.base /= 1000 * 60; // convert back to minutes
                 var newCallIds = [];
                 $scope.calls_from_me.push(responseCall);
                 newCallIds.push(responseCall.id);

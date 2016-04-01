@@ -45,18 +45,18 @@ class GameParams
     private $timeLimit;
 
     /**
-     * @return GameColor
+     * @return string
      */
-    public function getColor() : GameColor
+    public function getColor() : string
     {
-        return new GameColor($this->color);
+        return $this->color;
     }
 
     /**
-     * @param GameColor $color
+     * @param string $color
      * @return GameParams
      */
-    public function setColor(GameColor $color)
+    public function setColor(string $color)
     {
         $this->color = $color;
 

@@ -129,7 +129,7 @@ class GameCall
      * @param GameParams $gameParams
      * @return GameCall
      */
-    public function setGameParams($gameParams)
+    public function setGameParams(GameParams $gameParams)
     {
         $this->gameParams = $gameParams;
 

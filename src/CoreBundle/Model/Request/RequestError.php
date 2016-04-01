@@ -21,9 +21,15 @@ class RequestError implements RequestErrorInterface
      */
     private $errors;
 
-    public function addError(string $key, string $errorMessage)
+    /**
+     * @param string $key
+     * @param string $errorMessage
+     * @return RequestErrorInterface
+     */
+    public function addError(string $key, string $errorMessage) : RequestErrorInterface
     {
         $this->errors[$key] = $errorMessage;
+        return $this;
     }
 
     /**

@@ -125,10 +125,15 @@ class CallHandler implements CallProcessorInterface
         }
 
         $gameParams = new GameParams();
-        $gameParams->setColor( $this->getOpponentColor(new GameColor($sendRequest->getColor())) )
+        $gameParams->setColor( $this->getOpponentColor($sendRequest->getColor()) )
                    ->setTimeBase($sendRequest->getTime()->getBase());
 
         $gameCall = $this->createGameCall($me, $opponent, $gameParams);
+
+        if ($this->isTheSameCallExists($gameCall, $me)) {
+            $this->getRequestError()->addError("player", "You already created call with the same params")
+                                    ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
 
         $this->manager->flush();
 
@@ -194,12 +199,12 @@ class CallHandler implements CallProcessorInterface
     }
 
     /**
-     * @param GameColor $color
+     * @param string $color
      * @return GameColor
      */
-    private function getOpponentColor(GameColor $color)
+    private function getOpponentColor(string $color)
     {
-        return $color == GameColor::WHITE() ? GameColor::BLACK() : GameColor::WHITE();
+        return $color == GameColor::WHITE ? GameColor::BLACK : GameColor::WHITE;
     }
 
     /**
@@ -257,7 +262,7 @@ class CallHandler implements CallProcessorInterface
      * @param array $callIds
      * @return GameCall[]
      */
-    private function getUserCalls(User $user, string $fieldForUser = 'fromUser', array $callIds = [])
+    private function getUserCalls(User $user, string $fieldForUser = 'fromUser', array $callIds = []) : array
     {
         $filter = [$fieldForUser => $user];
 
@@ -270,5 +275,22 @@ class CallHandler implements CallProcessorInterface
         }
 
         return $this->repository->findBy($filter);
+    }
+
+    /**
+     * @param GameCall $call
+     * @param User $user
+     * @return bool
+     */
+    private function isTheSameCallExists(GameCall $call, User $user) : bool
+    {
+        return !empty(
+            array_filter(
+                $this->getUserCalls($user),
+                function(GameCall $existingCall) use ($call) {
+                    return !$existingCall->getToUser() && $existingCall->getGameParams() == $call->getGameParams();
+                }
+            )
+        );
     }
 }

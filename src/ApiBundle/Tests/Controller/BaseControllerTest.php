@@ -24,6 +24,7 @@ abstract class BaseControllerTest extends WebTestCase
 
     /**
      * @param string $baseUri
+     * @throws \Exception
      */
     protected function assertFromJson($baseUri)
     {

@@ -1,6 +1,8 @@
 {
   "fixtures": [
-    "CoreBundle\\DataFixtures\\ORM\\UserFixtures"
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\CallFixtures"
   ],
   "login_and_token_is_required": {
     "method": "POST",
@@ -142,34 +144,6 @@
       }
     }
   },
-  "correct_call_to_all": {
-    "method": "POST",
-    "request": {
-      "login": "TestLogin",
-      "token": "aba37b62d15cc5f8671fd3d1b034c354",
-      "color": {
-        "id": "w"
-      },
-      "time": {
-        "base": 300000
-      },
-      "games_count": 1
-    },
-    "response": {
-      "status": 200,
-      "data": {
-        "from_user": {
-          "login": "TestLogin",
-          "email": "test-login@yandex.ru",
-          "class": "D",
-          "rating": 2243
-        },
-        "game_params": {
-          "color": "b"
-        }
-      }
-    }
-  },
   "correct_call_with_time": {
     "method": "POST",
     "request": {
@@ -213,6 +187,25 @@
       "status": 400,
       "errors": {
         "time": "Time is required for this request"
+      }
+    }
+  },
+  "deny_call_with_the_same_params": {
+    "method": "POST",
+    "request": {
+      "login": "Petro",
+      "token": "d10f4fcce69f443f38827d7ffc2ef0ed",
+      "color": {
+        "id": "b"
+      },
+      "time": {
+        "base": 300000
+      }
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "player": "You already created call with the same params"
       }
     }
   }

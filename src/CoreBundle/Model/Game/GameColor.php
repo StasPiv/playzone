@@ -8,17 +8,13 @@
 
 namespace CoreBundle\Model\Game;
 
-use MyCLabs\Enum\Enum;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Class GameColor
  * @package CoreBundle\Model\Game
- *
- * @method static GameColor WHITE()
- * @method static GameColor BLACK()
- * @method static GameColor RANDOM()
  */
-class GameColor extends Enum
+class GameColor
 {
     const WHITE = "w";
     const BLACK = "b";

@@ -641,11 +641,11 @@ class Game
      * @JMS\SerializedName("move_color")
      * @JMS\Type("string")
      *
-     * @return GameColor
+     * @return string
      */
-    public function getMoveColor() : GameColor
+    public function getMoveColor() : string
     {
-        return $this->getUserWhite() == $this->getUserToMove() ? GameColor::WHITE() : GameColor::BLACK();
+        return $this->getUserWhite() == $this->getUserToMove() ? GameColor::WHITE : GameColor::BLACK;
     }
 }
 

@@ -11,7 +11,12 @@ use CoreBundle\Exception\Processor\ProcessorException;
 
 interface RequestErrorInterface
 {
-    public function addError(string $key, string $errorMessage);
+    /**
+     * @param string $key
+     * @param string $errorMessage
+     * @return RequestErrorInterface
+     */
+    public function addError(string $key, string $errorMessage) : RequestErrorInterface;
 
     /**
      * @return array

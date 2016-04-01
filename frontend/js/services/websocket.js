@@ -37,7 +37,9 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $in
         reconnect: function (user) {
             if (dataStream.readyState !== 1) {
                 createDataStream();
-                this.introduction(user);
+                if (dataStream.readyState === 1) {
+                    this.introduction(user);
+                }
             }
         },
         addListener: function(listenerName, methodToListen, callback) {

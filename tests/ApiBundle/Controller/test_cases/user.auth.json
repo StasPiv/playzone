@@ -96,17 +96,17 @@
   "correct_from_immortal": {
     "method": "POST",
     "request": {
-      "login": "Stanis",
+      "login": "Стас",
       "password": "010586"
     },
     "response": {
       "status": 200,
       "data": {
-        "login": "Stanis",
+        "login": "Стас",
         "email": "loveliverpool@yandex.ru",
         "rating": 2200,
         "class": "N",
-        "token": "3d52e11a00cc7463f8d34805f5ff22e5",
+        "token": "921e24103de9d393fdf7bfab278737f9",
         "isAuth": true
       }
     }

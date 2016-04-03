@@ -78,20 +78,34 @@ class CallHandler implements CallProcessorInterface
 
     /**
      * @param User $me
-     * @param User $opponent can be null - in this case common call will be created
+     * @param GameParams $gameParams
+     * @param User $opponent
+     * @return GameCall
+     */
+    private function createGameCallToUser(User $me, GameParams $gameParams, User $opponent) : GameCall
+    {
+        $call = new GameCall();
+
+        $call->setFromUser($me)
+             ->setToUser($opponent)
+             ->setGameParams($gameParams);
+
+        $this->manager->persist($call);
+
+        return $call;
+    }
+
+    /**
+     * @param User $me
      * @param GameParams $gameParams
      * @return GameCall
      */
-    private function createGameCall(User $me, $opponent, GameParams $gameParams) : GameCall
+    private function createCommonGameCall(User $me, GameParams $gameParams) : GameCall
     {
         $call = new GameCall();
 
         $call->setFromUser($me)
              ->setGameParams($gameParams);
-
-        if ($opponent) {
-            $call->setToUser($opponent);
-        }
 
         $this->manager->persist($call);
 
@@ -106,18 +120,6 @@ class CallHandler implements CallProcessorInterface
     {
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($sendRequest, $this->getRequestError());
 
-        if ($sendRequest->getPlayer()) {
-            /** @var User $opponent */
-            $opponent = $this->container->get("core.handler.user")->getRepository()->findOneByLogin($sendRequest->getPlayer());
-
-            if (!$opponent instanceof User) {
-                $this->getRequestError()->addError("player", "Opponent with this login is not found");
-                $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
-            }
-        } else {
-            $opponent = null;
-        }
-
         if (!$sendRequest->getColor() || $sendRequest->getColor() == GameColor::RANDOM) {
             $sendRequest->setColor(
                 [GameColor::WHITE, GameColor::BLACK][mt_rand(0, 1)]
@@ -128,11 +130,23 @@ class CallHandler implements CallProcessorInterface
         $gameParams->setColor( $this->getOpponentColor($sendRequest->getColor()) )
                    ->setTimeBase($sendRequest->getTime()->getBase());
 
-        $gameCall = $this->createGameCall($me, $opponent, $gameParams);
+        if ($sendRequest->getPlayer()) {
+            /** @var User $opponent */
+            $opponent = $this->container->get("core.handler.user")->getRepository()->findOneByLogin($sendRequest->getPlayer());
 
-        if ($this->isTheSameCallExists($gameCall, $me)) {
-            $this->getRequestError()->addError("player", "You already created call with the same params")
-                                    ->throwException(ResponseStatusCode::FORBIDDEN);
+            if (!$opponent instanceof User) {
+                $this->getRequestError()->addError("player", "Opponent with this login is not found");
+                $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
+            }
+
+            $gameCall = $this->createGameCallToUser($me, $gameParams, $opponent);
+        } else {
+            $gameCall = $this->createCommonGameCall($me, $gameParams);
+            if ($this->isTheSameCommonCallExists($gameCall, $me)) {
+                $this->getRequestError()
+                     ->addError("player", "You already created call with the same params")
+                     ->throwException(ResponseStatusCode::FORBIDDEN);
+            }
         }
 
         $this->manager->flush();
@@ -282,15 +296,25 @@ class CallHandler implements CallProcessorInterface
      * @param User $user
      * @return bool
      */
-    private function isTheSameCallExists(GameCall $call, User $user) : bool
+    private function isTheSameCommonCallExists(GameCall $call, User $user) : bool
     {
         return !empty(
             array_filter(
                 $this->getUserCalls($user),
                 function(GameCall $existingCall) use ($call) {
-                    return !$existingCall->getToUser() && $existingCall->getGameParams() == $call->getGameParams();
+                    return $this->isTwoCommonCallsEqual($existingCall, $call);
                 }
             )
         );
+    }
+
+    /**
+     * @param GameCall $existingCall
+     * @param GameCall $call
+     * @return bool
+     */
+    private function isTwoCommonCallsEqual(GameCall $existingCall, GameCall $call) : bool
+    {
+        return !$existingCall->getToUser() && !$call->getToUser() && $existingCall->getGameParams() == $call->getGameParams();
     }
 }

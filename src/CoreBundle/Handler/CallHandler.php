@@ -26,6 +26,7 @@ use CoreBundle\Model\Call\CallType;
 use CoreBundle\Processor\CallProcessorInterface;
 use CoreBundle\Repository\GameCallRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class CallHandler implements CallProcessorInterface
@@ -261,7 +262,9 @@ class CallHandler implements CallProcessorInterface
     public function getUserCallsByLogin(string $login, string $fieldForUser = 'fromUser', array $callIds = [])
     {
         if (!$login) {
-            return $this->repository->findBy(['toUser' => null]);
+            return $this->getQueryBuilderForLastCalls()
+                        ->andWhere('game_call.toUser IS NULL')
+                        ->getQuery()->getResult();
         }
 
         $user = $this->container->get("core.handler.user")->getRepository()
@@ -282,19 +285,7 @@ class CallHandler implements CallProcessorInterface
      */
     private function getUserCalls(User $user, string $fieldForUser = 'fromUser', array $callIds = []) : array
     {
-        $queryBuilder = $this->repository->createQueryBuilder('game_call');
-
-        $queryBuilder->where('game_call.createdAt > :limitAgo')
-                     ->setParameter(
-                            'limitAgo',
-                            new \DateTime('-' . $this->container->getParameter('app_call.lifetime') . 'second')
-                     );
-
-        $filter = [$fieldForUser => $user];
-
-        if (!empty($callIds)) {
-            $filter['id'] = $callIds;
-        }
+        $queryBuilder = $this->getQueryBuilderForLastCalls();
 
         if ($fieldForUser == 'toUser') {
             $queryBuilder->andWhere('game_call.toUser IS NULL OR game_call.toUser = :user');
@@ -332,5 +323,21 @@ class CallHandler implements CallProcessorInterface
     private function isTwoCommonCallsEqual(GameCall $existingCall, GameCall $call) : bool
     {
         return !$existingCall->getToUser() && !$call->getToUser() && $existingCall->getGameParams() == $call->getGameParams();
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    private function getQueryBuilderForLastCalls() : QueryBuilder
+    {
+        $queryBuilder = $this->repository->createQueryBuilder('game_call');
+
+        $queryBuilder->where('game_call.createdAt > :limitAgo')
+            ->setParameter(
+                'limitAgo',
+                new \DateTime('-' . $this->container->getParameter('app_call.lifetime') . 'second')
+            );
+
+        return $queryBuilder;
     }
 }

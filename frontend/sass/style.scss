@@ -72,6 +72,9 @@ body {
   font-family: $font_0, $font_1, $font_2, $font_3, $font_4;
   background-color: $color_catskill_white_approx;
 }
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
 a {
   color: $color_blumine_approx;
   cursor: pointer;

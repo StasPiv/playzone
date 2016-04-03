@@ -118,6 +118,11 @@ class GameHandler implements GameProcessorInterface
             $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
+        if ($game->getStatus() !== GameStatus::PLAY) {
+            $this->getRequestError()->addError("id", "Game is not played")
+                                    ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
         $pgn = $this->container->get("core.service.chess")->decodePgn($pgnRequest->getPgn());
 
         if (!$this->container->get("core.service.chess")->isValidPgn($pgn)) {
@@ -131,11 +136,11 @@ class GameHandler implements GameProcessorInterface
              ->setTimeBlack((int)$pgnRequest->getTimeBlack())
              ->setUserToMove($me == $game->getUserWhite() ? $game->getUserBlack() : $game->getUserWhite());
 
-        if ($game->getTimeWhite() <= 0) {
+        if ($pgnRequest->getTimeWhite() !== null && $game->getTimeWhite() <= 0) {
             $game->setResultWhite(0)->setResultBlack(1)->setStatus(GameStatus::END);
         }
 
-        if ($game->getTimeBlack() <= 0) {
+        if ($pgnRequest->getTimeBlack() !== null && $game->getTimeBlack() <= 0) {
             $game->setResultWhite(1)->setResultBlack(0)->setStatus(GameStatus::END);
         }
 

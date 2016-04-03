@@ -58,6 +58,24 @@ class GameCall
      */
     private $gameParams;
 
+    /**
+     * @var \DateTime
+     * 
+     * @JMS\Expose
+     * @JMS\Type("DateTime")
+     * 
+     * @ORM\Column(type="datetime", name="created_at")
+     */
+    private $createdAt;
+
+    /**
+     * GameCall constructor.
+     */
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime('now');
+    }
+
 
     /**
      * Get id
@@ -132,6 +150,25 @@ class GameCall
     public function setGameParams(GameParams $gameParams)
     {
         $this->gameParams = $gameParams;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt() : \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     * @return GameCall
+     */
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

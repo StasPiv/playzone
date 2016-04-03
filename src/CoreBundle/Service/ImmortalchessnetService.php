@@ -47,7 +47,7 @@ class ImmortalchessnetService
     {
         $userData = $this->getConnection()->fetchAssoc(
             "SELECT * FROM `user` 
-             WHERE `username` = '$login' AND `usergroupid` IN (5,6,7)"
+             WHERE `username` = '$login'"
         );
 
         if ($userData === false) {

@@ -38,6 +38,10 @@ playzoneControllers.directive('chessBoardLegal', function () {
             // do not pick up pieces if the game is over
             // only pick up pieces for the side to move
             var onDragStart = function(source, piece, position, orientation) {
+                if (scope.game.status !== 'play') {
+                    return false;
+                }
+
                 if (!scope.current_move) {
                     scope.current_move = { from: source }; // for move click&click
                 } else {

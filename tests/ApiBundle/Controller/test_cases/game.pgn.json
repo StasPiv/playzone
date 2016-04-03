@@ -89,7 +89,8 @@
         "draw": "",
         "user_to_move": {
           "login": "Stas"
-        }
+        },
+        "status": "play"
       }
     }
   },

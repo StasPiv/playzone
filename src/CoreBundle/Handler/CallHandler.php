@@ -278,6 +278,14 @@ class CallHandler implements CallProcessorInterface
      */
     private function getUserCalls(User $user, string $fieldForUser = 'fromUser', array $callIds = []) : array
     {
+        $queryBuilder = $this->repository->createQueryBuilder('game_call');
+
+        $queryBuilder->where('game_call.createdAt > :limitAgo')
+                     ->setParameter(
+                            'limitAgo',
+                            new \DateTime('-' . $this->container->getParameter('app_call.lifetime') . 'second')
+                     );
+
         $filter = [$fieldForUser => $user];
 
         if (!empty($callIds)) {
@@ -285,10 +293,14 @@ class CallHandler implements CallProcessorInterface
         }
 
         if ($fieldForUser == 'toUser') {
-            $filter['toUser'] = [null, $user];
+            $queryBuilder->andWhere('game_call.toUser IS NULL OR game_call.toUser = :user');
+        } elseif ($fieldForUser == 'fromUser') {
+            $queryBuilder->andWhere('game_call.fromUser = :user');
         }
 
-        return $this->repository->findBy($filter);
+        $queryBuilder->setParameter('user', $user);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

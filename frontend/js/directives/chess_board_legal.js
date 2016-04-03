@@ -90,9 +90,12 @@ playzoneControllers.directive('chessBoardLegal', function () {
             };
 
             $(element).on('click', '[class*="square"]', function () {
-                var square = $(this).data('square');
-                console.log(square);
+                if (element.onDragStart && !element.onDragStart()) {
+                    return false;
+                }
 
+                var square = $(this).data('square');
+                
                 if (!scope.current_move) {
                     scope.current_move = { from: square };
                     highlightSquare(square);

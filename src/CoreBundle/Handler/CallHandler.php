@@ -196,7 +196,6 @@ class CallHandler implements CallProcessorInterface
             $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
-        $this->manager->remove($call);
         $game = $this->container->get("core.handler.game")->createMyGame(
             $call->getFromUser(),
             $me,
@@ -207,6 +206,11 @@ class CallHandler implements CallProcessorInterface
              ->setTimeBlack($call->getGameParams()->getTimeBase());
 
         $this->manager->persist($game);
+
+        foreach ($this->getUserCalls($call->getFromUser()) as $call) {
+            $this->manager->remove($call);
+        }
+
         $this->manager->flush();
 
         return $this->container->get("core.handler.game")->getUserGame($game, $me);

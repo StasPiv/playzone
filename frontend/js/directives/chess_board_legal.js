@@ -35,6 +35,11 @@ playzoneControllers.directive('chessBoardLegal', function () {
                 fenEl = $(element).find('.fen'),
                 pgnEl = $(element).find('.pgn');
 
+            var highlightSquare = function (square) {
+                $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
+                $(element).find('.square-' + square).addClass(scope.boardConfig.highlightClass);
+            };
+
             // do not pick up pieces if the game is over
             // only pick up pieces for the side to move
             var onDragStart = function(source, piece, position, orientation) {
@@ -85,11 +90,16 @@ playzoneControllers.directive('chessBoardLegal', function () {
             };
 
             $(element).on('click', '[class*="square"]', function () {
+                var square = $(this).data('square');
+                console.log(square);
+
                 if (!scope.current_move) {
+                    scope.current_move = { from: square };
+                    highlightSquare(square);
                     return;
                 }
 
-                doMoveOnTheBoard(scope, element, $(this).data('square'));
+                doMoveOnTheBoard(scope, element, square);
             });
 
             // update the board position after the piece snap
@@ -133,7 +143,7 @@ playzoneControllers.directive('chessBoardLegal', function () {
 
             element.loadBoard = function (userConfig) {
                 element.board = ChessBoard(element.data('board'), {
-                    draggable: true,
+                    draggable: false,
                     moveSpeed: 1,
                     position: 'start',
                     onDragStart: onDragStart,

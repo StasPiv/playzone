@@ -18,7 +18,7 @@ $font_2: verdana;
 $font_3: sans-serif;
 $font_4: Lucida Sans;
 
-$board_width: 400px;
+$board_width: 800px;
 
 //@extend-elements
 //original selectors
@@ -526,7 +526,8 @@ th.header {
   }
   .play-chess-board {
     #board {
-      width: $board_width;
+      width: 100%;
+      max-width: $board_width;
       float: left;
     }
     .pgn {

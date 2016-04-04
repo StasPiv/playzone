@@ -3,11 +3,11 @@
  */
 'use strict';
 
-playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, $interval, dateFilter) {
+playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, $interval, dateFilter) {
     $scope.boardConfig = {
         pieceType: 'leipzig',
         highlightClass: 'highlight1-32417',
-        draggable: $rootScope.isNotMobile
+        draggable: !EnvService.isMobile()
     };
 
     $scope.gameConfig = {

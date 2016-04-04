@@ -146,7 +146,7 @@ playzoneControllers.directive('chessBoardLegal', function () {
 
             element.loadBoard = function (userConfig) {
                 element.board = ChessBoard(element.data('board'), {
-                    draggable: true,
+                    draggable: scope.boardConfig.draggable,
                     moveSpeed: 1,
                     position: 'start',
                     onDragStart: onDragStart,

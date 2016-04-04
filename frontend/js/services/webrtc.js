@@ -16,12 +16,12 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope, $loca
     var sendChannel;
 
     var ownerCandidate,
-        offerSdpSescription,
-        answerSdpSescription;
+        offerSdpDescription,
+        answerSdpDescription;
 
     function createNewOffer() {
         ownerConnection.createOffer().then(function (offer) {
-            offerSdpSescription = offer.sdp;
+            offerSdpDescription = offer.sdp;
             return ownerConnection.setLocalDescription(offer);
         }, function (error) {
             console.log('create offer error', error);
@@ -39,7 +39,7 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope, $loca
     function createAnswer() {
         subscriberConnection.createAnswer().then(
             function (answer) {
-                answerSdpSescription = answer.sdp;
+                answerSdpDescription = answer.sdp;
                 return subscriberConnection.setLocalDescription(answer);
             }, function (error) {
                 console.log('create answer error', error);
@@ -127,14 +127,14 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope, $loca
             }
 
             console.log('candidate', event.candidate.candidate);
-            console.log('answer_sdp_description', answerSdpSescription);
+            console.log('answer_sdp_description', answerSdpDescription);
             ownerCandidate = event.candidate;
 
             wsSignaler.send({
                 action: 'subscriber-send-data',
                 room: room,
                 name: $rootScope.user.login,
-                answer_sdp_description: answerSdpSescription,
+                answer_sdp_description: answerSdpDescription,
                 candidate: event.candidate.candidate
             });
         };
@@ -170,13 +170,13 @@ playzoneServices.factory('WebRTCService', function($websocket, $rootScope, $loca
             }
 
             console.log('candidate', event.candidate.candidate);
-            console.log('offer_sdp_description', offerSdpSescription);
+            console.log('offer_sdp_description', offerSdpDescription);
             ownerCandidate = event.candidate;
 
             wsSignaler.send({
                 action: 'owner-enter',
                 room: room,
-                offer_sdp_description: offerSdpSescription,
+                offer_sdp_description: offerSdpDescription,
                 candidate: event.candidate.candidate
             });
         };

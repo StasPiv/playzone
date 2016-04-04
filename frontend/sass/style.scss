@@ -75,6 +75,9 @@ body {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
+.info {
+  color: red;
+}
 a {
   color: $color_blumine_approx;
   cursor: pointer;
@@ -251,8 +254,9 @@ h2 {
   margin-bottom: 10px;
 }
 .apply-call {
-  text-align: left;
-  margin-bottom: 10px;
+  text-align: center;
+  margin: 10px 0;
+  font-weight: bold;
 }
 .call_form {
   display: none;

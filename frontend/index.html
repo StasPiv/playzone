@@ -76,7 +76,15 @@
                 </div>
             </div>
         </div>
-        <div class="info">{{ 'The site in the testing mode. Please send your bug-reports' | translate }}: <a href="mailto:staspivovartsev@gmail.com">email</a></div>
+        <div class="browser-not-supported" ng-if="!$root.browserSupported">
+            <p class='info'>
+                {{ 'Your browser is not supported for play. Try' | translate }} <a
+                    href='https://www.google.com/chrome/browser/desktop/'>Google Chrome</a>.
+            </p>
+        </div>
+        <div class="info" ng-if="$root.browserSupported">
+            {{ 'The site in the testing mode. Please send your bug-reports' | translate }}: <a href="mailto:staspivovartsev@gmail.com">email</a>
+        </div>
         <div class="middle" ng-view>
 
         </div>

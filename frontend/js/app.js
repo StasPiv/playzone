@@ -14,6 +14,8 @@ var playzoneApp = angular.module('playzoneApp', [
     'LocalStorageModule'
 ]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'WebsocketService', '$interval', function ($http, $rootScope, $cookies, UserRest, WebsocketService, $interval) {
 
+    $rootScope.browserSupported = typeof(WebSocket) === "function";
+
     $rootScope.user = new UserRest({
         login: $rootScope.user ? $rootScope.user.login : $cookies.get("user_login"),
         token: $rootScope.user ? $rootScope.user.token : $cookies.get("user_token"),

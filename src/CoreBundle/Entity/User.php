@@ -715,7 +715,7 @@ class User
      * @param boolean $offline
      * @return User
      */
-    public function setOffline(boolean $offline)
+    public function setOffline(bool $offline)
     {
         $this->offline = $offline;
 

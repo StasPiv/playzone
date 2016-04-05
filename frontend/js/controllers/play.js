@@ -24,7 +24,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         function () {
             WebsocketService.subscribeToGame($scope.game.id);
 
-            if (!EnvService.isWebRTC()) {
+            if (true || !EnvService.isWebRTC()) { // TODO: need to remove "true" for webRTC support
                 return;
             }
 

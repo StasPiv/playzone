@@ -22,6 +22,12 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
 
     $scope.game.$promise.then(
         function () {
+            WebsocketService.subscribeToGame($scope.game.id);
+
+            if (!EnvService.isWebRTC()) {
+                return;
+            }
+
             switch ($scope.game.color) {
                 case 'w':
                     WebRTCService.createGameRoom($scope.game.id);
@@ -33,8 +39,6 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
                     });
                     break;
             }
-
-            WebsocketService.subscribeToGame($scope.game.id);
         }
     );
 

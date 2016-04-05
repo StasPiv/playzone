@@ -75,10 +75,13 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
 
     $scope.sendWithWebsockets = function () {
         if ($scope.game.status === 'play') {
-            var opponentTime = $scope.game.color === 'w' ?
-                $scope.game.time_black :
-                $scope.game.time_white;
-            WebsocketService.sendGameToObservers($scope.game.id, window.btoa($scope.game.pgn), opponentTime, $scope.game.color);
+            WebsocketService.sendGameToObservers(
+                $scope.game.id, 
+                window.btoa($scope.game.pgn), 
+                $scope.game.time_white, 
+                $scope.game.time_black, 
+                $scope.game.color
+            );
         } else {
             WebsocketService.sendGameToObservers($scope.game.id);
         }
@@ -91,10 +94,28 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
 
         $scope.game.$savePgn().then(
             function () {
+                $scope.game.opponent.offline =
+                    ($rootScope.loginsOnline.indexOf($scope.game.opponent.login) === -1);
                 if (!withoutSaving) {
                     $scope.sendWithWebsockets();
                 }
             }
         )
     };
+
+    WebsocketService.addListener('listen_opponent_gone', 'user_gone', function (user) {
+        if (user['login'] === $scope.game.opponent.login) {
+            console.log('opponent has gone');
+            $scope.savePgnAndSendToObservers();
+            $scope.game.opponent.offline = true;
+        }
+    });
+
+    WebsocketService.addListener('listen_opponent_in', 'user_in', function (user) {
+        if ($scope.game && user['login'] === $scope.game.opponent.login) {
+            console.log('opponent has reconnected');
+            $scope.game.opponent.offline = false;
+        }
+    });
+
 });

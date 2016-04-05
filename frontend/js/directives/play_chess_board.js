@@ -65,15 +65,16 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                             return;
                         }
 
-                        scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
+                        var receivedPgn = window.atob(data.encoded_pgn);
 
-                        if (data.color === 'w') {
-                            scope.game.time_black = data.time;
-                        } else {
-                            scope.game.time_white = data.time;
+                        if (receivedPgn === scope.game.pgn) {
+                            return;
                         }
 
-                        var receivedPgn = window.atob(data.encoded_pgn);
+                        scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
+                        scope.game.time_black = data.time_black;
+
+                        scope.game.time_white = data.time_white;
 
                         if (receivedPgn.length <= scope.game.pgn.length) {
                             highlightLastMove(scope, element);

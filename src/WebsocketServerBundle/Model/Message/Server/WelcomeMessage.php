@@ -9,21 +9,37 @@
 namespace WebsocketServerBundle\Model\Message\Server;
 
 use JMS\Serializer\Annotation as JMS;
+use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageMethod;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
 
 class WelcomeMessage extends PlayzoneMessage
 {
     /**
      * @var string
+     *
+     * @JMS\Expose()
+     * @return string
+     */
+    protected $method = PlayzoneClientMessageMethod::WELCOME_MESSAGE;
+
+    /**
+     * @var string
      */
     private $login;
 
     /**
-     * @param $login
+     * @var array
      */
-    public function __construct($login)
+    private $otherLogins = [];
+
+    /**
+     * @param $login
+     * @param array $otherLogins
+     */
+    public function __construct($login, $otherLogins = [])
     {
-        $this->setLogin($login);
+        $this->setLogin($login)
+             ->setOtherLogins($otherLogins);
     }
 
     /**
@@ -36,15 +52,36 @@ class WelcomeMessage extends PlayzoneMessage
 
     /**
      * @param string $login
+     * @return WelcomeMessage
      */
     public function setLogin($login)
     {
         $this->login = $login;
+        return $this;
     }
 
     /**
-     * @var string
-     *
+     * @JMS\VirtualProperty()
+     * @JMS\SerializedName("other_logins")
+     * @return array
+     */
+    public function getOtherLogins() : array
+    {
+        return $this->otherLogins;
+    }
+
+    /**
+     * @param array $otherLogins
+     * @return WelcomeMessage
+     */
+    public function setOtherLogins(array $otherLogins = [])
+    {
+        $this->otherLogins = $otherLogins;
+
+        return $this;
+    }
+
+    /**
      * @JMS\VirtualProperty()
      * @JMS\SerializedName("message")
      * @return string

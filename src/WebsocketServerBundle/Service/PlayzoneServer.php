@@ -23,6 +23,7 @@ use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSubscribe;
 use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageMethod;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
 use WebsocketServerBundle\Model\Message\Server\AskIntroduction;
+use WebsocketServerBundle\Model\Message\Server\PlayzoneServerMessageScope;
 use WebsocketServerBundle\Model\WebsocketUser;
 use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageScope;
 use WebsocketServerBundle\Model\Message\Server\WelcomeMessage;
@@ -84,6 +85,18 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         foreach ($this->users as $user) {
             if ($user->getConnection() == $conn) {
                 $this->users->detach($user);
+
+                if (!$user->getPlayzoneUser()) {
+                    continue;
+                }
+
+                $this->sendToUsers(
+                    (new PlayzoneMessage())->setScope(PlayzoneServerMessageScope::USER_GONE)
+                                           ->setMethod(PlayzoneClientMessageMethod::USER_GONE)
+                                           ->setData([
+                                               'login' => $user->getPlayzoneUser()->getLogin()
+                                           ])
+                );
             }
         }
     }
@@ -157,10 +170,22 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         $this->container->get("core.request.error"));
 
         foreach ($this->users as $wsUser) {
-            if ($wsUser->getConnection() == $from) {
-                $wsUser->setPlayzoneUser($playzoneUser);
-                $this->send(new WelcomeMessage($wsUser->getPlayzoneUser()->getLogin()), $wsUser);
+            if ($wsUser->getConnection() != $from) {
+                continue;
             }
+
+            $wsUser->setPlayzoneUser($playzoneUser);
+
+            $this->sendWelcomeMessage($wsUser);
+
+            $this->sendToUsers(
+                (new PlayzoneMessage())
+                    ->setScope(PlayzoneServerMessageScope::USER_IN)
+                    ->setMethod(PlayzoneClientMessageMethod::USER_IN)
+                    ->setData([
+                        'login' => $wsUser->getPlayzoneUser()->getLogin()
+                    ])
+            );
         }
     }
 
@@ -274,5 +299,27 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                 $wsUser->addGameToListen($gameSubscribeMessage->getGameId());
             }
         }
+    }
+
+    /**
+     * @param WebsocketUser $wsUser
+     */
+    private function sendWelcomeMessage(WebsocketUser $wsUser)
+    {
+        $anotherLogins = [];
+
+        foreach ($this->users as $anotherUser) {
+            if ($anotherUser->getPlayzoneUser()) {
+                $anotherLogins[] = $anotherUser->getPlayzoneUser()->getLogin();
+            }
+        }
+
+        $this->send(
+            new WelcomeMessage(
+                $wsUser->getPlayzoneUser()->getLogin(),
+                $anotherLogins
+            ),
+            $wsUser
+        );
     }
 }

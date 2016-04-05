@@ -193,6 +193,14 @@ class User
      */
     private $auth = true;
 
+    /**
+     * @var boolean
+     *
+     * @JMS\Expose
+     * @JMS\Type("boolean")
+     */
+    private $offline = false;
+
 
     /**
      * Get id
@@ -693,6 +701,25 @@ class User
     public function setAuth($auth)
     {
         $this->auth = $auth;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getOffline() : boolean
+    {
+        return $this->offline;
+    }
+
+    /**
+     * @param boolean $offline
+     * @return User
+     */
+    public function setOffline(boolean $offline)
+    {
+        $this->offline = $offline;
+
+        return $this;
     }
 }
 

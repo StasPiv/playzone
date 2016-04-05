@@ -33,6 +33,23 @@ var playzoneApp = angular.module('playzoneApp', [
             );
         }
     );
+
+    $rootScope.loginsOnline = [];
+
+    WebsocketService.addListener('listen_welcome', 'welcome', function (loginsOnline) {
+        $rootScope.loginsOnline = loginsOnline;
+    });
+
+    WebsocketService.addListener('listen_user_in', 'user_in', function (user) {
+        $rootScope.loginsOnline.push(user['login']);
+    });
+
+    WebsocketService.addListener('listen_user_gone', 'user_gone', function (user) {
+        var index = $rootScope.loginsOnline.indexOf(user['login']);
+        if (index > -1) {
+            $rootScope.loginsOnline.splice(index, 1);
+        }
+    });
 }]);
 
 var checkIfUnauthorized = function ($q, $rootScope, $location) {

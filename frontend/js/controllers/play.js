@@ -73,18 +73,28 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         );
     };
 
-    $scope.savePgnAndSendToObservers = function () {
+    $scope.sendWithWebsockets = function () {
+        if ($scope.game.status === 'play') {
+            var opponentTime = $scope.game.color === 'w' ?
+                $scope.game.time_black :
+                $scope.game.time_white;
+            WebsocketService.sendGameToObservers($scope.game.id, window.btoa($scope.game.pgn), opponentTime, $scope.game.color);
+        } else {
+            WebsocketService.sendGameToObservers($scope.game.id);
+        }
+    };
+
+    $scope.savePgnAndSendToObservers = function (withoutSaving) {
+        if (withoutSaving) {
+            $scope.sendWithWebsockets();
+        }
+
         $scope.game.$savePgn().then(
             function () {
-                if ($scope.game.status === 'play') {
-                    var opponentTime = $scope.game.color === 'w' ? 
-                                       $scope.game.time_black :
-                                       $scope.game.time_white;
-                    WebsocketService.sendGameToObservers($scope.game.id, window.btoa($scope.game.pgn), opponentTime, $scope.game.color);
-                } else {
-                    WebsocketService.sendGameToObservers($scope.game.id);
+                if (!withoutSaving) {
+                    $scope.sendWithWebsockets();
                 }
             }
-        );
+        )
     };
 });

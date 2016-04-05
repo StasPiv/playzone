@@ -104,7 +104,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     move: move
                 });
                 scope.game.pgn = element.game.pgn();
-                scope.savePgnAndSendToObservers();
+                scope.savePgnAndSendToObservers(true);
 
                 element.game.game_over() && !element.game.in_checkmate() && scope.draw();
             };

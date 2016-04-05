@@ -99,14 +99,16 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
             element.onMove = function (move) {
                 scope.current_move = scope.pre_move = false;
                 $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
-                WebRTCService.sendMessage({
-                    gameId: scope.game.id,
-                    move: move
-                });
+
                 scope.game.pgn = element.game.pgn();
                 scope.savePgnAndSendToObservers(true);
 
                 element.game.game_over() && !element.game.in_checkmate() && scope.draw();
+
+                WebRTCService.sendMessage({
+                    gameId: scope.game.id,
+                    move: move
+                });
             };
 
             WebRTCService.addMessageListener(

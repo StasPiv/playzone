@@ -5,6 +5,13 @@
 
 playzoneControllers.directive('openPopup', function () {
     var overlay = $('.footer .overlay');
+    var sendCallButton = $('.call-form .send-call');
+
+    function hidePopup(popupSelector) {
+        overlay.hide();
+        $(popupSelector).hide();
+    }
+
     return {
         restrict: 'C',
         link: function(scope, element) {
@@ -13,8 +20,10 @@ playzoneControllers.directive('openPopup', function () {
                 overlay.show();
                 $(popupSelector).show();
                 overlay.on('click', function() {
-                    $(this).hide();
-                    $(popupSelector).hide();
+                    hidePopup.call(this, popupSelector);
+                });
+                sendCallButton.on('click', function () {
+                    hidePopup.call(this, popupSelector);
                 });
                 return false;
             });

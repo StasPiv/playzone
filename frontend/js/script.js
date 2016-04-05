@@ -3,8 +3,8 @@ jQuery(function($){
         $('.filter_form').fadeOut(100);
     });
 
-    $('.call_form input[type="submit"]').click(function(){
-        $('.call_form').fadeOut(100);
+    $('.call-form input[type="submit"]').click(function(){
+        $('.call-form').fadeOut(100);
     });
     
     // кнопка закрыть системное сообщение

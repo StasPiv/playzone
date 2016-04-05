@@ -1,5 +1,5 @@
 <div ng-controller="CallCtrl">
-    <div class="call_form filter">
+    <div class="call-form filter">
         <table>
             <tbody>
             <tr>
@@ -30,13 +30,13 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <input class="button" value="OK" type="submit" data-ng-click="sendCall(call)">
+                    <input class="button send-call" value="OK" type="submit" data-ng-click="sendCall(call)">
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <div class="apply-call open-popup" data-open-popup=".call_form"><a class="button accept">{{ 'Call on the game' |
+    <div class="apply-call open-popup" data-open-popup=".call-form"><a class="button accept">{{ 'Call on the game' |
         translate }}</a></div>
 </div>
 <h1>{{ "Your calls" | translate }}</h1>

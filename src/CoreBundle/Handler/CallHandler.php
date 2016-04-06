@@ -173,7 +173,7 @@ class CallHandler implements CallProcessorInterface
             ->setFrom('robot@immortalchess.net')
             ->setTo($this->container->getParameter("app_immortalchess.developer_email"))
             ->setBody(
-                $this->container->get("templating")->renderView(
+                $this->container->get("templating")->render(
                     'Email/newcall.html.twig',
                     array('name' => $callerName)
                 ),

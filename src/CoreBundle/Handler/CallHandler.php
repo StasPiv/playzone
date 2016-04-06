@@ -152,7 +152,35 @@ class CallHandler implements CallProcessorInterface
 
         $this->manager->flush();
 
+        try {
+            $this->sendEmailAboutCallSend($gameCall->getFromUser()->getLogin());
+        } catch (\Exception $e) {
+
+        }
+
         return $gameCall;
+    }
+
+    /**
+     * send email about call send
+     *
+     * @param string $callerName
+     */
+    private function sendEmailAboutCallSend(string $callerName)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject('New call')
+            ->setFrom('robot@immortalchess.net')
+            ->setTo($this->container->getParameter("app_immortalchess.developer_email"))
+            ->setBody(
+                $this->container->get("templating")->renderView(
+                    'Email/newcall.html.twig',
+                    array('name' => $callerName)
+                ),
+                'text/html'
+            )
+        ;
+        $this->container->get('mailer')->send($message);
     }
 
     /**

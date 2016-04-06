@@ -31,4 +31,3 @@ parameters:
     app_immortalchess.test.database_user: 'immortalchess'
     app_immortalchess.test.database_password: '123456'
     app_call.lifetime: 300
-    app_immortalchess.developer_email: 'staspivovartsev@gmail.com'

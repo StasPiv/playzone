@@ -1,7 +1,7 @@
 <div id="playroom">
     <h1>{{game.user_white.login}} - {{game.user_black.login}}</h1>
     <h2 ng-if="game.status == 'end'">{{game.result_white}} - {{game.result_black}}</h2>
-    <div ng-if="false && game.mine && game.opponent.offline" class="info">{{ 'Opponent is offline' | translate }}</div>
+    <div ng-if="game.mine && game.opponent.offline" class="info">{{ 'Opponent is offline' | translate }}</div>
     <div class="play-chess-board chess-board-legal" data-board="board">
         <chess-timer
                 class="white"

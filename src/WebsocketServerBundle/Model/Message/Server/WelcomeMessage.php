@@ -12,6 +12,10 @@ use JMS\Serializer\Annotation as JMS;
 use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageMethod;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
 
+/**
+ * Class WelcomeMessage
+ * @package WebsocketServerBundle\Model\Message\Server
+ */
 class WelcomeMessage extends PlayzoneMessage
 {
     /**
@@ -33,13 +37,42 @@ class WelcomeMessage extends PlayzoneMessage
     private $otherLogins = [];
 
     /**
+     * @var array
+     *
+     * @JMS\Expose()
+     * @JMS\Type("array")
+     */
+    protected $data;
+
+    /**
      * @param $login
      * @param array $otherLogins
      */
     public function __construct($login, $otherLogins = [])
     {
         $this->setLogin($login)
-             ->setOtherLogins($otherLogins);
+             ->setData([
+                'other_logins' => $otherLogins
+             ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function getData() : array
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param array $data
+     * @return WelcomeMessage
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+
+        return $this;
     }
 
     /**

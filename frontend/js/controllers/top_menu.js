@@ -5,6 +5,13 @@
 
 playzoneControllers.controller('TopMenuCtrl', function ($scope) {
     $scope.menu = [
-        
+        {
+            "label": "Games",
+            "url": "/#/games/"
+        },
+        {
+            "label": "Players online",
+            "url": "/#/online/"
+        }
     ];
 });

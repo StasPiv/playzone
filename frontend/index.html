@@ -33,6 +33,7 @@
     <script src="js/controllers/games.js"></script>
     <script src="js/controllers/call.js"></script>
     <script src="js/controllers/play.js"></script>
+    <script src="js/controllers/online.js"></script>
     <script src="js/directives/drop_down_menu.js"></script>
     <script src="js/directives/open_popup.js"></script>
     <script src="js/directives/chess_board_legal.js"></script>
@@ -62,6 +63,18 @@
         <div class="header">
             <a href="#/games/"><img src="images/logo.png" /></a>
 
+            <div class="menu" ng-controller="TopMenuCtrl">
+                <ul>
+                    <li class="button" ng-repeat="item in menu">
+                        <a href="{{item.url}}">{{item.label | translate}}</a>
+                        <ul class="sub-menu">
+                            <li class="button" ng-repeat="subItem in item.menu">
+                                <a href="{{subItem.url}}">{{subItem.label | translate}}</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
             <div class="language" ng-controller="LanguageCtrl">
                 <a ng-click="changeLanguage('en')" href="/#/">en</a> | <a ng-click="changeLanguage('ru')" href="/#/">ru</a>
             </div>

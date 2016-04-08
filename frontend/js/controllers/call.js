@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('CallCtrl', function ($scope, CallRest, WebsocketService) {
+playzoneControllers.controller('CallCtrl', function ($scope, $location, CallRest, WebsocketService) {
     $scope.colors = [
         {id: 'random', name: 'Random'},
         {id: 'w', name: 'White'},
@@ -17,12 +17,14 @@ playzoneControllers.controller('CallCtrl', function ($scope, CallRest, Websocket
     };
 
     $scope.sendCall = function(call) {
+        $('.footer .overlay').hide();
+        $location.path('/games');
         CallRest.send(
             {},
             call,
             function(responseCall) {
                 var newCallIds = [];
-                $scope.calls_from_me.push(responseCall);
+                $scope.calls_from_me && $scope.calls_from_me.push(responseCall);
                 newCallIds.push(responseCall.id);
                 $scope.errors = {};
 

@@ -10,7 +10,7 @@ playzoneControllers.controller('TopMenuCtrl', function ($scope) {
             "url": "/#/games/"
         },
         {
-            "label": "Players online",
+            "label": "Players",
             "url": "/#/online/"
         }
     ];

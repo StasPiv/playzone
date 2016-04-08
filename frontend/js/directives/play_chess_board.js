@@ -86,6 +86,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                         element.game.load_pgn(receivedPgn);
                         element.board.position(element.game.fen());
                         element.updateStatus();
+                        element.game.game_over() && scope.game.$get();
 
                         highlightLastMove(scope, element);
                         makePreMoveIfExists(scope, element);

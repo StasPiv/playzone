@@ -166,8 +166,11 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
             throw new PlayzoneServerException("Validator found some errors");
         }
 
-        $playzoneUser = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($newWsUser,
-        $this->container->get("core.request.error"));
+        $playzoneUser = $this->container->get("core.service.security")
+                             ->getUserIfCredentialsIsOk(
+                                 $newWsUser,
+                                 $this->container->get("core.request.error")
+                             );
 
         foreach ($this->users as $wsUser) {
             if ($wsUser->getConnection() != $from) {

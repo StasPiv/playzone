@@ -28,17 +28,17 @@ class ErrorService
     }
 
     /**
-     * @param RequestErrorInterface $RequestErrorInterface
+     * @param RequestErrorInterface $requestError
      * @param int $code
      * @throws ProcessorException
      */
-    public function throwExceptionIfHasErrors(RequestErrorInterface $RequestErrorInterface, $code)
+    public function throwExceptionIfHasErrors(RequestErrorInterface $requestError, int $code)
     {
-        $className = get_class($RequestErrorInterface);
+        $className = get_class($requestError);
         $initialState = new $className;
 
-        if ($initialState != $RequestErrorInterface) {
-            $RequestErrorInterface->throwException($code);
+        if ($initialState != $requestError) {
+            $requestError->throwException($code);
         }
     }
 }

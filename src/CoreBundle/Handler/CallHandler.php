@@ -9,6 +9,7 @@
 namespace CoreBundle\Handler;
 
 use CoreBundle\Exception\Handler\GameCallHandlerException;
+use CoreBundle\Exception\Handler\User\UserNotFoundException;
 use CoreBundle\Model\Game\GameParams;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
@@ -108,6 +109,12 @@ class CallHandler implements CallProcessorInterface
         $call->setFromUser($me)
              ->setGameParams($gameParams);
 
+        if ($this->isTheSameCommonCallExists($call, $me)) {
+            $this->getRequestError()
+                 ->addError("player", "You already created call with the same params")
+                 ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
         $this->manager->persist($call);
 
         return $call;
@@ -131,24 +138,25 @@ class CallHandler implements CallProcessorInterface
         $gameParams->setColor( $this->getOpponentColor($sendRequest->getColor()) )
                    ->setTimeBase($sendRequest->getTime()->getBase());
 
-        if ($sendRequest->getPlayer()) {
-            /** @var User $opponent */
-            $opponent = $this->container->get("core.handler.user")->getRepository()->findOneByLogin($sendRequest->getPlayer());
-
-            if (!$opponent instanceof User) {
-                $this->getRequestError()->addError("player", "Opponent with this login is not found");
-                $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
-            }
-
-            $gameCall = $this->createGameCallToUser($me, $gameParams, $opponent);
-        } else {
+        if (!$sendRequest->getPlayer()) {
             $gameCall = $this->createCommonGameCall($me, $gameParams);
-            if ($this->isTheSameCommonCallExists($gameCall, $me)) {
-                $this->getRequestError()
-                     ->addError("player", "You already created call with the same params")
-                     ->throwException(ResponseStatusCode::FORBIDDEN);
-            }
+
+            $this->manager->flush();
+
+            return $gameCall;
         }
+
+        try {
+            $opponent = $this->container->get("core.handler.user")
+                                        ->getRepository()
+                                        ->findOneByLogin($sendRequest->getPlayer());
+        } catch (UserNotFoundException $e) {
+            $this->getRequestError()
+                 ->addError("player", "Opponent with this login is not found")
+                 ->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        $gameCall = $this->createGameCallToUser($me, $gameParams, $opponent);
 
         $this->manager->flush();
 

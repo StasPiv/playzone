@@ -9,6 +9,7 @@
 namespace CoreBundle\Service;
 
 use CoreBundle\Entity\User;
+use CoreBundle\Exception\Handler\User\TokenNotCorrectException;
 use CoreBundle\Exception\Handler\User\UserHandlerException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
 use CoreBundle\Exception\Processor\ProcessorException;
@@ -46,9 +47,12 @@ class SecurityService
                 $securityRequest->getLogin(),
                 $securityRequest->getToken()
             );
-        } catch (UserHandlerException $e) {
-            $securityError->addError("login", "Forbidden for user with this credentials");
-            $securityError->throwException(ResponseStatusCode::FORBIDDEN);
+        } catch (UserNotFoundException $e) {
+            $securityError->addError("login", "Login is not found")
+                          ->throwException(ResponseStatusCode::FORBIDDEN);
+        } catch (TokenNotCorrectException $e) {
+            $securityError->addError("token", "Forbidden for user with this credentials")
+                          ->throwException(ResponseStatusCode::FORBIDDEN);
         }
     }
 }

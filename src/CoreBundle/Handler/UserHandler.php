@@ -11,6 +11,7 @@ namespace CoreBundle\Handler;
 use CoreBundle\Exception\Handler\User\PasswordNotCorrectException;
 use CoreBundle\Exception\Handler\User\TokenNotCorrectException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
+use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\RequestErrorInterface;
 use CoreBundle\Model\Request\User\UserGetListRequest;
@@ -24,6 +25,10 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Doctrine\ORM\EntityManager;
 
+/**
+ * Class UserHandler
+ * @package CoreBundle\Handler
+ */
 class UserHandler implements UserProcessorInterface
 {
     use ContainerAwareTrait;
@@ -63,15 +68,23 @@ class UserHandler implements UserProcessorInterface
      */
     public function processPostRegister(UserPostRegisterRequest $registerRequest) : User
     {
-        if ($this->repository->findOneByEmail($registerRequest->getEmail())) {
-            $this->getRequestError()->addError("email", 'This email was already registered');
+        try {
+            if ($this->repository->findOneByEmail($registerRequest->getEmail())) {
+                $this->getRequestError()->addError("email", 'This email was already registered');
+            }
+        } catch (UserNotFoundException $e) {
+            // that's alright
         }
 
-        if ($this->repository->findOneByLogin($registerRequest->getLogin())) {
-            $this->getRequestError()->addError("login", 'This login was already registered');
+        try {
+            if ($this->repository->findOneByLogin($registerRequest->getLogin())) {
+                $this->getRequestError()->addError("login", 'This login was already registered');
+            }
+        } catch (UserNotFoundException $e) {
+            // that's alright
         }
 
-        if ($registerRequest->getPassword() != $registerRequest->getPasswordRepeat()) {
+        if ($registerRequest->getPassword() !== $registerRequest->getPasswordRepeat()) {
             $this->getRequestError()->addError("password_repeat", 'The password repeat should be the same');
         }
 
@@ -100,15 +113,22 @@ class UserHandler implements UserProcessorInterface
             return $this->container->get("core.service.security")->getUserIfCredentialsIsOk($authRequest, $this->getRequestError());
         }
 
-        $user = $this->tryToFindUserInBothDatabases($authRequest);
-
-        if ($user->getPassword() != $this->generatePasswordHash($authRequest->getPassword())) {
-            $this->getRequestError()->addError("password", "The password is not correct");
-            $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
+        try {
+            try {
+                $user = $this->searchUserOnPlayzone($authRequest);
+            } catch (UserNotFoundException $e) {
+                $user = $this->searchUserOnImmortalchess($authRequest);
+                $this->saveUser($user);
+            }
+        } catch (UserNotFoundException $e) {
+            $this->getRequestError()->addError("login", "The login is not found")
+                 ->throwException(ResponseStatusCode::FORBIDDEN);
+        } catch (PasswordNotCorrectException $e) {
+            $this->getRequestError()->addError("password", "The password is not correct")
+                 ->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
-        $this->container->get("core.service.error")->throwExceptionIfHasErrors($this->getRequestError(), ResponseStatusCode::FORBIDDEN);
-
+        /** @var User $user */
         $this->generateUserToken($user);
 
         return $user;
@@ -144,10 +164,6 @@ class UserHandler implements UserProcessorInterface
     {
         $user = $this->repository->findOneByLogin($login);
 
-        if (!$user instanceof User) {
-            throw new UserNotFoundException;
-        }
-
         $this->generateUserToken($user);
 
         if ($user->getToken() !== $token) {
@@ -161,38 +177,9 @@ class UserHandler implements UserProcessorInterface
      * @param string $password
      * @return string
      */
-    private function generatePasswordHash($password)
+    private function generatePasswordHash($password) : string 
     {
         return md5($password);
-    }
-
-    /**
-     * @param UserPostAuthRequest $authRequest
-     * @return User
-     */
-    private function tryToFindUserInBothDatabases(UserPostAuthRequest $authRequest) : User
-    {
-        $user = $this->repository->findOneByLogin($authRequest->getLogin());
-
-        if ($user instanceof User) {
-            return $user;
-        }
-
-        try {
-            $user = $this->container->get('core.service.immortalchessnet')
-                ->getUser($authRequest->getLogin(),$authRequest->getPassword());
-
-            $user->setPassword($this->generatePasswordHash($authRequest->getPassword()));
-            $this->saveUser($user);
-
-            return $user;
-        } catch (UserNotFoundException $e) {
-            $this->getRequestError()->addError("login", "The login is not found");
-            $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
-        } catch (PasswordNotCorrectException $e) {
-            $this->getRequestError()->addError("password", "The password is not correct");
-            $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
-        }
     }
 
     /**
@@ -201,5 +188,35 @@ class UserHandler implements UserProcessorInterface
     private function generateUserToken(User $user)
     {
         $user->setToken(md5($user->getLogin() . $user->getPassword()));
+    }
+
+    /**
+     * @param UserPostAuthRequest $authRequest
+     * @return User
+     * @throws UserNotFoundException
+     * @throws PasswordNotCorrectException
+     */
+    private function searchUserOnImmortalchess(UserPostAuthRequest $authRequest) : User
+    {
+        return $this->container->get('core.service.immortalchessnet')
+                    ->getUser($authRequest->getLogin(), $authRequest->getPassword())
+                    ->setPassword($this->generatePasswordHash($authRequest->getPassword()));
+    }
+
+    /**
+     * @param UserPostAuthRequest $authRequest
+     * @return User
+     * @throws UserNotFoundException
+     * @throws PasswordNotCorrectException
+     */
+    private function searchUserOnPlayzone(UserPostAuthRequest $authRequest) : User
+    {
+        $user = $this->repository->findOneByLogin($authRequest->getLogin());
+
+        if ($user->getPassword() != $this->generatePasswordHash($authRequest->getPassword())) {
+            throw new PasswordNotCorrectException;
+        }
+
+        return $user;
     }
 }

@@ -16,7 +16,7 @@
     "response": {
       "status": 403,
       "errors": {
-        "login":"Forbidden for user with this credentials"
+        "token":"Forbidden for user with this credentials"
       }
     }
   },

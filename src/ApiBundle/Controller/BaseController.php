@@ -94,6 +94,7 @@ abstract class BaseController extends FOSRestController
             if ($this->container->get('kernel')->getEnvironment() != 'prod') {
                 $data['debug']['errorFile'] = $exception->getFile();
                 $data['debug']['errorLine'] = $exception->getLine();
+                $data['debug']['errorType'] = get_class($exception);
             }
             $statusCode = ResponseStatusCode::ISE;
         }

@@ -93,6 +93,20 @@
       }
     }
   },
+  "incorrect_password_from_immortal": {
+    "method": "POST",
+    "request": {
+      "login": "Стас",
+      "password": "0105867"
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "password": "The password is not correct"
+      },
+      "errorMessage": "Authorization failed"
+    }
+  },
   "correct_from_immortal": {
     "method": "POST",
     "request": {

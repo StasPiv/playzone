@@ -44,7 +44,7 @@
         <th>{{ "Player" | translate }}</th>
         <th>{{ "Action" | translate }}</th>
     </tr>
-    <tr ng-repeat="player in $root.loginsOnline">
+    <tr ng-repeat="player in $root.loginsOnline track by $index">
         <td>
             <a href="">{{ $index + 1 }}</a>
         </td>

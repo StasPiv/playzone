@@ -320,7 +320,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         $this->send(
             new WelcomeMessage(
                 $wsUser->getPlayzoneUser()->getLogin(),
-                $anotherLogins
+                array_unique($anotherLogins)
             ),
             $wsUser
         );

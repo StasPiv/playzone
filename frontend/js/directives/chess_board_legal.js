@@ -9,6 +9,7 @@
 playzoneControllers.directive('chessBoardLegal', function () {
     function doMoveOnTheBoard(scope, element, to) {
         scope.current_move.to = to; // move by click&click
+        scope.current_move.promotion = 'q'; // NOTE: always promote to a queen for example simplicity
 
         if (!element.game.move(scope.current_move)) {
             scope.current_move = scope.pre_move = false;

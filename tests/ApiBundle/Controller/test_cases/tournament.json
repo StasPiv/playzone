@@ -1,0 +1,29 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\TournamentFixtures"
+  ],
+  "get_tournament": {
+    "method": "GET",
+    "request": {
+      "reference": {
+        "name": "tournament_id",
+        "value": "tournament-0"
+      }
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "name": "First test tournament",
+        "players": [
+          {
+            "login": "Stas"
+          },
+          {
+            "login": "Petro"
+          }
+        ]
+      }
+    }
+  }
+}

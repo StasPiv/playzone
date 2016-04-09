@@ -1,0 +1,15 @@
+<h1>{{ "Players" | translate }}</h1>
+<table class="grid">
+    <tr>
+        <th>№</th>
+        <th>{{ "Player" | translate }}</th>
+    </tr>
+    <tr ng-repeat="user in tournament.players">
+        <td>
+            <a href="">{{ $index + 1 }}</a>
+        </td>
+        <td>
+            <a href="/#/profile/">{{ user.login }}</a>
+        </td>
+    </tr>
+</table>

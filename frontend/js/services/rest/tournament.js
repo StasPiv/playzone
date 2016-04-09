@@ -17,6 +17,9 @@ playzoneServices.factory('TournamentRest', function($resource, ApiService) {
                 url: ApiService.base_url + 'tournament/list',
                 isArray:true
             },
+            get: {
+                url: ApiService.base_url + 'tournament/:id'
+            },
             record: {
                 method: "POST",
                 url: ApiService.base_url + 'tournament/:id/record'

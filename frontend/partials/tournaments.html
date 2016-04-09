@@ -14,7 +14,7 @@
             <a href="">{{ $index + 1 }}</a>
         </td>
         <td>
-            <a href="">{{ tournament.name }}</a>
+            <a href="/#/tournament/{{ tournament.id }}">{{ tournament.name }}</a>
         </td>
         <td>
             <a href="">{{ tournament.game_params.time_base / 60000 }}{{ "m" | translate }}</a>

@@ -14,6 +14,7 @@ use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Tournament\TournamentDeleteUnrecordRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetListRequest;
+use CoreBundle\Model\Request\Tournament\TournamentGetRequest;
 use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Processor\TournamentProcessorInterface;
@@ -70,6 +71,23 @@ class TournamentHandler implements TournamentProcessorInterface
         }
 
         return $tournaments;
+    }
+
+    /**
+     * @param TournamentGetRequest $getRequest
+     * @return Tournament
+     */
+    public function processGet(TournamentGetRequest $getRequest) : Tournament
+    {
+        try {
+            $tournament = $this->repository->find($getRequest->getTournamentId());
+        } catch (TournamentNotFoundException $e) {
+            $this->getRequestError()->addError("tournament_id", "Tournament is not found")
+                 ->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        /** @var Tournament $tournament */
+        return $tournament;
     }
 
     /**

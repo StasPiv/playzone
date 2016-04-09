@@ -61,7 +61,7 @@
 <body>
     <div class="content" ng-cloak>
         <div class="header">
-            <a href="#/games/"><img src="images/logo.png" /></a>
+            <a ng-if="!EnvService.isMobile()" href="#/games/"><img src="images/logo.png" /></a>
 
             <div class="menu" ng-controller="TopMenuCtrl">
                 <ul>

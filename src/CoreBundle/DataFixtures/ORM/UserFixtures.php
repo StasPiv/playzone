@@ -20,7 +20,7 @@ class UserFixtures extends AbstractPlayzoneFixtures
      */
     public function getOrder()
     {
-        return 1;
+        return 0;
     }
 
     /**

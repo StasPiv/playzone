@@ -1,0 +1,25 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\TournamentFixtures"
+  ],
+  "all_tournaments": {
+    "method": "GET",
+    "request": {
+
+    },
+    "response": {
+      "status": 200,
+      "data": [
+        {
+          "name": "First test tournament"
+        },
+        {
+          "name": "Second test tournament"
+        },
+        {
+          "name": "Third test tournament"
+        }
+      ]
+    }
+  }
+}

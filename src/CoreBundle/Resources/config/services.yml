@@ -19,6 +19,12 @@ services:
         calls:
           - [setContainer, ['@service_container']]
           - [setRequestError, ['@core.request.error']]
+    core.handler.tournament:
+        class: CoreBundle\Handler\TournamentHandler
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+          - [setContainer, ['@service_container']]
+          - [setRequestError, ['@core.request.error']]
     core.service.error:
         class: CoreBundle\Service\ErrorService
         arguments: ['@service_container']

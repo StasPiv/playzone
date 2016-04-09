@@ -1,0 +1,14 @@
+[
+  {
+    "referenceName": "tournament-0",
+    "name": "First test tournament"
+  },
+  {
+    "referenceName": "tournament-1",
+    "name": "Second test tournament"
+  },
+  {
+    "referenceName": "tournament-2",
+    "name": "Third test tournament"
+  }
+]

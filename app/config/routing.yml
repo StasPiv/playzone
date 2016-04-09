@@ -16,6 +16,12 @@ call_api:
     prefix:   /
     defaults: {_format: json}
 
+tournament_api:
+    resource: "@ApiBundle/Controller/TournamentController.php"
+    type:     rest
+    prefix:   /
+    defaults: {_format: json}
+
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc

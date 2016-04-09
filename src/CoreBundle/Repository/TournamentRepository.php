@@ -8,6 +8,8 @@
 
 namespace CoreBundle\Repository;
 
+use CoreBundle\Entity\Tournament;
+use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -16,5 +18,26 @@ use Doctrine\ORM\EntityRepository;
  */
 class TournamentRepository extends EntityRepository
 {
+    /**
+     * Finds an entity by its primary key / identifier.
+     *
+     * @param mixed $id The identifier.
+     * @param int|null $lockMode One of the \Doctrine\DBAL\LockMode::* constants
+     *                              or NULL if no specific lock mode should be used
+     *                              during the search.
+     * @param int|null $lockVersion The lock version.
+     *
+     * @return object|null The entity instance or NULL if the entity can not be found.
+     */
+    public function find($id, $lockMode = null, $lockVersion = null) : Tournament
+    {
+        $tournament = parent::find($id, $lockMode, $lockVersion);
+        
+        if (!$tournament instanceof Tournament) {
+            throw new TournamentNotFoundException;
+        }
+
+        return $tournament;
+    }
 
 }

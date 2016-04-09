@@ -1,0 +1,61 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\TournamentFixtures"
+  ],
+  "record_without_tournament": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354"
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "tournament_id": "Tournament id is required for this request"
+      }
+    }
+  },
+  "tournament_not_found": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "tournament_id": 3213213
+    },
+    "response": {
+      "status": 404,
+      "errors": {
+        "tournament_id": "Tournament is not found"
+      }
+    }
+  },
+  "record_correct": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "tournament_id",
+        "value": "tournament-0"
+      }
+    },
+    "response": {
+      "status": 201,
+      "data": {
+        "name": "First test tournament",
+        "players": [
+          {
+            "login": "Stas"
+          },
+          {
+            "login": "Petro"
+          },
+          {
+            "login": "TestLogin"
+          }
+        ]
+      }
+    }
+  }
+}

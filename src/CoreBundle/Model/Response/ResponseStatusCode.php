@@ -8,9 +8,15 @@
 
 namespace CoreBundle\Model\Response;
 
+/**
+ * Class ResponseStatusCode
+ * @package CoreBundle\Model\Response
+ */
 class ResponseStatusCode
 {
     const OK = 200;
+    
+    const CREATED = 201;
 
     const BAD_FORMAT = 400;
 

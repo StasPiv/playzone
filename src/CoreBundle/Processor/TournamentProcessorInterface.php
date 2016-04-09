@@ -10,6 +10,7 @@ namespace CoreBundle\Processor;
 
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Model\Request\Tournament\TournamentGetListRequest;
+use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
 
 /**
  * Interface TournamentProcessorInterface
@@ -22,4 +23,10 @@ interface TournamentProcessorInterface
      * @return Tournament[]
      */
     public function processGetList(TournamentGetListRequest $listRequest) : array;
+
+    /**
+     * @param TournamentPostRecordRequest $listRequest
+     * @return Tournament
+     */
+    public function processPostRecord(TournamentPostRecordRequest $listRequest) : Tournament;
 }

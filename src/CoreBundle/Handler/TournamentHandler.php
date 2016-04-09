@@ -11,6 +11,7 @@ namespace CoreBundle\Handler;
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
+use CoreBundle\Model\Request\Tournament\TournamentDeleteUnrecordRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetListRequest;
 use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
@@ -58,18 +59,18 @@ class TournamentHandler implements TournamentProcessorInterface
     }
 
     /**
-     * @param TournamentPostRecordRequest $listRequest
+     * @param TournamentPostRecordRequest $recordRequest
      * @return Tournament
      */
-    public function processPostRecord(TournamentPostRecordRequest $listRequest) : Tournament
+    public function processPostRecord(TournamentPostRecordRequest $recordRequest) : Tournament
     {
         $user = $this->container->get("core.service.security")->getUserIfCredentialsIsOk(
-            $listRequest,
+            $recordRequest,
             $this->getRequestError()
         );
 
         try {
-            $tournament = $this->repository->find($listRequest->getTournamentId());
+            $tournament = $this->repository->find($recordRequest->getTournamentId());
         } catch (TournamentNotFoundException $e) {
             $this->getRequestError()->addError("tournament_id", "Tournament is not found")
                                     ->throwException(ResponseStatusCode::NOT_FOUND);
@@ -77,6 +78,32 @@ class TournamentHandler implements TournamentProcessorInterface
         
         /** @var Tournament $tournament */
         $tournament->addPlayer($user);
+
+        $this->manager->persist($tournament);
+
+        return $tournament;
+    }
+
+    /**
+     * @param TournamentDeleteUnrecordRequest $unrecordRequest
+     * @return Tournament
+     */
+    public function processDeleteUnrecord(TournamentDeleteUnrecordRequest $unrecordRequest) : Tournament
+    {
+        $user = $this->container->get("core.service.security")->getUserIfCredentialsIsOk(
+            $unrecordRequest,
+            $this->getRequestError()
+        );
+
+        try {
+            $tournament = $this->repository->find($unrecordRequest->getTournamentId());
+        } catch (TournamentNotFoundException $e) {
+            $this->getRequestError()->addError("tournament_id", "Tournament is not found")
+                ->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        /** @var Tournament $tournament */
+        $tournament->removePlayer($user);
 
         $this->manager->persist($tournament);
 

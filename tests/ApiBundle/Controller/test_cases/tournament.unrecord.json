@@ -1,0 +1,45 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\TournamentFixtures"
+  ],
+  "tournament_not_found": {
+    "method": "DELETE",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "tournament_id": 3213213
+    },
+    "response": {
+      "status": 404,
+      "errors": {
+        "tournament_id": "Tournament is not found"
+      }
+    }
+  },
+  "unrecord_correct": {
+    "method": "DELETE",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "tournament_id",
+        "value": "tournament-2"
+      }
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "name": "Third test tournament",
+        "players": {
+          "0": {
+            "login": "Stas"
+          },
+          "2": {
+            "login": "Petro"
+          }
+        }
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@
 
 namespace ApiBundle\Controller;
 
+use CoreBundle\Model\Request\Tournament\TournamentDeleteUnrecordRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetListRequest;
 use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
@@ -40,6 +41,16 @@ class TournamentController extends BaseController
     public function postRecordAction(Request $request, $tournament_id)
     {
         return $this->process($request, new TournamentPostRecordRequest(), ResponseStatusCode::CREATED);
+    }
+
+    /**
+     * @param Request $request
+     * @param $tournament_id
+     * @return Response
+     */
+    public function deleteUnrecordAction(Request $request, $tournament_id)
+    {
+        return $this->process($request, new TournamentDeleteUnrecordRequest());
     }
     
     /**

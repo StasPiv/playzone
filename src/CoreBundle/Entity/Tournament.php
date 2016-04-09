@@ -111,4 +111,14 @@ class Tournament
         $this->players[] = $player;
         return $this;
     }
+
+    /**
+     * @param User $player
+     * @return Tournament
+     */
+    public function removePlayer(User $player) : Tournament
+    {
+        $this->players->removeElement($player);
+        return $this;
+    }
 }

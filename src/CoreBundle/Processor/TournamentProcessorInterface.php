@@ -9,6 +9,7 @@
 namespace CoreBundle\Processor;
 
 use CoreBundle\Entity\Tournament;
+use CoreBundle\Model\Request\Tournament\TournamentDeleteUnrecordRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetListRequest;
 use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
 
@@ -25,8 +26,15 @@ interface TournamentProcessorInterface
     public function processGetList(TournamentGetListRequest $listRequest) : array;
 
     /**
-     * @param TournamentPostRecordRequest $listRequest
+     * @param TournamentPostRecordRequest $recordRequest
      * @return Tournament
      */
-    public function processPostRecord(TournamentPostRecordRequest $listRequest) : Tournament;
+    public function processPostRecord(TournamentPostRecordRequest $recordRequest) : Tournament;
+
+    /**
+     * @param TournamentDeleteUnrecordRequest $unrecordRequest
+     * @return Tournament
+     * @internal param TournamentDeleteUnrecordRequest $listRequest
+     */
+    public function processDeleteUnrecord(TournamentDeleteUnrecordRequest $unrecordRequest) : Tournament;
 }

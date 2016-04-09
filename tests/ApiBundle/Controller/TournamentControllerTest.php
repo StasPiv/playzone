@@ -24,4 +24,9 @@ class TournamentControllerTest extends BaseControllerTest
     {
         $this->assertFromJson('tournament/{tournament_id}/record');
     }
+
+    public function testTournamentUnrecord()
+    {
+        $this->assertFromJson('tournament/{tournament_id}/unrecord');
+    }
 }

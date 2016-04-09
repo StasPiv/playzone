@@ -6,11 +6,20 @@
 playzoneServices.factory('TournamentRest', function($resource, ApiService) {
     return $resource(
         '',
-        null,
+        $.extend(
+            {
+                id:'@id'
+            },
+            ApiService.getSecurityParams() // send with login and token
+        ),
         {
             query: {
                 url: ApiService.base_url + 'tournament/list',
                 isArray:true
+            },
+            record: {
+                method: "POST",
+                url: ApiService.base_url + 'tournament/:id/record'
             }
         }
     );

@@ -14,7 +14,9 @@
             <a href="">{{ tournament.name }}</a>
         </td>
         <td>
-
+            <a class="button accept" ng-click="recordIntoTournament(tournament)">
+                {{ 'Record' | translate }}
+            </a>
         </td>
     </tr>
 </table>

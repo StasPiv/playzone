@@ -7,4 +7,8 @@ playzoneControllers.controller('TournamentsCtrl', function ($scope, TournamentRe
     $scope.header = 'Tournaments';
     
     $scope.tournaments = TournamentRest.query();
+    
+    $scope.recordIntoTournament = function (tournament) {
+        TournamentRest.record(tournament);
+    }
 });

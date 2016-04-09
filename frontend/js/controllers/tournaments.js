@@ -9,6 +9,10 @@ playzoneControllers.controller('TournamentsCtrl', function ($scope, TournamentRe
     $scope.tournaments = TournamentRest.query();
     
     $scope.recordIntoTournament = function (tournament) {
-        TournamentRest.record(tournament);
-    }
+        tournament.$record();
+    };
+    
+    $scope.unrecordFromTournament = function (tournament) {
+        tournament.$unrecord();
+    };
 });

@@ -14,8 +14,11 @@
             <a href="">{{ tournament.name }}</a>
         </td>
         <td>
-            <a class="button accept" ng-click="recordIntoTournament(tournament)">
+            <a ng-if="!tournament.mine" class="button accept" ng-click="recordIntoTournament(tournament)">
                 {{ 'Record' | translate }}
+            </a>
+            <a ng-if="tournament.mine" class="button remove" ng-click="unrecordFromTournament(tournament)">
+                {{ 'Unrecord' | translate }}
             </a>
         </td>
     </tr>

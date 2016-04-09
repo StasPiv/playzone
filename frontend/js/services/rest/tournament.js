@@ -20,6 +20,10 @@ playzoneServices.factory('TournamentRest', function($resource, ApiService) {
             record: {
                 method: "POST",
                 url: ApiService.base_url + 'tournament/:id/record'
+            },
+            unrecord: {
+                method: "DELETE",
+                url: ApiService.base_url + 'tournament/:id/unrecord'
             }
         }
     );

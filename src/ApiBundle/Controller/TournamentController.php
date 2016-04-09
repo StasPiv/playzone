@@ -31,12 +31,13 @@ class TournamentController extends BaseController
     {
         return $this->process($request, new TournamentGetListRequest());
     }
-    
+
     /**
      * @param Request $request
+     * @param $tournament_id
      * @return Response
      */
-    public function postRecordAction(Request $request)
+    public function postRecordAction(Request $request, $tournament_id)
     {
         return $this->process($request, new TournamentPostRecordRequest(), ResponseStatusCode::CREATED);
     }

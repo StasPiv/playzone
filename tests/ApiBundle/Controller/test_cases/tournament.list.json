@@ -27,5 +27,34 @@
         }
       ]
     }
+  },
+  "all_tournaments_with_token": {
+    "method": "GET",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354"
+    },
+    "response": {
+      "status": 200,
+      "data": [
+        {
+          "name": "First test tournament",
+          "players": [
+            {
+              "login": "Stas"
+            }
+          ],
+          "mine": false
+        },
+        {
+          "name": "Second test tournament",
+          "mine": true
+        },
+        {
+          "name": "Third test tournament",
+          "mine": true
+        }
+      ]
+    }
   }
 }

@@ -9,6 +9,7 @@
 namespace CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use JMS\Serializer\Annotation as JMS;
 
 /**
@@ -37,13 +38,20 @@ class Tournament
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="features")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="players", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="tournament_player",
      *      joinColumns={@ORM\JoinColumn(name="tournament_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id")}
      *      )
+     * 
+     * @var PersistentCollection
      */
     private $players;
+
+    /**
+     * @var bool
+     */
+    private $mine;
 
     /**
      * @return int
@@ -84,9 +92,9 @@ class Tournament
     }
 
     /**
-     * @return User[]
+     * @return PersistentCollection
      */
-    public function getPlayers() : array
+    public function getPlayers() : PersistentCollection
     {
         return $this->players;
     }
@@ -119,6 +127,25 @@ class Tournament
     public function removePlayer(User $player) : Tournament
     {
         $this->players->removeElement($player);
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isMine() : bool
+    {
+        return !!$this->mine;
+    }
+
+    /**
+     * @param boolean $mine
+     * @return Tournament
+     */
+    public function setMine(bool $mine)
+    {
+        $this->mine = $mine;
+
         return $this;
     }
 }

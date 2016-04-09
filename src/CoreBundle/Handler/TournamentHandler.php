@@ -9,6 +9,7 @@
 namespace CoreBundle\Handler;
 
 use CoreBundle\Entity\Tournament;
+use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Tournament\TournamentDeleteUnrecordRequest;
@@ -55,7 +56,20 @@ class TournamentHandler implements TournamentProcessorInterface
      */
     public function processGetList(TournamentGetListRequest $listRequest) : array
     {
-        return $this->repository->findAll();
+        $tournaments = $this->repository->findAll();
+
+        if ($listRequest->getToken()) {
+            $user = $this->container->get("core.service.security")->getUserIfCredentialsIsOk(
+                $listRequest,
+                $this->getRequestError()
+            );
+
+            foreach ($tournaments as $tournament) {
+                $this->setMineToTournament($tournament, $user);
+            }
+        }
+
+        return $tournaments;
     }
 
     /**
@@ -80,6 +94,9 @@ class TournamentHandler implements TournamentProcessorInterface
         $tournament->addPlayer($user);
 
         $this->manager->persist($tournament);
+        $this->manager->flush();
+
+        $this->setMineToTournament($tournament, $user);
 
         return $tournament;
     }
@@ -99,15 +116,27 @@ class TournamentHandler implements TournamentProcessorInterface
             $tournament = $this->repository->find($unrecordRequest->getTournamentId());
         } catch (TournamentNotFoundException $e) {
             $this->getRequestError()->addError("tournament_id", "Tournament is not found")
-                ->throwException(ResponseStatusCode::NOT_FOUND);
+                 ->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
         /** @var Tournament $tournament */
         $tournament->removePlayer($user);
 
         $this->manager->persist($tournament);
+        $this->manager->flush();
+
+        $this->setMineToTournament($tournament, $user);
 
         return $tournament;
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param User $user
+     */
+    private function setMineToTournament(Tournament $tournament, User $user)
+    {
+        $tournament->setMine($tournament->getPlayers()->contains($user));
     }
 
 }

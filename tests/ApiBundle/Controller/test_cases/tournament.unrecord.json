@@ -1,6 +1,7 @@
 {
   "fixtures": [
     "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures",
     "CoreBundle\\DataFixtures\\ORM\\TournamentFixtures"
   ],
   "tournament_not_found": {
@@ -31,14 +32,18 @@
       "status": 200,
       "data": {
         "name": "Third test tournament",
-        "players": {
-          "0": {
-            "login": "Stas"
+        "players": [
+          {
+            "player": {
+              "login": "Stas"
+            }
           },
-          "2": {
-            "login": "Petro"
+          {
+            "player": {
+              "login": "Petro"
+            }
           }
-        }
+        ]
       }
     }
   }

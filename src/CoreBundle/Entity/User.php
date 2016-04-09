@@ -3,6 +3,7 @@
 namespace CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
 
@@ -200,6 +201,13 @@ class User
      * @JMS\Type("boolean")
      */
     private $offline = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity="CoreBundle\Entity\TournamentPlayer", mappedBy="player", cascade={"persist"})
+     * 
+     * @var PersistentCollection
+     */
+    private $tournaments;
 
 
     /**
@@ -719,6 +727,45 @@ class User
     {
         $this->offline = $offline;
 
+        return $this;
+    }
+
+    /**
+     * @return PersistentCollection
+     */
+    public function getTournaments() : PersistentCollection
+    {
+        return $this->tournaments;
+    }
+
+    /**
+     * @param PersistentCollection $tournaments
+     * @return Tournament
+     */
+    public function setTournaments(PersistentCollection $tournaments) : Tournament
+    {
+        $this->tournaments = $tournaments;
+
+        return $this;
+    }
+
+    /**
+     * @param TournamentPlayer $tournament
+     * @return User
+     */
+    public function addTournament(TournamentPlayer $tournament) : User
+    {
+        $this->tournaments->add($tournament);
+        return $this;
+    }
+
+    /**
+     * @param TournamentPlayer $player
+     * @return User
+     */
+    public function removeTournament(TournamentPlayer $player) : User
+    {
+        $this->tournaments->removeElement($player);
         return $this;
     }
 }

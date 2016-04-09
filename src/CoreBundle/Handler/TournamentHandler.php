@@ -9,8 +9,10 @@
 namespace CoreBundle\Handler;
 
 use CoreBundle\Entity\Tournament;
+use CoreBundle\Entity\TournamentPlayer;
 use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
+use CoreBundle\Exception\Handler\Tournament\TournamentPlayerNotFoundException;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Tournament\TournamentDeleteUnrecordRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetListRequest;
@@ -138,7 +140,13 @@ class TournamentHandler implements TournamentProcessorInterface
         }
 
         /** @var Tournament $tournament */
-        $tournament->removePlayer($user);
+        try {
+            $tournamentPlayer = $this->searchTournamentPlayer($tournament, $user);
+        } catch (TournamentPlayerNotFoundException $e) {
+            return $tournament;
+        }
+
+        $this->manager->remove($tournamentPlayer);
 
         $this->manager->persist($tournament);
         $this->manager->flush();
@@ -154,7 +162,23 @@ class TournamentHandler implements TournamentProcessorInterface
      */
     private function setMineToTournament(Tournament $tournament, User $user)
     {
-        $tournament->setMine($tournament->getPlayers()->contains($user));
+        try {
+            $this->searchTournamentPlayer($tournament, $user);
+            $tournament->setMine(true);
+        } catch (TournamentPlayerNotFoundException $e) {
+            $tournament->setMine(false);
+        }
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param User $user
+     * @return TournamentPlayer
+     */
+    private function searchTournamentPlayer(Tournament $tournament, User $user) : TournamentPlayer
+    {
+        return $this->manager->getRepository("CoreBundle:TournamentPlayer")
+                    ->findByTournamentAndUser($tournament, $user);
     }
 
 }

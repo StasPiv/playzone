@@ -1,6 +1,7 @@
 {
   "fixtures": [
     "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures",
     "CoreBundle\\DataFixtures\\ORM\\TournamentFixtures"
   ],
   "tournament_not_found": {
@@ -33,13 +34,19 @@
         "name": "First test tournament",
         "players": [
           {
-            "login": "Stas"
+            "player": {
+              "login": "Stas"
+            }
           },
           {
-            "login": "Petro"
+            "player": {
+              "login": "Petro"
+            }
           },
           {
-            "login": "TestLogin"
+            "player": {
+              "login": "TestLogin"
+            }
           }
         ]
       }

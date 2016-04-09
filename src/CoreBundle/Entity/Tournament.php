@@ -41,13 +41,9 @@ class Tournament
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="players", cascade={"persist", "remove"})
-     * @ORM\JoinTable(name="tournament_player",
-     *      joinColumns={@ORM\JoinColumn(name="tournament_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id")}
-     *      )
-     * 
-     * @var PersistentCollection
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="CoreBundle\Entity\TournamentPlayer", mappedBy="tournament", cascade={"persist", "remove"})
      */
     private $players;
 
@@ -78,9 +74,8 @@ class Tournament
     private $mine;
 
     /**
-     * @ORM\OneToMany(targetEntity="Game", mappedBy="tournament", cascade={"persist", "remove"})
-     *
      * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Game", mappedBy="tournament", cascade={"persist", "remove"})
      */
     private $games;
 
@@ -90,6 +85,7 @@ class Tournament
     public function __construct()
     {
         $this->games = new ArrayCollection();
+        $this->players = new ArrayCollection();
     }
 
     /**
@@ -139,33 +135,15 @@ class Tournament
     }
 
     /**
-     * @param User[] $players
-     * @return Tournament
-     */
-    public function setPlayers(array $players) : Tournament
-    {
-        $this->players = $players;
-
-        return $this;
-    }
-
-    /**
      * @param User $player
      * @return Tournament
      */
     public function addPlayer(User $player) : Tournament
     {
-        $this->players[] = $player;
-        return $this;
-    }
-
-    /**
-     * @param User $player
-     * @return Tournament
-     */
-    public function removePlayer(User $player) : Tournament
-    {
-        $this->players->removeElement($player);
+        $tournamentPlayer = new TournamentPlayer();
+        $tournamentPlayer->setTournament($this)
+                         ->setPlayer($player);
+        $this->players->add($tournamentPlayer);
         return $this;
     }
 

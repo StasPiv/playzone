@@ -1,6 +1,7 @@
 {
   "fixtures": [
     "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures",
     "CoreBundle\\DataFixtures\\ORM\\TournamentFixtures"
   ],
   "all_tournaments": {
@@ -15,7 +16,9 @@
           "name": "First test tournament",
           "players": [
             {
-              "login": "Stas"
+              "player": {
+                "login": "Stas"
+              }
             }
           ]
         },
@@ -41,7 +44,9 @@
           "name": "First test tournament",
           "players": [
             {
-              "login": "Stas"
+              "player": {
+                "login": "Stas"
+              }
             }
           ],
           "mine": false

@@ -38,7 +38,7 @@ class Tournament
 
     /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="features")
-     * @ORM\JoinTable(name="tournament_players",
+     * @ORM\JoinTable(name="tournament_player",
      *      joinColumns={@ORM\JoinColumn(name="tournament_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id")}
      *      )

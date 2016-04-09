@@ -192,6 +192,12 @@ class Game
     private $draw;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Tournament", inversedBy="games")
+     * @ORM\JoinColumn(name="tournament_id", referencedColumnName="id")
+     */
+    private $tournament;
+
+    /**
      * Get id
      *
      * @return int
@@ -646,6 +652,25 @@ class Game
     public function getMoveColor() : string
     {
         return $this->getUserWhite() == $this->getUserToMove() ? GameColor::WHITE : GameColor::BLACK;
+    }
+
+    /**
+     * @return Tournament
+     */
+    public function getTournament() : Tournament
+    {
+        return $this->tournament;
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @return Game
+     */
+    public function setTournament(Tournament $tournament) : Game
+    {
+        $this->tournament = $tournament;
+
+        return $this;
     }
 }
 

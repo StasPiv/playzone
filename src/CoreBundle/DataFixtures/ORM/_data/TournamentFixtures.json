@@ -12,7 +12,11 @@
     "tournament_params": {
       "type": "switz",
       "time_begin": "tomorrow"
-    }
+    },
+    "games": [
+      "game-0",
+      "game-1"
+    ]
   },
   {
     "referenceName": "tournament-1",

@@ -10,6 +10,7 @@ namespace CoreBundle\Entity;
 
 use CoreBundle\Model\Game\GameParams;
 use CoreBundle\Model\Tournament\TournamentParams;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use JMS\Serializer\Annotation as JMS;
@@ -75,6 +76,21 @@ class Tournament
      * @var bool
      */
     private $mine;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Game", mappedBy="tournament", cascade={"persist", "remove"})
+     *
+     * @var ArrayCollection
+     */
+    private $games;
+
+    /**
+     * Tournament constructor.
+     */
+    public function __construct()
+    {
+        $this->games = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -207,6 +223,46 @@ class Tournament
     {
         $this->tournamentParams = $tournamentParams;
 
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getGames() : ArrayCollection
+    {
+        return $this->games;
+    }
+
+    /**
+     * @param ArrayCollection $games
+     * @return Tournament
+     */
+    public function setGames(ArrayCollection $games)
+    {
+        $this->games = $games;
+
+        return $this;
+    }
+
+    /**
+     * @param Game $game
+     * @return Tournament
+     */
+    public function addGame(Game $game) : Tournament
+    {
+        $this->games->add($game);
+        $game->setTournament($this);
+        return $this;
+    }
+
+    /**
+     * @param Game $game
+     * @return Tournament
+     */
+    public function removeGame(Game $game) : Tournament
+    {
+        $this->games->removeElement($game);
         return $this;
     }
 }

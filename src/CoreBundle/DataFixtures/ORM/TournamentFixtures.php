@@ -8,6 +8,7 @@
 
 namespace CoreBundle\DataFixtures\ORM;
 
+use CoreBundle\Entity\Game;
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\User;
 use CoreBundle\Model\Game\GameParams;
@@ -56,6 +57,14 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
             }
 
             $tournament->setTournamentParams($tournamentParams);
+        }
+
+        if (isset($data["games"])) {
+            foreach ($data["games"] as $referenceGame) {
+                /** @var Game $game */
+                $game = $this->getReference($referenceGame);
+                $tournament->addGame($game);
+            }
         }
 
         return $tournament;

@@ -9,6 +9,7 @@
 namespace CoreBundle\DataFixtures\ORM;
 
 use CoreBundle\Entity\Tournament;
+use CoreBundle\Entity\User;
 
 /**
  * Class TournamentFixtures
@@ -23,8 +24,15 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
     protected function createEntity($data)
     {
         $tournament = new Tournament();
-
         $tournament->setName($data['name']);
+        
+        if (isset($data['players'])) {
+            foreach ($data['players'] as $referencePlayer) {
+                /** @var User $player */
+                $player = $this->getReference($referencePlayer);
+                $tournament->addPlayer($player);
+            }
+        }
 
         return $tournament;
     }

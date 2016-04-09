@@ -1,14 +1,27 @@
 [
   {
     "referenceName": "tournament-0",
-    "name": "First test tournament"
+    "name": "First test tournament",
+    "players": [
+      "user-stas",
+      "user-test-login"
+    ]
   },
   {
     "referenceName": "tournament-1",
-    "name": "Second test tournament"
+    "name": "Second test tournament",
+    "players": [
+      "user-petro",
+      "user-test-login"
+    ]
   },
   {
     "referenceName": "tournament-2",
-    "name": "Third test tournament"
+    "name": "Third test tournament",
+    "players": [
+      "user-stas",
+      "user-test-login",
+      "user-petro"
+    ]
   }
 ]

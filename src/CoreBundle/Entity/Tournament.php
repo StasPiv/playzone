@@ -30,16 +30,25 @@ class Tournament
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
      * @ORM\Column(type="string")
      */
     private $name;
 
     /**
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="features")
+     * @ORM\JoinTable(name="tournament_players",
+     *      joinColumns={@ORM\JoinColumn(name="tournament_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="player_id", referencedColumnName="id")}
+     *      )
+     */
+    private $players;
+
+    /**
      * @return int
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
@@ -48,7 +57,7 @@ class Tournament
      * @param int $id
      * @return Tournament
      */
-    public function setId($id)
+    public function setId($id) : Tournament
     {
         $this->id = $id;
 
@@ -56,21 +65,50 @@ class Tournament
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
     /**
-     * @param int $name
+     * @param string $name
      * @return Tournament
      */
-    public function setName($name)
+    public function setName(string $name) : Tournament
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getPlayers() : array
+    {
+        return $this->players;
+    }
+
+    /**
+     * @param User[] $players
+     * @return Tournament
+     */
+    public function setPlayers(array $players) : Tournament
+    {
+        $this->players = $players;
+
+        return $this;
+    }
+
+    /**
+     * @param User $player
+     * @return Tournament
+     */
+    public function addPlayer(User $player) : Tournament
+    {
+        $this->players[] = $player;
         return $this;
     }
 }

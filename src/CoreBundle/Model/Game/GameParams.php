@@ -10,6 +10,10 @@ namespace CoreBundle\Model\Game;
 
 use JMS\Serializer\Annotation as JMS;
 
+/**
+ * Class GameParams
+ * @package CoreBundle\Model\Game
+ */
 class GameParams
 {
     /**

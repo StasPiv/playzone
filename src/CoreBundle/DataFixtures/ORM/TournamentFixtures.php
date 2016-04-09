@@ -10,6 +10,9 @@ namespace CoreBundle\DataFixtures\ORM;
 
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\User;
+use CoreBundle\Model\Game\GameParams;
+use CoreBundle\Model\Tournament\Params\TournamentParamsFactory;
+use CoreBundle\Model\Tournament\TournamentParams;
 
 /**
  * Class TournamentFixtures
@@ -32,6 +35,27 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
                 $player = $this->getReference($referencePlayer);
                 $tournament->addPlayer($player);
             }
+        }
+
+        if (isset($data["game_params"])) {
+            /** @var GameParams $gameParams */
+            $gameParams = $this->container->get("jms_serializer")->deserialize(
+                json_encode($data["game_params"]),
+                'CoreBundle\Model\Game\GameParams',
+                'json'
+            );
+
+            $tournament->setGameParams($gameParams);
+        }
+
+        if (isset($data["tournament_params"])) {
+            $tournamentParams = TournamentParamsFactory::create($data["tournament_params"]["type"]);
+            
+            if (isset($data["tournament_params"]["time_begin"])) {
+                $tournamentParams->setTimeBegin(new \DateTime($data["tournament_params"]["time_begin"]));
+            }
+
+            $tournament->setTournamentParams($tournamentParams);
         }
 
         return $tournament;

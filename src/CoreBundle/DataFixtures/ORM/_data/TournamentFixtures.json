@@ -5,7 +5,14 @@
     "players": [
       "user-stas",
       "user-petro"
-    ]
+    ],
+    "game_params": {
+      "time_base": 180000
+    },
+    "tournament_params": {
+      "type": "switz",
+      "time_begin": "tomorrow"
+    }
   },
   {
     "referenceName": "tournament-1",
@@ -13,7 +20,14 @@
     "players": [
       "user-petro",
       "user-test-login"
-    ]
+    ],
+    "game_params": {
+      "time_base": 300000
+    },
+    "tournament_params": {
+      "type": "switz",
+      "time_begin": "+1hour"
+    }
   },
   {
     "referenceName": "tournament-2",
@@ -22,6 +36,13 @@
       "user-stas",
       "user-test-login",
       "user-petro"
-    ]
+    ],
+    "game_params": {
+      "time_base": 600000
+    },
+    "tournament_params": {
+      "type": "switz",
+      "time_begin": "+1minute"
+    }
   }
 ]

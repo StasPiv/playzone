@@ -4,6 +4,9 @@
     <tr>
         <th>№</th>
         <th>{{ "Tournament" | translate }}</th>
+        <th>{{ "Parameters" | translate }}</th>
+        <th>{{ "Type" | translate }}</th>
+        <th>{{ "Time begin" | translate }}</th>
         <th>{{ "Action" | translate }}</th>
     </tr>
     <tr ng-repeat="tournament in tournaments track by $index">
@@ -12,6 +15,15 @@
         </td>
         <td>
             <a href="">{{ tournament.name }}</a>
+        </td>
+        <td>
+            <a href="">{{ tournament.game_params.time_base / 60000 }}{{ "m" | translate }}</a>
+        </td>
+        <td>
+            <a href="">{{ tournament.tournament_params.type | translate }}</a>
+        </td>
+        <td>
+            <a href="">{{ tournament.tournament_params.time_begin }}</a>
         </td>
         <td>
             <a ng-if="!tournament.mine" class="button accept" ng-click="recordIntoTournament(tournament)">

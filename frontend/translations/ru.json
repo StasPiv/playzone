@@ -106,5 +106,8 @@
   "Opponent is offline": "Ваш оппонент покинул игру",
   "Players online": "Игроки он-лайн",
   "Record": "Записаться",
-  "Unrecord": "Выйти"
+  "Unrecord": "Выйти",
+  "Parameters": "Параметры",
+  "Time begin": "Время начала",
+  "switz": "швейц"
 }

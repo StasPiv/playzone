@@ -8,6 +8,8 @@
 
 namespace CoreBundle\Entity;
 
+use CoreBundle\Model\Game\GameParams;
+use CoreBundle\Model\Tournament\TournamentParams;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use JMS\Serializer\Annotation as JMS;
@@ -47,6 +49,27 @@ class Tournament
      * @var PersistentCollection
      */
     private $players;
+
+    /**
+     * @var GameParams
+     *
+     * @JMS\Expose
+     * @JMS\Type("CoreBundle\Model\Game\GameParams")
+     * @JMS\SerializedName("game_params")
+     *
+     * @ORM\Column(name="game_params", type="object")
+     */
+    private $gameParams;
+
+    /**
+     * @var TournamentParams
+     *
+     * @JMS\Expose
+     * @JMS\Type("CoreBundle\Model\Tournament\TournamentParams")
+     *
+     * @ORM\Column(name="tournament_params", type="object")
+     */
+    private $tournamentParams;
 
     /**
      * @var bool
@@ -145,6 +168,44 @@ class Tournament
     public function setMine(bool $mine)
     {
         $this->mine = $mine;
+
+        return $this;
+    }
+
+    /**
+     * @return GameParams
+     */
+    public function getGameParams() : GameParams
+    {
+        return $this->gameParams;
+    }
+
+    /**
+     * @param GameParams $gameParams
+     * @return Tournament
+     */
+    public function setGameParams(GameParams $gameParams) : Tournament
+    {
+        $this->gameParams = $gameParams;
+
+        return $this;
+    }
+
+    /**
+     * @return TournamentParams
+     */
+    public function getTournamentParams() : TournamentParams
+    {
+        return $this->tournamentParams;
+    }
+
+    /**
+     * @param TournamentParams $tournamentParams
+     * @return Tournament
+     */
+    public function setTournamentParams(TournamentParams $tournamentParams)
+    {
+        $this->tournamentParams = $tournamentParams;
 
         return $this;
     }

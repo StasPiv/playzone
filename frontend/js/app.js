@@ -41,11 +41,13 @@ var playzoneApp = angular.module('playzoneApp', [
     });
 
     WebsocketService.addListener('listen_user_in', 'user_in', function (user) {
-        $rootScope.loginsOnline.indexOf(user['login']) === -1 && $rootScope.loginsOnline.push(user['login']);
+        $rootScope.loginsOnline.length > 0 &&
+        $rootScope.loginsOnline.indexOf(user['login']) === -1 &&
+        $rootScope.loginsOnline.push(user['login']);
     });
 
     WebsocketService.addListener('listen_user_gone', 'user_gone', function (user) {
-        var index = $rootScope.loginsOnline.indexOf(user['login']);
+        var index = $rootScope.loginsOnline.length > 0 && $rootScope.loginsOnline.indexOf(user['login']);
         if (index > -1) {
             $rootScope.loginsOnline.splice(index, 1);
         }

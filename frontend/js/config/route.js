@@ -41,6 +41,10 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 templateUrl: 'partials/online.html',
                 controller: 'OnlineCtrl'
             }).
+            when('/tournaments', {
+                templateUrl: 'partials/tournaments.html',
+                controller: 'TournamentsCtrl'
+            }).
             otherwise({
                 redirectTo: '/'
             });

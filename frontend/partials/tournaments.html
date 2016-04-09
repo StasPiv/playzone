@@ -1,0 +1,20 @@
+<h1>{{ header | translate }}</h1>
+
+<table class="grid">
+    <tr>
+        <th>№</th>
+        <th>{{ "Tournament" | translate }}</th>
+        <th>{{ "Action" | translate }}</th>
+    </tr>
+    <tr ng-repeat="tournament in tournaments track by $index">
+        <td>
+            <a href="">{{ $index + 1 }}</a>
+        </td>
+        <td>
+            <a href="">{{ tournament.name }}</a>
+        </td>
+        <td>
+
+        </td>
+    </tr>
+</table>

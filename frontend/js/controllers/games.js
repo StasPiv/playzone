@@ -63,7 +63,7 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $rootScope, $locat
             }
         });
 
-        if (data[0].to_user.login === $rootScope.user.login) {
+        if (data[0].to_user && data[0].to_user.login === $rootScope.user.login) {
             $location.path('/games');
         }
     });

@@ -8,7 +8,9 @@
 
 namespace CoreBundle\Handler;
 
+use CoreBundle\Entity\Game;
 use CoreBundle\Entity\Tournament;
+use CoreBundle\Entity\TournamentGame;
 use CoreBundle\Entity\TournamentPlayer;
 use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
@@ -154,6 +156,20 @@ class TournamentHandler implements TournamentProcessorInterface
         $this->setMineToTournament($tournament, $user);
 
         return $tournament;
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param Game $game
+     * @param int $round
+     */
+    public function addGameToTournament(Tournament $tournament, Game $game, int $round = 0)
+    {
+        $tournamentGame = (new TournamentGame())->setTournament($tournament)
+                                                ->setGame($game)
+                                                ->setRound($round);
+        
+        $this->manager->persist($tournamentGame);
     }
 
     /**

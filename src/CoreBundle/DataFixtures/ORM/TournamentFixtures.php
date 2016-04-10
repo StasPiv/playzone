@@ -60,10 +60,11 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
         }
 
         if (isset($data["games"])) {
-            foreach ($data["games"] as $referenceGame) {
+            foreach ($data["games"] as $dataGame) {
                 /** @var Game $game */
-                $game = $this->getReference($referenceGame);
-                $tournament->addGame($game);
+                $game = $this->getReference($dataGame["reference"]);
+                $this->container->get("core.handler.tournament")
+                     ->addGameToTournament($tournament, $game, $dataGame["round"]);
             }
         }
 

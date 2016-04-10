@@ -75,7 +75,7 @@ class Tournament
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Game", mappedBy="tournament", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="TournamentGame", mappedBy="tournament", cascade={"persist", "remove"})
      */
     private $games;
 
@@ -220,27 +220,6 @@ class Tournament
     {
         $this->games = $games;
 
-        return $this;
-    }
-
-    /**
-     * @param Game $game
-     * @return Tournament
-     */
-    public function addGame(Game $game) : Tournament
-    {
-        $this->games->add($game);
-        $game->setTournament($this);
-        return $this;
-    }
-
-    /**
-     * @param Game $game
-     * @return Tournament
-     */
-    public function removeGame(Game $game) : Tournament
-    {
-        $this->games->removeElement($game);
         return $this;
     }
 }

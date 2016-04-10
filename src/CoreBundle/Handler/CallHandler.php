@@ -30,6 +30,10 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
+/**
+ * Class CallHandler
+ * @package CoreBundle\Handler
+ */
 class CallHandler implements CallProcessorInterface
 {
     use ContainerAwareTrait;
@@ -137,7 +141,7 @@ class CallHandler implements CallProcessorInterface
         }
 
         $gameParams = new GameParams();
-        $gameParams->setColor( $this->getOpponentColor($sendRequest->getColor()) )
+        $gameParams->setColor( GameColor::getOppositeColor($sendRequest->getColor()) )
                    ->setTimeBase($sendRequest->getTime()->getBase());
 
         if (!$sendRequest->getPlayer()) {
@@ -158,6 +162,7 @@ class CallHandler implements CallProcessorInterface
                  ->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
+        /** @var User $opponent */
         $gameCall = $this->createGameCallToUser($me, $gameParams, $opponent);
 
         $this->manager->flush();
@@ -210,7 +215,7 @@ class CallHandler implements CallProcessorInterface
         $game = $this->container->get("core.handler.game")->createMyGame(
             $call->getFromUser(),
             $me,
-            $this->getOpponentColor($call->getGameParams()->getColor())
+            GameColor::getOppositeColor($call->getGameParams()->getColor())
         );
         $game->setStatus(GameStatus::PLAY);
         $game->setTimeWhite($call->getGameParams()->getTimeBase())
@@ -225,15 +230,6 @@ class CallHandler implements CallProcessorInterface
         $this->manager->flush();
 
         return $this->container->get("core.handler.game")->getUserGame($game, $me);
-    }
-
-    /**
-     * @param string $color
-     * @return GameColor
-     */
-    private function getOpponentColor(string $color)
-    {
-        return $color == GameColor::WHITE ? GameColor::BLACK : GameColor::WHITE;
     }
 
     /**

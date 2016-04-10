@@ -117,6 +117,8 @@ class CallHandler implements CallProcessorInterface
 
         $this->manager->persist($call);
 
+        $this->container->get("core.service.immortalchessnet")->publishPostAboutNewCall($call);
+
         return $call;
     }
 

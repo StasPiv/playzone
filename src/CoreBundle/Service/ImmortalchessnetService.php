@@ -8,13 +8,19 @@
 
 namespace CoreBundle\Service;
 
+use CoreBundle\Entity\GameCall;
 use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\User\PasswordNotCorrectException;
 use CoreBundle\Exception\Handler\User\TokenNotCorrectException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
+use CoreBundle\Model\Game\GameColor;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
+/**
+ * Class ImmortalchessnetService
+ * @package CoreBundle\Service
+ */
 class ImmortalchessnetService
 {
     use ContainerAwareTrait;
@@ -36,6 +42,54 @@ class ImmortalchessnetService
 
         return (new User())->setLogin($userData['username'])
                            ->setEmail($userData['email']);
+    }
+
+    /**
+     * @param GameCall $call
+     */
+    public function publishPostAboutNewCall(GameCall $call)
+    {
+        $title = 'New call from ' . $call->getFromUser();
+        $pageText = $this->container->get("templating")->render(
+            'Post/newcall.html.twig',
+            [
+                'user' => $call->getFromUser(),
+                'time_minutes' => $call->getGameParams()->getTimeBase() / 60000,
+                'color' => GameColor::getOppositeColor($call->getGameParams()->getColor())
+            ]
+        );
+
+        $threadForCalls = $this->container->getParameter("app_immortalchess.thread_for_calls");
+        $forumPlayzone = $this->container->getParameter("app_immortalchess.forum_playzone");
+        $userNameForSent = $this->container->getParameter("app_immortalchess.post_username_for_calls");
+        $userIdForSent = $this->container->getParameter("app_immortalchess.post_userid_for_calls");
+
+        $query = "
+            INSERT INTO post 
+            (threadid, username, userid, title, pagetext, visible, dateline)
+            VALUE
+            ($threadForCalls, '$userNameForSent', $userIdForSent, '$title', '$pageText', 1, 
+            UNIX_TIMESTAMP(CURRENT_TIMESTAMP())
+            );    
+        ";
+
+        $this->getConnection()->exec($query);
+        
+        $newPostId = $this->getConnection()->lastInsertId();
+        
+        $query = "
+            UPDATE thread SET lastpostid = '$newPostId', lastpost = UNIX_TIMESTAMP(CURRENT_TIMESTAMP())
+            WHERE threadid = '{$threadForCalls}'
+        ";
+        
+        $this->getConnection()->exec($query);
+        
+        $query = "
+            UPDATE forum SET lastpostid = '$newPostId', lastpost = UNIX_TIMESTAMP(CURRENT_TIMESTAMP())
+            WHERE forumid = '$forumPlayzone'
+        ";
+
+        $this->getConnection()->exec($query);
     }
 
     /**

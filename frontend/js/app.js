@@ -15,6 +15,7 @@ var playzoneApp = angular.module('playzoneApp', [
 ]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'WebsocketService', '$interval', function ($http, $rootScope, $cookies, UserRest, WebsocketService, $interval) {
 
     $rootScope.browserSupported = typeof(WebSocket) === "function";
+    $rootScope.connected = true;
 
     $rootScope.user = new UserRest({
         login: $rootScope.user ? $rootScope.user.login : $cookies.get("user_login"),
@@ -27,7 +28,7 @@ var playzoneApp = angular.module('playzoneApp', [
             WebsocketService.introduction($rootScope.user);
             $interval(
                 function () {
-                    WebsocketService.reconnect($rootScope.user);
+                    WebsocketService.ping();
                 },
                 5000
             );
@@ -38,6 +39,7 @@ var playzoneApp = angular.module('playzoneApp', [
 
     WebsocketService.addListener('listen_welcome', 'welcome', function (data) {
         $rootScope.loginsOnline = data['other_logins'];
+        $rootScope.connected = true;
     });
 
     WebsocketService.addListener('listen_user_in', 'user_in', function (user) {

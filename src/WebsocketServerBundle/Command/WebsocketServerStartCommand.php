@@ -15,6 +15,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Ratchet\App as RatchetApp;
 use WebsocketServerBundle\Service\PlayzoneServer;
 
+/**
+ * Class WebsocketServerStartCommand
+ * @package WebsocketServerBundle\Command
+ */
 class WebsocketServerStartCommand extends ContainerAwareCommand
 {
     protected function configure()
@@ -41,6 +45,11 @@ class WebsocketServerStartCommand extends ContainerAwareCommand
             ->setDescription('Starting websocket server in symfony3');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $app = new RatchetApp($input->getArgument('host'), $input->getArgument('port'), $input->getArgument('address'));

@@ -68,7 +68,7 @@ class ImmortalchessnetService
             INSERT INTO post 
             (threadid, username, userid, title, pagetext, visible, dateline)
             VALUE
-            ($threadForCalls, '$userNameForSent', $userIdForSent, '$title', '$pageText', 1, 
+            ($threadForCalls, '{$call->getFromUser()}', $userIdForSent, '$title', '$pageText', 1, 
             UNIX_TIMESTAMP(CURRENT_TIMESTAMP())
             );    
         ";
@@ -78,14 +78,16 @@ class ImmortalchessnetService
         $newPostId = $this->getConnection()->lastInsertId();
         
         $query = "
-            UPDATE thread SET lastpostid = '$newPostId', lastpost = UNIX_TIMESTAMP(CURRENT_TIMESTAMP())
+            UPDATE thread SET lastpostid = '$newPostId', lastpost = UNIX_TIMESTAMP(CURRENT_TIMESTAMP()), 
+            lastposter = '{$call->getFromUser()}'
             WHERE threadid = '{$threadForCalls}'
         ";
         
         $this->getConnection()->exec($query);
         
         $query = "
-            UPDATE forum SET lastpostid = '$newPostId', lastpost = UNIX_TIMESTAMP(CURRENT_TIMESTAMP())
+            UPDATE forum SET lastpostid = '$newPostId', lastpost = UNIX_TIMESTAMP(CURRENT_TIMESTAMP()),
+            lastposter = '{$call->getFromUser()}'
             WHERE forumid = '$forumPlayzone'
         ";
 

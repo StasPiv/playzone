@@ -95,14 +95,15 @@
                 </div>
             </div>
         </div>
-        <div class="browser-not-supported" ng-if="!$root.browserSupported">
-            <p class='info'>
-                {{ 'Your browser is not supported for play. Try' | translate }} <a
-                    href='https://www.google.com/chrome/browser/desktop/'>Google Chrome</a>.
-            </p>
+        <div class="browser-not-supported info" ng-if="!$root.browserSupported">
+            {{ 'Your browser is not supported for play. Try' | translate }}
+            <a href='https://www.google.com/chrome/browser/desktop/'>Google Chrome</a>.
         </div>
-        <div class="info" ng-if="$root.browserSupported">
+        <div class="info" ng-if="$root.browserSupported && $root.connected">
             {{ 'The site in the testing mode. Please send your bug-reports' | translate }}: <a href="mailto:staspivovartsev@gmail.com">email</a>
+        </div>
+        <div class="not-connected info" ng-if="!$root.connected">
+            {{ 'Can not connect' | translate }}
         </div>
         <div class="middle" ng-view>
 

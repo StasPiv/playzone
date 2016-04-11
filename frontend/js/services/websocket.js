@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneServices.factory('WebsocketService', function($websocket, $location, $interval) {
+playzoneServices.factory('WebsocketService', function($websocket, $location, $rootScope, $interval) {
     var listenersMap = {};
     // Open a WebSocket connection
     var webSocketPath = 'ws://ws.' + $location.host() + ':8081/';
@@ -34,13 +34,8 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $in
     createDataStream();
 
     return {
-        reconnect: function (user) {
-            if (dataStream.readyState !== 1) {
-                createDataStream();
-                if (dataStream.readyState === 1) {
-                    this.introduction(user);
-                }
-            }
+        ping: function () {
+            $rootScope.connected = dataStream.readyState === 1;
         },
         addListener: function(listenerName, methodToListen, callback) {
             if (typeof callback !== 'function') {

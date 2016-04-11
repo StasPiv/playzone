@@ -2,5 +2,7 @@
   "Do move": "Move",
   "days": "d",
   "hours": "h",
-  "The site in the testing mode. Please send your bug-reports": "The site in the testing mode. Please send your bug-reports"
+  "The site in the testing mode. Please send your bug-reports":
+  "The site in the testing mode. Please send your bug-reports",
+  "Can not connect": "No connection. Reload page. If it doesn't help, please check your firewall settings."
 }

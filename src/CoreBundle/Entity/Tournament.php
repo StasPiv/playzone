@@ -216,7 +216,7 @@ class Tournament
      * @param ArrayCollection $games
      * @return Tournament
      */
-    public function setGames(ArrayCollection $games)
+    public function setGames(ArrayCollection $games) : Tournament
     {
         $this->games = $games;
 

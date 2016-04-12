@@ -54,6 +54,14 @@ class TournamentHandler implements TournamentProcessorInterface
         $this->manager = $manager;
         $this->repository = $this->manager->getRepository('CoreBundle:Tournament');
     }
+
+    /**
+     * @return TournamentRepository
+     */
+    public function getRepository() : TournamentRepository
+    {
+        return $this->repository;
+    }
     
     /**
      * @param TournamentGetListRequest $listRequest

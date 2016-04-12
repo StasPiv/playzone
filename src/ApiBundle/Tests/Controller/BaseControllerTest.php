@@ -50,7 +50,7 @@ abstract class BaseControllerTest extends WebTestCase
         }
 
         if (empty($testData)) {
-            throw new BaseControllerTestException("There are not test cases in $fullPathToTestFile");
+            throw new BaseControllerTestException("There are no test cases in $fullPathToTestFile");
         }
 
         foreach ($testData as $caseName => $data) {

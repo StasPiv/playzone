@@ -36,7 +36,7 @@ class TournamentGame
     /**
      * @var Game
      *
-     * @ORM\OneToOne(targetEntity="Game")
+     * @ORM\OneToOne(targetEntity="Game", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id")
      *
      * @JMS\Type("CoreBundle\Entity\Game")

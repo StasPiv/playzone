@@ -19,6 +19,10 @@ use CoreBundle\Model\Response\ResponseStatusCode;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
+/**
+ * Class SecurityService
+ * @package CoreBundle\Service
+ */
 class SecurityService
 {
     use ContainerAwareTrait;

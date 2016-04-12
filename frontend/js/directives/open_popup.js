@@ -8,11 +8,11 @@ playzoneControllers.directive('openPopup', function () {
 
     function hidePopup() {
         overlay.hide();
+        $('.call-form').hide();
     }
 
-    $('body').on('click', '.call-form .send-call', function () {
-        overlay.hide();
-        $('.call-form').hide();
+    $('body').on('click', '.footer .overlay, .call-form .send-call', function () {
+        hidePopup();
     });
 
     return {

@@ -291,6 +291,7 @@ h2 {
     left: auto;
     margin-top: auto;
     margin-left: auto;
+    position: static;
   }
   table {
     margin: auto;
@@ -317,6 +318,9 @@ h2 {
     opacity: 0.6;
     position: fixed;
     background-color: $color_horizon_approx;
+    .mobile & {
+      display: none!important;
+    }
   }
 }
 .ct-black-square {

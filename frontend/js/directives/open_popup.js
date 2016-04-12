@@ -11,7 +11,7 @@ playzoneControllers.directive('openPopup', function () {
         $('.call-form').hide();
     }
 
-    $('body').on('click', '.footer .overlay, .call-form .send-call', function () {
+    $('body').on('click', '.footer .overlay, .call-form', function () {
         hidePopup();
     });
 

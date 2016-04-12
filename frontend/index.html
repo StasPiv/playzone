@@ -58,10 +58,10 @@
     <link rel="stylesheet" href="css/chessboard-0.3.0.min.css" />
     <script type="text/javascript" src="js/chess.min.js"></script>
 </head>
-<body>
+<body ng-class="{'mobile': $root.isMobile}">
     <div class="content" ng-cloak>
         <div class="header">
-            <a ng-if="!EnvService.isMobile()" href="#/games/"><img src="images/logo.png" /></a>
+            <a class="logo" href="#/games/"><img src="images/logo.png" /></a>
 
             <div class="menu" ng-controller="TopMenuCtrl">
                 <ul>

@@ -77,6 +77,9 @@ body {
 }
 .info {
   color: red;
+  .mobile & {
+    display: none;
+  }
 }
 a {
   color: $color_blumine_approx;
@@ -126,6 +129,9 @@ h2 {
     margin-top: 77px;
     position: absolute;
     top: -4px;
+    .mobile & {
+      left: 0;
+    }
     ul li {
       cursor: default;
       display: inline;
@@ -135,6 +141,9 @@ h2 {
       text-align: center;
       min-width: 44px;
       height: 20px;
+      .mobile & {
+        padding: 5px;
+      }
       ul {
         display: none;
         li {
@@ -273,6 +282,9 @@ h2 {
   background-color: $white;
   border: 1px solid;
   z-index: 1;
+  .mobile & {
+    width: auto;
+  }
   table {
     margin: auto;
     td {
@@ -394,6 +406,9 @@ input[type="password"] {
 }
 .logo {
   border: none;
+  .mobile & {
+    display: none;
+  }
 }
 .download_games {
   font-weight: bold;
@@ -575,9 +590,15 @@ th.header {
       width: $board_width;
       text-align: center;
       margin-top: 8px;
+      .mobile & {
+        width: auto;
+      }
       .button {
         font-size: 26px;
         padding: 4px;
+        .mobile & {
+          font-size: inherit;
+        }
         &.draw {
           background-color: $color_japanese_laurel_approx;
           margin-right: 10px;

@@ -5,12 +5,15 @@
 
 playzoneControllers.directive('openPopup', function () {
     var overlay = $('.footer .overlay');
-    var sendCallButton = $('.call-form .send-call');
 
-    function hidePopup(popupSelector) {
+    function hidePopup() {
         overlay.hide();
-        $(popupSelector).hide();
     }
+
+    $('body').on('click', '.call-form .send-call', function () {
+        overlay.hide();
+        $('.call-form').hide();
+    });
 
     return {
         restrict: 'C',
@@ -20,10 +23,7 @@ playzoneControllers.directive('openPopup', function () {
                 overlay.show();
                 $(popupSelector).show();
                 overlay.on('click', function() {
-                    hidePopup.call(this, popupSelector);
-                });
-                sendCallButton.on('click', function () {
-                    hidePopup.call(this, popupSelector);
+                    hidePopup.call(this);
                 });
                 return false;
             });

@@ -119,6 +119,9 @@ h2 {
   margin: auto;
   max-width: 1000px;
   padding: 0 5px;
+  .mobile & {
+    padding: 0;
+  }
 }
 .header {
   height: 100px;
@@ -284,6 +287,10 @@ h2 {
   z-index: 1;
   .mobile & {
     width: auto;
+    top: auto;
+    left: auto;
+    margin-top: auto;
+    margin-left: auto;
   }
   table {
     margin: auto;

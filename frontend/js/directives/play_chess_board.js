@@ -10,7 +10,7 @@
  * element.game - chess.js plugin (with pgn functions etc.)
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
-playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService) {
+playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService, AudioService) {
     var highlightLastMove = function (scope, element) {
         $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
         var history = element.game.history({verbose: true});
@@ -60,6 +60,9 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                                 function () {
                                     scope.game.mine && element.game.game_over() &&
                                     !element.game.in_checkmate() && scope.draw(); // fix draw
+
+                                    // it means that opponent has resigned
+                                    scope.game.mine && !element.game.game_over() && AudioService.win();
                                 }
                             );
                             return;
@@ -106,6 +109,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 scope.savePgnAndSendToObservers(true);
 
                 element.game.game_over() && !element.game.in_checkmate() && scope.draw();
+                element.game.in_checkmate() && AudioService.win();
 
                 WebRTCService.sendMessage({
                     gameId: scope.game.id,

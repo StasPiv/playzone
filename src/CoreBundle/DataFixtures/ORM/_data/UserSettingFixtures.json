@@ -1,0 +1,10 @@
+[
+  {
+    "referenceName": "setting-sound-move",
+    "name": "Sound move"
+  },
+  {
+    "referenceName": "setting-board-size",
+    "name": "Board size"
+  }
+]

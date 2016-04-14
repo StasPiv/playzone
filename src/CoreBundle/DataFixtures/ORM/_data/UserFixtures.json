@@ -19,7 +19,17 @@
     "balance": 0,
     "immortal_id": 87,
     "another_login": "",
-    "last_move": "yesterday"
+    "last_move": "yesterday",
+    "settings": [
+      {
+        "settingReference": "setting-sound-move",
+        "value": "0"
+      },
+      {
+        "settingReference": "setting-board-size",
+        "value": "400"
+      }
+    ]
   },
   {
     "referenceName": "user-test-login",

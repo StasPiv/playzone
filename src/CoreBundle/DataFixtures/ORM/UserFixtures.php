@@ -9,6 +9,7 @@
 namespace CoreBundle\DataFixtures\ORM;
 
 use CoreBundle\Entity\User;
+use CoreBundle\Entity\UserSetting;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -20,7 +21,7 @@ class UserFixtures extends AbstractPlayzoneFixtures
      */
     public function getOrder()
     {
-        return 1;
+        return 20;
     }
 
     /**
@@ -48,6 +49,16 @@ class UserFixtures extends AbstractPlayzoneFixtures
             ->setAnotherLogin($data['another_login'])
             ->setLastMove(new \DateTime($data['last_move']))
             ->setBalance($data['balance']);
+
+        if (isset($data["settings"])) {
+            foreach ($data["settings"] as $settingArray) {
+                /** @var UserSetting $userSetting */
+                $userSetting = $this->getReference($settingArray["settingReference"]);
+                $userSetting->setValue($settingArray["value"]);
+
+                $user->setSetting($userSetting);
+            }
+        }
 
         return $user;
     }

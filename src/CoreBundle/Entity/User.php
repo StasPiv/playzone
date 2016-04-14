@@ -3,6 +3,7 @@
 namespace CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
 
@@ -200,6 +201,15 @@ class User
      * @JMS\Type("boolean")
      */
     private $offline = false;
+
+    /**
+     * @var UserSetting[]
+     * 
+     * @ORM\Column(type="array")
+     * @JMS\Expose
+     * @JMS\Type("array<CoreBundle\Entity\UserSetting>")
+     */
+    private $settings;
 
 
     /**
@@ -719,6 +729,35 @@ class User
     {
         $this->offline = $offline;
 
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSettings() : array
+    {
+        return $this->settings;
+    }
+
+    /**
+     * @param array $settings
+     * @return User
+     */
+    public function setSettings(array $settings) : User
+    {
+        $this->settings = $settings;
+
+        return $this;
+    }
+
+    /**
+     * @param UserSetting $userSetting
+     * @return User
+     */
+    public function setSetting(UserSetting $userSetting) : User
+    {
+        $this->settings[$userSetting->getId()] = $userSetting;
         return $this;
     }
 

@@ -8,19 +8,23 @@
 
 namespace CoreBundle\Handler;
 
+use CoreBundle\Entity\UserSetting;
 use CoreBundle\Exception\Handler\User\PasswordNotCorrectException;
 use CoreBundle\Exception\Handler\User\TokenNotCorrectException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
+use CoreBundle\Exception\Handler\User\UserSettingNotFoundException;
 use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\RequestErrorInterface;
 use CoreBundle\Model\Request\User\UserGetListRequest;
+use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserPostRegisterRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\User;
 use CoreBundle\Processor\UserProcessorInterface;
 use CoreBundle\Repository\UserRepository;
+use CoreBundle\Repository\UserSettingRepository;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Doctrine\ORM\EntityManager;
@@ -142,6 +146,29 @@ class UserHandler implements UserProcessorInterface
     {
         // TODO: need to add conditions here
         return $this->repository->findAll();
+    }
+
+    /**
+     * @param UserPatchSettingRequest $settingRequest
+     * @return UserSetting
+     */
+    public function processPatchSetting(UserPatchSettingRequest $settingRequest) : UserSetting
+    {
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($settingRequest, $this->getRequestError());
+        
+        try {
+            $userSetting = $this->manager->getRepository('CoreBundle:UserSetting')->find($settingRequest->getSettingId());
+        } catch (UserSettingNotFoundException $e) {
+            $this->getRequestError()
+                 ->addError("setting_id", "Setting {$settingRequest->getSettingId()} is not found")
+                 ->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        /** @var UserSetting $userSetting */
+        $userSetting->setValue($settingRequest->getValue());
+        $me->setSetting($userSetting);
+
+        return $userSetting;
     }
 
     /**

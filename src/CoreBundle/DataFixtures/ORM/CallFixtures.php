@@ -56,7 +56,7 @@ class CallFixtures extends AbstractPlayzoneFixtures
      */
     public function getOrder()
     {
-        return 4;
+        return 40;
     }
 
 }

@@ -10,7 +10,7 @@
  * element.game - chess.js plugin (with pgn functions etc.)
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
-playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService) {
+playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService, AudioService) {
     var highlightLastMove = function (scope, element) {
         $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
         var history = element.game.history({verbose: true});
@@ -60,6 +60,12 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                                 function () {
                                     scope.game.mine && element.game.game_over() &&
                                     !element.game.in_checkmate() && scope.draw(); // fix draw
+
+                                    if (scope.game.mine && scope.game.status === 'end') {
+                                        // it means that opponent has resigned or draw
+                                        scope.game.result_white != '0.5' ?
+                                            AudioService.win() : AudioService.draw();
+                                    }
                                 }
                             );
                             return;
@@ -84,6 +90,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                         scope.game.pgn = receivedPgn;
                         element.game.load_pgn(receivedPgn);
+                        AudioService.move();
                         element.board.position(element.game.fen());
                         element.updateStatus();
                         element.game.game_over() && scope.game.$get();
@@ -106,6 +113,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 scope.savePgnAndSendToObservers(true);
 
                 element.game.game_over() && !element.game.in_checkmate() && scope.draw();
+                element.game.in_checkmate() && AudioService.win();
 
                 WebRTCService.sendMessage({
                     gameId: scope.game.id,

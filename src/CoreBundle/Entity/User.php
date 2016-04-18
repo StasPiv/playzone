@@ -2,6 +2,7 @@
 
 namespace CoreBundle\Entity;
 
+use CoreBundle\Exception\Handler\User\UserSettingNotFoundException;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -209,6 +210,14 @@ class User
      */
     private $tournaments;
 
+    /**
+     * @var UserSetting[]
+     * 
+     * @ORM\Column(type="array")
+     * @JMS\Expose
+     * @JMS\Type("array<CoreBundle\Entity\UserSetting>")
+     */
+    private $settings;
 
     /**
      * Get id
@@ -745,7 +754,23 @@ class User
     public function setTournaments(PersistentCollection $tournaments) : Tournament
     {
         $this->tournaments = $tournaments;
+    }
 
+    /**
+     * @return array
+     */
+    public function getSettings()
+    {
+        return $this->settings;
+    }
+
+    /**
+     * @param array $settings
+     * @return User
+     */
+    public function setSettings(array $settings) : User
+    {
+        $this->settings = $settings;
         return $this;
     }
 
@@ -756,6 +781,15 @@ class User
     public function addTournament(TournamentPlayer $tournament) : User
     {
         $this->tournaments->add($tournament);
+    }
+
+    /**
+     * @param UserSetting $userSetting
+     * @return User
+     */
+    public function setSetting(UserSetting $userSetting) : User
+    {
+        $this->settings[$userSetting->getName()] = $userSetting;
         return $this;
     }
 
@@ -766,7 +800,21 @@ class User
     public function removeTournament(TournamentPlayer $player) : User
     {
         $this->tournaments->removeElement($player);
+
         return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return UserSetting
+     */
+    public function getSetting(string $name) : UserSetting
+    {
+        if (!isset($this->settings[$name])) {
+            throw new UserSettingNotFoundException;
+        }
+        
+        return $this->settings[$name];
     }
 
     /**

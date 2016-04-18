@@ -1,0 +1,50 @@
+[
+  {
+    "referenceName": "setting-sound-move",
+    "name": "Sound move",
+    "type": "checkbox",
+    "sort": 10
+  },
+  {
+    "referenceName": "setting-sound-draw",
+    "name": "Sound draw",
+    "type": "checkbox",
+    "sort": 20
+  },
+  {
+    "referenceName": "setting-sound-win",
+    "name": "Sound win",
+    "type": "checkbox",
+    "sort": 30
+  },
+  {
+    "referenceName": "setting-sound-call",
+    "name": "Sound call",
+    "type": "checkbox",
+    "sort": 40
+  },
+  {
+    "referenceName": "setting-sound-new-game",
+    "name": "Sound new game",
+    "type": "checkbox",
+    "sort": 50
+  },
+  {
+    "referenceName": "setting-board-size",
+    "name": "Board size",
+    "type": "number",
+    "sort": 60
+  },
+  {
+    "referenceName": "setting-draggable",
+    "name": "Draggable disabled",
+    "type": "checkbox",
+    "sort": 70
+  },
+  {
+    "referenceName": "setting-piece-type",
+    "name": "Piece type",
+    "type": "select:merida,leipzig,case,condal,kingdom,maya,wikipedia",
+    "sort": 80
+  }
+]

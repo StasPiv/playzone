@@ -8,9 +8,11 @@
 
 namespace ApiBundle\Controller;
 
+use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserGetListRequest;
 use CoreBundle\Model\Request\User\UserPostRegisterRequest;
+use CoreBundle\Model\Response\ResponseStatusCode;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,19 +25,41 @@ use CoreBundle\Processor\UserProcessorInterface;
  */
 class UserController extends BaseController
 {
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function postRegisterAction(Request $request)
     {
         return $this->process($request, new UserPostRegisterRequest());
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function postAuthAction(Request $request)
     {
         return $this->process($request, new UserPostAuthRequest());
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function getListAction(Request $request)
     {
         return $this->process($request, new UserGetListRequest());
+    }
+
+    /**
+     * @param Request $request
+     * @param int $setting_id
+     * @return Response
+     */
+    public function patchSettingAction(Request $request, int $setting_id)
+    {
+        return $this->process($request, new UserPatchSettingRequest());
     }
 
     /**

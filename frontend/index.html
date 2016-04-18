@@ -36,6 +36,7 @@
     <script src="js/controllers/online.js"></script>
     <script src="js/controllers/tournaments.js"></script>
     <script src="js/controllers/tournament.js"></script>
+    <script src="js/controllers/profile.js"></script>
     <script src="js/directives/drop_down_menu.js"></script>
     <script src="js/directives/open_popup.js"></script>
     <script src="js/directives/chess_board_legal.js"></script>
@@ -47,6 +48,8 @@
     <script src="js/services/websocket.js" type="text/javascript"></script>
     <script src="js/services/webrtc.js" type="text/javascript"></script>
     <script src="js/services/localstorage.js" type="text/javascript"></script>
+    <script src="js/services/audio.js" type="text/javascript"></script>
+    <script src="js/services/setting.js" type="text/javascript"></script>
     <script src="js/services/rest/call.js" type="text/javascript"></script>
     <script src="js/services/rest/game.js" type="text/javascript"></script>
     <script src="js/services/rest/user.js" type="text/javascript"></script>
@@ -61,10 +64,10 @@
     <link rel="stylesheet" href="css/chessboard-0.3.0.min.css" />
     <script type="text/javascript" src="js/chess.min.js"></script>
 </head>
-<body>
+<body ng-class="{'mobile': $root.isMobile}">
     <div class="content" ng-cloak>
         <div class="header">
-            <a ng-if="!EnvService.isMobile()" href="#/games/"><img src="images/logo.png" /></a>
+            <a class="logo" href="#/games/"><img src="images/logo.png" /></a>
 
             <div class="menu" ng-controller="TopMenuCtrl">
                 <ul>
@@ -89,7 +92,8 @@
                     <span>{{ 'Login' | translate }}: <b>{{$root.user.login}}</b></span>.
                     <span class="rating">{{ 'Rating' | translate }}: <b>{{$root.user.rating}}</b>. {{ 'Class' | translate }}: <b>{{$root.user.class}}</b></span>.
                     <br/>
-                    <span style="float:right;">
+                    <span class="user-action">
+                        <span class="profile"><a href="/#/profile">{{ 'My profile' | translate }}</a></span> |
                         <span class="enter"><a href="/#/logout" ng-click="logout()">{{ 'Logout' | translate }}</a></span>
                     </span>
                 </div>

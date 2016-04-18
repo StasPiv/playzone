@@ -21,7 +21,7 @@ class GameFixtures extends AbstractPlayzoneFixtures
      */
     public function getOrder()
     {
-        return 1;
+        return 30;
     }
 
     /**

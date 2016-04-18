@@ -4,5 +4,6 @@
   "hours": "h",
   "The site in the testing mode. Please send your bug-reports":
   "The site in the testing mode. Please send your bug-reports",
-  "Can not connect": "No connection. Reload page. If it doesn't help, please check your firewall settings."
+  "Can not connect": "No connection. Reload page. If it doesn't help, please check your firewall settings.",
+  "Time control (minutes)": "Minutes per game"
 }

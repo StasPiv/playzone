@@ -18,7 +18,6 @@ playzoneControllers.controller('CallCtrl', function ($scope, $location, CallRest
 
     $scope.sendCall = function(call) {
         $('.footer .overlay').hide();
-        $location.path('/games');
         CallRest.send(
             {},
             call,
@@ -37,6 +36,7 @@ playzoneControllers.controller('CallCtrl', function ($scope, $location, CallRest
                     call && call.player ? [call.player] : []
                 );
                 call && (call.player = ""); // to prevent duplicate calls
+                $location.path('/games');
             },
             function(response) {
                 $scope.errors = response.data;

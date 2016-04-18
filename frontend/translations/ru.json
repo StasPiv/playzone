@@ -100,7 +100,7 @@
   "hours": "ч",
   "Result": "Результат",
   "To all": "Всем",
-  "Time control (minutes)": "Контроль времени (минуты)",
+  "Time control (minutes)": "Минут на партию",
   "The site in the testing mode. Please send your bug-reports": "Сайт в процессе разработки. Отправляйте замечания об ошибках",
   "Your browser is not supported for play. Try": "Ваш браузер не поддерживается. Попробуйте",
   "Opponent is offline": "Ваш оппонент покинул игру",
@@ -111,5 +111,15 @@
   "Time begin": "Время начала",
   "switz": "швейц",
   "Type": "Тип",
-  "Can not connect": "Нет соединения. Обновите страницу. Если это не помогло - проверьте настройки вашего файрволла."
+  "Can not connect": "Нет соединения. Обновите страницу. Если это не помогло - проверьте настройки вашего файрволла.",
+  "Cancel": "Отмена",
+  "My profile": "Мой кабинет",
+  "Sound move": "Звук хода",
+  "Sound draw": "Звук ничьи",
+  "Sound win": "Звук победы",
+  "Sound call": "Звук вызова",
+  "Sound new game": "Звук новой партии",
+  "Board size": "Размер доски",
+  "Draggable disabled": "Отключить перетаскивание",
+  "Piece type": "Тип фигур"
 }

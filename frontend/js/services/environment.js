@@ -27,7 +27,7 @@ playzoneServices.factory('EnvService', function() {
 
     return {
         isMobile: function () {
-            return isMobile.any();    
+            return !!isMobile.any();
         },
 
         isWebRTC: function () {

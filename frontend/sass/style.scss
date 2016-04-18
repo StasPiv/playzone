@@ -18,7 +18,7 @@ $font_2: verdana;
 $font_3: sans-serif;
 $font_4: Lucida Sans;
 
-$board_width: 600px;
+$board_width: 500px;
 
 //@extend-elements
 //original selectors
@@ -77,6 +77,9 @@ body {
 }
 .info {
   color: red;
+  .mobile & {
+    display: none;
+  }
 }
 a {
   color: $color_blumine_approx;
@@ -116,6 +119,9 @@ h2 {
   margin: auto;
   max-width: 1000px;
   padding: 0 5px;
+  .mobile & {
+    padding: 0;
+  }
 }
 .header {
   height: 100px;
@@ -126,6 +132,9 @@ h2 {
     margin-top: 77px;
     position: absolute;
     top: -4px;
+    .mobile & {
+      left: 0;
+    }
     ul li {
       cursor: default;
       display: inline;
@@ -135,6 +144,9 @@ h2 {
       text-align: center;
       min-width: 44px;
       height: 20px;
+      .mobile & {
+        padding: 5px;
+      }
       ul {
         display: none;
         li {
@@ -153,8 +165,9 @@ h2 {
     position: absolute;
     right: 20px;
     top: 31px;
-    .enter {
+    .user-action {
       font-weight: bold;
+      float: right;
     }
   }
   .language {
@@ -230,6 +243,9 @@ h2 {
         padding-left: 10px;
       }
     }
+    .dropdown, .dropdown * {
+      color: $black!important;
+    }
   }
 }
 .pagination {
@@ -273,6 +289,14 @@ h2 {
   background-color: $white;
   border: 1px solid;
   z-index: 1;
+  .mobile & {
+    width: auto;
+    top: auto;
+    left: auto;
+    margin-top: auto;
+    margin-left: auto;
+    position: static;
+  }
   table {
     margin: auto;
     td {
@@ -280,7 +304,8 @@ h2 {
     }
     input[type="submit"] {
       float: right;
-      width: 50px;
+      width: 67px;
+      margin: 0 3px;
     }
   }
   .warning {
@@ -298,6 +323,9 @@ h2 {
     opacity: 0.6;
     position: fixed;
     background-color: $color_horizon_approx;
+    .mobile & {
+      display: none!important;
+    }
   }
 }
 .ct-black-square {
@@ -394,6 +422,9 @@ input[type="password"] {
 }
 .logo {
   border: none;
+  .mobile & {
+    display: none;
+  }
 }
 .download_games {
   font-weight: bold;
@@ -575,9 +606,15 @@ th.header {
       width: $board_width;
       text-align: center;
       margin-top: 8px;
+      .mobile & {
+        width: auto;
+      }
       .button {
         font-size: 26px;
         padding: 4px;
+        .mobile & {
+          font-size: inherit;
+        }
         &.draw {
           background-color: $color_japanese_laurel_approx;
           margin-right: 10px;

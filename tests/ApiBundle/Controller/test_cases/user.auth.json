@@ -1,5 +1,6 @@
 {
   "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserSettingFixtures",
     "CoreBundle\\DataFixtures\\ORM\\UserFixtures"
   ],
   "login_not_found": {
@@ -70,7 +71,12 @@
         "rating": 2243,
         "class": "D",
         "token": "aba37b62d15cc5f8671fd3d1b034c354",
-        "isAuth": true
+        "isAuth": true,
+        "settings": {
+          "Sound move": {
+            "name": "Sound move"
+          }
+        }
       }
     }
   },
@@ -89,7 +95,13 @@
         "rating": 2243,
         "class": "D",
         "token": "aba37b62d15cc5f8671fd3d1b034c354",
-        "isAuth": true
+        "isAuth": true,
+        "settings": {
+          "Sound move": {
+            "name": "Sound move",
+            "value": 1
+          }
+        }
       }
     }
   },

@@ -158,6 +158,7 @@ class CallHandler implements CallProcessorInterface
                  ->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
+        /** @var User $opponent */
         $gameCall = $this->createGameCallToUser($me, $gameParams, $opponent);
 
         $this->manager->flush();

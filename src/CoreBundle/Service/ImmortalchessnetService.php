@@ -64,34 +64,36 @@ class ImmortalchessnetService
         $userNameForSent = $this->container->getParameter("app_immortalchess.post_username_for_calls");
         $userIdForSent = $this->container->getParameter("app_immortalchess.post_userid_for_calls");
 
-        $query = "
-            INSERT INTO post 
-            (threadid, username, userid, title, pagetext, visible, dateline)
-            VALUE
-            ($threadForCalls, '{$call->getFromUser()}', $userIdForSent, '$title', '$pageText', 1, 
-            UNIX_TIMESTAMP(CURRENT_TIMESTAMP())
-            );    
-        ";
+        $this->getConnection()->exec(
+            "DELETE FROM post WHERE ipaddress = '' AND threadid = '$threadForCalls'"
+        );
 
-        $this->getConnection()->exec($query);
+        $this->getConnection()->exec(
+            "
+                INSERT INTO post 
+                (threadid, username, userid, title, pagetext, visible, dateline)
+                VALUE
+                ($threadForCalls, '{$call->getFromUser()}', $userIdForSent, '$title', '$pageText', 1, 
+                UNIX_TIMESTAMP(CURRENT_TIMESTAMP())
+                );    
+            "
+        );
         
         $newPostId = $this->getConnection()->lastInsertId();
         
-        $query = "
+        $this->getConnection()->exec(
+            "
             UPDATE thread SET lastpostid = '$newPostId', lastpost = UNIX_TIMESTAMP(CURRENT_TIMESTAMP()), 
             lastposter = '{$call->getFromUser()}'
             WHERE threadid = '{$threadForCalls}'
-        ";
-        
-        $this->getConnection()->exec($query);
-        
-        $query = "
+        "
+        );
+
+        $this->getConnection()->exec("
             UPDATE forum SET lastpostid = '$newPostId', lastpost = UNIX_TIMESTAMP(CURRENT_TIMESTAMP()),
             lastposter = '{$call->getFromUser()}'
             WHERE forumid = '$forumPlayzone'
-        ";
-
-        $this->getConnection()->exec($query);
+        ");
     }
 
     /**

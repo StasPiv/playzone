@@ -113,5 +113,7 @@
   "Sound win": "Звук победы",
   "Sound call": "Звук вызова",
   "Sound new game": "Звук новой партии",
-  "Board size": "Размер доски"
+  "Board size": "Размер доски",
+  "Draggable disabled": "Отключить перетаскивание",
+  "Piece type": "Тип фигур"
 }

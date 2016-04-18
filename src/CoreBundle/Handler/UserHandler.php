@@ -100,6 +100,8 @@ class UserHandler implements UserProcessorInterface
              ->setEmail($registerRequest->getEmail())
              ->setPassword($this->generatePasswordHash($registerRequest->getPassword()));
 
+        $this->initUserSettings($user);
+
         $this->saveUser($user);
 
         $this->generateUserToken($user);
@@ -260,7 +262,8 @@ class UserHandler implements UserProcessorInterface
      */
     private function initUserSettings(User $user)
     {
-        $allSettings = $this->manager->getRepository("CoreBundle:UserSetting")->findAll();
+        $allSettings = $this->manager->getRepository("CoreBundle:UserSetting")
+                            ->findBy([],['sort' => 'ASC']);
 
         foreach ($allSettings as $setting) {
             try {
@@ -269,5 +272,15 @@ class UserHandler implements UserProcessorInterface
                 $user->setSetting($setting);
             }
         }
+
+        $settings = $user->getSettings();
+        uasort(
+            $settings,
+            function(UserSetting $a, UserSetting $b)
+            {
+                return $a->getSort() <=> $b->getSort();
+            }
+        );
+        $user->setSettings($settings);
     }
 }

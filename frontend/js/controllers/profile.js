@@ -5,10 +5,12 @@
 
 playzoneControllers.controller('ProfileCtrl', function ($scope, $rootScope, UserRest) {
     $scope.user_setting = {};
+    
+    $scope.user_setting['Piece type'] = $rootScope.user.settings['Piece type'].value;
 
-    $scope.changeSetting = function (settingId, type, name) {
-        var value = $scope.user_setting[settingId];
-        
+    $scope.changeSetting = function (settingId, type, settingName) {
+        var value = $scope.user_setting[settingName];
+
         if (type === 'checkbox') {
             value = value != 1 ? 0 : 1;
         }
@@ -19,7 +21,7 @@ playzoneControllers.controller('ProfileCtrl', function ($scope, $rootScope, User
                 value: value
             },
             function () {
-                $rootScope.user.settings[name].value = value;
+                $rootScope.user.settings[settingName].value = value;
             }
         );
     }

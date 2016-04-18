@@ -25,7 +25,8 @@ class UserSettingFixtures extends AbstractPlayzoneFixtures
         $setting = new UserSetting();
         
         $setting->setName($data["name"])
-                ->setType($data["type"]);
+                ->setType($data["type"])
+                ->setSort($data["sort"]);
         
         return $setting;
     }

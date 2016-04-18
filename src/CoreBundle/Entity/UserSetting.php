@@ -66,6 +66,16 @@ class UserSetting
     private $value;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="sort", type="integer")
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     */
+    private $sort = 20;
+
+    /**
      * @return int
      */
     public function getId() : int
@@ -126,6 +136,25 @@ class UserSetting
     public function setType(string $type)
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSort() : int
+    {
+        return $this->sort;
+    }
+
+    /**
+     * @param int $sort
+     * @return UserSetting
+     */
+    public function setSort(int $sort) : UserSetting
+    {
+        $this->sort = $sort;
 
         return $this;
     }

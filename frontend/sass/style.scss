@@ -243,6 +243,9 @@ h2 {
         padding-left: 10px;
       }
     }
+    .dropdown * {
+      color: $black!important;
+    }
   }
 }
 .pagination {

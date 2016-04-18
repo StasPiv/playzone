@@ -58,7 +58,7 @@ class UserPatchSettingRequest extends UserRequest implements SecurityRequestInte
      * @var string
      * 
      * @JMS\Expose()
-     * @JMS\Type("integer")
+     * @JMS\Type("string")
      */
     private $value;
 

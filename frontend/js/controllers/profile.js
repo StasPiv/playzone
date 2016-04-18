@@ -6,7 +6,8 @@
 playzoneControllers.controller('ProfileCtrl', function ($scope, $rootScope, UserRest) {
     $scope.user_setting = {};
     
-    if ($rootScope.user && typeof $rootScope.user.settings['Piece type'] != 'undefined') {
+    if ($rootScope.user && $rootScope.user.settings &&
+        $rootScope.user.settings['Piece type'] != 'undefined') {
         $scope.user_setting['Piece type'] = $rootScope.user.settings['Piece type'].value;
     }
 

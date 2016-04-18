@@ -71,14 +71,19 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $rootScope, $locat
         // delete all my calls when somebody accepts my call
         if ($scope.calls_from_me.searchById(data.call_id)) {
             angular.forEach($scope.calls_from_me, function (call) {
-                $scope.deleteCall(call);
+                data.call_id !== call.id && $scope.deleteCall(call);
             });
         }
 
         $scope.calls_from_me.pullById(data.call_id);
         $scope.calls_to_me.pullById(data.call_id);
         $scope.current.push(new GameRest(data.game));
-        data.game.mine && $location.path( '/play/' + data.game.id ) && AudioService.newGame();
+
+        if (data.game.mine) {
+            console.log(data.game);
+            $location.path( '/play/' + data.game.id );
+            AudioService.newGame();
+        }
     });
 
     WebsocketService.addListener("listen_declined_calls", "call_decline", function(data) {

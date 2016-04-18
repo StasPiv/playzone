@@ -1,4 +1,8 @@
 {
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserSettingFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures"
+  ],
   "users_list" : {
     "method" : "GET",
     "response" : {

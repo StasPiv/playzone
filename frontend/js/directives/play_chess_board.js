@@ -61,8 +61,11 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                                     scope.game.mine && element.game.game_over() &&
                                     !element.game.in_checkmate() && scope.draw(); // fix draw
 
-                                    // it means that opponent has resigned
-                                    scope.game.mine && !element.game.game_over() && AudioService.win();
+                                    if (scope.game.mine && scope.game.status === 'end') {
+                                        // it means that opponent has resigned or draw
+                                        scope.game.result_white != '0.5' ?
+                                            AudioService.win() : AudioService.draw();
+                                    }
                                 }
                             );
                             return;
@@ -87,6 +90,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                         scope.game.pgn = receivedPgn;
                         element.game.load_pgn(receivedPgn);
+                        AudioService.move();
                         element.board.position(element.game.fen());
                         element.updateStatus();
                         element.game.game_over() && scope.game.$get();

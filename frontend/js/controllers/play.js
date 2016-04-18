@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, $interval, dateFilter) {
+playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService) {
     $scope.boardConfig = {
         pieceType: 'leipzig',
         highlightClass: 'highlight1-32417',
@@ -23,7 +23,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     $scope.game.$promise.then(
         function () {
             WebsocketService.subscribeToGame($scope.game.id);
-
+            
             if (true || !EnvService.isWebRTC()) { // TODO: need to remove "true" for webRTC support
                 return;
             }
@@ -61,6 +61,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
             $scope.game.$acceptDraw().then(
                 function () {
                     WebsocketService.sendGameToObservers($scope.game.id);
+                    AudioService.draw();
                 }
             );
             return;

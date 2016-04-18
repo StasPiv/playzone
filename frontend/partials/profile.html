@@ -1,0 +1,22 @@
+<h1>{{ 'My profile' | translate }}</h1>
+<table class="grid settings">
+    <tbody>
+    <tr ng-repeat="setting in $root.user.settings track by $index">
+        <td>
+            <span>
+                {{ setting.name | translate }}:
+            </span>
+        </td>
+        <td>
+            <input title="{{ setting.name | translate }}"
+                   type="{{ setting.type }}"
+                   ng-model="user_setting[setting.id]"
+                   ng-click="changeSetting(setting.id, setting.type, setting.name)"
+                   ng-blur="changeSetting(setting.id, setting.type, setting.name)"
+                   ng-checked="setting.value == 1"
+                   ng-value="setting.value"
+            />
+        </td>
+    </tr>
+    </tbody>
+</table>

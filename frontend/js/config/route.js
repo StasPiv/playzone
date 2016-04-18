@@ -41,6 +41,10 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 templateUrl: 'partials/online.html',
                 controller: 'OnlineCtrl'
             }).
+            when('/profile', {
+                templateUrl: 'partials/profile.html',
+                controller: 'ProfileCtrl'
+            }).
             otherwise({
                 redirectTo: '/'
             });

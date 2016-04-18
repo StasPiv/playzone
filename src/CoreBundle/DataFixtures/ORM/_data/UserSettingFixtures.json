@@ -1,10 +1,32 @@
 [
   {
     "referenceName": "setting-sound-move",
-    "name": "Sound move"
+    "name": "Sound move",
+    "type": "checkbox"
+  },
+  {
+    "referenceName": "setting-sound-draw",
+    "name": "Sound draw",
+    "type": "checkbox"
+  },
+  {
+    "referenceName": "setting-sound-win",
+    "name": "Sound win",
+    "type": "checkbox"
+  },
+  {
+    "referenceName": "setting-sound-call",
+    "name": "Sound call",
+    "type": "checkbox"
+  },
+  {
+    "referenceName": "setting-sound-new-game",
+    "name": "Sound new game",
+    "type": "checkbox"
   },
   {
     "referenceName": "setting-board-size",
-    "name": "Board size"
+    "name": "Board size",
+    "type": "number"
   }
 ]

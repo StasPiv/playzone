@@ -2,6 +2,7 @@
 
 namespace CoreBundle\Entity;
 
+use CoreBundle\Exception\Handler\User\UserSettingNotFoundException;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -735,7 +736,7 @@ class User
     /**
      * @return array
      */
-    public function getSettings() : array
+    public function getSettings()
     {
         return $this->settings;
     }
@@ -757,8 +758,21 @@ class User
      */
     public function setSetting(UserSetting $userSetting) : User
     {
-        $this->settings[$userSetting->getId()] = $userSetting;
+        $this->settings[$userSetting->getName()] = $userSetting;
         return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return UserSetting
+     */
+    public function getSetting(string $name) : UserSetting
+    {
+        if (!isset($this->settings[$name])) {
+            throw new UserSettingNotFoundException;
+        }
+        
+        return $this->settings[$name];
     }
 
     /**

@@ -34,6 +34,7 @@
     <script src="js/controllers/call.js"></script>
     <script src="js/controllers/play.js"></script>
     <script src="js/controllers/online.js"></script>
+    <script src="js/controllers/profile.js"></script>
     <script src="js/directives/drop_down_menu.js"></script>
     <script src="js/directives/open_popup.js"></script>
     <script src="js/directives/chess_board_legal.js"></script>
@@ -46,6 +47,7 @@
     <script src="js/services/webrtc.js" type="text/javascript"></script>
     <script src="js/services/localstorage.js" type="text/javascript"></script>
     <script src="js/services/audio.js" type="text/javascript"></script>
+    <script src="js/services/setting.js" type="text/javascript"></script>
     <script src="js/services/rest/call.js" type="text/javascript"></script>
     <script src="js/services/rest/game.js" type="text/javascript"></script>
     <script src="js/services/rest/user.js" type="text/javascript"></script>
@@ -87,7 +89,8 @@
                     <span>{{ 'Login' | translate }}: <b>{{$root.user.login}}</b></span>.
                     <span class="rating">{{ 'Rating' | translate }}: <b>{{$root.user.rating}}</b>. {{ 'Class' | translate }}: <b>{{$root.user.class}}</b></span>.
                     <br/>
-                    <span style="float:right;">
+                    <span class="user-action">
+                        <span class="profile"><a href="/#/profile">{{ 'My profile' | translate }}</a></span> |
                         <span class="enter"><a href="/#/logout" ng-click="logout()">{{ 'Logout' | translate }}</a></span>
                     </span>
                 </div>

@@ -3,9 +3,9 @@
  */
 'use strict';
 
-playzoneServices.factory('AudioService', function($cookies) {
+playzoneServices.factory('AudioService', function(SettingService) {
     var play = function (audioFile) {
-        var audio = new Audio('audio/' + audioFile);
+        var audio = new Audio('audio/Board/' + audioFile);
         audio.play();
     };
 
@@ -15,13 +15,27 @@ playzoneServices.factory('AudioService', function($cookies) {
 
     return {
         newCall: function () {
-            play('Board/Server/Gong.wav');
+            SettingService.getSetting('Sound call') == 1 &&
+            play('Server/Gong.wav');
         },
         newGame: function () {
-            play('Board/NEWGAME.WAV');
+            SettingService.getSetting('Sound new game') == 1 &&
+            play('NEWGAME.WAV');
         },
         win: function () {
-            play('Board/Server/WinApplause' + getRandomArbitrary(1,5) + '.wav');
+            SettingService.getSetting('Sound win') == 1 &&
+            play('Server/WinApplause' + getRandomArbitrary(1,5) + '.wav');
+        },
+        draw: function () {
+            SettingService.getSetting('Sound draw') == 1 &&
+            play('Server/Clapping.wav');
+        },
+        move: function () {
+            SettingService.getSetting('Sound move') == 1 &&
+            play('MOVE' + getRandomArbitrary(1,6) + '.WAV');
+        },
+        capture: function () {
+            play('CAPTURE' + getRandomArbitrary(1,5) + '.WAV');
         }
     };
 });

@@ -114,7 +114,11 @@ class UserHandler implements UserProcessorInterface
     public function processPostAuth(UserPostAuthRequest $authRequest) : User
     {
         if ($authRequest->getToken()) {
-            return $this->container->get("core.service.security")->getUserIfCredentialsIsOk($authRequest, $this->getRequestError());
+            $user = $this->container->get("core.service.security")
+                          ->getUserIfCredentialsIsOk($authRequest,$this->getRequestError());
+
+            $this->initUserSettings($user);
+            return $user;
         }
 
         try {
@@ -134,6 +138,7 @@ class UserHandler implements UserProcessorInterface
 
         /** @var User $user */
         $this->generateUserToken($user);
+        $this->initUserSettings($user);
 
         return $user;
     }
@@ -167,6 +172,8 @@ class UserHandler implements UserProcessorInterface
         /** @var UserSetting $userSetting */
         $userSetting->setValue($settingRequest->getValue());
         $me->setSetting($userSetting);
+
+        $this->saveUser($me);
 
         return $userSetting;
     }
@@ -245,5 +252,22 @@ class UserHandler implements UserProcessorInterface
         }
 
         return $user;
+    }
+
+    /**
+     * @param User $user
+     * @return void
+     */
+    private function initUserSettings(User $user)
+    {
+        $allSettings = $this->manager->getRepository("CoreBundle:UserSetting")->findAll();
+
+        foreach ($allSettings as $setting) {
+            try {
+                $user->getSetting($setting->getName());
+            } catch (UserSettingNotFoundException $e) {
+                $user->setSetting($setting);
+            }
+        }
     }
 }

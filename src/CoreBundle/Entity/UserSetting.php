@@ -48,6 +48,17 @@ class UserSetting
     /**
      * @var string
      *
+     * @ORM\Column(name="type", type="string", length=255)
+     *
+     * @JMS\Expose
+     * @JMS\SerializedName("type")
+     * @JMS\Type("string")
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
      * @JMS\Expose
      * @JMS\SerializedName("value")
      * @JMS\Type("string")
@@ -96,6 +107,25 @@ class UserSetting
     public function setValue(string $value) : UserSetting
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType() : string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     * @return UserSetting
+     */
+    public function setType(string $type)
+    {
+        $this->type = $type;
 
         return $this;
     }

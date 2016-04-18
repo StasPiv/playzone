@@ -18,7 +18,7 @@ $font_2: verdana;
 $font_3: sans-serif;
 $font_4: Lucida Sans;
 
-$board_width: 600px;
+$board_width: 500px;
 
 //@extend-elements
 //original selectors
@@ -165,8 +165,9 @@ h2 {
     position: absolute;
     right: 20px;
     top: 31px;
-    .enter {
+    .user-action {
       font-weight: bold;
+      float: right;
     }
   }
   .language {
@@ -220,7 +221,7 @@ h2 {
       text-align: center;
     }
   }
-  .games {
+  .games, .grid {
     width: 100%;
     margin: 10px 0;
     border-collapse: collapse;

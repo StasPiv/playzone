@@ -267,7 +267,7 @@ class UserHandler implements UserProcessorInterface
 
         foreach ($allSettings as $setting) {
             try {
-                $user->getSetting($setting->getName());
+                $user->getSetting($setting->getName())->setId($setting->getId());
             } catch (UserSettingNotFoundException $e) {
                 $user->setSetting($setting);
             }

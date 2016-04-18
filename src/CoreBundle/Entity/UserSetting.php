@@ -76,6 +76,17 @@ class UserSetting
     private $sort = 20;
 
     /**
+     * @param int $id
+     * @return UserSetting
+     */
+    public function setId(int $id) : UserSetting
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getId() : int

@@ -84,7 +84,7 @@ class ImmortalchessnetService
         $this->getConnection()->exec(
             "
             UPDATE thread SET lastpostid = '$newPostId', lastpost = UNIX_TIMESTAMP(CURRENT_TIMESTAMP()), 
-            lastposter = '{$call->getFromUser()}'
+            lastposter = '{$call->getFromUser()}', title = '$title'
             WHERE threadid = '{$threadForCalls}'
         "
         );

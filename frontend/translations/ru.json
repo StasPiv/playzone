@@ -115,5 +115,7 @@
   "Sound new game": "Звук новой партии",
   "Board size": "Размер доски",
   "Draggable disabled": "Отключить перетаскивание",
-  "Piece type": "Тип фигур"
+  "Piece type": "Тип фигур",
+  "Immortalchess.Net login/password is allowed": "Логин/пароль с immortalchess.net допустимы",
+  "Connection succesful": "Соединение успешно"
 }

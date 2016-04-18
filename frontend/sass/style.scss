@@ -77,9 +77,9 @@ body {
 }
 .info {
   color: red;
-  .mobile & {
-    display: none;
-  }
+}
+.green-info {
+  color: green;
 }
 a {
   color: $color_blumine_approx;
@@ -90,6 +90,9 @@ a {
   &:hover {
     text-decoration: underline;
     outline: medium none;
+  }
+  &:visited {
+    text-decoration: none;
   }
 }
 h1 {
@@ -123,6 +126,19 @@ h2 {
     padding: 0;
   }
 }
+.pic-connect {
+  border-radius: 7px;
+  float: left;
+  height: 10px;
+  width: 10px;
+  margin: 4px;
+  &.connect-not-success {
+    background-color: $red;
+  }
+  &.connect-success {
+    background-color: $green;
+  }
+}
 .header {
   height: 100px;
   padding: 10px;
@@ -142,8 +158,9 @@ h2 {
       margin-left: 10px;
       padding: 10px;
       text-align: center;
-      min-width: 44px;
+      min-width: 65px;
       height: 20px;
+      border-radius: 10px;
       .mobile & {
         padding: 5px;
       }
@@ -168,6 +185,9 @@ h2 {
     .user-action {
       font-weight: bold;
       float: right;
+    }
+    .enter {
+      font-weight: bold;
     }
   }
   .language {

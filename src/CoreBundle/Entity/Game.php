@@ -122,7 +122,7 @@ class Game
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="time_last_move", type="time")
+     * @ORM\Column(name="time_last_move", type="datetime")
      */
     private $timeLastMove;
 
@@ -136,14 +136,14 @@ class Game
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="gone_in_rest_white", type="time", nullable=true)
+     * @ORM\Column(name="gone_in_rest_white", type="datetime", nullable=true)
      */
     private $goneInRestWhite;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="gone_in_rest_black", type="time", nullable=true)
+     * @ORM\Column(name="gone_in_rest_black", type="datetime", nullable=true)
      */
     private $goneInRestBlack;
 

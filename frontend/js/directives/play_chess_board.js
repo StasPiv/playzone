@@ -102,7 +102,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
             );
 
             element.onDragStart = function (source) {
-                return element.isMyMove();
+                return true;
             };
 
             element.isMyMove = function (piece) {

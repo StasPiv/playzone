@@ -123,6 +123,11 @@ class GameHandler implements GameProcessorInterface
                                     ->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
+        if ($me != $game->getUserToMove()) {
+            $this->getRequestError()->addError("pgn", "It is not your turn")
+                                    ->throwException(ResponseStatusCode::BAD_FORMAT);
+        }
+
         $pgn = $this->container->get("core.service.chess")->decodePgn($pgnRequest->getPgn());
 
         if (!$this->container->get("core.service.chess")->isValidPgn($pgn)) {

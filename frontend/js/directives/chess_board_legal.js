@@ -44,7 +44,7 @@ playzoneControllers.directive('chessBoardLegal', function () {
             // do not pick up pieces if the game is over
             // only pick up pieces for the side to move
             var onDragStart = function(source, piece, position, orientation) {
-                if (scope.game.status !== 'play') {
+                if (scope.game.status !== 'play' || !scope.game.mine || !element.isMyMove(piece)) {
                     return false;
                 }
 
@@ -55,21 +55,12 @@ playzoneControllers.directive('chessBoardLegal', function () {
                     return true;
                 }
 
-                if (!scope.pre_move) {
-                    return true;
-                }
-                if (element.onDragStart && !element.onDragStart()) {
-                    return false;
-                }
-                if (element.game.game_over() === true ||
-                    (element.game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-                    (element.game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-                    return false;
-                }
+                return !scope.pre_move;
             };
 
             var onDrop = function(source, target) {
                 if (element.game.turn() !== scope.game.color) {
+                    // pre-move functionality for draggable
                     scope.pre_move = {from: source, to: target};
                 }
                 // see if the move is legal
@@ -91,7 +82,7 @@ playzoneControllers.directive('chessBoardLegal', function () {
             };
 
             $(element).on('click', '[class*="square"]', function () {
-                if (element.onDragStart && !element.onDragStart()) {
+                if (!scope.game.mine || element.game.turn() !== scope.game.color) {
                     return false;
                 }
 

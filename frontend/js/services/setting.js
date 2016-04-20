@@ -6,7 +6,7 @@
 playzoneServices.factory('SettingService', function($rootScope) {
     return {
         getSetting: function (settingName) {
-            if (!$rootScope.user.settings[settingName]) {
+            if (!$rootScope.user.settings || !$rootScope.user.settings[settingName]) {
                 return null;
             }
 

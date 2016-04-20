@@ -57,8 +57,8 @@
   "incorrect_pgn": {
     "method": "PUT",
     "request": {
-      "login": "TestLogin",
-      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "login": "Stas",
+      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
       "reference": {
         "name": "id",
         "value": "game-0"
@@ -75,8 +75,8 @@
   "correct_pgn_ruy_lopez": {
     "method": "PUT",
     "request": {
-      "login": "TestLogin",
-      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "login": "Stas",
+      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
       "reference": {
         "name": "id",
         "value": "game-0"
@@ -89,9 +89,27 @@
         "pgn": "1.e4 e5 2.Nf3 Nc6 3.Bb5 a6",
         "draw": "",
         "user_to_move": {
-          "login": "Stas"
+          "login": "TestLogin"
         },
         "status": "play"
+      }
+    }
+  },
+  "not_my_move": {
+    "method": "PUT",
+    "request": {
+      "login": "Stas",
+      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
+      "reference": {
+        "name": "id",
+        "value": "game-0"
+      },
+      "pgn": "MS5lNCBlNSAyLk5mMyBOYzYgMy5CYjUgYTY="
+    },
+    "response": {
+      "status": 400,
+      "errors": {
+        "pgn": "It is not your turn"
       }
     }
   },

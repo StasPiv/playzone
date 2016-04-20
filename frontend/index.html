@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Welcome, {{$root.user.login}}!</title>
+    <title>PlayZone.Immortalchess.Net</title>
     <!--link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"-->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -89,6 +89,12 @@
                     <a href="/#/register">{{ 'Sign Up' | translate }}</a> / <span class="enter"><a href="/#/auth">{{ 'Sign In' | translate }}</a></span>
                 </div>
                 <div class="for-authorized" ng-if="$root.user.isAuth">
+                    <div ng-class="[
+                        'pic-connect',
+                        {'connect-not-success': !$root.connected},
+                        {'connect-success': !!$root.connected}]">
+                        &nbsp;
+                    </div>
                     <span>{{ 'Login' | translate }}: <b>{{$root.user.login}}</b></span>.
                     <span class="rating">{{ 'Rating' | translate }}: <b>{{$root.user.rating}}</b>. {{ 'Class' | translate }}: <b>{{$root.user.class}}</b></span>.
                     <br/>
@@ -103,9 +109,6 @@
             {{ 'Your browser is not supported for play. Try' | translate }}
             <a href='https://www.google.com/chrome/browser/desktop/'>Google Chrome</a>.
         </div>
-        <div class="info" ng-if="$root.browserSupported && $root.connected">
-            {{ 'The site in the testing mode. Please send your bug-reports' | translate }}: <a href="mailto:staspivovartsev@gmail.com">email</a>
-        </div>
         <div class="not-connected info" ng-if="!$root.connected">
             {{ 'Can not connect' | translate }}
         </div>
@@ -119,7 +122,6 @@
 
     <script src="js/script.js"></script>
     <script type="text/javascript" src="js/jquery.zclip.js"></script>
-    <script type="text/javascript" src="http://static.tinymce.com/tinymce/js/4.0b2/tinymce.min.js"></script>
     <script src="js/jquery.ui.draggable.js" type="text/javascript"></script>
     <script src="js/jquery.alerts.js" type="text/javascript"></script>
 

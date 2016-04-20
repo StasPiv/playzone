@@ -102,7 +102,11 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
             );
 
             element.onDragStart = function (source) {
-                return scope.game.status === 'play' && element.game.turn() === scope.game.color;
+                return element.isMyMove();
+            };
+
+            element.isMyMove = function (piece) {
+                return !piece || piece.indexOf(scope.game.color) === 0;
             };
 
             element.onMove = function (move) {

@@ -182,6 +182,70 @@ class TournamentHandler implements TournamentProcessorInterface
 
     /**
      * @param Tournament $tournament
+     * @return array|\CoreBundle\Entity\TournamentPlayer[]
+     * @throws \Exception
+     */
+    public function getAllTournamentPlayers(Tournament $tournament) : array
+    {
+        return $this->container->get("doctrine")->getRepository("CoreBundle:TournamentPlayer")
+            ->findBy(["tournament" => $tournament]);
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param int $round
+     * @return array|TournamentGame[]
+     * @throws \Exception
+     */
+    public function getAllTournamentGamesInRound(Tournament $tournament, int $round) : array
+    {
+        return $this->container->get("doctrine")->getRepository("CoreBundle:TournamentGame")
+            ->findBy(
+                [
+                    "tournament" => $tournament,
+                    "round" => $round
+                ]
+            );
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param User $user
+     * @return TournamentPlayer
+     * @throws \Exception
+     */
+    public function getTournamentPlayer(Tournament $tournament, User $user) : TournamentPlayer
+    {
+        $tournamentPlayer = $this->container->get("doctrine")
+            ->getRepository("CoreBundle:TournamentPlayer")
+            ->findOneBy(
+                [
+                    "player" => $user,
+                    "tournament" => $tournament
+                ]
+            );
+
+        if (!$tournamentPlayer instanceof TournamentPlayer) {
+            throw new TournamentPlayerNotFoundException;
+        }
+
+        return $tournamentPlayer;
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param User $user
+     * @return string
+     * @throws \Exception
+     */
+    public function getUserPreferColor(Tournament $tournament, User $user)
+    {
+        return $this->getTournamentPlayer($tournament, $user)
+                    ->getRequiredColor();
+    }
+
+    /**
+     * @param Tournament $tournament
      * @param User $user
      */
     private function setMineToTournament(Tournament $tournament, User $user)

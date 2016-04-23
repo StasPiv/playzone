@@ -3,6 +3,10 @@
 namespace CoreBundle\Tests\Service;
 
 use CoreBundle\Entity\TournamentGame;
+use CoreBundle\Entity\TournamentPlayer;
+use CoreBundle\Entity\User;
+use CoreBundle\Handler\TournamentHandler;
+use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Tests\KernelAwareTest;
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Service\SwissService;
@@ -30,34 +34,75 @@ class SwissServiceTest extends KernelAwareTest
         $this->swissService = $this->container->get("core.service.swiss");
     }
 
-    public function testDrawFirstRound()
+    public function testDraw()
     {
-        $tournament = $this->getTournament();
+        $tournament = $this->getTestTournament();
         $round = 1;
 
         $this->swissService->makeDraw($tournament, $round);
+        $this->assertPlayerPlaysOnlyOneGame($tournament, $round);
+        $this->assertAllPlayersTakePartInTheRound($tournament, $round);
+        $this->assertRequiredColors($tournament, $round);
+        $this->assertNoSameOpponent($tournament, $round);
+    }
 
-        $tournamentMap = [
-            [
-                "round" => $round,
-                "whiteLogin" => "User-A",
-                "blackLogin" => "User-N"
-            ],
-            [
-                "round" => $round,
-                "whiteLogin" => "User-B",
-                "blackLogin" => "User-O"
-            ]
-        ];
+    /**
+     * @param Tournament $tournament
+     * @param int $round
+     */
+    private function assertPlayerPlaysOnlyOneGame(Tournament $tournament, int $round)
+    {
+        $playerIds = $this->getPlayerIdsInTournamentRound($tournament, $round);
 
-        foreach ($tournamentMap as $tournamentGameArray) {
-            $this->assertTrue(
-                $this->isTournamentGameExists(
-                    $tournament,
-                    $tournamentGameArray["round"],
-                    $tournamentGameArray["whiteLogin"],
-                    $tournamentGameArray["blackLogin"]
-                )
+        $this->assertEquals(
+            $playerIds,
+            array_unique($playerIds),
+            "Some players play more than one game"
+        );
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param int $round
+     */
+    private function assertAllPlayersTakePartInTheRound(Tournament $tournament, int $round)
+    {
+        $playerIdsInTournament = $this->getPlayerIdsInTournament($tournament);
+        $playerIdsInRound = $this->getPlayerIdsInTournamentRound($tournament, $round);
+
+        $this->assertEquals(
+            $playerIdsInTournament,
+            $playerIdsInRound,
+            "Some players don't take part in the round"
+        );
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param int $round
+     */
+    private function assertRequiredColors(Tournament $tournament, int $round)
+    {
+        $games = $this->getTournamentHandler()
+                      ->getAllTournamentGamesInRound($tournament, $round);
+
+        foreach ($games as $tournamentGame) {
+            $this->assertContains(
+                $this->getUserRequiredColor(
+                    $tournament, $tournamentGame->getGame()->getUserWhite()
+                ),
+                [GameColor::WHITE, GameColor::RANDOM],
+                $tournamentGame->getGame()->getUserWhite() . " - " .
+                $tournamentGame->getGame()->getUserBlack()
+            );
+
+            $this->assertContains(
+                $this->getUserRequiredColor(
+                    $tournament, $tournamentGame->getGame()->getUserBlack()
+                ),
+                [GameColor::BLACK, GameColor::RANDOM],
+                $tournamentGame->getGame()->getUserWhite() . " - " .
+                $tournamentGame->getGame()->getUserBlack()
             );
         }
     }
@@ -65,43 +110,116 @@ class SwissServiceTest extends KernelAwareTest
     /**
      * @param Tournament $tournament
      * @param int $round
-     * @param string $whiteLogin
-     * @param string $blackLogin
-     * @return bool
-     * @throws \Exception
      */
-    private function isTournamentGameExists(Tournament $tournament, int $round, string $whiteLogin, string $blackLogin) : bool
+    private function assertNoSameOpponent(Tournament $tournament, int $round)
     {
-        return count(
-            array_filter(
-                $this->container->get("doctrine")->getRepository("CoreBundle:TournamentGame")
-                    ->findBy(
-                        [
-                            "tournament" => $tournament,
-                            "round" => $round
-                        ]
-                    ),
-                function(TournamentGame $tournamentGame) use ($whiteLogin, $blackLogin)
-                {
-                    return $tournamentGame->getGame()->getUserWhite()->getLogin() === $whiteLogin &&
-                           $tournamentGame->getGame()->getUserBlack()->getLogin() === $blackLogin;
-                }
-            )
-        ) === 1;
+        $games = $this->getTournamentHandler()
+                      ->getAllTournamentGamesInRound($tournament, $round);
+
+        foreach ($games as $tournamentGame) {
+            $playerWhite = $this->getTournamentHandler()->getTournamentPlayer(
+                $tournament, $tournamentGame->getGame()->getUserWhite()
+            );
+
+            $playerBlack = $this->getTournamentHandler()->getTournamentPlayer(
+                $tournament, $tournamentGame->getGame()->getUserBlack()
+            );
+
+            $this->assertNotContains(
+                $playerBlack->getPlayer()->getId(),
+                $playerWhite->getOpponents(),
+                $playerWhite->getPlayer() . " has already played with {$playerBlack->getPlayer()}"
+            );
+            $this->assertNotContains(
+                $playerWhite->getPlayer()->getId(),
+                $playerBlack->getOpponents(),
+                $playerBlack->getPlayer() . " has already played with {$playerWhite->getPlayer()}"
+            );
+        }
     }
 
     /**
      * @throws \Exception
      * @return Tournament
      */
-    private function getTournament() : Tournament
+    private function getTestTournament() : Tournament
     {
-        $tournament = $this->container->get("core.handler.tournament")->getRepository()
-                                      ->findOneBy(
-                                          [
-                                              'name' => 'Test switz tournament'
-                                          ]
-                                      );
-        return $tournament;
+        return $this->getTournamentHandler()
+                    ->getRepository()
+                    ->findOneByName('Test switz tournament');
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param int $round
+     * @return mixed
+     * @throws \Exception
+     */
+    private function getPlayerIdsInTournamentRound(Tournament $tournament, int $round) : array
+    {
+        $games = $this->getTournamentHandler()
+                      ->getAllTournamentGamesInRound($tournament, $round);
+
+        $playerIds =
+            array_merge(
+                array_map(
+                    function (TournamentGame $tournamentGame) {
+                        return $tournamentGame->getGame()->getUserWhite()->getId();
+                    },
+                    $games
+                ),
+                array_map(
+                    function (TournamentGame $tournamentGame) {
+                        return $tournamentGame->getGame()->getUserBlack()->getId();
+                    },
+                    $games
+                )
+            );
+
+        sort($playerIds);
+
+        return $playerIds;
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @return mixed
+     * @throws \Exception
+     */
+    private function getPlayerIdsInTournament(Tournament $tournament)
+    {
+        $playerIds = array_map(
+            function(TournamentPlayer $tournamentPlayer)
+            {
+                return $tournamentPlayer->getPlayer()->getId();
+            },
+            $this->getTournamentHandler()->getAllTournamentPlayers($tournament)
+        );
+
+        sort($playerIds);
+
+        return $playerIds;
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param User $user
+     * @return string
+     * @throws \Exception
+     */
+    private function getUserRequiredColor(Tournament $tournament, User $user)
+    {
+        return $this->getTournamentHandler()
+                    ->getTournamentPlayer($tournament, $user)
+                    ->getRequiredColor();
+    }
+
+    /**
+     * @return \CoreBundle\Handler\TournamentHandler
+     * @throws \Exception
+     */
+    private function getTournamentHandler() : TournamentHandler
+    {
+        return $this->container->get("core.handler.tournament");
     }
 }

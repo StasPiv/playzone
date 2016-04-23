@@ -40,4 +40,20 @@ class TournamentRepository extends EntityRepository
         return $tournament;
     }
 
+    /**
+     * @param string $name
+     * @return Tournament
+     * @throws TournamentNotFoundException
+     */
+    public function findOneByName(string $name) : Tournament
+    {
+        $tournament = parent::findOneByName($name);
+
+        if (!$tournament instanceof Tournament) {
+            throw new TournamentNotFoundException;
+        }
+
+        return $tournament;
+    }
+
 }

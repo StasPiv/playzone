@@ -10,6 +10,7 @@ namespace CoreBundle\DataFixtures\ORM;
 
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\Tournament;
+use CoreBundle\Entity\TournamentPlayer;
 use CoreBundle\Entity\User;
 use CoreBundle\Model\Game\GameParams;
 use CoreBundle\Model\Tournament\Params\TournamentParamsFactory;
@@ -34,7 +35,28 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
             foreach ($data['players'] as $referencePlayer) {
                 /** @var User $player */
                 $player = $this->getReference($referencePlayer);
-                $tournament->addPlayer($player);
+                
+                $tournamentPlayer = new TournamentPlayer();
+                $countBlack = mt_rand(4, 5);
+                $whiteInRow = mt_rand(0, 2);
+                $tournamentPlayer->setTournament($tournament)
+                                 ->setPlayer($player)
+                                 ->setWhiteInRow($whiteInRow)
+                                 ->setBlackInRow($whiteInRow ? 0 : mt_rand(0,2))
+                                 ->setCountBlack($countBlack)
+                                 ->setCountWhite(9 - $countBlack)
+                                 ->setPoints(mt_rand(0, 9))
+                                 ->setMissedRound(!!mt_rand(0,1));
+                
+                $opponents = $this->getShuffleOpponents($data["players"], $referencePlayer, 
+                    min(count($data["players"]), 9)
+                );
+                
+                foreach ($opponents as $opponent) {
+                    $tournamentPlayer->addOpponent($opponent);
+                }
+                
+                $tournament->getPlayers()->add($tournamentPlayer);
             }
         }
 
@@ -69,6 +91,33 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
         }
 
         return $tournament;
+    }
+
+    /**
+     * @param array $references
+     * @param string $excludeReference
+     * @param int $numberOfOpponents
+     * @return array|User[]
+     */
+    private function getShuffleOpponents(array $references, string $excludeReference, int $numberOfOpponents) : array 
+    {
+        $users = [];
+
+        foreach ($references as $reference) {
+            if ($reference == $excludeReference) {
+                continue;
+            }
+
+            $user = $this->getReference($reference);
+            
+            if ($user instanceof User) {
+                $users[] = $user;
+            }
+        }
+        
+        shuffle($users);
+        
+        return array_slice($users, 0, $numberOfOpponents);
     }
 
     /**

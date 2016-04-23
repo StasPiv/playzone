@@ -8,7 +8,10 @@
 
 namespace CoreBundle\Entity;
 
+use CoreBundle\Model\Game\GameColor;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use JMS\Serializer\Annotation as JMS;
 
 /**
@@ -36,6 +39,8 @@ class TournamentPlayer
      * 
      * @ORM\ManyToOne(targetEntity="Tournament", inversedBy="players")
      * @ORM\JoinColumn(name="tournament_id", referencedColumnName="id", nullable=false)
+     *
+     * @JMS\Exclude()
      */
     private $tournament;
 
@@ -44,15 +49,64 @@ class TournamentPlayer
      * 
      * @ORM\ManyToOne(targetEntity="User", inversedBy="tournaments")
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id", nullable=false)
+     *
+     * @JMS\Exclude()
      */
     private $player;
 
     /**
-     * @var int
+     * @var float
      * 
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      */
     private $points = 0;
+
+    /**
+     * @var float
+     */
+    private $pointsForDraw = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="count_white")
+     */
+    private $countWhite = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="count_black")
+     */
+    private $countBlack = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="white_in_row")
+     */
+    private $whiteInRow = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="black_in_row")
+     */
+    private $blackInRow = 0;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", name="missed_round")
+     */
+    private $missedRound = false;
+
+    /**
+     * @ORM\Column(type="array")
+     *
+     * @var array
+     */
+    private $opponents;
 
     /**
      * @return int
@@ -112,22 +166,180 @@ class TournamentPlayer
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getPoints() : int 
+    public function getPoints() : float
     {
         return $this->points;
     }
 
     /**
-     * @param int $points
+     * @return float
+     */
+    public function getPointsForDraw() : float 
+    {
+        return $this->pointsForDraw;
+    }
+
+    /**
+     * @param float $pointsForDraw
      * @return TournamentPlayer
      */
-    public function setPoints(int $points) : TournamentPlayer
+    public function setPointsForDraw(float $pointsForDraw) : TournamentPlayer
+    {
+        $this->pointsForDraw = $pointsForDraw;
+
+        return $this;
+    }
+
+    /**
+     * @param float $points
+     * @return TournamentPlayer
+     */
+    public function setPoints(float $points) : TournamentPlayer
     {
         $this->points = $points;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountWhite() : int 
+    {
+        return $this->countWhite;
+    }
+
+    /**
+     * @param int $countWhite
+     * @return TournamentPlayer
+     */
+    public function setCountWhite($countWhite) : TournamentPlayer
+    {
+        $this->countWhite = $countWhite;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountBlack() : int 
+    {
+        return $this->countBlack;
+    }
+
+    /**
+     * @param int $countBlack
+     * @return TournamentPlayer
+     */
+    public function setCountBlack($countBlack) : TournamentPlayer
+    {
+        $this->countBlack = $countBlack;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWhiteInRow() : int 
+    {
+        return $this->whiteInRow;
+    }
+
+    /**
+     * @param int $whiteInRow
+     * @return TournamentPlayer
+     */
+    public function setWhiteInRow($whiteInRow) : TournamentPlayer
+    {
+        $this->whiteInRow = $whiteInRow;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBlackInRow() : int 
+    {
+        return $this->blackInRow;
+    }
+
+    /**
+     * @param int $blackInRow
+     * @return TournamentPlayer
+     */
+    public function setBlackInRow($blackInRow) : TournamentPlayer
+    {
+        $this->blackInRow = $blackInRow;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isMissedRound() : bool 
+    {
+        return $this->missedRound;
+    }
+
+    /**
+     * @param boolean $missedRound
+     * @return TournamentPlayer
+     */
+    public function setMissedRound($missedRound) : TournamentPlayer
+    {
+        $this->missedRound = $missedRound;
+
+        return $this;
+    }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
+    public function addOpponent(User $user)
+    {
+        if (!$this->opponents) {
+            $this->opponents = [];
+        }
+        
+        $this->opponents[] = $user->getId();
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOpponents() : array 
+    {
+        return $this->opponents;
+    }
+
+    /**
+     * @return string
+     *
+     * @JMS\VirtualProperty()
+     * @JMS\SerializedName("required_color")
+     */
+    public function getRequiredColor()
+    {
+        switch (true) {
+            case $this->getBlackInRow() > 1:
+                return GameColor::WHITE;
+            case $this->getWhiteInRow() > 1:
+                return GameColor::BLACK;
+            case $this->getCountBlack() > $this->getCountWhite() + 1:
+                return GameColor::WHITE;
+            case $this->getCountWhite() > $this->getCountBlack() + 1:
+                return GameColor::BLACK;
+            default:
+                return GameColor::RANDOM;
+        }
     }
     
     

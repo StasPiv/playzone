@@ -204,7 +204,7 @@ class User
     private $offline = false;
 
     /**
-     * @ORM\OneToMany(targetEntity="CoreBundle\Entity\TournamentPlayer", mappedBy="player", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="TournamentPlayer", mappedBy="player", cascade={"persist"})
      * 
      * @var PersistentCollection
      */

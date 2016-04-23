@@ -43,7 +43,7 @@ class Tournament
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="CoreBundle\Entity\TournamentPlayer", mappedBy="tournament", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="TournamentPlayer", mappedBy="tournament", cascade={"persist", "remove"})
      */
     private $players;
 
@@ -127,9 +127,9 @@ class Tournament
     }
 
     /**
-     * @return PersistentCollection
+     * @return ArrayCollection
      */
-    public function getPlayers() : PersistentCollection
+    public function getPlayers() : ArrayCollection
     {
         return $this->players;
     }

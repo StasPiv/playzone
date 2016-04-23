@@ -1,37 +1,39 @@
 <h1>{{ header | translate }}</h1>
 
-<table class="grid">
-    <tr>
-        <th>№</th>
-        <th>{{ "Tournament" | translate }}</th>
-        <th>{{ "Parameters" | translate }}</th>
-        <th>{{ "Type" | translate }}</th>
-        <th>{{ "Time begin" | translate }}</th>
-        <th>{{ "Action" | translate }}</th>
-    </tr>
-    <tr ng-repeat="tournament in tournaments track by $index">
-        <td>
-            <a href="">{{ tournament.id }}</a>
-        </td>
-        <td>
-            <a href="/#/tournament/{{ tournament.id }}">{{ tournament.name }}</a>
-        </td>
-        <td>
-            <a href="">{{ tournament.game_params.time_base / 60000 }}{{ "m" | translate }}</a>
-        </td>
-        <td>
-            <a href="">{{ tournament.tournament_params.type | translate }}</a>
-        </td>
-        <td>
-            <a href="">{{ tournament.tournament_params.time_begin }}</a>
-        </td>
-        <td>
-            <a ng-if="!tournament.mine" class="button accept" ng-click="recordIntoTournament(tournament)">
-                {{ 'Record' | translate }}
-            </a>
-            <a ng-if="tournament.mine" class="button remove" ng-click="unrecordFromTournament(tournament)">
-                {{ 'Unrecord' | translate }}
-            </a>
-        </td>
-    </tr>
-</table>
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>№</th>
+            <th>{{ "Tournament" | translate }}</th>
+            <th>{{ "Parameters" | translate }}</th>
+            <th>{{ "Type" | translate }}</th>
+            <th>{{ "Time begin" | translate }}</th>
+            <th>{{ "Action" | translate }}</th>
+        </tr>
+        <tr ng-repeat="tournament in tournaments track by $index">
+            <td>
+                <a href="">{{ tournament.id }}</a>
+            </td>
+            <td>
+                <a href="/#/tournament/{{ tournament.id }}">{{ tournament.name }}</a>
+            </td>
+            <td>
+                <a href="">{{ tournament.game_params.time_base / 60000 }}{{ "m" | translate }}</a>
+            </td>
+            <td>
+                <a href="">{{ tournament.tournament_params.type | translate }}</a>
+            </td>
+            <td>
+                <a href="">{{ tournament.tournament_params.time_begin }}</a>
+            </td>
+            <td>
+                <a ng-if="!tournament.mine" class="btn btn-success" ng-click="recordIntoTournament(tournament)">
+                    {{ 'Record' | translate }}
+                </a>
+                <a ng-if="tournament.mine" class="btn btn-danger" ng-click="unrecordFromTournament(tournament)">
+                    {{ 'Unrecord' | translate }}
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>

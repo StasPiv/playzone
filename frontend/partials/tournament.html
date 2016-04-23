@@ -1,15 +1,17 @@
 <h1>{{ "Players" | translate }}</h1>
-<table class="grid">
-    <tr>
-        <th>№</th>
-        <th>{{ "Player" | translate }}</th>
-    </tr>
-    <tr ng-repeat="tournamentPlayer in tournament.players">
-        <td>
-            <a href="">{{ $index + 1 }}</a>
-        </td>
-        <td>
-            <a href="/#/profile/">{{ tournamentPlayer.player.login }}</a>
-        </td>
-    </tr>
-</table>
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>№</th>
+            <th>{{ "Player" | translate }}</th>
+        </tr>
+        <tr ng-repeat="tournamentPlayer in tournament.players">
+            <td>
+                <a href="">{{ $index + 1 }}</a>
+            </td>
+            <td>
+                <a href="/#/profile/">{{ tournamentPlayer.player.login }}</a>
+            </td>
+        </tr>
+    </table>
+</div>

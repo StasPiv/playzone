@@ -1,6 +1,6 @@
 <div ng-controller="CallCtrl" ng-if="!!$root.user.id">
-    <div class="call-form filter">
-        <table>
+    <div class="call-form filter table-responsive">
+        <table class="table">
             <tbody>
             <tr>
                 <td class="warning" colspan="2">{{ 'Personal calls do not affect the rating' |
@@ -30,7 +30,8 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <input class="button send-call" value="OK" type="submit" data-ng-click="sendCall(call)"><input title="Cancel" class="button" type="submit" value="{{ 'Cancel' | translate }}">&nbsp;
+                    <input title="Cancel" class="btn btn-danger" type="submit" value="{{ 'Cancel' | translate }}">&nbsp;
+                    <input class="btn btn-primary send-call" value="OK" type="submit" data-ng-click="sendCall(call)">
                 </td>
             </tr>
             </tbody>
@@ -38,24 +39,26 @@
     </div>
 </div>
 <h1>{{ "Players online" | translate }}</h1>
-<table class="games">
-    <tr>
-        <th>№</th>
-        <th>{{ "Player" | translate }}</th>
-        <th>{{ "Action" | translate }}</th>
-    </tr>
-    <tr ng-repeat="player in $root.loginsOnline track by $index">
-        <td>
-            <a href="">{{ $index + 1 }}</a>
-        </td>
-        <td>
-            <a href="/#/profile/">{{ player }}</a>
-        </td>
-        <td>
-            <a ng-if="player !== $root.user.login" class="button accept open-popup" data-open-popup=".call-form"
-               ng-click="openSendCallToPlayer(player)">
-                {{ 'Call on the game' | translate }}
-            </a>
-        </td>
-    </tr>
-</table>
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>№</th>
+            <th>{{ "Player" | translate }}</th>
+            <th>{{ "Action" | translate }}</th>
+        </tr>
+        <tr ng-repeat="player in $root.loginsOnline track by $index">
+            <td>
+                <a href="">{{ $index + 1 }}</a>
+            </td>
+            <td>
+                <a href="/#/profile/">{{ player }}</a>
+            </td>
+            <td>
+                <a ng-if="player !== $root.user.login" class="btn btn-success open-popup" data-open-popup=".call-form"
+                   ng-click="openSendCallToPlayer(player)">
+                    {{ 'Call on the game' | translate }}
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -1,6 +1,6 @@
 <div ng-controller="CallCtrl" ng-if="!!$root.user.id">
-    <div class="call-form filter">
-        <table>
+    <div class="call-form filter table-responsive">
+        <table class="table">
             <tbody>
             <tr>
                 <td class="warning" colspan="2">{{ 'Personal calls do not affect the rating' |
@@ -30,93 +30,109 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <input class="button send-call" value="OK" type="submit" data-ng-click="sendCall(call)"><input title="Cancel" class="button" type="submit" value="{{ 'Cancel' | translate }}">&nbsp;
+                    <input title="Cancel" class="btn btn-danger" type="submit" value="{{ 'Cancel' | translate }}">&nbsp;
+                    <input class="btn btn-success send-call" value="OK" type="submit" data-ng-click="sendCall(call)">
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
     <div class="apply-call">
-        <a class="button accept open-popup" data-open-popup=".call-form">{{ 'Call on the game' | translate }}</a>
+        <a class="btn btn-success open-popup" data-open-popup=".call-form">
+            {{ 'Call on the game' | translate }}
+        </a>
     </div>
 </div>
 <h1>{{ "Your calls" | translate }}</h1>
-<table class="games">
-    <tr>
-        <th>№</th>
-        <th>{{ "To user" | translate }}</th>
-        <th>{{ "Time control (minutes)" | translate }}</th>
-        <th width="20%">&nbsp;</th>
-    </tr>
-    <tr ng-repeat="call in calls_from_me" ng-if="call.id">
-        <td>
-            <a href="" ng-click="deleteCall(call);">{{ call.id }}</a>
-        </td>
-        <td>
-            {{ call.to_user.login ? call.to_user.login : "To all" | translate }}
-        </td>
-        <td>
-            {{ call.game_params.time_base / 60000 }}
-        </td>
-        <td>
-            <a href="" class="button remove" ng-click="deleteCall(call);">{{ "Remove" | translate }}</a>
-        </td>
-    </tr>
-</table>
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>№</th>
+            <th>{{ "To user" | translate }}</th>
+            <th>{{ "Time control (minutes)" | translate }}</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr ng-repeat="call in calls_from_me" ng-if="call.id">
+            <td>
+                <a href="" ng-click="deleteCall(call);">{{ call.id }}</a>
+            </td>
+            <td>
+                {{ call.to_user.login ? call.to_user.login : "To all" | translate }}
+            </td>
+            <td>
+                {{ call.game_params.time_base / 60000 }}
+            </td>
+            <td>
+                <a href="" class="btn btn-danger" ng-click="deleteCall(call);">{{ "Remove" | translate }}</a>
+            </td>
+        </tr>
+    </table>
+</div>
 <h1>{{ "Calls to you" | translate }}</h1>
-<table class="games">
-    <tr>
-        <th>№</th>
-        <th>{{ "From user" | translate }}</th>
-        <th>{{ "Time control (minutes)" | translate }}</th>
-        <th width="20%">&nbsp;</th>
-    </tr>
-    <tr ng-repeat="call in calls_to_me" ng-if="call.id && call.from_user.id != $root.user.id">
-        <td>
-            <a href="" ng-click="acceptCall(call)">{{ call.id }}</a>
-        </td>
-        <td>
-            <a href="/#/profile/{{ call.from_user.id }}">{{ call.from_user.login }}</a>
-        </td>
-        <td>
-            {{ call.game_params.time_base / 60000 }}
-        </td>
-        <td>
-            <a href="" class="button accept" ng-click="acceptCall(call)">{{ "Accept" | translate }}</a>&nbsp;&nbsp;<a
-                href="" ng-if="call.to_user.id == $root.user.id" class="button remove" ng-click="declineCall(call)">{{
-            "Decline" | translate }}</a>
-        </td>
-    </tr>
-</table>
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>№</th>
+            <th>{{ "From user" | translate }}</th>
+            <th>{{ "Time control (minutes)" | translate }}</th>
+            <th width="20%">&nbsp;</th>
+        </tr>
+        <tr ng-repeat="call in calls_to_me" ng-if="call.id && call.from_user.id != $root.user.id">
+            <td>
+                <a href="" ng-click="acceptCall(call)">{{ call.id }}</a>
+            </td>
+            <td>
+                <a href="/#/profile/{{ call.from_user.id }}">{{ call.from_user.login }}</a>
+            </td>
+            <td>
+                {{ call.game_params.time_base / 60000 }}
+            </td>
+            <td>
+                <a href="" class="btn btn-success" ng-click="acceptCall(call)">
+                    {{ "Accept" | translate }}
+                </a>&nbsp;&nbsp;
+                <a href="" ng-if="call.to_user.id == $root.user.id" class="btn btn-danger" ng-click="declineCall(call)">
+                    {{ "Decline" | translate }}
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
 <h1>{{ "Current games" | translate }} ({{ current.length }})</h1>
-<table class="games current">
-    <thead>
-    <tr>
-        <th>№</th>
-        <th>{{ "White" | translate }}</th>
-        <th>{{ "Black" | translate }}</th>
-        <th>{{ "Result" | translate }}</th>
-        <th width="15%">{{ "Action" | translate }}</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="game in current">
-        <td>
-            <a href="/#/play/{{ game.id }}">{{ game.id }}</a>
-        </td>
-        <td>
-            <span>{{ game.user_white.login }}</span>
-        </td>
-        <td>
-            <span>{{ game.user_black.login }}</span>
-        </td>
-        <td>
-            <span>{{ game.result_white }} - {{ game.result_black }}</span>
-        </td>
-        <td>
-            <a ng-show="game.user_move" href="/#/play/{{ game.id }}" class="button domove">{{ "Do move" | translate }}</a>
-            <a ng-show="!game.user_move" href="/#/play/{{ game.id }}" class="button">{{ "See" | translate }}</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table current">
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>{{ "White" | translate }}</th>
+            <th>{{ "Black" | translate }}</th>
+            <th>{{ "Result" | translate }}</th>
+            <th width="15%">{{ "Action" | translate }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="game in current">
+            <td>
+                <a href="/#/play/{{ game.id }}">{{ game.id }}</a>
+            </td>
+            <td>
+                <span>{{ game.user_white.login }}</span>
+            </td>
+            <td>
+                <span>{{ game.user_black.login }}</span>
+            </td>
+            <td>
+                <span>{{ game.result_white }} - {{ game.result_black }}</span>
+            </td>
+            <td>
+                <a ng-show="game.user_move" href="/#/play/{{ game.id }}" class="btn btn-success">
+                    {{ "Do move" | translate }}
+                </a>
+                <a ng-show="!game.user_move" href="/#/play/{{ game.id }}" class="btn btn-info">
+                    {{ "See" | translate }}
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

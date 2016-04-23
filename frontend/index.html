@@ -9,7 +9,10 @@
     <title>PlayZone.Immortalchess.Net</title>
     <!--link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"-->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- end bootstrap -->
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
@@ -68,18 +71,16 @@
 
             <div class="menu" ng-controller="TopMenuCtrl">
                 <ul>
-                    <li class="button" ng-repeat="item in menu">
-                        <a href="{{item.url}}">{{item.label | translate}}</a>
-                        <ul class="sub-menu">
-                            <li class="button" ng-repeat="subItem in item.menu">
-                                <a href="{{subItem.url}}">{{subItem.label | translate}}</a>
-                            </li>
-                        </ul>
-                    </li>
+                    <div class="btn-group-justified">
+                        <a href="{{item.url}}" class="btn btn-default" ng-repeat="item in menu">
+                            {{item.label | translate}}
+                        </a>
+                    </div>
                 </ul>
             </div>
-            <div class="language" ng-controller="LanguageCtrl">
-                <a ng-click="changeLanguage('en')" href="/#/">en</a> | <a ng-click="changeLanguage('ru')" href="/#/">ru</a>
+            <div class="language btn-group" ng-controller="LanguageCtrl">
+                <a class="btn btn-default" ng-click="changeLanguage('en')" href="/#/">en</a>
+                <a class="btn btn-default" ng-click="changeLanguage('ru')" href="/#/">ru</a>
             </div>
             <div class="register" ng-controller="TopRegisterCtrl">
                 <div class="for-unauthorized" ng-if="!$root.user.isAuth">
@@ -92,13 +93,14 @@
                         {'connect-success': !!$root.connected}]">
                         &nbsp;
                     </div>
-                    <span>{{ 'Login' | translate }}: <b>{{$root.user.login}}</b></span>.
-                    <span class="rating">{{ 'Rating' | translate }}: <b>{{$root.user.rating}}</b>. {{ 'Class' | translate }}: <b>{{$root.user.class}}</b></span>.
-                    <br/>
-                    <span class="user-action">
-                        <span class="profile"><a href="/#/profile">{{ 'My profile' | translate }}</a></span> |
-                        <span class="enter"><a href="/#/logout" ng-click="logout()">{{ 'Logout' | translate }}</a></span>
-                    </span>
+                    <div class="user-action btn-group">
+                        <a class="btn btn-primary" href="/#/profile">
+                            {{ 'My profile' | translate }} ({{$root.user.login}})
+                        </a>
+                        <a class="btn btn-primary" href="/#/logout" ng-click="logout()">
+                            {{ 'Logout' | translate }}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -127,11 +127,11 @@ h2 {
   }
 }
 .pic-connect {
-  border-radius: 7px;
+  border-radius: 15px;
   float: left;
-  height: 10px;
-  width: 10px;
-  margin: 4px;
+  height: 15px;
+  margin: 10px;
+  width: 15px;
   &.connect-not-success {
     background-color: $red;
   }
@@ -147,7 +147,7 @@ h2 {
     left: 230px;
     margin-top: 77px;
     position: absolute;
-    top: -4px;
+    top: -20px;
     .mobile & {
       left: 0;
     }
@@ -180,8 +180,8 @@ h2 {
   .register {
     font-size: 14px;
     position: absolute;
-    right: 20px;
-    top: 31px;
+    right: 111px;
+    top: 10px;
     .user-action {
       font-weight: bold;
       float: right;
@@ -227,6 +227,7 @@ h2 {
   }
 }
 .middle {
+  padding-top: 13px;
   .teasers {
     margin: auto;
     width: 100%;
@@ -324,7 +325,6 @@ h2 {
     }
     input[type="submit"] {
       float: right;
-      width: 67px;
       margin: 0 3px;
     }
   }

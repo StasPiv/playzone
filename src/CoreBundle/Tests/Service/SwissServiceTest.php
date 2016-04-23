@@ -34,14 +34,32 @@ class SwissServiceTest extends KernelAwareTest
         $this->swissService = $this->container->get("core.service.swiss");
     }
 
-    public function testDrawOdd()
-    {
-        $this->makeDrawAndAssert($this->getTestTournamentOdd());
-    }
-
     public function testDrawEven()
     {
-        $this->makeDrawAndAssert($this->getTestTournamentEven(), true);
+        $tournament = $this->getTestTournamentEven();
+        $round = 1;
+
+        $this->swissService->makeDraw($tournament, $round);
+        $this->assertPlayerPlaysOnlyOneGame($tournament, $round);
+
+        $this->assertAllPlayersTakePartInTheRound($tournament, $round);
+
+        $this->assertNoSameOpponent($tournament, $round);
+        $this->assertRequiredColors($tournament, $round);
+    }
+
+    public function testDrawOdd()
+    {
+        $tournament = $this->getTestTournamentOdd();
+        $round = 1;
+
+        $this->swissService->makeDraw($tournament, $round);
+        $this->assertPlayerPlaysOnlyOneGame($tournament, $round);
+
+        $this->assertOnlyOnePlayerMissedThisRound($tournament, $round);
+
+        $this->assertNoSameOpponent($tournament, $round);
+        $this->assertRequiredColors($tournament, $round);
     }
 
     /**
@@ -246,26 +264,5 @@ class SwissServiceTest extends KernelAwareTest
     private function getTournamentHandler() : TournamentHandler
     {
         return $this->container->get("core.handler.tournament");
-    }
-
-    /**
-     * @param Tournament $tournament
-     * @param bool $even
-     */
-    private function makeDrawAndAssert(Tournament $tournament, bool $even = false)
-    {
-        $round = 1;
-
-        $this->swissService->makeDraw($tournament, $round);
-        $this->assertPlayerPlaysOnlyOneGame($tournament, $round);
-
-        if (!$even) {
-            $this->assertAllPlayersTakePartInTheRound($tournament, $round);
-        } else {
-            $this->assertOnlyOnePlayerMissedThisRound($tournament, $round);
-        }
-
-        $this->assertRequiredColors($tournament, $round);
-        $this->assertNoSameOpponent($tournament, $round);
     }
 }

@@ -49,8 +49,6 @@ class TournamentPlayer
      * 
      * @ORM\ManyToOne(targetEntity="User", inversedBy="tournaments")
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id", nullable=false)
-     *
-     * @JMS\Exclude()
      */
     private $player;
 

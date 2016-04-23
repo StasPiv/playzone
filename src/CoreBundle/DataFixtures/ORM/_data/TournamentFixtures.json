@@ -57,7 +57,7 @@
   },
   {
     "referenceName": "tournament-switz",
-    "name": "Test switz tournament odd",
+    "name": "Test switz tournament even",
     "players": [
       "user-a",
       "user-b",
@@ -96,7 +96,7 @@
   },
   {
     "referenceName": "tournament-switz-even",
-    "name": "Test switz tournament even",
+    "name": "Test switz tournament odd",
     "players": [
       "user-b",
       "user-c",

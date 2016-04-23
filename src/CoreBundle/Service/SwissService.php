@@ -51,6 +51,11 @@ class SwissService implements TournamentDrawInterface
     private $existsMissedPlayer = false;
 
     /**
+     * @var bool
+     */
+    private $ignoreColors = false;
+
+    /**
      * UserHandler constructor.
      * @param EntityManager $manager
      */
@@ -113,6 +118,7 @@ class SwissService implements TournamentDrawInterface
 
         foreach ($this->possibleTournamentGames as $possibleTournamentGame) {
             $this->manager->detach($possibleTournamentGame);
+            $this->manager->detach($possibleTournamentGame->getGame());
         }
         
         $this->possibleTournamentGames = [];
@@ -216,6 +222,7 @@ class SwissService implements TournamentDrawInterface
     private function buildPossibleOpponentsMapForEachPlayer(array $players)
     {
         $this->possibleOpponentsMap = [];
+        $this->existsMissedPlayer = false;
 
         foreach ($players as $player) {
             $this->buildPossibleOpponentsMap($player);
@@ -258,7 +265,8 @@ class SwissService implements TournamentDrawInterface
                 continue;
             }
 
-            if ($player->getRequiredColor() != GameColor::RANDOM &&
+            if (!$this->ignoreColors &&
+                $player->getRequiredColor() != GameColor::RANDOM &&
                 $opponent->getRequiredColor() == $player->getRequiredColor()) {
                 continue;
             }
@@ -283,13 +291,9 @@ class SwissService implements TournamentDrawInterface
             /** @var TournamentPlayer $firstPlayer */
             $firstPlayer = $playerArray["player"];
 
-            if (empty($playerArray["opponents"])) {
-                continue;
-            }
-
             $secondPlayer = null;
 
-            foreach ($playerArray["opponents"] as $opponentId => $opponent) {
+            foreach ((array)$playerArray["opponents"] as $opponentId => $opponent) {
                 if (!isset($alreadyPlayed[$opponentId])) {
                     /** @var TournamentPlayer $secondPlayer */
                     $secondPlayer = $playerArray["opponents"][$opponentId];
@@ -307,6 +311,10 @@ class SwissService implements TournamentDrawInterface
                     continue;
                 } else {
                     $firstPlayer->setPointsForDraw($firstPlayer->getPointsForDraw() + 0.5);
+                    
+                    if ($firstPlayer->getPointsForDraw() == 8) {
+                        $this->ignoreColors = true;
+                    }
 
                     throw new TournamentDrawIncorrectException(
                         $this->getPlayerInfo($firstPlayer)

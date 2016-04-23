@@ -34,16 +34,14 @@ class SwissServiceTest extends KernelAwareTest
         $this->swissService = $this->container->get("core.service.swiss");
     }
 
-    public function testDraw()
+    public function testDrawOdd()
     {
-        $tournament = $this->getTestTournament();
-        $round = 1;
+        $this->makeDrawAndAssert($this->getTestTournamentOdd());
+    }
 
-        $this->swissService->makeDraw($tournament, $round);
-        $this->assertPlayerPlaysOnlyOneGame($tournament, $round);
-        $this->assertAllPlayersTakePartInTheRound($tournament, $round);
-        $this->assertRequiredColors($tournament, $round);
-        $this->assertNoSameOpponent($tournament, $round);
+    public function testDrawEven()
+    {
+        $this->makeDrawAndAssert($this->getTestTournamentEven(), true);
     }
 
     /**
@@ -74,6 +72,22 @@ class SwissServiceTest extends KernelAwareTest
             $playerIdsInTournament,
             $playerIdsInRound,
             "Some players don't take part in the round"
+        );
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param int $round
+     */
+    private function assertOnlyOnePlayerMissedThisRound(Tournament $tournament, int $round)
+    {
+        $playerIdsInTournament = $this->getPlayerIdsInTournament($tournament);
+        $playerIdsInRound = $this->getPlayerIdsInTournamentRound($tournament, $round);
+
+        $this->assertEquals(
+            count($playerIdsInRound) + 1,
+            count($playerIdsInTournament),
+            "Only one player should miss the round"
         );
     }
 
@@ -142,11 +156,22 @@ class SwissServiceTest extends KernelAwareTest
      * @throws \Exception
      * @return Tournament
      */
-    private function getTestTournament() : Tournament
+    private function getTestTournamentOdd() : Tournament
     {
         return $this->getTournamentHandler()
                     ->getRepository()
-                    ->findOneByName('Test switz tournament');
+                    ->findOneByName('Test switz tournament odd');
+    }
+
+    /**
+     * @throws \Exception
+     * @return Tournament
+     */
+    private function getTestTournamentEven() : Tournament
+    {
+        return $this->getTournamentHandler()
+                    ->getRepository()
+                    ->findOneByName('Test switz tournament even');
     }
 
     /**
@@ -221,5 +246,26 @@ class SwissServiceTest extends KernelAwareTest
     private function getTournamentHandler() : TournamentHandler
     {
         return $this->container->get("core.handler.tournament");
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param bool $even
+     */
+    private function makeDrawAndAssert(Tournament $tournament, bool $even = false)
+    {
+        $round = 1;
+
+        $this->swissService->makeDraw($tournament, $round);
+        $this->assertPlayerPlaysOnlyOneGame($tournament, $round);
+
+        if (!$even) {
+            $this->assertAllPlayersTakePartInTheRound($tournament, $round);
+        } else {
+            $this->assertOnlyOnePlayerMissedThisRound($tournament, $round);
+        }
+
+        $this->assertRequiredColors($tournament, $round);
+        $this->assertNoSameOpponent($tournament, $round);
     }
 }

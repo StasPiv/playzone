@@ -46,6 +46,11 @@ class SwissService implements TournamentDrawInterface
     private $possibleTournamentGames = [];
 
     /**
+     * @var bool
+     */
+    private $existsMissedPlayer = false;
+
+    /**
      * UserHandler constructor.
      * @param EntityManager $manager
      */
@@ -168,7 +173,10 @@ class SwissService implements TournamentDrawInterface
             $tournamentPlayers,
             function(TournamentPlayer $a, TournamentPlayer $b)
             {
-                if ($a->getPoints() === $b->getPoints()) {
+                $pointsB = $b->getPoints() + $b->getPointsForDraw();
+                $pointsA = $a->getPoints() + $a->getPointsForDraw();
+
+                if ($pointsA === $pointsB) {
                     if ($b->getRequiredColor() == $a->getRequiredColor()) {
                         return $b->getPlayer()->getLogin() <=> $a->getPlayer()->getLogin();
                     }
@@ -176,11 +184,22 @@ class SwissService implements TournamentDrawInterface
                     return $b->getRequiredColor() <=> $a->getRequiredColor();
                 }
 
-                return $b->getPoints() + $b->getPointsForDraw() <=> $a->getPoints() + $a->getPointsForDraw();
+                return $pointsB <=> $pointsA;
             }
         );
 
         return $tournamentPlayers;
+    }
+
+    /**
+     * @param TournamentPlayer $tournamentPlayer
+     * @return string
+     */
+    private function getPlayerInfo(TournamentPlayer $tournamentPlayer) : string
+    {
+        return $tournamentPlayer->getPlayer()->getLogin() .
+               " (" . $tournamentPlayer->getPlayer()->getId() . ")" . " " .
+               $this->container->get("jms_serializer")->serialize($tournamentPlayer, "json");
     }
 
     /**
@@ -279,9 +298,21 @@ class SwissService implements TournamentDrawInterface
             }
 
             if (!$secondPlayer) {
-                $firstPlayer->setPointsForDraw($firstPlayer->getPointsForDraw() + 0.5);
+                if (!$this->existsMissedPlayer && !$firstPlayer->isMissedRound()) {
+                    $firstPlayer->setPoints($firstPlayer->getPoints() + 1)
+                                ->setMissedRound(true);
 
-                throw new TournamentDrawIncorrectException;
+                    $alreadyPlayed[$firstPlayer->getId()] = $firstPlayer->getId();
+                    $this->existsMissedPlayer = true;
+                    continue;
+                } else {
+                    $firstPlayer->setPointsForDraw($firstPlayer->getPointsForDraw() + 0.5);
+
+                    throw new TournamentDrawIncorrectException(
+                        $this->getPlayerInfo($firstPlayer)
+                    );
+                }
+
             }
 
             $this->createTournamentGame($tournament, $round, $firstPlayer, $secondPlayer);

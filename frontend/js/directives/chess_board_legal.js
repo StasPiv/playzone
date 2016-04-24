@@ -7,15 +7,11 @@
  * This small library is useful for separating drag&drop logic and application logic
  */
 playzoneControllers.directive('chessBoardLegal', function (SettingService) {
-    function doMoveOnTheBoard(scope, element, to) {
-        if (element.game.turn() !== scope.game.color) {
-            scope.pre_move = {
-                from: scope.current_move.from,
-                to: to
-            };
-            return;
-        }
+    function isMyTurn(scope, element) {
+        return element.game.turn() === scope.game.color;
+    }
 
+    function doMoveOnTheBoard(scope, element, to) {
         scope.current_move.to = to; // move by click&click
         scope.current_move.promotion = 'q'; // NOTE: always promote to a queen for example simplicity
 
@@ -37,6 +33,10 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService) {
     }
 
     function moveByOneClick(element, square, scope) {
+        if (!isMyTurn(scope, element)) {
+            return;
+        }
+
         var legalMoves = element.game.moves({verbose: true});
 
         var isSingleOptionToMoveHere = false;
@@ -133,19 +133,35 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService) {
 
                 var isMyPiece = piece.length && piece.data('piece').indexOf(scope.game.color) === 0;
 
-                if (!isMyPiece && !scope.current_move && SettingService.getSetting('One-click move')) { // move by one click
+                if (!isMyPiece &&
+                    !scope.current_move &&
+                    SettingService.getSetting('One-click move')) { // move by one click
                     if (moveByOneClick(element, square, scope)) {
                         return;
                     }
                 }
 
-                if (!scope.current_move || isMyPiece) {
-                    scope.current_move = { from: square };
+                if (isMyTurn(scope, element)) {
+                    if (!scope.current_move || isMyPiece) {
+                        scope.current_move = {
+                            from: square
+                        };
+                        highlightSquare(square);
+                    } else {
+                        doMoveOnTheBoard(scope, element, square);
+                    }
+                } else {
+                    if (!scope.pre_move) {
+                        scope.pre_move = {
+                            from: square
+                        };
+                        console.log(scope.pre_move);
+                    } else {
+                        scope.pre_move.to = square;
+                        console.log(scope.pre_move);
+                    }
                     highlightSquare(square);
-                    return;
                 }
-
-                doMoveOnTheBoard(scope, element, square);
             });
 
             // update the board position after the piece snap

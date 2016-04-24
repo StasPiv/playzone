@@ -8,11 +8,21 @@
  */
 playzoneControllers.directive('chessBoardLegal', function () {
     function doMoveOnTheBoard(scope, element, to) {
+        if (element.game.turn() !== scope.game.color) {
+            scope.pre_move = {
+                from: scope.current_move.from,
+                to: to
+            };
+            console.log(scope.pre_move);
+            return;
+        }
+
         scope.current_move.to = to; // move by click&click
         scope.current_move.promotion = 'q'; // NOTE: always promote to a queen for example simplicity
 
         if (!element.game.move(scope.current_move)) {
-            scope.current_move = scope.pre_move = false;
+            scope.current_move.to = false;
+            scope.pre_move = false;
             return;
         }
 
@@ -82,13 +92,19 @@ playzoneControllers.directive('chessBoardLegal', function () {
             };
 
             $(element).on('click', '[class*="square"]', function () {
-                if (!scope.game.mine || element.game.turn() !== scope.game.color) {
+                if (!scope.game.mine) {
                     return false;
                 }
 
                 var square = $(this).data('square');
-                
-                if (!scope.current_move) {
+
+                var piece = $(this).find('img');
+
+                var isMyPiece = piece.length && piece.data('piece').indexOf(scope.game.color) === 0;
+
+                console.log(isMyPiece);
+
+                if (!scope.current_move || isMyPiece) {
                     scope.current_move = { from: square };
                     highlightSquare(square);
                     return;

@@ -118,6 +118,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                 element.game.game_over() && !element.game.in_checkmate() && scope.draw();
                 element.game.in_checkmate() && AudioService.win();
+                highlightLastMove(scope, element);
 
                 WebRTCService.sendMessage({
                     gameId: scope.game.id,

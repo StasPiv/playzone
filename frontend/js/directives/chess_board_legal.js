@@ -6,14 +6,13 @@
  * Also drag and drop functions will be defined.
  * This small library is useful for separating drag&drop logic and application logic
  */
-playzoneControllers.directive('chessBoardLegal', function () {
+playzoneControllers.directive('chessBoardLegal', function (SettingService) {
     function doMoveOnTheBoard(scope, element, to) {
         if (element.game.turn() !== scope.game.color) {
             scope.pre_move = {
                 from: scope.current_move.from,
                 to: to
             };
-            console.log(scope.pre_move);
             return;
         }
 
@@ -35,6 +34,38 @@ playzoneControllers.directive('chessBoardLegal', function () {
         element.board.position(element.game.fen());
         element.updateStatus();
         element.onMove(scope.current_move);
+    }
+
+    function moveByOneClick(element, square, scope) {
+        var legalMoves = element.game.moves({verbose: true});
+
+        var isSingleOptionToMoveHere = false;
+
+        $.each(
+            legalMoves,
+            function (index, value) {
+                if (value.to === square) {
+                    if (isSingleOptionToMoveHere) {
+                        isSingleOptionToMoveHere = false;
+                        scope.current_move = false;
+                        return false;
+                    } else {
+                        isSingleOptionToMoveHere = true;
+                        scope.current_move = {
+                            from: value.from
+                        };
+                        console.log('test');
+                    }
+                }
+            }
+        );
+
+        if (isSingleOptionToMoveHere) {
+            doMoveOnTheBoard(scope, element, square);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     return {
@@ -102,7 +133,11 @@ playzoneControllers.directive('chessBoardLegal', function () {
 
                 var isMyPiece = piece.length && piece.data('piece').indexOf(scope.game.color) === 0;
 
-                console.log(isMyPiece);
+                if (!isMyPiece && !scope.current_move && SettingService.getSetting('One-click move')) { // move by one click
+                    if (moveByOneClick(element, square, scope)) {
+                        return;
+                    }
+                }
 
                 if (!scope.current_move || isMyPiece) {
                     scope.current_move = { from: square };

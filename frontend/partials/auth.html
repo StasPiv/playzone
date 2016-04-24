@@ -1,5 +1,5 @@
 <h1>{{ 'Authorization' | translate }}</h1>
-<div class="green-info">
+<div class="alert alert-success">
     {{ 'Immortalchess.Net login/password is allowed' | translate }}
 </div>
 <table class="register auth">
@@ -27,16 +27,11 @@
         </td>
     </tr>
     <tr>
-        <td>
-            <a href="/#/register/">{{ 'Sign Up' | translate }}</a>
-        </td>
         <td colspan="2">
-            <a href="/#/forgot/">{{ 'Forgot password?' | translate }}</a>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="3">
-            <input class="button" value="{{ 'Enter' | translate }}" type="submit" ng-click="auth()">
+            <div class="btn btn-group">
+                <a class="btn btn-default" href="/#/register/">{{ 'Sign Up' | translate }}</a>
+                <input class="btn btn-success" value="{{ 'Enter' | translate }}" type="submit" ng-click="auth()">
+            </div>
         </td>
     </tr>
     </tbody>

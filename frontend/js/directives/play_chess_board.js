@@ -11,14 +11,6 @@
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
 playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService, AudioService) {
-    var highlightLastMove = function (scope, element) {
-        $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
-        var history = element.game.history({verbose: true});
-        var lastMove = history[history.length - 1];
-        $(element).find('.square-' + lastMove.from).addClass(scope.boardConfig.highlightClass);
-        $(element).find('.square-' + lastMove.to).addClass(scope.boardConfig.highlightClass);
-    };
-
     var makePreMoveIfExists = function (scope, element) {
         if (!scope.game.mine || !scope.pre_move) { //premove
             return;
@@ -44,6 +36,16 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
     return {
         restrict: 'C',
         link: function(scope, element) {
+            scope.highlightLastMove = function (scope, element, lastMove) {
+                $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
+                var history = element.game.history({verbose: true});
+
+                !lastMove && (lastMove = history[history.length - 1]);
+
+                $(element).find('.square-' + lastMove.from).addClass(scope.boardConfig.highlightClass);
+                $(element).find('.square-' + lastMove.to).addClass(scope.boardConfig.highlightClass);
+            };
+
             scope.game.$promise.then(
                 function() {
                     element.loadBoard(scope.boardConfig);
@@ -83,7 +85,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                         scope.game.time_white = data.time_white;
 
                         if (receivedPgn.length <= scope.game.pgn.length) {
-                            highlightLastMove(scope, element);
+                            scope.highlightLastMove(scope, element);
                             makePreMoveIfExists(scope, element);
                             return;
                         }
@@ -95,7 +97,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                         element.updateStatus();
                         element.game.game_over() && scope.game.$get();
 
-                        highlightLastMove(scope, element);
+                        scope.highlightLastMove(scope, element);
                         makePreMoveIfExists(scope, element);
                     });
                 }
@@ -118,7 +120,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                 element.game.game_over() && !element.game.in_checkmate() && scope.draw();
                 element.game.in_checkmate() && AudioService.win();
-                highlightLastMove(scope, element);
+                scope.highlightLastMove(scope, element);
 
                 WebRTCService.sendMessage({
                     gameId: scope.game.id,

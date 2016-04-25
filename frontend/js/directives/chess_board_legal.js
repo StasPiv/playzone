@@ -151,16 +151,16 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService) {
                         doMoveOnTheBoard(scope, element, square);
                     }
                 } else {
-                    if (!scope.pre_move) {
+                    if (!scope.pre_move || !!scope.pre_move.to) {
                         scope.pre_move = {
                             from: square
                         };
-                        console.log(scope.pre_move);
+                        highlightSquare(square);
                     } else {
                         scope.pre_move.to = square;
-                        console.log(scope.pre_move);
+                        scope.highlightLastMove(scope, element, scope.pre_move);
                     }
-                    highlightSquare(square);
+
                 }
             });
 

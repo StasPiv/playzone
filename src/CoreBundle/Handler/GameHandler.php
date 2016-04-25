@@ -144,11 +144,11 @@ class GameHandler implements GameProcessorInterface
                  ->setPgn($pgn);
         }
 
-        if ($pgnRequest->getTimeWhite() !== null && $game->getTimeWhite() <= 0) {
+        if ($pgnRequest->getTimeWhite() !== null && $game->getTimeWhite() <= 100) {
             $game->setResultWhite(0)->setResultBlack(1)->setStatus(GameStatus::END);
         }
 
-        if ($pgnRequest->getTimeBlack() !== null && $game->getTimeBlack() <= 0) {
+        if ($pgnRequest->getTimeBlack() !== null && $game->getTimeBlack() <= 100) {
             $game->setResultWhite(1)->setResultBlack(0)->setStatus(GameStatus::END);
         }
 

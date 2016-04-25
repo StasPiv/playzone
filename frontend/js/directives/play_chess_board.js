@@ -73,7 +73,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                         var receivedPgn = window.atob(data.encoded_pgn);
 
-                        if (receivedPgn === scope.game.pgn) {
+                        if (receivedPgn.length <= scope.game.pgn.length) {
                             return;
                         }
 

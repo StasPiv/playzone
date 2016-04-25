@@ -40,6 +40,7 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
         var legalMoves = element.game.moves({verbose: true});
 
         var isSingleOptionToMoveHere = false;
+        var isSingleOptionFromMoveHere = false;
 
         $.each(
             legalMoves,
@@ -54,7 +55,18 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
                         scope.current_move = {
                             from: value.from
                         };
-                        console.log('test');
+                    }
+                } else if (value.from === square) {
+                    if (isSingleOptionFromMoveHere) {
+                        isSingleOptionFromMoveHere = false;
+                        scope.current_move = false;
+                        return false;
+                    } else {
+                        isSingleOptionFromMoveHere = true;
+                        scope.current_move = {
+                            from: square,
+                            to: value.to
+                        };
                     }
                 }
             }
@@ -62,6 +74,9 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
 
         if (isSingleOptionToMoveHere) {
             doMoveOnTheBoard(scope, element, square);
+            return true;
+        } else if (isSingleOptionFromMoveHere) {
+            doMoveOnTheBoard(scope, element, scope.current_move.to);
             return true;
         } else {
             return false;
@@ -142,8 +157,7 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
 
                 var isMyPiece = piece.length && piece.data('piece').indexOf(scope.game.color) === 0;
 
-                if (!isMyPiece &&
-                    !scope.current_move &&
+                if (!scope.current_move &&
                     SettingService.getSetting('One-click move')) { // move by one click
                     if (moveByOneClick(element, square, scope)) {
                         return;

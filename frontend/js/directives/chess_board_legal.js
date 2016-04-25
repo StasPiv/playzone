@@ -6,7 +6,7 @@
  * Also drag and drop functions will be defined.
  * This small library is useful for separating drag&drop logic and application logic
  */
-playzoneControllers.directive('chessBoardLegal', function (SettingService) {
+playzoneControllers.directive('chessBoardLegal', function (SettingService, $timeout) {
     function isMyTurn(scope, element) {
         return element.game.turn() === scope.game.color;
     }
@@ -100,9 +100,18 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService) {
             };
 
             var onDrop = function(source, target) {
-                if (element.game.turn() !== scope.game.color) {
+                if (!isMyTurn(scope, element)) {
                     // pre-move functionality for draggable
                     scope.pre_move = {from: source, to: target};
+
+                    $timeout(
+                        function () {
+                            scope.highlightLastMove(scope, element, scope.pre_move);
+                        },
+                        150
+                    );
+
+                    return;
                 }
                 // see if the move is legal
                 var moveObject = {

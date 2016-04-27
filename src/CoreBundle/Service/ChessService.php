@@ -8,11 +8,16 @@
 
 namespace CoreBundle\Service;
 
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-use CoreBundle\Entity\Game;
-
+/**
+ * Class ChessService
+ * @package CoreBundle\Service
+ */
 class ChessService
 {
+    use ContainerAwareTrait;
+    
     /**
      * @param string $pgn
      * @return bool
@@ -38,5 +43,14 @@ class ChessService
     public function isGameInCheckmate(string $pgn) : bool
     {
         return substr($pgn, -1, 1) === '#';
+    }
+
+    /**
+     * @param string $fen
+     * @return string
+     */
+    public function getBestMoveFromFen(string $fen) : string 
+    {
+        return $this->container->get("core.service.chess.uci")->getBestMoveFromFen($fen);
     }
 }

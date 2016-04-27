@@ -10,7 +10,7 @@
  * element.game - chess.js plugin (with pgn functions etc.)
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
-playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService, AudioService) {
+playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService, AudioService, $timeout, $rootScope) {
     var makePreMoveIfExists = function (scope, element) {
         if (!scope.game.mine || !scope.pre_move) { //premove
             return;
@@ -46,7 +46,59 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 $(element).find('.square-' + lastMove.to).addClass(scope.boardConfig.highlightClass);
             };
 
-            scope.game.$promise.then(
+            if ($rootScope.robot && !!$rootScope.robotGame) {
+                $timeout(
+                    function () {
+                        scope.game = {
+                            color: $rootScope.robotGame.color && $rootScope.robotGame.color.id == "b"
+                                   ?
+                                   "b" : "w",
+                            status: "play",
+                            mine: true
+                        };
+
+                        element.loadBoard(scope.boardConfig);
+
+                        if (scope.game.color === 'b') {
+                            element.board.flip();
+                            scope.savePgnAndSendToObservers(
+                                true,
+                                window.btoa(
+                                    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+                                )
+                            );
+                        }
+
+                        element.updateStatus();
+                    },
+                    1000
+                );
+
+                WebsocketService.addListener(
+                    "listen_robot_move_" + scope.game.id,
+                    "send_move_from_robot",
+                    function(data) {
+                        var from = data.move.substr(0,2);
+                        var to = data.move.substr(2,2);
+                        element.game.move({
+                            from: from,
+                            to: to,
+                            promotion: "q"
+                        });
+                        scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
+                        scope.game.pgn = element.game.pgn();
+                        element.board.position(element.game.fen());
+
+                        AudioService.move();
+                        element.updateStatus();
+                        element.game.game_over() && scope.game.$get();
+
+                        scope.highlightLastMove(scope, element);
+                        makePreMoveIfExists(scope, element);
+                    });
+            }
+
+            !$rootScope.robot && scope.game.$promise.then(
                 function() {
                     element.loadBoard(scope.boardConfig);
                     element.loadPgn(scope.game.pgn);
@@ -116,7 +168,12 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
 
                 scope.game.pgn = element.game.pgn();
-                scope.savePgnAndSendToObservers(true);
+
+                if (!scope.game.id) { // isRobot
+                    scope.savePgnAndSendToObservers(true, window.btoa(element.game.fen()));
+                } else {
+                    scope.savePgnAndSendToObservers(true);
+                }
 
                 element.game.game_over() && !element.game.in_checkmate() && scope.draw();
                 element.game.in_checkmate() && AudioService.win();

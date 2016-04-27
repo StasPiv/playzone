@@ -4,6 +4,7 @@
 'use strict';
 
 playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService, SettingService) {
+    $rootScope.robot = false;
     $scope.boardConfig = {
         pieceType: SettingService.getSetting('Piece type') ?
             SettingService.getSetting('Piece type') : 'leipzig',
@@ -89,7 +90,12 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         }
     };
 
-    $scope.savePgnAndSendToObservers = function (withoutSaving) {
+    $scope.savePgnAndSendToObservers = function (withoutSaving, encodedFenForRobot) {
+        if (encodedFenForRobot) {
+            WebsocketService.sendFenToRobot($scope.game.id, encodedFenForRobot);
+            return;
+        }
+        
         if (withoutSaving) {
             $scope.sendWithWebsockets();
         }

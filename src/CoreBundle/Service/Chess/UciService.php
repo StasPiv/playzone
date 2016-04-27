@@ -26,19 +26,17 @@ class UciService
      */
     private function startGame()
     {
-        if (!$this->resource) {
-            $this->resource = proc_open(
-                '/usr/games/stockfish',
-                [
-                    0 => ["pipe", "r"],
-                    1 => ["pipe", "w"],
-                    2 => ["file", "/tmp/uci_err", "w+"]
-                ],
-                $this->pipes,
-                '/tmp',
-                []
-            );
-        }
+        $this->resource = proc_open(
+            '/usr/games/stockfish',
+            [
+                0 => ["pipe", "r"],
+                1 => ["pipe", "w"],
+                2 => ["file", "/tmp/uci_err", "w+"]
+            ],
+            $this->pipes,
+            '/tmp',
+            []
+        );
 
         if (!is_resource($this->resource)) {
             $this->shutDown();
@@ -65,14 +63,13 @@ class UciService
         if (empty($fen)) {
             fwrite($this->pipes[0], "position startpos\n");
         } else {
-            fwrite($this->pipes[0], "position startpos fen $fen\n");
+            fwrite($this->pipes[0], "position fen $fen\n");
         }
 
         fwrite($this->pipes[0], "go\n");
 
         $start = microtime(true);
 
-        echo $this->thinkingTime;
         while (true) {
             if (microtime(true) - $start > $this->thinkingTime) {
                 fclose($this->pipes[0]);
@@ -81,6 +78,7 @@ class UciService
                     stream_get_contents($this->pipes[1]),
                     $matches
                 );
+                $this->shutDown();
                 return $matches["bestmove"];
             }
         }

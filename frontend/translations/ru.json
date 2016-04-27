@@ -120,5 +120,7 @@
   "Immortalchess.Net login/password is allowed": "Логин/пароль с immortalchess.net допустимы",
   "Connection succesful": "Соединение успешно",
   "Table": "Таблица",
-  "One-click move": "Ввод хода одним щелчком"
+  "One-click move": "Ввод хода одним щелчком",
+  "Against robot": "Против робота",
+  "The game against robot without time": "Игра против робота без учета времени и не отображается зрителям"
 }

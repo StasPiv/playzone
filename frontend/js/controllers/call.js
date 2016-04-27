@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('CallCtrl', function ($scope, $location, CallRest, WebsocketService) {
+playzoneControllers.controller('CallCtrl', function ($scope, $rootScope, $location, CallRest, WebsocketService, AudioService) {
     $scope.colors = [
         {id: 'random', name: 'Random'},
         {id: 'w', name: 'White'},
@@ -42,5 +42,13 @@ playzoneControllers.controller('CallCtrl', function ($scope, $location, CallRest
                 $scope.errors = response.data;
             }
         );
+    };
+
+    $scope.playAgainstRobot = function(call) {
+        $('.footer .overlay').hide();
+
+        $rootScope.robotGame = call;
+        AudioService.newGame();
+        $location.path( '/play_against_robot' );
     };
 });

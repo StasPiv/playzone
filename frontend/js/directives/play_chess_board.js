@@ -50,9 +50,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 $timeout(
                     function () {
                         scope.game = {
-                            color: $rootScope.robotGame.color && $rootScope.robotGame.color.id == "b"
-                                   ?
-                                   "b" : "w",
+                            color: ["w", "b"][Math.floor(Math.random() * 2)],
                             status: "play",
                             mine: true
                         };

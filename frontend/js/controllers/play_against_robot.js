@@ -51,4 +51,8 @@ playzoneControllers.controller('PlayAgainstRobotCtrl', function ($scope, $rootSc
         }
     };
 
+    WebsocketService.addListener("listen_sent_calls_when_play_robot", "call_send", function() {
+        $scope.newCall = true;
+    });
+
 });

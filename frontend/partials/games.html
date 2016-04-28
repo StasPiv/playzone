@@ -30,7 +30,6 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <input class="btn btn-warning send-call" value="{{ 'Against robot' | translate }}" type="submit" data-ng-click="playAgainstRobot(call)">&nbsp;
                     <input title="Cancel" class="btn btn-danger" type="submit" value="{{ 'Cancel' | translate }}">&nbsp;
                     <input class="btn btn-primary send-call" value="OK" type="submit" data-ng-click="sendCall(call)">
                 </td>
@@ -41,6 +40,9 @@
     <div class="apply-call">
         <a class="btn btn-success open-popup" data-open-popup=".call-form">
             {{ 'Call on the game' | translate }}
+        </a>
+        <a class="btn btn-warning" data-ng-click="playAgainstRobot(call)">
+            {{ 'Against robot' | translate }}
         </a>
     </div>
 </div>

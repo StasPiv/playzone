@@ -223,6 +223,10 @@ class CallHandler implements CallProcessorInterface
             $this->manager->remove($call);
         }
 
+        foreach ($this->getUserCalls($me) as $call) {
+            $this->manager->remove($call);
+        }
+
         $this->manager->flush();
 
         return $this->container->get("core.handler.game")->getUserGame($game, $me);

@@ -10,7 +10,7 @@
  * element.game - chess.js plugin (with pgn functions etc.)
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
-playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService, AudioService, $timeout, $rootScope) {
+playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService, AudioService, $timeout, GameRest) {
     var makePreMoveIfExists = function (scope, element) {
         if (!scope.game.mine || !scope.pre_move) { //premove
             return;
@@ -46,63 +46,45 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 $(element).find('.square-' + lastMove.to).addClass(scope.boardConfig.highlightClass);
             };
 
-            if ($rootScope.robot && !!$rootScope.robotGame) {
-                $timeout(
-                    function () {
-                        scope.game = {
-                            color: ["w", "b"][Math.floor(Math.random() * 2)],
-                            status: "play",
-                            mine: true
-                        };
-
-                        element.loadBoard(scope.boardConfig);
-
-                        if (scope.game.color === 'b') {
-                            element.board.flip();
-                            scope.savePgnAndSendToObservers(
-                                true,
-                                window.btoa(
-                                    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-                                )
-                            );
-                        }
-
-                        element.updateStatus();
-                    },
-                    1000
-                );
-
-                WebsocketService.addListener(
-                    "listen_robot_move_" + scope.game.id,
-                    "send_move_from_robot",
-                    function(data) {
-                        var from = data.move.substr(0,2);
-                        var to = data.move.substr(2,2);
-                        element.game.move({
-                            from: from,
-                            to: to,
-                            promotion: "q"
-                        });
-                        scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
-                        scope.game.pgn = element.game.pgn();
-                        element.board.position(element.game.fen());
-
-                        AudioService.move();
-                        element.updateStatus();
-                        element.game.game_over() && scope.game.$get();
-
-                        scope.highlightLastMove(scope, element);
-                        makePreMoveIfExists(scope, element);
-                    });
-            }
-
-            !$rootScope.robot && scope.game.$promise.then(
+            scope.game.$promise.then(
                 function() {
                     element.loadBoard(scope.boardConfig);
                     element.loadPgn(scope.game.pgn);
 
                     if (scope.game.color === 'b') {
                         element.board.flip();
+                    }
+
+                    if (
+                        scope.game.opponent.login === 'Robot' &&
+                        scope.game.move_color !== scope.game.color
+                    ) {
+
+                        GameRest.getRobotmove(
+                            {
+                                encoded_fen: window.btoa(element.game.fen()),
+                                id: scope.game.id
+                            },
+                            function (data) {
+                                element.game.move({
+                                    from: data.from,
+                                    to: data.to,
+                                    promotion: "q"
+                                });
+                                scope.game.pgn = element.game.pgn();
+
+                                scope.savePgnAndSendToObservers(true);
+
+                                element.board.position(element.game.fen());
+                                AudioService.move();
+                                element.updateStatus();
+
+                                element.game.game_over() && scope.game.$get();
+                                scope.highlightLastMove(scope, element);
+
+                                makePreMoveIfExists(scope, element);
+                            }
+                        );
                     }
 
                     WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
@@ -167,8 +149,33 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                 scope.game.pgn = element.game.pgn();
 
-                if (!scope.game.id) { // isRobot
-                    scope.savePgnAndSendToObservers(true, window.btoa(element.game.fen()));
+                if (scope.game.opponent.login === "Robot") { // isRobot
+                    scope.savePgnAndSendToObservers(true);
+                    GameRest.getRobotmove(
+                        {
+                            encoded_fen: window.btoa(element.game.fen()),
+                            id: scope.game.id
+                        },
+                        function (data) {
+                            element.game.move({
+                                from: data.from,
+                                to: data.to,
+                                promotion: "q"
+                            });
+                            scope.game.pgn = element.game.pgn();
+
+                            scope.savePgnAndSendToObservers(true);
+
+                            element.board.position(element.game.fen());
+                            AudioService.move();
+                            element.updateStatus();
+
+                            element.game.game_over() && scope.game.$get();
+                            scope.highlightLastMove(scope, element);
+
+                            makePreMoveIfExists(scope, element);
+                        }
+                    );
                 } else {
                     scope.savePgnAndSendToObservers(true);
                 }

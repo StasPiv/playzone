@@ -79,7 +79,9 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     };
 
     $scope.sendWithWebsockets = function () {
+        console.log('sendWithWS');
         if ($scope.game.status === 'play') {
+            console.log($scope.game.pgn);
             WebsocketService.sendGameToObservers(
                 $scope.game.id, 
                 window.btoa($scope.game.pgn), 
@@ -92,12 +94,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         }
     };
 
-    $scope.savePgnAndSendToObservers = function (withoutSaving, encodedFenForRobot) {
-        if (encodedFenForRobot) {
-            WebsocketService.sendFenToRobot($scope.game.id, encodedFenForRobot);
-            return;
-        }
-        
+    $scope.savePgnAndSendToObservers = function (withoutSaving) {
         if (withoutSaving) {
             $scope.sendWithWebsockets();
         }
@@ -110,7 +107,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
                     $scope.sendWithWebsockets();
                 }
             }
-        )
+        );
     };
 
     WebsocketService.addListener('listen_opponent_gone', 'user_gone', function (user) {

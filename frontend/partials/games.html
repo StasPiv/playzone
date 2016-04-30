@@ -38,10 +38,12 @@
         </table>
     </div>
     <div class="apply-call">
-        <a class="btn btn-success open-popup" data-open-popup=".call-form">
+        <a class="btn btn-success open-popup" data-open-popup=".call-form"
+                                              data-ng-click="openSendCallToAll()">
             {{ 'Call on the game' | translate }}
         </a>
-        <a class="btn btn-warning" data-ng-click="playAgainstRobot(call)">
+        <a class="btn btn-warning open-popup" data-open-popup=".call-form"
+                                              data-ng-click="openSendCallToRobot()">
             {{ 'Against robot' | translate }}
         </a>
     </div>

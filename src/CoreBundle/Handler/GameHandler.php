@@ -11,9 +11,11 @@ namespace CoreBundle\Handler;
 use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Exception\Handler\User\UserHandlerException;
 use CoreBundle\Exception\Processor\ProcessorException;
+use CoreBundle\Model\Game\GameMove;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
+use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
@@ -100,6 +102,24 @@ class GameHandler implements GameProcessorInterface
     }
 
     /**
+     * @param GameGetRobotmoveAction $request
+     * @return GameMove
+     */
+    public function processGetRobotmove(GameGetRobotmoveAction $request) : GameMove
+    {
+        $this->container->get("core.service.security")->getUserIfCredentialsIsOk(
+            $request, $this->getRequestError()
+        );
+
+        $fen = base64_decode($request->getEncodedFen());
+
+        $moveString = $this->container->get("core.service.chess")->getBestMoveFromFen($fen);
+
+        return (new GameMove())->setFrom(substr($moveString, 0, 2))
+                               ->setTo(substr($moveString, 2, 2));
+    }
+
+    /**
      * @param GamePostNewrobotRequest $request
      * @return Game
      */
@@ -153,7 +173,11 @@ class GameHandler implements GameProcessorInterface
                                     ->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
-        if ($me != $game->getUserToMove()) {
+        if (
+            $me != $game->getUserToMove() &&
+            !in_array(0, [$pgnRequest->getTimeBlack(), $pgnRequest->getTimeWhite()]) &&
+            !in_array("Robot", [$game->getUserWhite(), $game->getUserBlack()])
+        ) {
             $this->getRequestError()->addError("pgn", "It is not your turn")
                                     ->throwException(ResponseStatusCode::BAD_FORMAT);
         }
@@ -170,8 +194,18 @@ class GameHandler implements GameProcessorInterface
 
         if ($pgn !== $game->getPgn()) {
             $game->setDraw("")
-                 ->setUserToMove($me == $game->getUserWhite() ? $game->getUserBlack() : $game->getUserWhite())
                  ->setPgn($pgn);
+
+            if (in_array("Robot", [$game->getUserWhite(), $game->getUserBlack()])) {
+                $game->setUserToMove(
+                    $game->getUserToMove() == $game->getUserWhite() ?
+                        $game->getUserBlack() : $game->getUserWhite()
+                );
+            } else {
+                $game->setUserToMove(
+                    $me == $game->getUserWhite() ? $game->getUserBlack() : $game->getUserWhite()
+                );
+            }
         }
 
         if ($pgnRequest->getTimeWhite() !== null && $game->getTimeWhite() <= 100) {

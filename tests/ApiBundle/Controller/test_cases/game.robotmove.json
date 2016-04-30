@@ -1,0 +1,25 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserSettingFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures"
+  ],
+  "fen": {
+    "method": "GET",
+    "request": {
+      "encoded_fen": "cm5icWtiMXIvcHBwMnBwcC80cG4yLzNwNC8yUFA0LzJOMVAzL1BQM1BQUC9SMUJRS0JOUiBiIEtRa3EgLSAwIDQ=",          "reference": {
+        "name": "id",
+        "value": "game-0"
+      },
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "from":"f8",
+        "to":"b4"
+      }
+    }
+  }
+}

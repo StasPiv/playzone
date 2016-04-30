@@ -26,6 +26,16 @@ class GameControllerTest extends BaseControllerTest
         $this->assertFromJson('game/{id}/pgn');
     }
 
+    public function testGameNewRobot()
+    {
+        $this->assertFromJson('game/newrobot');
+    }
+
+    public function testGameGetRobotMove()
+    {
+        $this->assertFromJson('game/{id}/robotmove');
+    }
+
     public function testGameResign()
     {
         $this->assertFromJson('game/{id}/resign');

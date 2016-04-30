@@ -1,10 +1,7 @@
-<div class="alert alert-warning" ng-if="$root.robot">
-    {{ 'The game against robot without time' | translate }}
-</div>
 <div id="playroom">
-    <h1 ng-if="!$root.robot">{{game.user_white.login}} - {{game.user_black.login}}</h1>
+    <h1>{{game.user_white.login}} - {{game.user_black.login}}</h1>
     <h2 ng-if="game.status == 'end'">{{game.result_white}} - {{game.result_black}}</h2>
-    <div ng-if="game.mine && game.opponent.offline" class="alert alert-warning">
+    <div ng-if="game.mine && game.opponent.login !== 'Robot' && game.opponent.offline" class="alert alert-warning">
         {{ 'Opponent is offline' | translate }}
     </div>
     <div class="play-chess-board chess-board-legal" data-board="board">

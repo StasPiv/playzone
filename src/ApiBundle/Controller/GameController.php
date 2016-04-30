@@ -10,6 +10,7 @@ namespace ApiBundle\Controller;
 
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
+use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
@@ -74,6 +75,24 @@ class GameController extends BaseController
     public function postNewrobotAction(Request $request)
     {
         return $this->process($request, new GamePostNewrobotRequest());
+    }
+
+    /**
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Save pgn",
+     *  filters={
+     *      {"name"="login", "dataType"="string", "description"="Your name"},
+     *      {"name"="token", "dataType"="string", "description"="Your token"}
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function getRobotmoveAction(Request $request, $id)
+    {
+        return $this->process($request, new GameGetRobotmoveAction());
     }
 
     /**

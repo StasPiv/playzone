@@ -33,10 +33,6 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 templateUrl: 'partials/play.html',
                 controller: 'PlayCtrl'
             }).
-            when('/play_against_robot', {
-                templateUrl: 'partials/play_against_robot.html',
-                controller: 'PlayAgainstRobotCtrl'
-            }).
             when('/show/:gameId', {
                 templateUrl: 'partials/show.html',
                 controller: 'ShowCtrl'

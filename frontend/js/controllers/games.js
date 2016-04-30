@@ -55,6 +55,14 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $rootScope, $locat
         );
     };
 
+    $scope.openSendCallToAll = function(call) {
+        $('#login_enemy').val("").trigger('change');
+    };
+
+    $scope.openSendCallToRobot = function(call) {
+        $('#login_enemy').val("Robot").trigger('change');
+    };
+
     WebsocketService.addListener("listen_sent_calls", "call_send", function(data) {
         console.log('data: ', data);
 

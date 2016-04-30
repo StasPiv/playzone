@@ -32,7 +32,7 @@ playzoneServices.factory('AudioService', function(SettingService) {
         },
         move: function () {
             SettingService.getSetting('Sound move') == 1 &&
-            play('MOVE' + getRandomArbitrary(1,6) + '.WAV');
+            play('MOVE' + getRandomArbitrary(1,4) + '.WAV');
         },
         capture: function () {
             play('CAPTURE' + getRandomArbitrary(1,5) + '.WAV');

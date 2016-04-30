@@ -315,9 +315,11 @@ class GameHandler implements GameProcessorInterface
             $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
+        $gameAgainstRobot = in_array("Robot", [$game->getUserWhite(), $game->getUserBlack()]);
+        
         switch (true) {
-            case $me == $game->getUserBlack() && $game->getDraw() == GameColor::WHITE:
-            case $me == $game->getUserWhite() && $game->getDraw() == GameColor::BLACK:
+            case $me == $game->getUserBlack() && ($game->getDraw() == GameColor::WHITE || $gameAgainstRobot):
+            case $me == $game->getUserWhite() && ($game->getDraw() == GameColor::BLACK || $gameAgainstRobot):
                 $game->setResultWhite(0.5)->setResultBlack(0.5)->setStatus(GameStatus::END);
                 break;
             default:

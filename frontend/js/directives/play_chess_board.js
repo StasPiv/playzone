@@ -76,6 +76,9 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                                 scope.savePgnAndSendToObservers(true);
 
                                 element.board.position(element.game.fen());
+
+                                element.game.game_over() && !element.game.in_checkmate() && scope.draw();
+
                                 AudioService.move();
                                 element.updateStatus();
 

@@ -14,6 +14,7 @@ use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
+use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
@@ -96,6 +97,35 @@ class GameHandler implements GameProcessorInterface
                      ->getUserByLoginAndToken($gameRequest->getLogin(), $gameRequest->getToken());
 
         return $this->getUserGame($game, $user);
+    }
+
+    /**
+     * @param GamePostNewrobotRequest $request
+     * @return Game
+     */
+    public function processPostNewrobot(GamePostNewrobotRequest $request) : Game
+    {
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request, $this->getRequestError());
+
+        $game = $this->container->get("core.handler.game")->createMyGame(
+            $me,
+            $this->manager->getRepository("CoreBundle:User")->findOneByLogin("Robot"),
+            $request->getColor()
+        );
+        
+        $game->setStatus(GameStatus::PLAY);
+
+        $game->setTimeWhite($request->getTime()->getBase())
+             ->setTimeBlack($request->getTime()->getBase());
+        
+        $this->defineUserColorForGame($me, $game);
+        $this->defineUserMoveAndOpponentForGame($me, $game);
+
+        $this->manager->persist($game);
+
+        $this->manager->flush();
+
+        return $game;
     }
 
     /**

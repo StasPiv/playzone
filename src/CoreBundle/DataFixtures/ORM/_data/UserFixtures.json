@@ -86,9 +86,9 @@
     "last_move": "yesterday"
   },
   {
-    "referenceName": "user-stockfish",
-    "login": "Stockfish",
-    "email": "stock@yandex.ru",
+    "referenceName": "user-robot",
+    "login": "Robot",
+    "email": "robot@yandex.ru",
     "password": "123456",
     "hash": "test",
     "confirm": 0,

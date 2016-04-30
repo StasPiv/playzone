@@ -56,7 +56,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     }
 
                     if (
-                        scope.game.opponent.login === 'Robot' &&
+                        scope.game.opponent && scope.game.opponent.login === 'Robot' &&
                         scope.game.move_color !== scope.game.color
                     ) {
 

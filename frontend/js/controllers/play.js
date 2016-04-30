@@ -13,7 +13,9 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     };
 
     $scope.gameConfig = {
-        zeitnotLimit: 28000
+        zeitnotLimit: SettingService.getSetting('Zeitnot limit') ?
+                      SettingService.getSetting('Zeitnot limit') * 1000 :
+                      28000
     };
 
     $scope.game = GameRest.get(

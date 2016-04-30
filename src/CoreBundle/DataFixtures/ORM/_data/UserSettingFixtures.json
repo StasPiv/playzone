@@ -52,5 +52,11 @@
     "name": "One-click move",
     "type": "checkbox",
     "sort": 90
+  },
+  {
+    "referenceName": "setting-one-zeitnot-limit",
+    "name": "Zeitnot limit",
+    "type": "number",
+    "sort": 100
   }
 ]

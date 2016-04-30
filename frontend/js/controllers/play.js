@@ -119,7 +119,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     });
 
     WebsocketService.addListener('listen_opponent_in', 'user_in', function (user) {
-        if ($scope.game && user['login'] === $scope.game.opponent.login) {
+        if ($scope.game && $scope.game.opponent && user['login'] === $scope.game.opponent.login) {
             console.log('opponent has reconnected');
             $scope.game.opponent.offline = false;
         }

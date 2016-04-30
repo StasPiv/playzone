@@ -25,7 +25,7 @@
             <tr ng-class="{ error: errors.time }">
                 <td><label for="time_base">{{ 'Time control (minutes)' | translate }}:</label></td>
                 <td>
-                    <input type="number" min="1" max="30" id="time_base" data-ng-model="call.time.base_minutes" />
+                    <input type="number" min="1" max="60" id="time_base" data-ng-model="call.time.base_minutes" />
                 </td>
             </tr>
             <tr>

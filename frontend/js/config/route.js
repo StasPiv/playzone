@@ -42,6 +42,10 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 controller: 'OnlineCtrl'
             }).
             when('/profile', {
+                templateUrl: 'partials/myprofile.html',
+                controller: 'MyProfileCtrl'
+            }).
+            when('/user/:userId/profile', {
                 templateUrl: 'partials/profile.html',
                 controller: 'ProfileCtrl'
             }).

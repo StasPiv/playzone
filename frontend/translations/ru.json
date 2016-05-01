@@ -109,6 +109,7 @@
   "Can not connect": "Нет соединения. Обновите страницу. Если это не помогло - проверьте настройки вашего файрволла.",
   "Cancel": "Отмена",
   "My profile": "Мой кабинет",
+  "Profile": "Профиль игрока",
   "Sound move": "Звук хода",
   "Sound draw": "Звук ничьи",
   "Sound win": "Звук победы",
@@ -124,5 +125,8 @@
   "Against robot": "Против робота",
   "The game against robot without time": "Игра против робота без учета времени и не отображается зрителям",
   "New challenge has been appeared": "Появился новый вызов",
-  "Zeitnot limit": "Цейтнот в секундах"
+  "Zeitnot limit": "Цейтнот в секундах",
+  "Win count": "Побед",
+  "Draw count": "Ничьих",
+  "Lose count": "Поражений"
 }

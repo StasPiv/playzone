@@ -22,6 +22,10 @@ services:
     core.service.error:
         class: CoreBundle\Service\ErrorService
         arguments: ['@service_container']
+    core.user.stat:
+        class: CoreBundle\Service\UserStatService
+        calls:
+          - [setContainer, ['@service_container']]
     core.service.security:
         class: CoreBundle\Service\SecurityService
         arguments: ['@service_container']

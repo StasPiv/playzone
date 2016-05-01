@@ -25,6 +25,11 @@ class UserControllerTest extends BaseControllerTest
         $this->assertFromJson('user/list');
     }
 
+    public function testProfile()
+    {
+        $this->assertFromJson('user/{user_id}/profile');
+    }
+
     public function testUserUpdateSetting()
     {
         $this->assertFromJson('user/{setting_id}/setting');

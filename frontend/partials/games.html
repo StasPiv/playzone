@@ -87,7 +87,7 @@
                 <a href="" ng-click="acceptCall(call)">{{ call.id }}</a>
             </td>
             <td>
-                <a href="/#/profile/{{ call.from_user.id }}">{{ call.from_user.login }}</a>
+                <a href="/#/user/{{ call.from_user.id }}/profile">{{ call.from_user.login }}</a>
             </td>
             <td>
                 {{ call.game_params.time_base / 60000 }}
@@ -123,10 +123,14 @@
                 <a ng-show="!game.user_move" href="/#/play/{{ game.id }}" class="btn btn-info glyphicon glyphicon-eye-open" title="{{ 'See' | translate }}"></a>
             </td>
             <td>
-                <span>{{ game.user_white.login }}</span>
+                <span>
+                    <a href="/#/user/{{ game.user_white.id }}/profile">{{ game.user_white.login }}</a>
+                </span>
             </td>
             <td>
-                <span>{{ game.user_black.login }}</span>
+                <span>
+                    <a href="/#/user/{{ game.user_black.id }}/profile">{{ game.user_black.login }}</a>
+                </span>
             </td>
             <td>
                 <span>{{ game.result_white }} - {{ game.result_black }}</span>

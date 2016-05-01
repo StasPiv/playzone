@@ -17,6 +17,7 @@ use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\RequestErrorInterface;
 use CoreBundle\Model\Request\User\UserGetListRequest;
+use CoreBundle\Model\Request\User\UserGetProfileRequest;
 use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserPostRegisterRequest;
@@ -153,6 +154,20 @@ class UserHandler implements UserProcessorInterface
     {
         // TODO: need to add conditions here
         return $this->repository->findAll();
+    }
+
+    /**
+     * @param UserGetProfileRequest $request
+     * @return User
+     */
+    public function processGetProfile(UserGetProfileRequest $request) : User
+    {
+        try {
+            return $this->getRepository()->find($request->getId());
+        } catch (UserNotFoundException $e) {
+            $this->getRequestError()->addError("user_id", "User not found")
+                                    ->throwException(ResponseStatusCode::NOT_FOUND);
+        }
     }
 
     /**

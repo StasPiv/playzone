@@ -129,6 +129,10 @@ class User
      * @var int
      *
      * @ORM\Column(name="win", type="integer")
+     *
+     * @JMS\Expose
+     * @JMS\SerializedName("win")
+     * @JMS\Type("integer")
      */
     private $win = 0;
 
@@ -136,6 +140,10 @@ class User
      * @var int
      *
      * @ORM\Column(name="draw", type="integer")
+     *
+     * @JMS\Expose
+     * @JMS\SerializedName("draw")
+     * @JMS\Type("integer")
      */
     private $draw = 0;
 
@@ -143,6 +151,10 @@ class User
      * @var int
      *
      * @ORM\Column(name="lose", type="integer")
+     *
+     * @JMS\Expose
+     * @JMS\SerializedName("lose")
+     * @JMS\Type("integer")
      */
     private $lose = 0;
 

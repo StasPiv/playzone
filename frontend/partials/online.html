@@ -51,10 +51,10 @@
                 <a href="">{{ $index + 1 }}</a>
             </td>
             <td>
-                <a href="/#/profile/">{{ player }}</a>
+                <a href="/#/user/{{ player.id }}/profile/">{{ player.login }}</a>
             </td>
             <td>
-                <a ng-if="player !== $root.user.login" class="btn btn-success open-popup" data-open-popup=".call-form"
+                <a ng-if="player.login !== $root.user.login" class="btn btn-success open-popup" data-open-popup=".call-form"
                    ng-click="openSendCallToPlayer(player)">
                     {{ 'Call on the game' | translate }}
                 </a>

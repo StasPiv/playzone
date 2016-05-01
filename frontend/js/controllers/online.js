@@ -5,6 +5,6 @@
 
 playzoneControllers.controller('OnlineCtrl', function ($scope, $rootScope, CallRest) {
     $scope.openSendCallToPlayer = function (player) {
-        $('#login_enemy').val(player).trigger('change');
+        $('#login_enemy').val(player.login).trigger('change');
     };
 });

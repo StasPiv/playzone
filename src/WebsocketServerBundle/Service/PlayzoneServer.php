@@ -95,6 +95,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                     (new PlayzoneMessage())->setScope(PlayzoneServerMessageScope::USER_GONE)
                                            ->setMethod(PlayzoneClientMessageMethod::USER_GONE)
                                            ->setData([
+                                               'id' => $user->getPlayzoneUser()->getId(),
                                                'login' => $user->getPlayzoneUser()->getLogin()
                                            ])
                 );
@@ -190,6 +191,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                     ->setScope(PlayzoneServerMessageScope::USER_IN)
                     ->setMethod(PlayzoneClientMessageMethod::USER_IN)
                     ->setData([
+                        'id' => $wsUser->getPlayzoneUser()->getId(),
                         'login' => $wsUser->getPlayzoneUser()->getLogin()
                     ])
             );
@@ -346,15 +348,15 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         $anotherLogins = [];
 
         foreach ($this->users as $anotherUser) {
-            if ($anotherUser->getPlayzoneUser()) {
-                $anotherLogins[] = $anotherUser->getPlayzoneUser()->getLogin();
+            if ($anotherUser->getPlayzoneUser() instanceof User) {
+                $anotherLogins[] = $anotherUser->getPlayzoneUser();
             }
         }
 
         $this->send(
             new WelcomeMessage(
                 $wsUser->getPlayzoneUser()->getLogin(),
-                array_unique($anotherLogins)
+                $anotherLogins
             ),
             $wsUser
         );

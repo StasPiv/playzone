@@ -12,6 +12,7 @@ namespace CoreBundle\Processor;
 use CoreBundle\Entity\UserSetting;
 use CoreBundle\Model\Request\RequestErrorInterface;
 use CoreBundle\Model\Request\User\UserGetListRequest;
+use CoreBundle\Model\Request\User\UserGetProfileRequest;
 use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserPostRegisterRequest;
@@ -36,6 +37,12 @@ interface UserProcessorInterface extends ProcessorInterface
      * @return User[]
      */
     public function processGetList(UserGetListRequest $listRequest) : array;
+
+    /**
+     * @param UserGetProfileRequest $request
+     * @return User
+     */
+    public function processGetProfile(UserGetProfileRequest $request) : User;
 
     /**
      * @param UserPatchSettingRequest $settingRequest

@@ -23,9 +23,9 @@ class UserStatService
     {
         $users = $this->container->get("doctrine")->getRepository("CoreBundle:User")->findAll();
         
-        $win = $draw = $lose = 0;
-        
         foreach ($users as $user) {
+            $win = $draw = $lose = 0;
+
             $games = $this->container->get("core.handler.game")->getGamesForUser($user, GameStatus::END);
             
             foreach ($games as $game) {

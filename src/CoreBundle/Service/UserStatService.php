@@ -29,7 +29,7 @@ class UserStatService
             $games = $this->container->get("core.handler.game")->getGamesForUser($user, GameStatus::END);
             
             foreach ($games as $game) {
-                if (strlen($game->getPgn() < 20)) {
+                if (strlen($game->getPgn()) < 20) {
                     continue;
                 }
                 

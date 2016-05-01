@@ -152,8 +152,16 @@ class UserHandler implements UserProcessorInterface
      */
     public function processGetList(UserGetListRequest $listRequest) : array 
     {
-        // TODO: need to add conditions here
-        return $this->repository->findAll();
+        $qb = $this->manager->createQueryBuilder();
+
+        $qb->set('u.numChilds', $qb->expr()->sum('u.numChilds', '?1'));
+
+        $users = $qb->select(array('u')) // string 'u' is converted to array internally
+                    ->from('CoreBundle:User', 'u')
+                    ->orderBy($listRequest->getOrderBy(), 'DESC')
+                    ->setMaxResults($listRequest->getLimit());
+
+        return $users->getQuery()->getResult();
     }
 
     /**

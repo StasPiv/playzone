@@ -9,16 +9,34 @@
       "status" : 200,
       "data" : [
         {
-          "login" : "Stas",
-          "email" : "piv1986@yandex.ru",
-          "rating" : 2200,
-          "class" : "N"
-        },
+          "login" : "TestLogin",
+          "email" : "test-login@yandex.ru",
+          "rating" : 2243,
+          "class" : "D"
+        }
+      ]
+    }
+  },
+  "users_list_top_5_by_count" : {
+    "method" : "GET",
+    "request": {
+      "order_by": "u.win",
+      "limit": 5
+    },
+    "response" : {
+      "status" : 200,
+      "data" : [
         {
           "login" : "TestLogin",
           "email" : "test-login@yandex.ru",
           "rating" : 2243,
           "class" : "D"
+        },
+        {
+          "login" : "Stas",
+          "email" : "piv1986@yandex.ru",
+          "rating" : 2200,
+          "class" : "N"
         }
       ]
     }

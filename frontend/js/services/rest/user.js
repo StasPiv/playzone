@@ -35,6 +35,11 @@ playzoneServices.factory('UserRest', function($resource, $rootScope, ApiService)
                     },
                     ApiService.getSecurityParams() // send with login and token
                 )
+            },
+            query: {
+                method: 'GET',
+                url: ApiService.base_url + 'user/list',
+                isArray:true
             }
         }
     );

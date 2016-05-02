@@ -223,7 +223,6 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
 
                 statusEl.html(status);
                 fenEl.html(element.game.fen());
-                pgnEl.html(element.game.pgn());
             };
 
             element.loadBoard = function (userConfig) {

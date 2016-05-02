@@ -46,5 +46,17 @@
     "name": "Piece type",
     "type": "select:merida,leipzig,case,condal,kingdom,maya,wikipedia",
     "sort": 80
+  },
+  {
+    "referenceName": "setting-one-click-move",
+    "name": "One-click move",
+    "type": "checkbox",
+    "sort": 90
+  },
+  {
+    "referenceName": "setting-one-zeitnot-limit",
+    "name": "Zeitnot limit",
+    "type": "number",
+    "sort": 100
   }
 ]

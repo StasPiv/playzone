@@ -45,4 +45,27 @@ class UserRepository extends EntityRepository
 
         return $user;
     }
+
+    /**
+     * Finds an entity by its primary key / identifier.
+     *
+     * @param mixed $id The identifier.
+     * @param int|null $lockMode One of the \Doctrine\DBAL\LockMode::* constants
+     *                              or NULL if no specific lock mode should be used
+     *                              during the search.
+     * @param int|null $lockVersion The lock version.
+     *
+     * @return User The entity instance or NULL if the entity can not be found.
+     * @throws UserNotFoundException
+     */
+    public function find($id, $lockMode = null, $lockVersion = null)
+    {
+        $user = parent::find($id, $lockMode, $lockVersion);
+
+        if (!$user) {
+            throw new UserNotFoundException;
+        }
+
+        return $user;
+    }
 }

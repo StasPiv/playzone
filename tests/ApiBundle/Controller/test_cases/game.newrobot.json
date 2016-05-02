@@ -1,0 +1,93 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserSettingFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\CallFixtures"
+  ],
+  "login_and_token_is_incorrect": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "bba37b62d15cc5f8671fd3d1b034c354",
+      "time": {
+        "base": 300000
+      },
+      "color": "w"
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "token": "Forbidden for user with this credentials"
+      }
+    }
+  },
+  "correct": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "time": {
+        "base": 180000
+      },
+      "color": "w"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "user_white": {
+          "login": "TestLogin"
+        },
+        "user_black": {
+          "login": "Robot"
+        },
+        "user_to_move": {
+          "login": "TestLogin"
+        },
+        "user_move": true,
+        "opponent": {
+          "login": "Robot"
+        },
+        "color": "w",
+        "status": "play",
+        "time_white": 180000,
+        "time_black": 180000,
+        "time_over": false
+      }
+    }
+  },
+  "correct_with_params": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "time": {
+        "base": 300000
+      },
+      "color": "b"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "user_white": {
+          "login": "Robot"
+        },
+        "user_black": {
+          "login": "TestLogin"
+        },
+        "user_to_move": {
+          "login": "Robot"
+        },
+        "user_move": false,
+        "opponent": {
+          "login": "Robot"
+        },
+        "color": "b",
+        "status": "play",
+        "time_white": 300000,
+        "time_black": 300000,
+        "time_over": false
+      }
+    }
+  }
+}

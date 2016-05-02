@@ -17,6 +17,7 @@ use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\RequestErrorInterface;
 use CoreBundle\Model\Request\User\UserGetListRequest;
+use CoreBundle\Model\Request\User\UserGetProfileRequest;
 use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserPostRegisterRequest;
@@ -28,6 +29,7 @@ use CoreBundle\Repository\UserSettingRepository;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class UserHandler
@@ -151,8 +153,30 @@ class UserHandler implements UserProcessorInterface
      */
     public function processGetList(UserGetListRequest $listRequest) : array 
     {
-        // TODO: need to add conditions here
-        return $this->repository->findAll();
+        $qb = $this->manager->createQueryBuilder();
+
+        $users = $qb->select(array('u')) // string 'u' is converted to array internally
+                    ->from('CoreBundle:User', 'u')
+                    ->orderBy($listRequest->getOrderBy(), 'DESC')
+                    ->setMaxResults($listRequest->getLimit());
+
+        return $users->getQuery()->getResult();
+    }
+
+    /**
+     * @param UserGetProfileRequest $request
+     * @return User
+     */
+    public function processGetProfile(UserGetProfileRequest $request) : User
+    {
+        try {
+            $user = $this->getRepository()->find($request->getId());
+            $user->setPgnLink($this->getHttpPgnLink($user));
+            return $user;
+        } catch (UserNotFoundException $e) {
+            $this->getRequestError()->addError("user_id", "User not found")
+                                    ->throwException(ResponseStatusCode::NOT_FOUND);
+        }
     }
 
     /**
@@ -282,5 +306,28 @@ class UserHandler implements UserProcessorInterface
             }
         );
         $user->setSettings($settings);
+    }
+
+    /**
+     * @param User $user
+     * @return string
+     */
+    public function getHttpPgnLink(User $user) : string
+    {
+        $fs = new Filesystem();
+
+        $pgnFileName = $this->getPgnFilePath($user);
+
+        return $fs->exists($pgnFileName) ? "/pgn/" . basename($pgnFileName) : "";
+    }
+
+    /**
+     * @param User $user
+     * @return string
+     */
+    public function getPgnFilePath(User $user) : string
+    {
+        return $this->container->get("core.service.chess")->getPgnDir() . 
+                    DIRECTORY_SEPARATOR . $user . ".pgn";
     }
 }

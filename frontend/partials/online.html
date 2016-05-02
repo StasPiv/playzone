@@ -51,13 +51,34 @@
                 <a href="">{{ $index + 1 }}</a>
             </td>
             <td>
-                <a href="/#/profile/">{{ player }}</a>
+                <a href="/#/user/{{ player.id }}/profile/">{{ player.login }}</a>
             </td>
             <td>
-                <a ng-if="player !== $root.user.login" class="btn btn-success open-popup" data-open-popup=".call-form"
+                <a ng-if="player.login !== $root.user.login" class="btn btn-success open-popup" data-open-popup=".call-form"
                    ng-click="openSendCallToPlayer(player)">
                     {{ 'Call on the game' | translate }}
                 </a>
+            </td>
+        </tr>
+    </table>
+</div>
+<h1>{{ "Top 5" | translate }}</h1>
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>№</th>
+            <th>{{ "Player" | translate }}</th>
+            <th>{{ "Win count" | translate }}</th>
+        </tr>
+        <tr ng-repeat="player in top_5 track by $index">
+            <td>
+                <a href="">{{ $index + 1 }}</a>
+            </td>
+            <td>
+                <a href="/#/user/{{ player.id }}/profile/">{{ player.login }}</a>
+            </td>
+            <td>
+                {{ player.win }}
             </td>
         </tr>
     </table>

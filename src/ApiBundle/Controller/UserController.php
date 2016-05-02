@@ -8,6 +8,7 @@
 
 namespace ApiBundle\Controller;
 
+use CoreBundle\Model\Request\User\UserGetProfileRequest;
 use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserGetListRequest;
@@ -50,6 +51,16 @@ class UserController extends BaseController
     public function getListAction(Request $request)
     {
         return $this->process($request, new UserGetListRequest());
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    public function getProfileAction(Request $request, $id)
+    {
+        return $this->process($request, new UserGetProfileRequest());
     }
 
     /**

@@ -11,9 +11,12 @@ namespace CoreBundle\Handler;
 use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Exception\Handler\User\UserHandlerException;
 use CoreBundle\Exception\Processor\ProcessorException;
+use CoreBundle\Model\Game\GameMove;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
+use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
+use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
@@ -99,6 +102,53 @@ class GameHandler implements GameProcessorInterface
     }
 
     /**
+     * @param GameGetRobotmoveAction $request
+     * @return GameMove
+     */
+    public function processGetRobotmove(GameGetRobotmoveAction $request) : GameMove
+    {
+        $this->container->get("core.service.security")->getUserIfCredentialsIsOk(
+            $request, $this->getRequestError()
+        );
+
+        $fen = base64_decode($request->getEncodedFen());
+
+        $moveString = $this->container->get("core.service.chess")->getBestMoveFromFen($fen);
+
+        return (new GameMove())->setFrom(substr($moveString, 0, 2))
+                               ->setTo(substr($moveString, 2, 2));
+    }
+
+    /**
+     * @param GamePostNewrobotRequest $request
+     * @return Game
+     */
+    public function processPostNewrobot(GamePostNewrobotRequest $request) : Game
+    {
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request, $this->getRequestError());
+
+        $game = $this->container->get("core.handler.game")->createMyGame(
+            $me,
+            $this->manager->getRepository("CoreBundle:User")->findOneByLogin("Robot"),
+            $request->getColor()
+        );
+        
+        $game->setStatus(GameStatus::PLAY);
+
+        $game->setTimeWhite($request->getTime()->getBase())
+             ->setTimeBlack($request->getTime()->getBase());
+        
+        $this->defineUserColorForGame($me, $game);
+        $this->defineUserMoveAndOpponentForGame($me, $game);
+
+        $this->manager->persist($game);
+
+        $this->manager->flush();
+
+        return $game;
+    }
+
+    /**
      * @param GamePutPgnRequest $pgnRequest
      * @return Game
      */
@@ -123,7 +173,11 @@ class GameHandler implements GameProcessorInterface
                                     ->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
-        if ($me != $game->getUserToMove()) {
+        if (
+            $me != $game->getUserToMove() &&
+            !in_array(0, [$pgnRequest->getTimeBlack(), $pgnRequest->getTimeWhite()]) &&
+            !in_array("Robot", [$game->getUserWhite(), $game->getUserBlack()])
+        ) {
             $this->getRequestError()->addError("pgn", "It is not your turn")
                                     ->throwException(ResponseStatusCode::BAD_FORMAT);
         }
@@ -140,15 +194,25 @@ class GameHandler implements GameProcessorInterface
 
         if ($pgn !== $game->getPgn()) {
             $game->setDraw("")
-                 ->setUserToMove($me == $game->getUserWhite() ? $game->getUserBlack() : $game->getUserWhite())
                  ->setPgn($pgn);
+
+            if (in_array("Robot", [$game->getUserWhite(), $game->getUserBlack()])) {
+                $game->setUserToMove(
+                    $game->getUserToMove() == $game->getUserWhite() ?
+                        $game->getUserBlack() : $game->getUserWhite()
+                );
+            } else {
+                $game->setUserToMove(
+                    $me == $game->getUserWhite() ? $game->getUserBlack() : $game->getUserWhite()
+                );
+            }
         }
 
-        if ($pgnRequest->getTimeWhite() !== null && $game->getTimeWhite() <= 0) {
+        if ($pgnRequest->getTimeWhite() !== null && $game->getTimeWhite() <= 100) {
             $game->setResultWhite(0)->setResultBlack(1)->setStatus(GameStatus::END);
         }
 
-        if ($pgnRequest->getTimeBlack() !== null && $game->getTimeBlack() <= 0) {
+        if ($pgnRequest->getTimeBlack() !== null && $game->getTimeBlack() <= 100) {
             $game->setResultWhite(1)->setResultBlack(0)->setStatus(GameStatus::END);
         }
 
@@ -251,9 +315,11 @@ class GameHandler implements GameProcessorInterface
             $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
+        $gameAgainstRobot = in_array("Robot", [$game->getUserWhite(), $game->getUserBlack()]);
+        
         switch (true) {
-            case $me == $game->getUserBlack() && $game->getDraw() == GameColor::WHITE:
-            case $me == $game->getUserWhite() && $game->getDraw() == GameColor::BLACK:
+            case $me == $game->getUserBlack() && ($game->getDraw() == GameColor::WHITE || $gameAgainstRobot):
+            case $me == $game->getUserWhite() && ($game->getDraw() == GameColor::BLACK || $gameAgainstRobot):
                 $game->setResultWhite(0.5)->setResultBlack(0.5)->setStatus(GameStatus::END);
                 break;
             default:
@@ -389,6 +455,9 @@ class GameHandler implements GameProcessorInterface
             ->setUserToMove($game->getUserWhite());
 
         $this->container->get("core.handler.game")->defineUserColorForGame($me, $game);
+        
+        $game->getUserWhite()->setLastColor(GameColor::WHITE);
+        $game->getUserBlack()->setLastColor(GameColor::BLACK);
 
         return $game;
     }

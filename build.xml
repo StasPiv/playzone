@@ -6,7 +6,7 @@
     <property name="frontenddir" value="${workspace}/frontend" />
 
     <target name="build"
-            depends="vendors_install, vendors_update, migrate, npm, bower, cache-prod, gulp, killServer, startServer"/>
+            depends="vendors_install, vendors_update, migrate, npm, bower, cache-prod, gulp, user-stat, killServer, startServer"/>
 
     <target name="check-composer-lock">
         <available file="${basedir}/composer.lock" property="composer.lock.present"/>
@@ -51,6 +51,12 @@
     <target name="cache-prod" description="Clear cache on production">
         <exec executable="php" dir="${basedir}" failonerror="true">
             <arg line="app/console cache:clear --env=prod"/>
+        </exec>
+    </target>
+
+    <target name="user-stat" description="User stat">
+        <exec executable="php" dir="${basedir}" failonerror="true">
+            <arg line="app/console core:user:stat"/>
         </exec>
     </target>
 

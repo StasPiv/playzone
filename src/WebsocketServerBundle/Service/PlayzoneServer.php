@@ -23,6 +23,7 @@ use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSubscribe;
 use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageMethod;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
 use WebsocketServerBundle\Model\Message\Server\AskIntroduction;
+use WebsocketServerBundle\Model\Message\Server\Game\ServerGameSendMove;
 use WebsocketServerBundle\Model\Message\Server\PlayzoneServerMessageScope;
 use WebsocketServerBundle\Model\WebsocketUser;
 use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageScope;
@@ -94,6 +95,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                     (new PlayzoneMessage())->setScope(PlayzoneServerMessageScope::USER_GONE)
                                            ->setMethod(PlayzoneClientMessageMethod::USER_GONE)
                                            ->setData([
+                                               'id' => $user->getPlayzoneUser()->getId(),
                                                'login' => $user->getPlayzoneUser()->getLogin()
                                            ])
                 );
@@ -139,6 +141,9 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                     break;
                 case PlayzoneClientMessageScope::SEND_TO_GAME_OBSERVERS:
                     $this->sendToGameObservers($messageObject, $from);
+                    break;
+                case PlayzoneClientMessageScope::SEND_TO_ROBOT:
+                    $this->sendToRobot($messageObject, $from);
                     break;
                 case PlayzoneClientMessageScope::SUBSCRIBE_TO_GAME:
                     $this->addGameForListen($messageObject, $from);
@@ -186,6 +191,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                     ->setScope(PlayzoneServerMessageScope::USER_IN)
                     ->setMethod(PlayzoneClientMessageMethod::USER_IN)
                     ->setData([
+                        'id' => $wsUser->getPlayzoneUser()->getId(),
                         'login' => $wsUser->getPlayzoneUser()->getLogin()
                     ])
             );
@@ -261,6 +267,36 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
 
     /**
      * @param PlayzoneMessage $messageObject
+     * @param ConnectionInterface $from
+     */
+    private function sendToRobot(PlayzoneMessage $messageObject, ConnectionInterface $from)
+    {
+        /** @var ClientMessageGameSend $gameSendMessage */
+        $gameSendMessage = $this->getObjectFromJson(json_encode($messageObject->getData()),
+            'WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSend');
+
+        $fen = base64_decode($gameSendMessage->getEncodedFen());
+        $move = $this->container->get("core.service.chess")->getBestMoveFromFen($fen);
+        $serverAnswer = new ServerGameSendMove();
+        $serverAnswer->setMove($move);
+
+        foreach ($this->users as $wsUser) {
+            if ($wsUser->getConnection() == $from) {
+                $messageObject->setScope(PlayzoneClientMessageMethod::SEND_MOVE_FROM_ROBOT);
+                $messageObject->setMethod(PlayzoneClientMessageMethod::SEND_MOVE_FROM_ROBOT);
+                $messageObject->setData(
+                    json_decode(
+                        $this->container->get("jms_serializer")->serialize($serverAnswer, 'json'),
+                        true
+                    )
+                );
+                $this->send($messageObject, $wsUser);
+            }
+        }
+    }
+
+    /**
+     * @param PlayzoneMessage $messageObject
      * @param WebsocketUser $wsUser
      */
     private function send(PlayzoneMessage $messageObject, WebsocketUser $wsUser)
@@ -312,15 +348,15 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         $anotherLogins = [];
 
         foreach ($this->users as $anotherUser) {
-            if ($anotherUser->getPlayzoneUser()) {
-                $anotherLogins[] = $anotherUser->getPlayzoneUser()->getLogin();
+            if ($anotherUser->getPlayzoneUser() instanceof User) {
+                $anotherLogins[] = $anotherUser->getPlayzoneUser();
             }
         }
 
         $this->send(
             new WelcomeMessage(
                 $wsUser->getPlayzoneUser()->getLogin(),
-                array_unique($anotherLogins)
+                $anotherLogins
             ),
             $wsUser
         );

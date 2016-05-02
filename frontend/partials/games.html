@@ -25,21 +25,26 @@
             <tr ng-class="{ error: errors.time }">
                 <td><label for="time_base">{{ 'Time control (minutes)' | translate }}:</label></td>
                 <td>
-                    <input type="number" min="1" max="30" id="time_base" data-ng-model="call.time.base_minutes" />
+                    <input type="number" min="1" max="60" id="time_base" data-ng-model="call.time.base_minutes" />
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
                     <input title="Cancel" class="btn btn-danger" type="submit" value="{{ 'Cancel' | translate }}">&nbsp;
-                    <input class="btn btn-success send-call" value="OK" type="submit" data-ng-click="sendCall(call)">
+                    <input class="btn btn-primary send-call" value="OK" type="submit" data-ng-click="sendCall(call)">
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
     <div class="apply-call">
-        <a class="btn btn-success open-popup" data-open-popup=".call-form">
+        <a class="btn btn-success open-popup" data-open-popup=".call-form"
+                                              data-ng-click="openSendCallToAll()">
             {{ 'Call on the game' | translate }}
+        </a>
+        <a class="btn btn-warning open-popup" data-open-popup=".call-form"
+                                              data-ng-click="openSendCallToRobot()">
+            {{ 'Against robot' | translate }}
         </a>
     </div>
 </div>
@@ -63,7 +68,7 @@
                 {{ call.game_params.time_base / 60000 }}
             </td>
             <td>
-                <a href="" class="btn btn-danger" ng-click="deleteCall(call);">{{ "Remove" | translate }}</a>
+                <a href="" class="btn btn-danger glyphicon glyphicon-remove" ng-click="deleteCall(call);" title="{{ 'Remove' | translate }}"></a>
             </td>
         </tr>
     </table>
@@ -82,18 +87,20 @@
                 <a href="" ng-click="acceptCall(call)">{{ call.id }}</a>
             </td>
             <td>
-                <a href="/#/profile/{{ call.from_user.id }}">{{ call.from_user.login }}</a>
+                <a href="/#/user/{{ call.from_user.id }}/profile">{{ call.from_user.login }}</a>
             </td>
             <td>
                 {{ call.game_params.time_base / 60000 }}
             </td>
             <td>
-                <a href="" class="btn btn-success" ng-click="acceptCall(call)">
-                    {{ "Accept" | translate }}
-                </a>&nbsp;&nbsp;
-                <a href="" ng-if="call.to_user.id == $root.user.id" class="btn btn-danger" ng-click="declineCall(call)">
-                    {{ "Decline" | translate }}
-                </a>
+                <div class="btn btn-group">
+                    <a href="" class="btn btn-success glyphicon glyphicon-ok" ng-click="acceptCall(call)">
+
+                    </a>
+                    <a href="" ng-if="call.to_user.id == $root.user.id" class="btn btn-danger glyphicon glyphicon-remove" ng-click="declineCall(call)">
+
+                    </a>
+                </div>
             </td>
         </tr>
     </table>
@@ -107,30 +114,26 @@
             <th>{{ "White" | translate }}</th>
             <th>{{ "Black" | translate }}</th>
             <th>{{ "Result" | translate }}</th>
-            <th width="15%">{{ "Action" | translate }}</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="game in current">
             <td>
-                <a href="/#/play/{{ game.id }}">{{ game.id }}</a>
+                <a ng-show="game.user_move" href="/#/play/{{ game.id }}" class="btn btn-success glyphicon glyphicon-play" title="{{ 'Do move' | translate }}"></a>
+                <a ng-show="!game.user_move" href="/#/play/{{ game.id }}" class="btn btn-info glyphicon glyphicon-eye-open" title="{{ 'See' | translate }}"></a>
             </td>
             <td>
-                <span>{{ game.user_white.login }}</span>
+                <span>
+                    <a href="/#/user/{{ game.user_white.id }}/profile">{{ game.user_white.login }}</a>
+                </span>
             </td>
             <td>
-                <span>{{ game.user_black.login }}</span>
+                <span>
+                    <a href="/#/user/{{ game.user_black.id }}/profile">{{ game.user_black.login }}</a>
+                </span>
             </td>
             <td>
                 <span>{{ game.result_white }} - {{ game.result_black }}</span>
-            </td>
-            <td>
-                <a ng-show="game.user_move" href="/#/play/{{ game.id }}" class="btn btn-success">
-                    {{ "Do move" | translate }}
-                </a>
-                <a ng-show="!game.user_move" href="/#/play/{{ game.id }}" class="btn btn-info">
-                    {{ "See" | translate }}
-                </a>
             </td>
         </tr>
         </tbody>

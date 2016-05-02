@@ -1,7 +1,7 @@
 <div id="playroom">
-    <h1>{{game.user_white.login}} - {{game.user_black.login}}</h1>
-    <h2 ng-if="game.status == 'end'">{{game.result_white}} - {{game.result_black}}</h2>
-    <div ng-if="game.mine && game.opponent.offline" class="info">{{ 'Opponent is offline' | translate }}</div>
+    <div ng-if="game.mine && game.opponent.login !== 'Robot' && game.opponent.offline" class="alert alert-warning">
+        {{ 'Opponent is offline' | translate }}
+    </div>
     <div class="play-chess-board chess-board-legal" data-board="board">
         <chess-timer
                 class="white"
@@ -20,14 +20,18 @@
                 data-fix-time="savePgnAndSendToObservers()"
         ></chess-timer>
         <div class="clear">&nbsp;</div>
-        <div id="board"></div>
-        <div ng-if="game.status == 'end'" class="pgn"></div>
-        <div class="clear">&nbsp;</div>
         <div class="action" ng-if="game.status == 'play' && game.mine">
             <span ng-class="{'btn-success': game.draw && game.draw !== game.color}"
                   class="btn btn-primary draw"
                   ng-click="draw()">{{ "Draw" | translate }}</span>
             <span class="btn btn-danger resign" ng-click="resign()">{{ "Resign" | translate }}</span>
         </div>
+        <div id="board"></div>
+        <div class="pgn">
+            <h1>{{game.user_white.login}} - {{game.user_black.login}}</h1>
+            {{game.pgn}}
+            <h2 ng-if="game.status == 'end'">{{game.result_white}} - {{game.result_black}}</h2>
+        </div>
+        <div class="clear">&nbsp;</div>
     </div>
 </div>

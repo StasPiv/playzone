@@ -4,6 +4,7 @@
 'use strict';
 
 playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService, SettingService) {
+    $rootScope.robot = false;
     $scope.boardConfig = {
         pieceType: SettingService.getSetting('Piece type') ?
             SettingService.getSetting('Piece type') : 'leipzig',
@@ -12,7 +13,9 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     };
 
     $scope.gameConfig = {
-        zeitnotLimit: 28000
+        zeitnotLimit: SettingService.getSetting('Zeitnot limit') ?
+                      SettingService.getSetting('Zeitnot limit') * 1000 :
+                      28000
     };
 
     $scope.game = GameRest.get(
@@ -56,7 +59,9 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     };
 
     $scope.draw = function () {
-        $scope.opponentOfferDraw = $scope.game.draw && $scope.game.draw !== $scope.game.color;
+        $scope.opponentOfferDraw =
+            ($scope.game.draw && $scope.game.draw !== $scope.game.color) ||
+            $scope.game.opponent.login === "Robot";
 
         if ($scope.opponentOfferDraw) {
             $scope.game.$acceptDraw().then(
@@ -76,7 +81,9 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     };
 
     $scope.sendWithWebsockets = function () {
+        console.log('sendWithWS');
         if ($scope.game.status === 'play') {
+            console.log($scope.game.pgn);
             WebsocketService.sendGameToObservers(
                 $scope.game.id, 
                 window.btoa($scope.game.pgn), 
@@ -96,13 +103,12 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
 
         $scope.game.$savePgn().then(
             function () {
-                $scope.game.opponent.offline =
-                    ($rootScope.loginsOnline.indexOf($scope.game.opponent.login) === -1);
+                $scope.game.opponent.offline = !$rootScope.loginsOnline.searchById($scope.game.opponent.id);
                 if (!withoutSaving) {
                     $scope.sendWithWebsockets();
                 }
             }
-        )
+        );
     };
 
     WebsocketService.addListener('listen_opponent_gone', 'user_gone', function (user) {
@@ -114,7 +120,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     });
 
     WebsocketService.addListener('listen_opponent_in', 'user_in', function (user) {
-        if ($scope.game && user['login'] === $scope.game.opponent.login) {
+        if ($scope.game && $scope.game.opponent && user['login'] === $scope.game.opponent.login) {
             console.log('opponent has reconnected');
             $scope.game.opponent.offline = false;
         }

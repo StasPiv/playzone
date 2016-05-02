@@ -124,5 +124,24 @@
         "result_black": 0.5
       }
     }
+  },
+  "correct_acceptdraw_with_robot": {
+    "method": "PUT",
+    "request": {
+      "login": "Stas",
+      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
+      "reference": {
+        "name": "id",
+        "value": "game-with_robot"
+      }
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "status": "end",
+        "result_white": 0.5,
+        "result_black": 0.5
+      }
+    }
   }
 }

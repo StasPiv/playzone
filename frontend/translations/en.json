@@ -5,7 +5,7 @@
   "The site in the testing mode. Please send your bug-reports":
   "The site in the testing mode. Please send your bug-reports",
   "Can not connect": "No connection. Reload page. If it doesn't help, please check your firewall settings.",
-  "Time control (minutes)": "Minutes per game",
+  "Time control (minutes)": "Minutes",
   "Immortalchess.Net login/password is allowed": "Login/password from immortalchess.net are allowed",
   "Sound move": "'Move' sound",
   "Sound draw": "'Draw' sound",
@@ -17,5 +17,6 @@
   "Call on the game": "Send challenge",
   "Your calls": "Your challenges",
   "Calls to you": "Challenges to you",
-  "See": "Watch"
+  "See": "Watch",
+  "Zeitnot limit": "Zeitnot limit (seconds)"
 }

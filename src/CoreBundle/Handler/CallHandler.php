@@ -136,7 +136,8 @@ class CallHandler implements CallProcessorInterface
 
         if (!$sendRequest->getColor() || $sendRequest->getColor() == GameColor::RANDOM) {
             $sendRequest->setColor(
-                [GameColor::WHITE, GameColor::BLACK][mt_rand(0, 1)]
+                !$me->getLastColor() ? [GameColor::WHITE, GameColor::BLACK][mt_rand(0, 1)] :
+                    GameColor::getOppositeColor($me->getLastColor())
             );
         }
 
@@ -224,6 +225,10 @@ class CallHandler implements CallProcessorInterface
         $this->manager->persist($game);
 
         foreach ($this->getUserCalls($call->getFromUser()) as $call) {
+            $this->manager->remove($call);
+        }
+
+        foreach ($this->getUserCalls($me) as $call) {
             $this->manager->remove($call);
         }
 

@@ -6,13 +6,18 @@
  * Also drag and drop functions will be defined.
  * This small library is useful for separating drag&drop logic and application logic
  */
-playzoneControllers.directive('chessBoardLegal', function () {
+playzoneControllers.directive('chessBoardLegal', function (SettingService, $timeout) {
+    function isMyTurn(scope, element) {
+        return element.game.turn() === scope.game.color;
+    }
+
     function doMoveOnTheBoard(scope, element, to) {
         scope.current_move.to = to; // move by click&click
         scope.current_move.promotion = 'q'; // NOTE: always promote to a queen for example simplicity
 
         if (!element.game.move(scope.current_move)) {
-            scope.current_move = scope.pre_move = false;
+            scope.current_move.to = false;
+            scope.pre_move = false;
             return;
         }
 
@@ -25,6 +30,57 @@ playzoneControllers.directive('chessBoardLegal', function () {
         element.board.position(element.game.fen());
         element.updateStatus();
         element.onMove(scope.current_move);
+    }
+
+    function moveByOneClick(element, square, scope) {
+        if (!isMyTurn(scope, element)) {
+            return;
+        }
+
+        var legalMoves = element.game.moves({verbose: true});
+
+        var isSingleOptionToMoveHere = false;
+        var isSingleOptionFromMoveHere = false;
+
+        $.each(
+            legalMoves,
+            function (index, value) {
+                if (value.to === square) {
+                    if (isSingleOptionToMoveHere) {
+                        isSingleOptionToMoveHere = false;
+                        scope.current_move = false;
+                        return false;
+                    } else {
+                        isSingleOptionToMoveHere = true;
+                        scope.current_move = {
+                            from: value.from
+                        };
+                    }
+                } else if (value.from === square) {
+                    if (isSingleOptionFromMoveHere) {
+                        isSingleOptionFromMoveHere = false;
+                        scope.current_move = false;
+                        return false;
+                    } else {
+                        isSingleOptionFromMoveHere = true;
+                        scope.current_move = {
+                            from: square,
+                            to: value.to
+                        };
+                    }
+                }
+            }
+        );
+
+        if (isSingleOptionToMoveHere) {
+            doMoveOnTheBoard(scope, element, square);
+            return true;
+        } else if (isSingleOptionFromMoveHere) {
+            doMoveOnTheBoard(scope, element, scope.current_move.to);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     return {
@@ -59,9 +115,18 @@ playzoneControllers.directive('chessBoardLegal', function () {
             };
 
             var onDrop = function(source, target) {
-                if (element.game.turn() !== scope.game.color) {
+                if (!isMyTurn(scope, element)) {
                     // pre-move functionality for draggable
                     scope.pre_move = {from: source, to: target};
+
+                    $timeout(
+                        function () {
+                            scope.highlightLastMove(scope, element, scope.pre_move);
+                        },
+                        150
+                    );
+
+                    return;
                 }
                 // see if the move is legal
                 var moveObject = {
@@ -82,19 +147,44 @@ playzoneControllers.directive('chessBoardLegal', function () {
             };
 
             $(element).on('click', '[class*="square"]', function () {
-                if (!scope.game.mine || element.game.turn() !== scope.game.color) {
+                if (!scope.game.mine) {
                     return false;
                 }
 
                 var square = $(this).data('square');
-                
-                if (!scope.current_move) {
-                    scope.current_move = { from: square };
-                    highlightSquare(square);
-                    return;
+
+                var piece = $(this).find('img');
+
+                var isMyPiece = piece.length && piece.data('piece').indexOf(scope.game.color) === 0;
+
+                if (!scope.current_move &&
+                    SettingService.getSetting('One-click move')) { // move by one click
+                    if (moveByOneClick(element, square, scope)) {
+                        return;
+                    }
                 }
 
-                doMoveOnTheBoard(scope, element, square);
+                if (isMyTurn(scope, element)) {
+                    if (!scope.current_move || isMyPiece) {
+                        scope.current_move = {
+                            from: square
+                        };
+                        highlightSquare(square);
+                    } else {
+                        doMoveOnTheBoard(scope, element, square);
+                    }
+                } else {
+                    if (!scope.pre_move || !!scope.pre_move.to) {
+                        scope.pre_move = {
+                            from: square
+                        };
+                        highlightSquare(square);
+                    } else {
+                        scope.pre_move.to = square;
+                        scope.highlightLastMove(scope, element, scope.pre_move);
+                    }
+
+                }
             });
 
             // update the board position after the piece snap
@@ -133,7 +223,6 @@ playzoneControllers.directive('chessBoardLegal', function () {
 
                 statusEl.html(status);
                 fenEl.html(element.game.fen());
-                pgnEl.html(element.game.pgn());
             };
 
             element.loadBoard = function (userConfig) {

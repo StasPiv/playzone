@@ -9,8 +9,11 @@
 namespace CoreBundle\Processor;
 
 use CoreBundle\Entity\Game;
+use CoreBundle\Model\Game\GameMove;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
+use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
+use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
@@ -30,6 +33,18 @@ interface GameProcessorInterface extends ProcessorInterface
      * @return Game
      */
     public function processGet(GameGetRequest $gameRequest) : Game;
+
+    /**
+     * @param GameGetRobotmoveAction $request
+     * @return GameMove
+     */
+    public function processGetRobotmove(GameGetRobotmoveAction $request) : GameMove;
+
+    /**
+     * @param GamePostNewrobotRequest $request
+     * @return Game
+     */
+    public function processPostNewrobot(GamePostNewrobotRequest $request) : Game;
 
     /**
      * @param GamePutPgnRequest $pgnRequest

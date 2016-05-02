@@ -3,6 +3,7 @@
 namespace CoreBundle\Entity;
 
 use CoreBundle\Exception\Handler\User\UserSettingNotFoundException;
+use CoreBundle\Model\Game\GameColor;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -129,6 +130,10 @@ class User
      * @var int
      *
      * @ORM\Column(name="win", type="integer")
+     *
+     * @JMS\Expose
+     * @JMS\SerializedName("win")
+     * @JMS\Type("integer")
      */
     private $win = 0;
 
@@ -136,6 +141,10 @@ class User
      * @var int
      *
      * @ORM\Column(name="draw", type="integer")
+     *
+     * @JMS\Expose
+     * @JMS\SerializedName("draw")
+     * @JMS\Type("integer")
      */
     private $draw = 0;
 
@@ -143,6 +152,10 @@ class User
      * @var int
      *
      * @ORM\Column(name="lose", type="integer")
+     *
+     * @JMS\Expose
+     * @JMS\SerializedName("lose")
+     * @JMS\Type("integer")
      */
     private $lose = 0;
 
@@ -218,6 +231,24 @@ class User
      * @JMS\Type("array<CoreBundle\Entity\UserSetting>")
      */
     private $settings;
+
+    /**
+     * @var string
+     * 
+     * @JMS\Expose
+     * @JMS\Type("string")
+     */
+    private $pgnLink;
+
+    /**
+     * @var string
+     *
+     * @JMS\Expose()
+     * @JMS\Type("string")
+     *
+     * @ORM\Column(name="last_color", type="string", length=1, nullable=true)
+     */
+    private $lastColor;
 
     /**
      * Get id
@@ -828,6 +859,42 @@ class User
         return $this->getLogin();
     }
 
+    /**
+     * @return string
+     */
+    public function getPgnLink() : string 
+    {
+        return $this->pgnLink;
+    }
 
+    /**
+     * @param string $pgnLink
+     * @return User
+     */
+    public function setPgnLink($pgnLink)
+    {
+        $this->pgnLink = $pgnLink;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastColor()
+    {
+        return $this->lastColor;
+    }
+
+    /**
+     * @param string $lastColor
+     * @return User
+     */
+    public function setLastColor($lastColor)
+    {
+        $this->lastColor = $lastColor;
+
+        return $this;
+    }
 }
 

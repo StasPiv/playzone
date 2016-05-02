@@ -1,0 +1,38 @@
+<h1>{{ 'My profile' | translate }} - {{ $root.user.login }}</h1>
+<div class="table-responsive">
+    <table class="settings table">
+        <tbody>
+        <tr ng-repeat="setting in $root.user.settings track by $index">
+            <td>
+                <span>
+                    {{ setting.name | translate }}:
+                </span>
+            </td>
+            <td>
+                <input ng-if="setting.type.indexOf('select') !== 0"
+                       title="{{ setting.name | translate }}"
+                       type="{{ setting.type }}"
+                       ng-model="user_setting[setting.name]"
+                       ng-click="changeSetting(setting.id, setting.type, setting.name)"
+                       ng-blur="changeSetting(setting.id, setting.type, setting.name)"
+                       ng-checked="setting.value == 1"
+                       ng-value="setting.value"
+                />
+                <select ng-if="setting.type.indexOf('select') === 0"
+                        title="{{ setting.name | translate }}"
+                        ng-model="user_setting[setting.name]"
+                        ng-change="changeSetting(setting.id, setting.type, setting.name)"
+                        class="dropdown"
+                >
+                    <option
+                            ng-repeat="chunk in setting.type.replace('select:', '').split(',') track by $index"
+                            value="{{chunk}}"
+                    >
+                        {{chunk}}
+                    </option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

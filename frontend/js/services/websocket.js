@@ -13,8 +13,9 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
         dataStream = $websocket(webSocketPath);
         dataStream.onMessage(
             function (message) {
+                console.log("message.data", message.data);
                 var receivedMessage = angular.fromJson(message.data);
-                console.log(receivedMessage);
+                console.log("received message", receivedMessage);
 
                 if (!receivedMessage.method || !receivedMessage.data) {
                     return;
@@ -86,6 +87,7 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
                 }
             )
         },
+        
         /**
          * Pass only first param (gameId) to fix result on observers' side
          *
@@ -115,6 +117,25 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
                         time_white: timeWhite,
                         time_black: timeBlack,
                         color: color
+                    }
+                }
+            )
+        },
+        
+        /**
+         * Pass only first param (gameId) to fix result on observers' side
+         *
+         * @param gameId
+         * @param encodedFen
+         */
+        sendFenToRobot: function (gameId, encodedFen) {
+            this.send(
+                {
+                    scope: 'send_to_robot',
+                    method: 'send_fen_to_robot',
+                    data: {
+                        game_id: gameId,
+                        encoded_fen: encodedFen
                     }
                 }
             )

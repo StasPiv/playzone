@@ -1,0 +1,24 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserSettingFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures"
+  ],
+  "users_stas" : {
+    "method" : "GET",
+    "request": {
+      "reference": {
+        "name": "user_id",
+        "value": "user-stas"
+      }
+    },
+    "response" : {
+      "status" : 200,
+      "data" : {
+        "login" : "Stas",
+        "email" : "piv1986@yandex.ru",
+        "rating" : 2200,
+        "class" : "N"
+      }
+    }
+  }
+}

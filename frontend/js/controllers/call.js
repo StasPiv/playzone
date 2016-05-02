@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('CallCtrl', function ($scope, $location, CallRest, WebsocketService) {
+playzoneControllers.controller('CallCtrl', function ($scope, $rootScope, $location, CallRest, WebsocketService, AudioService, GameRest) {
     $scope.colors = [
         {id: 'random', name: 'Random'},
         {id: 'w', name: 'White'},
@@ -18,6 +18,12 @@ playzoneControllers.controller('CallCtrl', function ($scope, $location, CallRest
 
     $scope.sendCall = function(call) {
         $('.footer .overlay').hide();
+
+        if ($('#login_enemy').val() === "Robot") {
+            $scope.playAgainstRobot(call);
+            return;
+        }
+
         CallRest.send(
             {},
             call,
@@ -40,6 +46,31 @@ playzoneControllers.controller('CallCtrl', function ($scope, $location, CallRest
             },
             function(response) {
                 $scope.errors = response.data;
+            }
+        );
+    };
+
+    $scope.playAgainstRobot = function(call) {
+        $('.footer .overlay').hide();
+
+        call.time.base = call.time.base_minutes * 60000;
+        GameRest.createNewrobot(
+            {
+                time: call.time,
+                color: !call.color ? ["w", "b"][parseInt(Math.random() * 2)] : call.color.id
+            },
+            function (newGame) {
+                WebsocketService.sendDataToLogins(
+                    'call_accept',
+                    {
+                        game_id: newGame.id
+                    },
+                    []
+                );
+                $scope.current.push(newGame);
+                AudioService.newGame();
+                $location.path( '/play/' + newGame.id );
+
             }
         );
     };

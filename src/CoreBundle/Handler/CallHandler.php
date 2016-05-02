@@ -132,7 +132,8 @@ class CallHandler implements CallProcessorInterface
 
         if (!$sendRequest->getColor() || $sendRequest->getColor() == GameColor::RANDOM) {
             $sendRequest->setColor(
-                [GameColor::WHITE, GameColor::BLACK][mt_rand(0, 1)]
+                !$me->getLastColor() ? [GameColor::WHITE, GameColor::BLACK][mt_rand(0, 1)] :
+                    GameColor::getOppositeColor($me->getLastColor())
             );
         }
 

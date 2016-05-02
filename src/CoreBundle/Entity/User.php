@@ -3,6 +3,7 @@
 namespace CoreBundle\Entity;
 
 use CoreBundle\Exception\Handler\User\UserSettingNotFoundException;
+use CoreBundle\Model\Game\GameColor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
@@ -230,6 +231,16 @@ class User
      * @JMS\Type("string")
      */
     private $pgnLink;
+
+    /**
+     * @var string
+     *
+     * @JMS\Expose()
+     * @JMS\Type("string")
+     *
+     * @ORM\Column(name="last_color", type="string", length=1, nullable=true)
+     */
+    private $lastColor;
 
     /**
      * Get id
@@ -819,6 +830,25 @@ class User
     public function setPgnLink($pgnLink)
     {
         $this->pgnLink = $pgnLink;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastColor()
+    {
+        return $this->lastColor;
+    }
+
+    /**
+     * @param string $lastColor
+     * @return User
+     */
+    public function setLastColor($lastColor)
+    {
+        $this->lastColor = $lastColor;
 
         return $this;
     }

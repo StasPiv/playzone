@@ -455,6 +455,9 @@ class GameHandler implements GameProcessorInterface
             ->setUserToMove($game->getUserWhite());
 
         $this->container->get("core.handler.game")->defineUserColorForGame($me, $game);
+        
+        $game->getUserWhite()->setLastColor(GameColor::WHITE);
+        $game->getUserBlack()->setLastColor(GameColor::BLACK);
 
         return $game;
     }

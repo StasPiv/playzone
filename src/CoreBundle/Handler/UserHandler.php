@@ -155,8 +155,6 @@ class UserHandler implements UserProcessorInterface
     {
         $qb = $this->manager->createQueryBuilder();
 
-        $qb->set('u.numChilds', $qb->expr()->sum('u.numChilds', '?1'));
-
         $users = $qb->select(array('u')) // string 'u' is converted to array internally
                     ->from('CoreBundle:User', 'u')
                     ->orderBy($listRequest->getOrderBy(), 'DESC')

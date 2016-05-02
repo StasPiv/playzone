@@ -48,6 +48,8 @@ class GameFixtures extends AbstractPlayzoneFixtures
             ->setRate($data['rate'])
             ->setTimeWhite($data['time_white'])
             ->setTimeBlack($data['time_black'])
+            ->setResultWhite(@$data['result_white'])
+            ->setResultBlack(@$data['result_black'])
             ->setTimeLastMove(new \DateTime($data['time_last_move']))
             ->setDraw(@$data['draw']);
 

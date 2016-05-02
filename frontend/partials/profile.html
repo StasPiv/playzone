@@ -32,6 +32,16 @@
                 {{ user.lose }}
             </td>
         </tr>
+        <tr ng-if="user.pgn_link">
+            <td>
+                <span>
+                    {{ "Download player games" | translate }}:
+                </span>
+            </td>
+            <td>
+                <a href="{{ user.pgn_link }}">pgn</a>
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>

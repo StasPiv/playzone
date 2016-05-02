@@ -117,5 +117,36 @@
     "time_white": 180000,
     "time_black": 180000,
     "time_last_move": "yesterday"
+  },
+  {
+    "referenceName": "game-real-white-offer-draw-finished",
+    "user_white": "user-stas",
+    "user_black": "user-test-login",
+    "user_to_move": "user-test-login",
+    "pgn": "1.e4 e5 2.Nf3 Nc6 3.Bb5",
+    "pgn_alt": "1",
+    "status": "end",
+    "rate": false,
+    "time_white": 180000,
+    "time_black": 180000,
+    "time_last_move": "yesterday",
+    "draw": "w",
+    "result_white": 1,
+    "result_black": 0
+  },
+  {
+    "referenceName": "game-with_robot-finished",
+    "user_white": "user-stas",
+    "user_black": "user-robot",
+    "user_to_move": "user-robot",
+    "pgn": "1.e4 e5 2.Nf3 Nc6 3.Bb5",
+    "pgn_alt": "1",
+    "status": "end",
+    "rate": false,
+    "time_white": 180000,
+    "time_black": 180000,
+    "time_last_move": "yesterday",
+    "result_white": 0.5,
+    "result_black": 0.5
   }
 ]

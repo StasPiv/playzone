@@ -4,7 +4,6 @@ namespace CoreBundle\Entity;
 
 use CoreBundle\Exception\Handler\User\UserSettingNotFoundException;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
 
@@ -224,6 +223,13 @@ class User
      */
     private $settings;
 
+    /**
+     * @var string
+     * 
+     * @JMS\Expose
+     * @JMS\Type("string")
+     */
+    private $pgnLink;
 
     /**
      * Get id
@@ -796,6 +802,25 @@ class User
     function __toString()
     {
         return $this->getLogin();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPgnLink() : string 
+    {
+        return $this->pgnLink;
+    }
+
+    /**
+     * @param string $pgnLink
+     * @return User
+     */
+    public function setPgnLink($pgnLink)
+    {
+        $this->pgnLink = $pgnLink;
+
+        return $this;
     }
 }
 

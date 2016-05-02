@@ -55,7 +55,7 @@ class UserRepository extends EntityRepository
      *                              during the search.
      * @param int|null $lockVersion The lock version.
      *
-     * @return object|null The entity instance or NULL if the entity can not be found.
+     * @return User The entity instance or NULL if the entity can not be found.
      * @throws UserNotFoundException
      */
     public function find($id, $lockMode = null, $lockVersion = null)

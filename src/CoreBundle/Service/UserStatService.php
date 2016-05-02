@@ -10,6 +10,8 @@ namespace CoreBundle\Service;
 
 use CoreBundle\Model\Game\GameStatus;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class UserStatService
@@ -18,21 +20,30 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 class UserStatService
 {
     use ContainerAwareTrait;
-    
+
+    /**
+     * @return void
+     */
     public function run()
     {
-        $users = $this->container->get("doctrine")->getRepository("CoreBundle:User")->findAll();
+        $this->container->get("core.service.chess")->createPgnDir();
         
+        $fs = new Filesystem();
+
+        $users = $this->container->get("doctrine")->getRepository("CoreBundle:User")->findAll();
+
         foreach ($users as $user) {
             $win = $draw = $lose = 0;
+            $pgnFormatted = [];
 
-            $games = $this->container->get("core.handler.game")->getGamesForUser($user, GameStatus::END);
-            
+            $games = $this->container->get("core.handler.game")
+                          ->getGamesForUser($user, GameStatus::END);
+
             foreach ($games as $game) {
-                if (strlen($game->getPgn()) < 20) {
+                if (strlen($game->getPgn()) < 0) {
                     continue;
                 }
-                
+
                 if ($game->getUserWhite() == $user) {
                     switch ($game->getResultWhite()) {
                         case 1:
@@ -58,11 +69,30 @@ class UserStatService
                             break;
                     }
                 }
+                
+                $pgnFormatted[] = $this->container->get("templating")
+                                       ->render(":Chess:pgn.html.twig", ["game" => $game]);
             }
-            
+
             $user->setWin($win)->setDraw($draw)->setLose($lose);
-            
+
             $this->container->get("doctrine")->getManager()->persist($user);
+
+            try {
+                $userPgnFilePath = $this->container->get("core.handler.user")->getPgnFilePath($user);
+
+                if (empty($pgnFormatted)) {
+                    $fs->remove($userPgnFilePath);
+                } else {
+                    $fs->dumpFile(
+                        $userPgnFilePath,
+                        implode(PHP_EOL, $pgnFormatted)
+                    );
+                }
+
+            } catch (IOException $e) {
+                $this->container->get("logger")->err($e->getMessage());
+            }
         }
 
         $this->container->get("doctrine")->getManager()->flush();

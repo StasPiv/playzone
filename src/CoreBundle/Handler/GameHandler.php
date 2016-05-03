@@ -12,6 +12,7 @@ use CoreBundle\Entity\ChatMessage;
 use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Exception\Handler\User\UserHandlerException;
 use CoreBundle\Exception\Processor\ProcessorException;
+use CoreBundle\Model\ChatMessage\ChatMessageType;
 use CoreBundle\Model\Game\GameMove;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
@@ -350,7 +351,8 @@ class GameHandler implements GameProcessorInterface
         }
 
         $chatMessage = (new ChatMessage())->setMessage($request->getMessage())
-                                          ->setUser($me);
+                                          ->setUser($me)
+                                          ->setType(ChatMessageType::GAME());
 
 
         $game->addChatMessage($chatMessage);

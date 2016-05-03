@@ -95,11 +95,11 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
 
                 $this->sendToUsers(
                     (new PlayzoneMessage())->setScope(PlayzoneServerMessageScope::USER_GONE)
-                                           ->setMethod(PlayzoneClientMessageMethod::USER_GONE)
-                                           ->setData([
-                                               'id' => $user->getPlayzoneUser()->getId(),
-                                               'login' => $user->getPlayzoneUser()->getLogin()
-                                           ])
+                        ->setMethod(PlayzoneClientMessageMethod::USER_GONE)
+                        ->setData([
+                            'id' => $user->getPlayzoneUser()->getId(),
+                            'login' => $user->getPlayzoneUser()->getLogin()
+                        ])
                 );
             }
         }
@@ -139,7 +139,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                     $this->addUser($from, $messageObject->getData());
                     break;
                 case PlayzoneClientMessageScope::SEND_TO_USERS:
-                    $this->sendToUsers($messageObject);
+                    $this->sendToUsers($messageObject, $from);
                     break;
                 case PlayzoneClientMessageScope::SEND_TO_GAME_OBSERVERS:
                     $this->sendToGameObservers($messageObject, $from);
@@ -233,9 +233,16 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
 
     /**
      * @param PlayzoneMessage $messageObject
+     * @param ConnectionInterface $from
      */
-    private function sendToUsers(PlayzoneMessage $messageObject)
+    private function sendToUsers(PlayzoneMessage $messageObject, ConnectionInterface $from = null)
     {
+        if ($from &&
+            strpos($messageObject->getMethod(), PlayzoneClientMessageMethod::SEND_MESSAGE_TO_OBSERVERS) === 0) {
+            $this->sendMessageToGameObservers($messageObject, $from);
+            return;
+        }
+
         foreach ($this->users as $wsUser) {
             if (!$wsUser->getPlayzoneUser() instanceof User) {
                 continue;
@@ -257,9 +264,6 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         switch ($messageObject->getMethod()) {
             case PlayzoneClientMessageMethod::SEND_PGN_TO_OBSERVERS:
                 $this->sendGameToGameObservers($messageObject, $from);
-                break;
-            case PlayzoneClientMessageMethod::SEND_MESSAGE_TO_OBSERVERS:
-                $this->sendMessageToGameObservers($messageObject, $from);
                 break;
         }
     }
@@ -298,7 +302,8 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                 $chatMessage = new ChatMessage();
 
                 $chatMessage->setUser($wsUser->getPlayzoneUser())
-                            ->setMessage($messageGame->getMessage());
+                            ->setMessage($messageGame->getMessage())
+                            ->setTime(new \DateTime());
 
                 $messageObject->setData(
                     json_decode(
@@ -312,8 +317,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         }
 
         foreach ($this->users as $wsUser) {
-            if (isset($wsUser->getGamesToListenMap()[$messageGame->getGameId()
-                    ])) {
+            if ($wsUser->getConnection() != $from) {
                 $messageObject->setMethod(
                     "send_message_to_observers_" . $messageGame->getGameId()
                 );

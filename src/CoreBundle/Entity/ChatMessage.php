@@ -2,6 +2,7 @@
 
 namespace CoreBundle\Entity;
 
+use CoreBundle\Model\ChatMessage\ChatMessageType;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 
@@ -30,6 +31,15 @@ class ChatMessage
     private $message;
 
     /**
+     * @var \DateTime
+     *
+     * @JMS\Type("DateTime<'Y-m-d H:i:s'>")
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $time;
+
+    /**
      * @var User
      *
      * @JMS\Expose
@@ -41,6 +51,20 @@ class ChatMessage
      */
     private $user;
 
+    /**
+     * @var ChatMessageType
+     *
+     * @ORM\Column(type="string", columnDefinition="ENUM('game', 'common')")
+     */
+    private $type;
+
+    /**
+     * ChatMessage constructor.
+     */
+    public function __construct()
+    {
+        $this->time = new \DateTime();
+    }
 
     /**
      * Get id
@@ -91,6 +115,44 @@ class ChatMessage
     public function setUser(User $user)
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getTime() : \DateTime
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param \DateTime $time
+     * @return ChatMessage
+     */
+    public function setTime(\DateTime $time)
+    {
+        $this->time = $time;
+
+        return $this;
+    }
+
+    /**
+     * @return ChatMessageType
+     */
+    public function getType() : ChatMessageType
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param ChatMessageType $type
+     * @return ChatMessage
+     */
+    public function setType(ChatMessageType $type)
+    {
+        $this->type = $type;
 
         return $this;
     }

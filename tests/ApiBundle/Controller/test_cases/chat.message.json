@@ -1,0 +1,38 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserSettingFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures"
+  ],
+  "login_and_token_is_incorrect": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "bba37b62d15cc5f8671fd3d1b034c354",
+      "message": "kisa kuku"
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "token": "Forbidden for user with this credentials"
+      }
+    }
+  },
+  "correct": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "message": "kisa kuku"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "message": "kisa kuku",
+        "user": {
+          "login": "TestLogin"
+        },
+        "type": "common"
+      }
+    }
+  }
+}

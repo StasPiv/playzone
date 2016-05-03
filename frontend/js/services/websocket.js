@@ -123,16 +123,16 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
         },
         
         /**
-         * @param gameId
+         * @param chatRoom
          * @param message
          */
-        sendMessageToObservers: function (gameId, message) {
+        sendMessageToObservers: function (chatRoom, message) {
             this.send(
                 {
-                    scope: 'send_to_game_observers',
-                    method: 'send_message_to_observers',
+                    scope: 'send_to_users',
+                    method: 'send_message_to_observers_' + chatRoom,
                     data: {
-                        game_id: gameId,
+                        game_id: chatRoom,
                         message: message
                     }
                 }

@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.directive('playzoneChat', function (WebsocketService, GameRest) {
+playzoneControllers.directive('playzoneChat', function (WebsocketService, GameRest, ChatRest) {
     return {
         restrict: 'E',
         link: function(scope, element) {
@@ -13,13 +13,16 @@ playzoneControllers.directive('playzoneChat', function (WebsocketService, GameRe
                 function () {
                     WebsocketService.addListener(
                         "listen_message_container_" + scope.messageContainer.id,
-                        "send_message_to_observers_" + scope.messageContainer.id,
+                        "send_message_to_observers_" + scope.chatRoom,
                         function (data) {
-                            scope.chat_messages.push(data);
+                            scope.chat_messages.unshift(data);
                         }
                     );
                     
-                    scope.chat_messages = scope.messageContainer.chat_messages ? scope.messageContainer.chat_messages : [];
+                    scope.chat_messages = scope.messageContainer.chat_messages ?
+                        scope.messageContainer.chat_messages : [];
+
+                    console.log("chat messages", scope.chat_messages);
                 }
             );
 
@@ -36,20 +39,23 @@ playzoneControllers.directive('playzoneChat', function (WebsocketService, GameRe
                     return;
                 }
 
-                WebsocketService.sendMessageToObservers(scope.messageContainer.id, messageText);
+                WebsocketService.sendMessageToObservers(scope.chatRoom, messageText);
 
-                GameRest.addMessage({
-                    message: messageText,
-                    id: scope.messageContainer.id
-                },
-                    function (data) {
+                console.log("rest container", scope.restContainer);
+
+                scope.restContainer.message = messageText;
+
+                scope.restContainer.$addMessage().then(
+                    function () {
                         messageInput.val("");
                     }
                 );
             };
         },
         scope: {
-            messageContainer: '='
+            messageContainer: '=',
+            restContainer: '=',
+            chatRoom: '='
         },
         templateUrl: 'partials/chat.html'
     }

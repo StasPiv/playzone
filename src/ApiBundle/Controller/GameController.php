@@ -156,7 +156,6 @@ class GameController extends BaseController
     /**
      * @ApiDoc(
      *  resource=true,
-     *  description="Resign game",
      *  filters={
      *      {"name"="login", "dataType"="string", "description"="Your name"},
      *      {"name"="token", "dataType"="string", "description"="Your token"}

@@ -2,9 +2,12 @@
 
 namespace CoreBundle\Entity;
 
+use CoreBundle\Model\ChatMessage\ChatMessageContainerInterface;
 use CoreBundle\Model\Game\GameColor;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * Game
@@ -12,7 +15,7 @@ use JMS\Serializer\Annotation as JMS;
  * @ORM\Table(name="game")
  * @ORM\Entity(repositoryClass="CoreBundle\Repository\GameRepository")
  */
-class Game
+class Game implements ChatMessageContainerInterface
 {
     /**
      * @var int
@@ -196,8 +199,12 @@ class Game
      *
      * @JMS\Expose()
      * @JMS\Type("array<CoreBundle\Entity\ChatMessage>")
-     *
-     * @ORM\Column(type="array")
+     * @ORM\ManyToMany(targetEntity="ChatMessage")
+     * @ORM\OrderBy({"id" = "DESC"})
+     * @JoinTable(name="game_chat_messages",
+     *      joinColumns={@JoinColumn(name="game_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="chat_message_id", referencedColumnName="id", unique=true)}
+     *      )
      */
     private $chatMessages;
 

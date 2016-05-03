@@ -123,6 +123,23 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
         },
         
         /**
+         * @param gameId
+         * @param message
+         */
+        sendMessageToObservers: function (gameId, message) {
+            this.send(
+                {
+                    scope: 'send_to_game_observers',
+                    method: 'send_message_to_observers',
+                    data: {
+                        game_id: gameId,
+                        message: message
+                    }
+                }
+            )
+        },
+        
+        /**
          * Pass only first param (gameId) to fix result on observers' side
          *
          * @param gameId

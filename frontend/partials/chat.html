@@ -1,0 +1,26 @@
+<h1>{{ "Chat" | translate }}</h1>
+<table class="table">
+    <tr>
+        <td colspan="2">
+            <label for="message">{{ "Your message" | translate }}</label>
+            <input class="message" id="message" type="text">&nbsp;
+            <input class="btn btn-primary send-call" value="OK" type="submit" data-ng-click="addMessage()">
+        </td>
+    </tr>
+    <tbody class="chat">
+        <tr>
+            <th>{{ "Player" | translate }}</th>
+            <th>{{ "Message" | translate }}</th>
+        </tr>
+        <tr ng-repeat="chatMessage in chat_messages.slice().reverse()">
+            <td>
+                <a ng-keyup="" href="/#/user/{{ chatMessage.user.id }}/profile/">
+                    {{ chatMessage.user.login }}
+                </a>
+            </td>
+            <td>
+                {{ chatMessage.message }}
+            </td>
+        </tr>
+    </tbody>
+</table>

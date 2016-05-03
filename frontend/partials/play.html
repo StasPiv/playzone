@@ -33,5 +33,6 @@
             <h2 ng-if="game.status == 'end'">{{game.result_white}} - {{game.result_black}}</h2>
         </div>
         <div class="clear">&nbsp;</div>
+        <playzone-chat ng-if="game.mine" class="table-responsive" data-message-container="game"></playzone-chat>
     </div>
 </div>

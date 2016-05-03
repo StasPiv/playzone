@@ -8,6 +8,7 @@
 
 namespace WebsocketServerBundle\Service;
 
+use CoreBundle\Entity\ChatMessage;
 use CoreBundle\Entity\User;
 use CoreBundle\Model\Request\RequestErrorInterface;
 use Monolog\Logger;
@@ -20,6 +21,7 @@ use WebsocketServerBundle\Exception\PlayzoneServerException;
 use WebsocketServerBundle\Model\GameObserver;
 use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSend;
 use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSubscribe;
+use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageMessageSend;
 use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageMethod;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
 use WebsocketServerBundle\Model\Message\Server\AskIntroduction;
@@ -252,14 +254,70 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
      */
     private function sendToGameObservers(PlayzoneMessage $messageObject, ConnectionInterface $from)
     {
+        switch ($messageObject->getMethod()) {
+            case PlayzoneClientMessageMethod::SEND_PGN_TO_OBSERVERS:
+                $this->sendGameToGameObservers($messageObject, $from);
+                break;
+            case PlayzoneClientMessageMethod::SEND_MESSAGE_TO_OBSERVERS:
+                $this->sendMessageToGameObservers($messageObject, $from);
+                break;
+        }
+    }
+
+    /**
+     * @param PlayzoneMessage $messageObject
+     * @param ConnectionInterface $from
+     */
+    private function sendGameToGameObservers(PlayzoneMessage $messageObject, ConnectionInterface $from)
+    {
         /** @var ClientMessageGameSend $gameSendMessage */
         $gameSendMessage = $this->getObjectFromJson(json_encode($messageObject->getData()),
             'WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSend');
 
         foreach ($this->users as $wsUser) {
             if ($wsUser->getConnection() != $from && isset($wsUser->getGamesToListenMap()[$gameSendMessage->getGameId()
-                ])) {
+                    ])) {
                 $messageObject->setMethod("game_pgn_" . $gameSendMessage->getGameId());
+                $this->send($messageObject, $wsUser);
+            }
+        }
+    }
+
+    /**
+     * @param PlayzoneMessage $messageObject
+     * @param ConnectionInterface $from
+     */
+    private function sendMessageToGameObservers(PlayzoneMessage $messageObject, ConnectionInterface $from)
+    {
+        /** @var ClientMessageMessageSend $messageGame */
+        $messageGame = $this->getObjectFromJson(json_encode($messageObject->getData()),
+            'WebsocketServerBundle\Model\Message\Client\Game\ClientMessageMessageSend');
+
+        foreach ($this->users as $wsUser) {
+            if ($wsUser->getConnection() == $from) {
+                $chatMessage = new ChatMessage();
+
+                $chatMessage->setUser($wsUser->getPlayzoneUser())
+                            ->setMessage($messageGame->getMessage());
+
+                $messageObject->setData(
+                    json_decode(
+                        $this->container->get("jms_serializer")->serialize($chatMessage, 'json'),
+                        true
+                    )
+                );
+
+                $this->send($messageObject, $wsUser);
+            }
+        }
+
+        foreach ($this->users as $wsUser) {
+            if (isset($wsUser->getGamesToListenMap()[$messageGame->getGameId()
+                    ])) {
+                $messageObject->setMethod(
+                    "send_message_to_observers_" . $messageGame->getGameId()
+                );
+
                 $this->send($messageObject, $wsUser);
             }
         }

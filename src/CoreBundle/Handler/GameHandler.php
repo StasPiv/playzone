@@ -357,10 +357,10 @@ class GameHandler implements GameProcessorInterface
 
         $this->manager->persist($chatMessage);
         $this->manager->persist($game);
-        
+
         $this->manager->flush();
 
-        return $game;
+        return $this->getUserGame($game, $me);
     }
 
     /**

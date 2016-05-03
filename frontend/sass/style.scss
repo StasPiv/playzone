@@ -460,9 +460,10 @@ input[type="password"] {
   }
 }
 .chat {
-  float: right;
   margin: 10px 0;
-  width: 449px;
+  display: block;
+  height: 300px;
+  overflow-y: scroll;
   textarea {
     width: 446px;
     border: 1px $color_horizon_approx solid;

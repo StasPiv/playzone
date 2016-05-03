@@ -660,7 +660,7 @@ class Game
 
     /**
      * @param ChatMessage $message
-     * @return $this
+     * @return Game
      */
     public function addChatMessage(ChatMessage $message) : Game
     {

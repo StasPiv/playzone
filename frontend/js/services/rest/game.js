@@ -84,6 +84,10 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
                         }
                     );
                 }
+            },
+            addMessage: {
+                method: 'POST',
+                url: ApiService.base_url + 'game/:id/addmessage'
             }
         }
     );

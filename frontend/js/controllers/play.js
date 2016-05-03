@@ -125,5 +125,4 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
             $scope.game.opponent.offline = false;
         }
     });
-
 });

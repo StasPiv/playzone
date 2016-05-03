@@ -19,7 +19,7 @@ playzoneControllers.directive('playzoneChat', function (WebsocketService, GameRe
                         }
                     );
                     
-                    scope.chat_messages = scope.messageContainer.chat_messages;
+                    scope.chat_messages = scope.messageContainer.chat_messages ? scope.messageContainer.chat_messages : [];
                 }
             );
 

@@ -13,9 +13,6 @@ use Symfony\Component\DependencyInjection\Container;
 
 class UserHandlerTest extends KernelTestCase
 {
-    /** @var  Container */
-    private $container;
-
     public function setUp()
     {
         self::bootKernel();

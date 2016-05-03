@@ -19,9 +19,6 @@ use Symfony\Component\DependencyInjection\Container;
  */
 class ChessServiceTest extends KernelTestCase
 {
-    /** @var Container */
-    private $container;
-
     /**
      * @var ChessService
      */

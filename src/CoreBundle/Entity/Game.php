@@ -192,6 +192,16 @@ class Game
     private $draw;
 
     /**
+     * @var ChatMessage[]
+     *
+     * @JMS\Expose()
+     * @JMS\Type("array<CoreBundle\Entity\ChatMessage>")
+     *
+     * @ORM\Column(type="array")
+     */
+    private $chatMessages;
+
+    /**
      * Get id
      *
      * @return int
@@ -646,6 +656,24 @@ class Game
     public function getMoveColor() : string
     {
         return $this->getUserWhite() == $this->getUserToMove() ? GameColor::WHITE : GameColor::BLACK;
+    }
+
+    /**
+     * @param ChatMessage $message
+     * @return $this
+     */
+    public function addChatMessage(ChatMessage $message) : Game
+    {
+        $this->chatMessages[] = $message;
+        return $this;
+    }
+
+    /**
+     * @return ChatMessage[]
+     */
+    public function getChatMessages() : array
+    {
+        return $this->chatMessages;
     }
 }
 

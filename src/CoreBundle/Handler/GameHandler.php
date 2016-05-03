@@ -8,6 +8,7 @@
 
 namespace CoreBundle\Handler;
 
+use CoreBundle\Entity\ChatMessage;
 use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Exception\Handler\User\UserHandlerException;
 use CoreBundle\Exception\Processor\ProcessorException;
@@ -16,6 +17,7 @@ use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
+use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
@@ -330,6 +332,35 @@ class GameHandler implements GameProcessorInterface
         $this->manager->flush($game);
 
         return $this->getUserGame($game, $me);
+    }
+
+    /**
+     * @param GamePostAddmessageRequest $request
+     * @return Game
+     */
+    public function processPostAddmessage(GamePostAddmessageRequest $request) : Game
+    {
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request, $this->getRequestError());
+
+        $game = $this->repository->find($request->getId());
+
+        if (!$game instanceof Game) {
+            $this->getRequestError()->addError("id", "Game is not found");
+            $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        $chatMessage = (new ChatMessage())->setMessage($request->getMessage())
+                                          ->setUser($me);
+
+
+        $game->addChatMessage($chatMessage);
+
+        $this->manager->persist($chatMessage);
+        $this->manager->persist($game);
+        
+        $this->manager->flush();
+
+        return $game;
     }
 
     /**

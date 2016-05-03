@@ -11,6 +11,7 @@ namespace ApiBundle\Controller;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
+use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
@@ -152,6 +153,25 @@ class GameController extends BaseController
         return $this->process($request, new GamePutAcceptdrawRequest());
     }
 
+    /**
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Resign game",
+     *  filters={
+     *      {"name"="login", "dataType"="string", "description"="Your name"},
+     *      {"name"="token", "dataType"="string", "description"="Your token"}
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    public function postAddmessageAction(Request $request, $id)
+    {
+        return $this->process($request, new GamePostAddmessageRequest());
+    }
+    
     /**
      * @return GameProcessorInterface
      */

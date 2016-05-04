@@ -95,8 +95,10 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                             // it means that game is finished or drawn and we have to fix result
                             scope.game.$get().then( // get game from server
                                 function () {
-                                    scope.game.mine && element.game.game_over() &&
-                                    !element.game.in_checkmate() && scope.draw(); // fix draw
+                                    scope.game.mine &&
+                                    (element.game.game_over() && !element.game.in_checkmate() ||
+                                    element.game.insufficient_material()) &&
+                                    scope.draw(); // fix draw
 
                                     if (scope.game.mine && scope.game.status === 'end') {
                                         // it means that opponent has resigned or draw
@@ -183,7 +185,9 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     scope.savePgnAndSendToObservers(true);
                 }
 
-                element.game.game_over() && !element.game.in_checkmate() && scope.draw();
+                (element.game.game_over() && !element.game.in_checkmate() ||
+                    element.game.insufficient_material())
+                && scope.draw();
                 element.game.in_checkmate() && AudioService.win();
                 scope.highlightLastMove(scope, element);
 

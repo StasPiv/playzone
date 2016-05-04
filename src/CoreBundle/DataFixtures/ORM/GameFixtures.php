@@ -43,7 +43,7 @@ class GameFixtures extends AbstractPlayzoneFixtures
             ->setUserBlack($userBlack)
             ->setUserToMove($userToMove)
             ->setPgn($data['pgn'])
-            ->setPgnAlt($data['pgn_alt'])
+            ->setPgnAlt(@$data['pgn_alt'])
             ->setStatus($data['status'])
             ->setRate($data['rate'])
             ->setTimeWhite($data['time_white'])

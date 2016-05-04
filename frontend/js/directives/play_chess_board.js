@@ -50,6 +50,8 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 function() {
                     element.loadBoard(scope.boardConfig);
                     element.loadPgn(scope.game.pgn);
+                    scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());
+                    scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
 
                     if (scope.game.color === 'b') {
                         element.board.flip();
@@ -153,6 +155,9 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
 
                 scope.game.pgn = element.game.pgn();
+                console.log('fen after move', element.game.fen());
+                scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());
+                scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
 
                 if (scope.game.opponent.login === "Robot") { // isRobot
                     scope.savePgnAndSendToObservers(true);

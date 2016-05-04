@@ -211,13 +211,7 @@ class GameHandler implements GameProcessorInterface
             }
         }
 
-        if ($pgnRequest->getTimeWhite() !== null && $game->getTimeWhite() <= 100) {
-            $game->setResultWhite(0)->setResultBlack(1)->setStatus(GameStatus::END);
-        }
-
-        if ($pgnRequest->getTimeBlack() !== null && $game->getTimeBlack() <= 100) {
-            $game->setResultWhite(1)->setResultBlack(0)->setStatus(GameStatus::END);
-        }
+        $this->fixResultIfTimeOver($pgnRequest, $game);
 
         if ($this->container->get("core.service.chess")->isGameInCheckmate($game->getPgn())) {
             $game->setResultWhite((int)($game->getUserToMove() === $game->getUserBlack()))
@@ -524,5 +518,40 @@ class GameHandler implements GameProcessorInterface
     private function isMyGame(Game $game, User $user)
     {
         return in_array($user, [$game->getUserWhite(), $game->getUserBlack()]);
+    }
+
+    /**
+     * @param GamePutPgnRequest $pgnRequest
+     * @param Game $game
+     */
+    private function fixResultIfTimeOver(GamePutPgnRequest $pgnRequest, Game $game)
+    {
+        if ($pgnRequest->getTimeWhite() !== null && $game->getTimeWhite() <= 100) {
+            switch ($pgnRequest->isInsufficientMaterialBlack()) {
+                case false:
+                    $game->setResultWhite(0)
+                         ->setResultBlack(1)
+                         ->setStatus(GameStatus::END);
+                    break;
+                case true:
+                    $game->setResultWhite(0.5)
+                         ->setResultBlack(0.5)
+                         ->setStatus(GameStatus::END);
+                    break;
+            }
+        } elseif ($pgnRequest->getTimeBlack() !== null && $game->getTimeBlack() <= 100) {
+            switch ($pgnRequest->isInsufficientMaterialWhite()) {
+                case false:
+                    $game->setResultWhite(1)
+                         ->setResultBlack(0)
+                         ->setStatus(GameStatus::END);
+                    break;
+                case true:
+                    $game->setResultWhite(0.5)
+                         ->setResultBlack(0.5)
+                         ->setStatus(GameStatus::END);
+                    break;
+            }
+        }
     }
 }

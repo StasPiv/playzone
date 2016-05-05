@@ -89,7 +89,12 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
             },
             addMessage: {
                 method: 'POST',
-                url: ApiService.base_url + 'game/:id/addmessage'
+                url: ApiService.base_url + 'game/:id/addmessage',
+                transformRequest: function (data) {
+                    return angular.toJson({
+                        message: data.message
+                    });
+                }
             }
         }
     );

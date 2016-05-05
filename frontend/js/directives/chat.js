@@ -39,21 +39,38 @@ playzoneControllers.directive('playzoneChat', function (WebsocketService, GameRe
 
                 WebsocketService.sendMessageToObservers(scope.chatRoom, messageText);
 
-                console.log("rest container", scope.restContainer);
-
-                scope.restContainer.message = messageText;
-
-                scope.restContainer.$addMessage().then(
-                    function () {
-                        messageInput.val("");
-                    }
-                );
+                switch (scope.restContainer) {
+                    case 'chat':
+                        ChatRest.addMessage(
+                            '',
+                            {
+                                message: messageText
+                            },
+                            function () {
+                                messageInput.val("");
+                            }
+                        );
+                        break;
+                    case 'game':
+                        GameRest.addMessage(
+                            '',
+                            {
+                                id: scope.restContainerId,
+                                message: messageText
+                            },
+                            function () {
+                                messageInput.val("");
+                            }
+                        );
+                        break;
+                }
             };
         },
         scope: {
             messageContainer: '=',
             restContainer: '=',
-            chatRoom: '='
+            chatRoom: '=',
+            restContainerId: '='
         },
         templateUrl: 'partials/chat.html'
     }

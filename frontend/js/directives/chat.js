@@ -21,8 +21,6 @@ playzoneControllers.directive('playzoneChat', function (WebsocketService, GameRe
                     
                     scope.chat_messages = scope.messageContainer.chat_messages ?
                         scope.messageContainer.chat_messages : [];
-
-                    console.log("chat messages", scope.chat_messages);
                 }
             );
 

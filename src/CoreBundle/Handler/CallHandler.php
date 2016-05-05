@@ -290,16 +290,15 @@ class CallHandler implements CallProcessorInterface
             throw new GameCallHandlerException("User $login is not found");
         }
 
-        return $this->getUserCalls($user, $fieldForUser, $callIds);
+        return $this->getUserCalls($user, $fieldForUser);
     }
 
     /**
      * @param User $user
      * @param string $fieldForUser
-     * @param array $callIds
-     * @return GameCall[]
+     * @return array|\CoreBundle\Entity\GameCall[]
      */
-    private function getUserCalls(User $user, string $fieldForUser = 'fromUser', array $callIds = []) : array
+    private function getUserCalls(User $user, string $fieldForUser = 'fromUser') : array
     {
         $queryBuilder = $this->getQueryBuilderForLastCalls();
 

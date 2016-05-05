@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation as JMS;
 /**
  * ChatMessage
  *
- * @ORM\Table(name="chat_message")
+ * @ORM\Table(name="chat_message", indexes={@ORM\Index(name="type_idx", columns={"type"})})
  * @ORM\Entity(repositoryClass="CoreBundle\Repository\ChatMessageRepository")
  */
 class ChatMessage
@@ -54,7 +54,7 @@ class ChatMessage
     /**
      * @var ChatMessageType
      *
-     * @ORM\Column(type="string", columnDefinition="ENUM('game', 'common')")
+     * @ORM\Column(type="integer")
      */
     private $type;
 
@@ -152,7 +152,7 @@ class ChatMessage
      */
     public function setType(ChatMessageType $type)
     {
-        $this->type = $type;
+        $this->type = $type->getValue();
 
         return $this;
     }

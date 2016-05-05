@@ -74,10 +74,13 @@ class ChatHandler implements ChatProcessorInterface
      */
     public function processGetMessages(ChatGetMessagesRequest $request) : array
     {
-        return $this->repository->findBy(
-            ["type" => ChatMessageType::COMMON],
-            ["id" => "DESC"],
-            $this->container->getParameter("app_last_chat_messages_count")
-        );
+        return $this->repository->createQueryBuilder("cm")
+                    ->select(["u.login", "cm.time", "cm.message"])
+                    ->where("cm.type = :type")
+                    ->setParameter("type", ChatMessageType::COMMON)
+                    ->innerJoin("cm.user", "u")
+                    ->orderBy("cm.id", "DESC")
+                    ->getQuery()
+                    ->getResult();
     }
 }

@@ -13,17 +13,11 @@
       "data": [
         {
           "message": "kisa kuku 2",
-          "user": {
-            "login": "Petro"
-          },
-          "type": "common"
+          "login": "Petro"
         },
         {
           "message": "kisa kuku",
-          "user": {
-            "login": "Stas"
-          },
-          "type": "common"
+          "login": "Stas"
         }
       ]
     }

@@ -19,6 +19,6 @@ use MyCLabs\Enum\Enum;
  */
 class ChatMessageType extends Enum
 {
-    const GAME = 1;
-    const COMMON = 2;
+    const COMMON = 1;
+    const GAME = 2;
 }

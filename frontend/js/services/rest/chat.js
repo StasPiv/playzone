@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneServices.factory('ChatRest', function($resource, $rootScope, ApiService) {
+playzoneServices.factory('ChatRest', function($resource, $rootScope, ApiService, $filter) {
     return $resource(
         '',
         $.extend(
@@ -27,8 +27,22 @@ playzoneServices.factory('ChatRest', function($resource, $rootScope, ApiService)
                 url: ApiService.base_url + 'chat/messages',
                 isArray: false,
                 transformResponse: function(data) {
+                    var chatMessages = [];
+                    $.each(
+                        angular.fromJson(data),
+                        function (index, value) {
+                            chatMessages.push({
+                               user: {
+                                   login: value.login
+                               },
+                               time: $filter('date')(new Date(value.time), 'yyyy-MM-dd H:mm:ss'),
+                               message: value.message
+                            });
+                        }
+                    );
+
                     return {
-                        chat_messages: angular.fromJson(data)
+                        chat_messages: chatMessages
                     };
                 }
             }

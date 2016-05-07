@@ -73,8 +73,7 @@ class GameHandler implements GameProcessorInterface
             case UserType::ME:
                 return $this->getGamesForUser(
                     $this->container->get("core.service.security")->getUserIfCredentialsIsOk($listRequest,
-                        $this->getRequestError()), $listRequest->getStatus(), $listRequest->getLimit()
-                );
+                        $this->getRequestError()), $listRequest->getStatus());
             case UserType::ALL:
                 return $this->repository->findBy(['status' => $listRequest->getStatus()], ["id" => "ASC"]);
             default:
@@ -376,18 +375,22 @@ class GameHandler implements GameProcessorInterface
      * @param int $limit
      * @return \CoreBundle\Entity\Game[]
      */
-    public function getGamesForUser(User $user, $status, $limit = 100)
+    public function getGamesForUser(User $user, $status, $limit = null)
     {
-        $games = $this->manager
+        $gamesQuery = $this->manager
             ->createQuery(
                 "SELECT g FROM CoreBundle:Game g
                           WHERE (g.userWhite = :user OR g.userBlack = :user) AND g.status = :status
                           ORDER BY g.id DESC"
             )
             ->setParameter("status", $status)
-            ->setParameter("user", $user)
-            ->setMaxResults($limit)
-            ->getResult();
+            ->setParameter("user", $user);
+
+        if ($limit) {
+            $gamesQuery->setMaxResults($limit);
+        }
+
+        $games = $gamesQuery->getResult();
 
         foreach ($games as $game) {
             $this->defineUserColorForGame($user, $game);

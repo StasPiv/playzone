@@ -8,7 +8,7 @@ playzoneControllers.controller('UserArchiveCtrl', function ($scope, $routeParams
         {
             status: "end",
             user:$routeParams.userId,
-            limit: 5
+            limit: 20
         }
     );
 });

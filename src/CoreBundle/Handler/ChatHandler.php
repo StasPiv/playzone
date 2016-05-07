@@ -80,6 +80,7 @@ class ChatHandler implements ChatProcessorInterface
                     ->setParameter("type", ChatMessageType::COMMON)
                     ->innerJoin("cm.user", "u")
                     ->orderBy("cm.id", "DESC")
+                    ->setMaxResults($this->container->getParameter("app_last_chat_messages_count"))
                     ->getQuery()
                     ->getResult();
     }

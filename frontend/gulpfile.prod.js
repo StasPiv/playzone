@@ -4,9 +4,10 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var minify = require('gulp-minify');
 var concat = require('gulp-concat-util');
-var Server = require('karma').Server;
 
-gulp.task('default', ['watch', 'styles', 'compressJs']);
+var tasks = ['styles', 'compressJs'];
+
+gulp.task('default', tasks);
 
 gulp.task('watch', function () {
     gulp.watch('sass/**/*.scss', ['styles']);

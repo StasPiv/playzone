@@ -4,5 +4,11 @@
 'use strict';
 
 playzoneControllers.controller('UserArchiveCtrl', function ($scope, $routeParams, GameRest) {
-    $scope.games = GameRest.query({status: "end", user:$routeParams.userId});
+    $scope.games = GameRest.query(
+        {
+            status: "end",
+            user:$routeParams.userId,
+            limit: 5
+        }
+    );
 });

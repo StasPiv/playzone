@@ -33,69 +33,16 @@
       "data": [
         {
           "user_white": {
-            "login": "Stas",
-            "email": "piv1986@yandex.ru",
-            "class": "N",
-            "rating": 2200
+            "login": "Stas"
           },
           "user_black": {
-            "login": "TestLogin",
-            "email": "test-login@yandex.ru",
-            "class": "D",
-            "rating": 2243
-          },
-          "user_to_move": {
-            "login": "Stas",
-            "email": "piv1986@yandex.ru",
-            "class": "N",
-            "rating": 2200
-          },
-          "user_move": false,
-          "opponent": {
-            "login": "Stas",
-            "email": "piv1986@yandex.ru",
-            "class": "N",
-            "rating": 2200
-          },
-          "color": "b",
-          "pgn": "1",
-          "pgn_alt": "1",
-          "status": "play",
-          "rate": false,
-          "time_over": false
-        },
-        {
-          "user_white": {
-            "login": "TestLogin",
-            "email": "test-login@yandex.ru",
-            "class": "D",
-            "rating": 2243
-          },
-          "user_black": {
-            "login": "Petro",
-            "email": "petro@yandex.ru",
-            "class": "D",
-            "rating": 2443
-          },
-          "user_to_move": {
-            "login": "TestLogin",
-            "email": "test-login@yandex.ru",
-            "class": "D",
-            "rating": 2243
+            "login": "TestLogin"
           },
           "user_move": true,
           "opponent": {
-            "login": "Petro",
-            "email": "petro@yandex.ru",
-            "class": "D",
-            "rating": 2443
+            "login": "Stas"
           },
-          "color": "w",
-          "pgn": "1",
-          "pgn_alt": "1",
-          "status": "play",
-          "rate": true,
-          "time_over": false
+          "color": "b"
         }
       ]
     }
@@ -157,6 +104,63 @@
           "status": "play",
           "rate": false,
           "time_over": false
+        }
+      ]
+    }
+  },
+  "only_one_current_game": {
+    "method": "GET",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "user": "all",
+      "status": "play",
+      "limit": 1
+    },
+    "response": {
+      "status": 200,
+      "data": [
+        {
+          "user_white": {
+            "login": "Stas"
+          },
+          "user_black": {
+            "login": "TestLogin"
+          },
+          "user_to_move": {
+            "login": "Stas"
+          },
+          "status": "play"
+        }
+      ]
+    }
+  },
+  "not_mine_only_one_current_game": {
+    "method": "GET",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "user",
+        "value": "user-stas"
+      },
+      "status": "play",
+      "limit": 1
+    },
+    "response": {
+      "status": 200,
+      "data": [
+        {
+          "user_white": {
+            "login": "Stas"
+          },
+          "user_black": {
+            "login": "TestLogin"
+          },
+          "user_to_move": {
+            "login": "TestLogin"
+          },
+          "status": "play"
         }
       ]
     }

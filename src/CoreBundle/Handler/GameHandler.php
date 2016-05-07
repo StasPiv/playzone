@@ -11,6 +11,7 @@ namespace CoreBundle\Handler;
 use CoreBundle\Entity\ChatMessage;
 use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Exception\Handler\User\UserHandlerException;
+use CoreBundle\Exception\Handler\User\UserNotFoundException;
 use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\ChatMessage\ChatMessageType;
 use CoreBundle\Model\Game\GameMove;
@@ -71,13 +72,23 @@ class GameHandler implements GameProcessorInterface
         switch ($listRequest->getUser()) {
             case UserType::ME:
                 return $this->getGamesForUser(
-                    $this->container->get("core.service.security")->getUserIfCredentialsIsOk($listRequest,$this->getRequestError()),
-                    $listRequest->getStatus()
+                    $this->container->get("core.service.security")->getUserIfCredentialsIsOk($listRequest,
+                        $this->getRequestError()), $listRequest->getStatus(), $listRequest->getLimit()
                 );
             case UserType::ALL:
                 return $this->repository->findBy(['status' => $listRequest->getStatus()], ["id" => "ASC"]);
             default:
-                return [];
+                try {
+                    $user = $this->container->get("core.handler.user")->getRepository()->find($listRequest->getUser());
+                } catch (UserNotFoundException $e) {
+                    $this->getRequestError()->addError("user", "User not found")
+                                            ->throwException(ResponseStatusCode::NOT_FOUND);
+                }
+
+                /** @var User $user */
+                return $this->getGamesForUser(
+                    $user, $listRequest->getStatus(), $listRequest->getLimit()
+                );
         }
     }
 
@@ -362,18 +373,20 @@ class GameHandler implements GameProcessorInterface
     /**
      * @param User $user
      * @param null $status
-     * @return Game[]
+     * @param int $limit
+     * @return \CoreBundle\Entity\Game[]
      */
-    public function getGamesForUser(User $user, $status)
+    public function getGamesForUser(User $user, $status, $limit = 100)
     {
         $games = $this->manager
             ->createQuery(
                 "SELECT g FROM CoreBundle:Game g
                           WHERE (g.userWhite = :user OR g.userBlack = :user) AND g.status = :status
-                          ORDER BY g.id ASC"
+                          ORDER BY g.id DESC"
             )
             ->setParameter("status", $status)
             ->setParameter("user", $user)
+            ->setMaxResults($limit)
             ->getResult();
 
         foreach ($games as $game) {

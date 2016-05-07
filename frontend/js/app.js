@@ -39,16 +39,44 @@ var playzoneApp = angular.module('playzoneApp', [
     $rootScope.loginsOnline = [];
 
     WebsocketService.addListener('listen_welcome', 'welcome', function (data) {
-        $rootScope.loginsOnline = data['other_logins'];
+        var otherLogins = data['other_logins'];
+
+        $.each(
+            otherLogins,
+            function (index, otherUser) {
+                var existingUser = $rootScope.loginsOnline.searchById(otherUser['id']);
+
+                if (!existingUser) {
+                    $rootScope.loginsOnline.push(otherUser)
+                } else if (!existingUser.count) {
+                    existingUser.count = 1;
+                } else {
+                    existingUser.count++;
+                }
+            }
+        );
+
         $rootScope.connected = true;
     });
 
-    WebsocketService.addListener('listen_user_in', 'user_in', function (user) {
-        !$rootScope.loginsOnline.searchById(user['id']) && $rootScope.loginsOnline.push(user);
+    WebsocketService.addListener('listen_user_in', 'user_in', function (newUser) {
+        var existingUser = $rootScope.loginsOnline.searchById(newUser['id']);
+
+        if (!existingUser) {
+            $rootScope.loginsOnline.push(newUser)
+        } else if (!existingUser.count) {
+            existingUser.count = 1;
+        } else {
+            existingUser.count++;
+        }
     });
 
     WebsocketService.addListener('listen_user_gone', 'user_gone', function (user) {
-        $rootScope.loginsOnline.searchById(user['id']) && $rootScope.loginsOnline.pullById(user['id']);
+        user = $rootScope.loginsOnline.searchById(user['id']);
+
+        if (user) {
+            user.count ? user.count-- : $rootScope.loginsOnline.pullById(user['id'])
+        }
     });
 }]);
 

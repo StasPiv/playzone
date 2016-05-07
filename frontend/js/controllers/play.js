@@ -64,16 +64,23 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
             $scope.game.opponent.login === "Robot";
 
         if ($scope.opponentOfferDraw) {
-            $scope.game.$acceptDraw().then(
+            GameRest.acceptDraw(
+                {
+                    id: $scope.game.id
+                },
                 function () {
                     WebsocketService.sendGameToObservers($scope.game.id);
                     AudioService.draw();
+                    $scope.game.$get();
                 }
             );
             return;
         }
 
-        $scope.game.$offerDraw().then(
+        GameRest.offerDraw(
+            {
+                id: $scope.game.id
+            },
             function () {
                 WebsocketService.sendGameToObservers($scope.game.id);
             }
@@ -98,6 +105,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
 
     $scope.savePgnAndSendToObservers = function (withoutSaving) {
         if (withoutSaving) {
+            $scope.game.move_color = $scope.game.move_color === 'w' ? 'b' : 'w';
             $scope.sendWithWebsockets();
         }
 

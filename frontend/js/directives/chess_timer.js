@@ -35,6 +35,7 @@ playzoneControllers.directive('chessTimer', function (dateFilter, $interval) {
             zeitnot: '=',
             current: '=',
             game: '=',
+            user: '=',
             fixTime: '&fixTime'
         },
         templateUrl: 'partials/chess_timer.html'

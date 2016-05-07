@@ -596,6 +596,12 @@ th.header {
         max-height: 600px;
       }
       chess-timer {
+         .user {
+           display: none;
+           .mobile & {
+             display: block;
+           }
+         }
          &.white {
            * {
              background-color: $white;

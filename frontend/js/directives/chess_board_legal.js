@@ -226,6 +226,10 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
             };
 
             element.loadBoard = function (userConfig) {
+                if (!$('#' + element.data('board')).length) {
+                    return;
+                }
+
                 element.board = ChessBoard(element.data('board'), {
                     draggable: scope.boardConfig.draggable,
                     moveSpeed: 1,

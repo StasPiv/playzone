@@ -12,7 +12,13 @@ var playzoneApp = angular.module('playzoneApp', [
     'playzoneServices',
     'pascalprecht.translate',
     'LocalStorageModule'
-]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'ChatRest', 'WebsocketService', 'EnvService', '$interval', function ($http, $rootScope, $cookies, UserRest, ChatRest, WebsocketService, EnvService, $interval) {
+]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'ChatRest', 'WebsocketService', 'EnvService', '$interval', '$location', function ($http, $rootScope, $cookies, UserRest, ChatRest, WebsocketService, EnvService, $interval, $location) {
+
+    if ($location.host().indexOf('.lc') === -1) {
+        console.log = function () {
+
+        };
+    }
 
     $rootScope.browserSupported = typeof(WebSocket) === "function";
     $rootScope.isMobile = EnvService.isMobile();

@@ -459,6 +459,9 @@ input[type="password"] {
   }
 }
 .chat {
+  .mobile & {
+    height: 50px;
+  }
   margin: 10px 0;
   display: block;
   height: 150px;

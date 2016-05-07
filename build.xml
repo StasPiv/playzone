@@ -79,13 +79,13 @@
 
     <target name="gulpfileSymbolic">
         <exec executable="ln">
-            <arg line=" -s frontend/gulpfile.prod.js frontend/gulpfile.js"/>
+            <arg line=" -s gulpfile.prod.js frontend/gulpfile.js"/>
         </exec>
     </target>
 
     <target name="indexHtmlSymbolic">
         <exec executable="ln">
-            <arg line=" -s frontend/index.prod.html frontend/index.html"/>
+            <arg line=" -s index.prod.html frontend/index.html"/>
         </exec>
     </target>
 </project>

@@ -36,16 +36,6 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
     return {
         restrict: 'C',
         link: function(scope, element) {
-            scope.highlightLastMove = function (scope, element, lastMove) {
-                $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
-                var history = element.game.history({verbose: true});
-
-                !lastMove && (lastMove = history[history.length - 1]);
-
-                $(element).find('.square-' + lastMove.from).addClass(scope.boardConfig.highlightClass);
-                $(element).find('.square-' + lastMove.to).addClass(scope.boardConfig.highlightClass);
-            };
-
             scope.game.$promise.then(
                 function() {
                     element.loadBoard(scope.boardConfig);

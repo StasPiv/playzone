@@ -119,6 +119,8 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         );
     };
 
+    $scope.highlightLastMove = highlightLastMove;
+
     WebsocketService.addListener('listen_opponent_gone', 'user_gone', function (user) {
         if (user['login'] === $scope.game.opponent.login) {
             console.log('opponent has gone');

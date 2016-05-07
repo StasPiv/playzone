@@ -680,10 +680,21 @@ th.header {
       .mobile & {
         float: none;
       }
-      .pgn {
+      pgn-notation {
         height: 350px;
         margin: -2px 0 0 5px;
         overflow-y: scroll;
+        .move {
+          cursor: pointer;
+          font-weight: bold;
+          &.current {
+            color: $red;
+          }
+        }
+        .navigation span {
+          cursor: pointer;
+          border: 1px solid black;
+        }
       }
       playzone-chat {
         display: block;

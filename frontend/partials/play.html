@@ -47,7 +47,13 @@
         <div class="right-column">
             <div class="pgn">
                 <h1>{{game.user_white.login}} - {{game.user_black.login}}</h1>
-                {{game.pgn}}
+                <pgn-notation
+                           ng-if="game.status === 'end'"
+                           data-pgn-string="game.pgn"
+                ></pgn-notation>
+                <div
+                    ng-if="game.status === 'play'"
+                    class="simple-pgn">{{game.pgn}}</div>
                 <h2 ng-if="game.status == 'end'">{{game.result_white}} - {{game.result_black}}</h2>
             </div>
             <playzone-chat ng-if="game.mine" class="table-responsive"
@@ -55,9 +61,7 @@
                            data-rest-container="'game'"
                            data-rest-container-id="game.id"
                            data-chat-room="game.id"
-            >
-
-            </playzone-chat>
+            ></playzone-chat>
         </div>
     </div>
 </div>

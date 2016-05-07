@@ -6,7 +6,7 @@
  * Also drag and drop functions will be defined.
  * This small library is useful for separating drag&drop logic and application logic
  */
-playzoneControllers.directive('chessBoardLegal', function (SettingService, $timeout) {
+playzoneControllers.directive('chessBoardLegal', function (SettingService, $timeout, $rootScope) {
     function isMyTurn(scope, element) {
         return element.game.turn() === scope.game.color;
     }
@@ -86,7 +86,7 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
     return {
         restrict: 'C',
         link: function(scope, element) {
-            element.game = new Chess();
+            $rootScope.chess = element.game = new Chess();
 
             var statusEl = $(element).find('.status'),
                 fenEl = $(element).find('.fen'),
@@ -230,7 +230,7 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
                     return;
                 }
 
-                element.board = ChessBoard(element.data('board'), {
+                $rootScope.chessBoard = element.board = ChessBoard(element.data('board'), {
                     draggable: scope.boardConfig.draggable,
                     moveSpeed: 1,
                     position: 'start',

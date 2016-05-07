@@ -82,3 +82,21 @@ var insufficient_material_black = function (fen) {
 
     return !!(lastPiece === "n" || lastPiece === "b");
 };
+
+
+
+var highlightLastMove = function (scope, element, lastMove, game) {
+    var highlightClass = scope.boardConfig ? scope.boardConfig.highlightClass : 'highlight1-32417';
+
+    if (element.game) {
+        game = element.game;
+    }
+
+    $(element).find('[class*="square"]').removeClass(highlightClass);
+    var history = game.history({verbose: true});
+
+    !lastMove && (lastMove = history[history.length - 1]);
+
+    $(element).find('.square-' + lastMove.from).addClass(highlightClass);
+    $(element).find('.square-' + lastMove.to).addClass(highlightClass);
+};

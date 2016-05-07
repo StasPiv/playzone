@@ -65,6 +65,7 @@ gulp.task('compressJs', function() {
         "js/directives/play_chess_board.js",
         "js/directives/chess_timer.js",
         "js/directives/chat.js",
+        "js/directives/pgn_notation.js",
         "js/services/environment.js",
         "js/services/cookie.js",
         "js/services/api.js",
@@ -77,6 +78,7 @@ gulp.task('compressJs', function() {
         "js/services/rest/game.js",
         "js/services/rest/user.js",
         "js/services/rest/chat.js",
+        "js/services/rest/pgn.js",
         "js/utils.js"
     ])
         .pipe(concat('app.js'))

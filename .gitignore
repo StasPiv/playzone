@@ -23,5 +23,4 @@ frontend/bower_components
 frontend/node_modules
 npm-debug.log
 /bin/
-/frontend/gulpfile.js
 /frontend/pgn

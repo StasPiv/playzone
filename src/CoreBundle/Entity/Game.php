@@ -209,6 +209,14 @@ class Game implements ChatMessageContainerInterface
     private $chatMessages;
 
     /**
+     * @var float
+     *
+     * @JMS\Expose
+     * @JMS\Type("float")
+     */
+    private $myResult;
+
+    /**
      * Get id
      *
      * @return int
@@ -681,6 +689,25 @@ class Game implements ChatMessageContainerInterface
     public function getChatMessages() : array
     {
         return $this->chatMessages;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMyResult()
+    {
+        return $this->myResult;
+    }
+
+    /**
+     * @param float $myResult
+     * @return Game
+     */
+    public function setMyResult($myResult)
+    {
+        $this->myResult = $myResult;
+
+        return $this;
     }
 }
 

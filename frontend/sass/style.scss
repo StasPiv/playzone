@@ -18,7 +18,7 @@ $font_2: verdana;
 $font_3: sans-serif;
 $font_4: Lucida Sans;
 
-$board_width: 500px;
+$board_width: 800px;
 
 //@extend-elements
 //original selectors
@@ -120,8 +120,7 @@ h2 {
 }
 .content {
   margin: auto;
-  max-width: 1000px;
-  padding: 0 5px;
+  padding: 10px;
   .mobile & {
     padding: 0;
   }
@@ -463,6 +462,9 @@ input[type="password"] {
   margin: 10px 0;
   display: block;
   height: 150px;
+  #playroom & {
+    height: 350px;
+  }
   overflow-y: scroll;
   textarea {
     width: 446px;
@@ -577,82 +579,105 @@ th.header {
     font-size: 20px;
   }
   .play-chess-board {
-    #board {
-      width: 100%;
-      max-width: $board_width;
-      float: left;
-      margin: 5px 0;
+    h1.game-over {
+      color: $green;
     }
-    .pgn {
-      float: left;
-      margin: -2px 0 0 5px;
-      width: 400px;
-    }
-    chess-timer {
-      &.white {
-        * {
-          background-color: $white;
-          color: $black;
-        }
-        .timer {
-          border-color: $white;
-        }
-      }
-      &.black {
-        * {
-          background-color: $black;
-          color: $white;
-        }
-        .timer {
-          border-color: $black;
-        }
-      }
-      .timer {
-        width: 48%;
-        max-width: ($board_width - 8) / 2;
-        float: left;
-        text-align: center;
-        border: 2px solid;
-        &.zeitnot {
-          color: $red
-        }
-        &.active {
-          border-color: $red;
-        }
-        span {
-          font-size: 26px;
-        }
-      }
-    }
-    .action {
-      width: $board_width;
-      text-align: center;
-      margin-top: 8px;
+    .left-column {
       .mobile & {
-        width: auto;
+        width: 100%;
+        float: none;
       }
-      .button {
-        font-size: 26px;
-        padding: 4px;
+      float: left;
+      width: 40%;
+      #board {
+        width: 100%;
+        float: left;
+        margin: 5px 0;
+        max-height: 600px;
+      }
+      chess-timer {
+         &.white {
+           * {
+             background-color: $white;
+             color: $black;
+           }
+           .timer {
+             border-color: $white;
+           }
+         }
+         &.black {
+           * {
+             background-color: $black;
+             color: $white;
+           }
+           .timer {
+             border-color: $black;
+           }
+         }
+         .timer {
+           width: 50%;
+           float: left;
+           text-align: center;
+           border: 2px solid;
+           &.zeitnot {
+             color: $red
+           }
+           &.active {
+             border-color: $red;
+           }
+           span {
+             font-size: 26px;
+           }
+         }
+       }
+      .action {
+        text-align: center;
+        margin-top: 8px;
         .mobile & {
-          font-size: inherit;
+          width: auto;
         }
-        &.draw {
-          background-color: $color_japanese_laurel_approx;
-          margin-right: 10px;
-          &.offered {
+        .button {
+          font-size: 26px;
+          padding: 4px;
+          .mobile & {
+            font-size: inherit;
+          }
+          &.draw {
+            background-color: $color_japanese_laurel_approx;
+            margin-right: 10px;
+            &.offered {
+              font-weight: bold;
+              border: 4px solid greenyellow;
+              color: greenyellow;
+            }
+          }
+          &.draw_accept {
+            background-color: $color_japanese_laurel_approx;
             font-weight: bold;
-            border: 4px solid greenyellow;
-            color: greenyellow;
+          }
+          &.resign {
+            background-color: $red;
           }
         }
-        &.draw_accept {
-          background-color: $color_japanese_laurel_approx;
-          font-weight: bold;
-        }
-        &.resign {
-          background-color: $red;
-        }
+      }
+    }
+    .right-column {
+      .mobile & {
+        display: none;
+      }
+      padding-left: 15px;
+      float: left;
+      width: 60%;
+      .mobile & {
+        float: none;
+      }
+      .pgn {
+        height: 350px;
+        margin: -2px 0 0 5px;
+        overflow-y: scroll;
+      }
+      playzone-chat {
+        display: block;
       }
     }
   }

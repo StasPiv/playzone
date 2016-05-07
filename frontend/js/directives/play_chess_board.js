@@ -53,10 +53,6 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());
                     scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
 
-                    if (scope.game.color === 'b') {
-                        element.board.flip();
-                    }
-
                     if (
                         scope.game.opponent && scope.game.opponent.login === 'Robot' &&
                         scope.game.move_color !== scope.game.color

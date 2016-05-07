@@ -180,7 +180,8 @@
         "time_black": 0,
         "result_white": 1,
         "result_black": 0,
-        "status": "end"
+        "status": "end",
+        "my_result": 1
       }
     }
   },
@@ -204,7 +205,8 @@
         "draw": "",
         "result_white": 1,
         "result_black": 0,
-        "status": "end"
+        "status": "end",
+        "my_result": 1
       }
     }
   },
@@ -230,7 +232,8 @@
         "time_black": 0,
         "result_white": 0.5,
         "result_black": 0.5,
-        "status": "end"
+        "status": "end",
+        "my_result": 0.5
       }
     }
   }

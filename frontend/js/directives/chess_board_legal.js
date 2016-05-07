@@ -235,8 +235,32 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
                     onSnapEnd: onSnapEnd,
                     pieceTheme: 'img/chesspieces/' + userConfig.pieceType + '/{piece}.png'
                 });
+                if (scope.game.color === 'b') {
+                    element.board.flip();
+                }
                 element.updateStatus();
             };
+
+            var rtime;
+            var timeout = false;
+            var delta = 200;
+            $(window).resize(function() {
+                rtime = new Date();
+                if (timeout === false) {
+                    timeout = true;
+                    setTimeout(resizeend, delta);
+                }
+            });
+
+            function resizeend() {
+                if (new Date() - rtime < delta) {
+                    setTimeout(resizeend, delta);
+                } else {
+                    timeout = false;
+                    element.loadBoard(scope.boardConfig);
+                    element.loadPgn(scope.game.pgn);
+                }
+            }
 
             element.loadPgn = function (pgn) {
                 element.game.load_pgn(pgn);

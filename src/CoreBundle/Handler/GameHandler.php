@@ -507,6 +507,17 @@ class GameHandler implements GameProcessorInterface
         $this->defineUserColorForGame($user, $game);
         $this->defineUserMoveAndOpponentForGame($user, $game);
 
+        if ($game->getStatus() == GameStatus::END) {
+            switch ($game->getColor()) {
+                case GameColor::WHITE:
+                    $game->setMyResult($game->getResultWhite());
+                    break;
+                case GameColor::BLACK:
+                    $game->setMyResult($game->getResultBlack());
+                    break;
+            }
+        }
+
         return $game;
     }
 

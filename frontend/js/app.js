@@ -12,7 +12,11 @@ var playzoneApp = angular.module('playzoneApp', [
     'playzoneServices',
     'pascalprecht.translate',
     'LocalStorageModule'
-]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'ChatRest', 'WebsocketService', 'EnvService', '$interval', '$location', function ($http, $rootScope, $cookies, UserRest, ChatRest, WebsocketService, EnvService, $interval, $location) {
+]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'ChatRest', 'WebsocketService', 'EnvService', '$interval', '$location', '$templateCache', function ($http, $rootScope, $cookies, UserRest, ChatRest, WebsocketService, EnvService, $interval, $location, $templateCache) {
+
+    $rootScope.$on('$viewContentLoaded', function() {
+        $templateCache.removeAll();
+    });
 
     if ($location.host().indexOf('.lc') === -1) {
         console.log = function () {

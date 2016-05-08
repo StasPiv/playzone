@@ -90,7 +90,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                                     if (scope.game.mine && scope.game.status === 'end') {
                                         // it means that opponent has resigned or draw
-                                        scope.game.result_white != '0.5' ?
+                                        scope.game.my_result == '1' ?
                                             AudioService.win() : AudioService.draw();
                                     }
                                 }

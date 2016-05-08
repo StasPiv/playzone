@@ -68,16 +68,20 @@ playzoneControllers.directive('pgnNotation', function ($rootScope) {
                 goToIndex(--scope.currentIndex);
             });
 
-            $(window).on('keypress', function(event) {
+            $(window).on('keydown', function(event) {
+                var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0;
+
+                console.log(key);
+                
                 var left = 37;
                 var right = 39;
 
-                switch (event.keyCode) {
+                switch (key) {
                     case left:
-                        $(element).find('.back').click()
+                        $(element).find('.back').click();
                         break;
                     case right:
-                        $(element).find('.go').click()
+                        $(element).find('.go').click();
                         break;
                 }
             });

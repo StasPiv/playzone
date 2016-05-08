@@ -243,6 +243,16 @@ class User
     private $lastColor;
 
     /**
+     * @var boolean
+     *
+     * @JMS\Expose
+     * @JMS\Type("boolean")
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $banned = false;
+
+    /**
      * Get id
      *
      * @return int
@@ -849,6 +859,25 @@ class User
     public function setLastColor($lastColor)
     {
         $this->lastColor = $lastColor;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isBanned() : bool
+    {
+        return $this->banned;
+    }
+
+    /**
+     * @param boolean $banned
+     * @return User
+     */
+    public function setBanned($banned)
+    {
+        $this->banned = $banned;
 
         return $this;
     }

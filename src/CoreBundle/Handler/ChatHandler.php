@@ -13,6 +13,7 @@ use CoreBundle\Model\ChatMessage\ChatMessageType;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Chat\ChatGetMessagesRequest;
 use CoreBundle\Model\Request\Chat\ChatPostMessageRequest;
+use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Processor\ChatProcessorInterface;
 use CoreBundle\Repository\ChatMessageRepository;
 use Doctrine\ORM\EntityManager;
@@ -54,6 +55,11 @@ class ChatHandler implements ChatProcessorInterface
     public function processPostMessage(ChatPostMessageRequest $request) : ChatMessage
     {
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request, $this->getRequestError());
+        
+        if ($me->isBanned()) {
+            $this->getRequestError()->addError("user", "You are banned")
+                                    ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
 
         $chatMessage = new ChatMessage();
 

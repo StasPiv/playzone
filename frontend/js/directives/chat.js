@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.directive('playzoneChat', function (WebsocketService, GameRest, ChatRest) {
+playzoneControllers.directive('playzoneChat', function ($rootScope, WebsocketService, GameRest, ChatRest) {
     return {
         restrict: 'E',
         link: function(scope, element) {
@@ -31,6 +31,10 @@ playzoneControllers.directive('playzoneChat', function (WebsocketService, GameRe
             });
 
             scope.addMessage = function () {
+                if ($rootScope.user.banned) {
+                    return;
+                }
+
                 var messageText = messageInput.val();
 
                 if (messageText === "") {

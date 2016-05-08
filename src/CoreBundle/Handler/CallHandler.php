@@ -130,6 +130,11 @@ class CallHandler implements CallProcessorInterface
     {
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($sendRequest, $this->getRequestError());
 
+        if ($me->isBanned()) {
+            $this->getRequestError()->addError("user", "You are banned")
+                                    ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
         if (!$sendRequest->getColor() || $sendRequest->getColor() == GameColor::RANDOM) {
             $sendRequest->setColor(
                 !$me->getLastColor() ? [GameColor::WHITE, GameColor::BLACK][mt_rand(0, 1)] :
@@ -201,6 +206,11 @@ class CallHandler implements CallProcessorInterface
     public function processDeleteAccept(CallDeleteAcceptRequest $acceptRequest) : Game
     {
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($acceptRequest, $this->getRequestError());
+
+        if ($me->isBanned()) {
+            $this->getRequestError()->addError("user", "You are banned")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
 
         $call = $this->repository->find($acceptRequest->getCallId());
 

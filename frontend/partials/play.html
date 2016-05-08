@@ -38,7 +38,9 @@
             <div class="action" ng-if="game.status == 'play' && game.mine">
                 <span ng-class="{'btn-success': game.draw && game.draw !== game.color}"
                       class="btn btn-primary draw"
-                      ng-click="draw()">{{ "Draw" | translate }}</span>
+                      ng-click="draw()"
+                      ng-if="game.opponent.login !== 'Robot'"
+                >{{ "Draw" | translate }}</span>
                 <span class="btn btn-danger resign" ng-click="resign()">{{ "Resign" | translate }}</span>
             </div>
             <div id="board"></div>

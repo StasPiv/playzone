@@ -49,23 +49,20 @@
         <div class="right-column">
             <div class="pgn">
                 <h1>
-                    <a href="/#/user/{{ game.user_white.id }}/profile">
-                        {{game.user_white.login}}
-                    </a> -
-                    <a href="/#/user/{{ game.user_black.id }}/profile">
-                        {{game.user_black.login}}
-                    </a>
+                    <user-link
+                            data-user="game.user_white"
+                    ></user-link>
+                     -
+                    <user-link
+                            data-user="game.user_black"
+                    ></user-link>
                 </h1>
                 <pgn-notation
-                           ng-if="game.status === 'end'"
                            data-pgn-string="game.pgn"
                 ></pgn-notation>
-                <div
-                    ng-if="game.status === 'play'"
-                    class="simple-pgn">{{game.pgn}}</div>
                 <h2 ng-if="game.status == 'end'">{{game.result_white}} - {{game.result_black}}</h2>
             </div>
-            <playzone-chat ng-if="game.mine" class="table-responsive"
+            <playzone-chat ng-if="game.mine" class="pgn table-responsive"
                            data-message-container="game"
                            data-rest-container="'game'"
                            data-rest-container-id="game.id"

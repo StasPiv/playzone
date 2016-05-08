@@ -94,7 +94,9 @@
                 <a href="" ng-click="acceptCall(call)">{{ call.id }}</a>
             </td>
             <td>
-                <a href="/#/user/{{ call.from_user.id }}/profile">{{ call.from_user.login }}</a>
+                <user-link
+                        data-user="call.from_user"
+                ></user-link>
             </td>
             <td>
                 {{ call.game_params.time_base / 60000 }}
@@ -137,12 +139,16 @@
             </td>
             <td>
                 <span>
-                    <a href="/#/user/{{ game.user_white.id }}/profile">{{ game.user_white.login }}</a>
+                    <user-link
+                            data-user="game.user_white"
+                    ></user-link>
                 </span>
             </td>
             <td>
                 <span>
-                    <a href="/#/user/{{ game.user_black.id }}/profile">{{ game.user_black.login }}</a>
+                    <user-link
+                            data-user="game.user_black"
+                    ></user-link>
                 </span>
             </td>
             <td>

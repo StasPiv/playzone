@@ -33,6 +33,7 @@ playzoneServices.factory('ChatRest', function($resource, $rootScope, ApiService,
                         function (index, value) {
                             chatMessages.push({
                                user: {
+                                   id: value.id,
                                    login: value.login
                                },
                                time: $filter('date')(new Date(value.time), 'yyyy-MM-dd H:mm:ss'),

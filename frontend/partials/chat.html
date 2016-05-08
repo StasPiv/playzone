@@ -13,9 +13,11 @@
         <tbody>
             <tr ng-repeat="chatMessage in chat_messages">
                 <td>
-                    <a ng-keyup="" href="/#/user/{{ chatMessage.user.id }}/profile/">
-                        {{ chatMessage.user.login }}
-                    </a> ({{ chatMessage.time }}): <b>{{ chatMessage.message }}</b>
+                    <user-link
+                        data-user="chatMessage.user"
+                    >
+                    </user-link>
+                    ({{ chatMessage.time }}): <b>{{ chatMessage.message }}</b>
                 </td>
             </tr>
         </tbody>

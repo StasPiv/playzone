@@ -580,6 +580,9 @@ th.header {
 #playroom {
   h1 {
     font-size: 20px;
+    * {
+      font-size: 20px;
+    }
   }
   .play-chess-board {
     h1.game-over {
@@ -684,6 +687,7 @@ th.header {
         height: 350px;
         margin: -2px 0 0 5px;
         overflow-y: scroll;
+        display: block;
         .move {
           cursor: pointer;
           font-weight: bold;

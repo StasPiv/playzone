@@ -13,21 +13,25 @@
         <tbody>
         <tr ng-repeat="game in games">
             <td>
-                <a target="_blank" href="/#/play/{{ game.id }}">
+                <a href="/#/play/{{ game.id }}">
                     {{game.id}}
                 </a>
             </td>
             <td>
-                <a target="_blank" href="/#/play/{{ game.id }}" class="btn btn-info glyphicon glyphicon-eye-open" title="{{ 'See' | translate }}"></a>
+                <a href="/#/play/{{ game.id }}" class="btn btn-info glyphicon glyphicon-eye-open" title="{{ 'See' | translate }}"></a>
             </td>
             <td>
                 <span>
-                    <a href="/#/user/{{ game.user_white.id }}/profile">{{ game.user_white.login }}</a>
+                    <user-link
+                        data-user="game.user_white"
+                    ></user-link>
                 </span>
             </td>
             <td>
                 <span>
-                    <a href="/#/user/{{ game.user_black.id }}/profile">{{ game.user_black.login }}</a>
+                    <user-link
+                            data-user="game.user_black"
+                    ></user-link>
                 </span>
             </td>
             <td>

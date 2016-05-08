@@ -81,7 +81,7 @@ class ChatHandler implements ChatProcessorInterface
     public function processGetMessages(ChatGetMessagesRequest $request) : array
     {
         return $this->repository->createQueryBuilder("cm")
-                    ->select(["u.login", "cm.time", "cm.message"])
+                    ->select(["u.id", "u.login", "cm.time", "cm.message"])
                     ->where("cm.type = :type")
                     ->setParameter("type", ChatMessageType::COMMON)
                     ->innerJoin("cm.user", "u")

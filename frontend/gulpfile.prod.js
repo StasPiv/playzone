@@ -67,6 +67,7 @@ gulp.task('compressJs', function() {
         "js/directives/chess_timer.js",
         "js/directives/chat.js",
         "js/directives/pgn_notation.js",
+        "js/directives/user_link.js",
         "js/services/environment.js",
         "js/services/cookie.js",
         "js/services/api.js",

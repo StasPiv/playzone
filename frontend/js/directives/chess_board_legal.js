@@ -237,7 +237,8 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
                     onDragStart: onDragStart,
                     onDrop: onDrop,
                     onSnapEnd: onSnapEnd,
-                    pieceTheme: 'img/chesspieces/' + userConfig.pieceType + '/{piece}.png'
+                    pieceTheme: 'img/chesspieces/' + userConfig.pieceType + '/{piece}.png',
+                    showNotation: scope.boardConfig.showNotation
                 });
                 if (scope.game.color === 'b') {
                     element.board.flip();

@@ -44,7 +44,12 @@ services:
         calls:
           - [setContainer, ['@service_container']]
     core.service.swiss:
-        class: CoreBundle\Service\SwissService
+        class: CoreBundle\Service\Tournament\SwissService
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+          - [setContainer, ['@service_container']]
+    core.service.round_robin:
+        class: CoreBundle\Service\Tournament\RoundrobinService
         arguments: ['@doctrine.orm.entity_manager']
         calls:
           - [setContainer, ['@service_container']]

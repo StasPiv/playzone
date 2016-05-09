@@ -13,8 +13,11 @@ use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\TournamentGame;
 use CoreBundle\Entity\TournamentPlayer;
 use CoreBundle\Entity\User;
+use CoreBundle\Exception\Handler\Tournament\TournamentGameShouldBeSkippedException;
 use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
 use CoreBundle\Exception\Handler\Tournament\TournamentPlayerNotFoundException;
+use CoreBundle\Model\Game\GameColor;
+use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Tournament\TournamentDeleteUnrecordRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetListRequest;
@@ -185,10 +188,10 @@ class TournamentHandler implements TournamentProcessorInterface
      * @return array|\CoreBundle\Entity\TournamentPlayer[]
      * @throws \Exception
      */
-    public function getAllTournamentPlayers(Tournament $tournament) : array
+    public function getPlayers(Tournament $tournament) : array
     {
         return $this->container->get("doctrine")->getRepository("CoreBundle:TournamentPlayer")
-            ->findBy(["tournament" => $tournament]);
+            ->findBy(["tournament" => $tournament], ["id" => "ASC"]);
     }
 
     /**
@@ -197,7 +200,7 @@ class TournamentHandler implements TournamentProcessorInterface
      * @return array|TournamentGame[]
      * @throws \Exception
      */
-    public function getAllTournamentGamesInRound(Tournament $tournament, int $round) : array
+    public function getRoundGames(Tournament $tournament, int $round) : array
     {
         return $this->container->get("doctrine")->getRepository("CoreBundle:TournamentGame")
             ->findBy(
@@ -242,6 +245,64 @@ class TournamentHandler implements TournamentProcessorInterface
     {
         return $this->getTournamentPlayer($tournament, $user)
                     ->getRequiredColor();
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param int $round
+     * @param TournamentPlayer $firstPlayer
+     * @param TournamentPlayer $secondPlayer
+     * @return TournamentGame
+     */
+    public function createTournamentGame(Tournament $tournament, int $round, TournamentPlayer $firstPlayer, TournamentPlayer $secondPlayer) : TournamentGame
+    {
+        if ($firstPlayer->getId() === 0 || $secondPlayer->getId() === 0) {
+            throw new TournamentGameShouldBeSkippedException;
+        }
+
+        $game = new Game();
+
+        switch (true) {
+            case $firstPlayer->getRequiredColor() == GameColor::BLACK ||
+                $secondPlayer->getRequiredColor() == GameColor::WHITE:
+                $game->setUserWhite($secondPlayer->getPlayer())
+                    ->setUserBlack($firstPlayer->getPlayer());
+                break;
+            default:
+                $game->setUserWhite($firstPlayer->getPlayer())
+                    ->setUserBlack($secondPlayer->getPlayer());
+        }
+
+        $game->setUserToMove($game->getUserWhite())
+             ->setStatus(GameStatus::PLAY);
+
+        $tournamentGame = new TournamentGame();
+
+        $tournamentGame->setGame($game)
+            ->setTournament($tournament)
+            ->setRound($round);
+        
+        return $tournamentGame;
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param int $round
+     * @return void
+     */
+    public function clearRound(Tournament $tournament, int $round)
+    {
+        $existingTournamentGames = $this->manager->getRepository("CoreBundle:TournamentGame")
+            ->findBy(
+                [
+                    "round" => $round,
+                    "tournament" => $tournament
+                ]
+            );
+
+        foreach ($existingTournamentGames as $exTournamentGame) {
+            $this->manager->remove($exTournamentGame);
+        }
     }
 
     /**

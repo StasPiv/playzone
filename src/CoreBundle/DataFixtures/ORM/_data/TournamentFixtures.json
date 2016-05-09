@@ -131,5 +131,25 @@
       "type": "switz",
       "time_begin": "+1minute"
     }
+  },
+  {
+    "referenceName": "tournament-round-robin",
+    "name": "Round robin test",
+    "players": [
+      "user-a",
+      "user-b",
+      "user-c",
+      "user-d",
+      "user-e",
+      "user-f",
+      "user-g"
+    ],
+    "game_params": {
+      "time_base": 600000
+    },
+    "tournament_params": {
+      "type": "round_robin",
+      "time_begin": "+1minute"
+    }
   }
 ]

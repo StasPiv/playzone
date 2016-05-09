@@ -107,6 +107,11 @@ class TournamentPlayer
     private $opponents;
 
     /**
+     * @var string
+     */
+    private $requiredColor;
+
+    /**
      * @return int
      */
     public function getId() : int
@@ -319,6 +324,17 @@ class TournamentPlayer
     }
 
     /**
+     * @param string $requiredColor
+     * @return TournamentPlayer
+     */
+    public function setRequiredColor(string $requiredColor)
+    {
+        $this->requiredColor = $requiredColor;
+
+        return $this;
+    }
+
+    /**
      * @return string
      *
      * @JMS\VirtualProperty()
@@ -326,6 +342,10 @@ class TournamentPlayer
      */
     public function getRequiredColor()
     {
+        if ($this->requiredColor) {
+            return $this->requiredColor;
+        }
+
         switch (true) {
             case $this->getBlackInRow() > 1:
                 return GameColor::WHITE;

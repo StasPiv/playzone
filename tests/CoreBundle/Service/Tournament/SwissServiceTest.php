@@ -1,6 +1,6 @@
 <?php
 
-namespace CoreBundle\Tests\Service;
+namespace CoreBundle\Tests\Service\Tournament;
 
 use CoreBundle\Entity\TournamentGame;
 use CoreBundle\Entity\TournamentPlayer;
@@ -9,7 +9,7 @@ use CoreBundle\Handler\TournamentHandler;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Tests\KernelAwareTest;
 use CoreBundle\Entity\Tournament;
-use CoreBundle\Service\SwissService;
+use CoreBundle\Service\Tournament\SwissService;
 
 /**
  * Created by PhpStorm.
@@ -116,7 +116,7 @@ class SwissServiceTest extends KernelAwareTest
     private function assertRequiredColors(Tournament $tournament, int $round)
     {
         $games = $this->getTournamentHandler()
-                      ->getAllTournamentGamesInRound($tournament, $round);
+                      ->getRoundGames($tournament, $round);
 
         foreach ($games as $tournamentGame) {
             $this->assertContains(
@@ -146,7 +146,7 @@ class SwissServiceTest extends KernelAwareTest
     private function assertNoSameOpponent(Tournament $tournament, int $round)
     {
         $games = $this->getTournamentHandler()
-                      ->getAllTournamentGamesInRound($tournament, $round);
+                      ->getRoundGames($tournament, $round);
 
         foreach ($games as $tournamentGame) {
             $playerWhite = $this->getTournamentHandler()->getTournamentPlayer(
@@ -201,7 +201,7 @@ class SwissServiceTest extends KernelAwareTest
     private function getPlayerIdsInTournamentRound(Tournament $tournament, int $round) : array
     {
         $games = $this->getTournamentHandler()
-                      ->getAllTournamentGamesInRound($tournament, $round);
+                      ->getRoundGames($tournament, $round);
 
         $playerIds =
             array_merge(
@@ -236,7 +236,7 @@ class SwissServiceTest extends KernelAwareTest
             {
                 return $tournamentPlayer->getPlayer()->getId();
             },
-            $this->getTournamentHandler()->getAllTournamentPlayers($tournament)
+            $this->getTournamentHandler()->getPlayers($tournament)
         );
 
         sort($playerIds);

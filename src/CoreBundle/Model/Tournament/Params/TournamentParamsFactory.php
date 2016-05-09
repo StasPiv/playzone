@@ -27,6 +27,8 @@ final class TournamentParamsFactory
         switch ($type) {
             case 'switz':
                 return new TournamentSwitzParams();
+            case 'round_robin':
+                return new TournamentRoundrobinParams();
             default:
                 throw new TournamentParamsNotFound;
         }

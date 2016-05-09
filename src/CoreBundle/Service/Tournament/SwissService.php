@@ -6,15 +6,13 @@
  * Time: 22:11
  */
 
-namespace CoreBundle\Service;
+namespace CoreBundle\Service\Tournament;
 
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\TournamentGame;
 use CoreBundle\Entity\TournamentPlayer;
-use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\Tournament\TournamentDrawIncorrectException;
-use CoreBundle\Exception\Handler\Tournament\TournamentPlayersAlreadyPlayedException;
 use CoreBundle\Handler\TournamentHandler;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Model\Game\GameStatus;
@@ -90,7 +88,7 @@ class SwissService implements TournamentDrawInterface
 
         $this->buildPossibleOpponentsMapForEachPlayer(
             $this->getSortedTournamentPlayers(
-                $this->getTournamentHandler()->getAllTournamentPlayers($tournament)
+                $this->getTournamentHandler()->getPlayers($tournament)
             )
         );
 
@@ -104,17 +102,7 @@ class SwissService implements TournamentDrawInterface
      */
     private function clearRound(Tournament $tournament, int $round)
     {
-        $existingTournamentGames = $this->manager->getRepository("CoreBundle:TournamentGame")
-            ->findBy(
-                [
-                    "round" => $round,
-                    "tournament" => $tournament
-                ]
-            );
-
-        foreach ($existingTournamentGames as $exTournamentGame) {
-            $this->manager->remove($exTournamentGame);
-        }
+        $this->getTournamentHandler()->clearRound($tournament, $round);
 
         foreach ($this->possibleTournamentGames as $possibleTournamentGame) {
             $this->manager->detach($possibleTournamentGame);
@@ -133,27 +121,7 @@ class SwissService implements TournamentDrawInterface
      */
     private function createTournamentGame(Tournament $tournament, int $round, TournamentPlayer $firstPlayer, TournamentPlayer $secondPlayer)
     {
-        $game = new Game();
-
-        switch (true) {
-            case $firstPlayer->getRequiredColor() == GameColor::BLACK ||
-                 $secondPlayer->getRequiredColor() == GameColor::WHITE:
-                $game->setUserWhite($secondPlayer->getPlayer())
-                     ->setUserBlack($firstPlayer->getPlayer());
-                break;
-            default:
-                $game->setUserWhite($firstPlayer->getPlayer())
-                     ->setUserBlack($secondPlayer->getPlayer());
-        }
-
-        $game->setUserToMove($game->getUserWhite())
-             ->setStatus(GameStatus::PLAY);
-
-        $tournamentGame = new TournamentGame();
-
-        $tournamentGame->setGame($game)
-            ->setTournament($tournament)
-            ->setRound($round);
+        $tournamentGame = $this->getTournamentHandler()->createTournamentGame($tournament, $round, $firstPlayer, $secondPlayer);
 
         $this->manager->persist($tournamentGame);
 

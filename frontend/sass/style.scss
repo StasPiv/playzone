@@ -147,8 +147,10 @@ h2 {
     margin-top: 77px;
     position: absolute;
     top: -20px;
+    width: 40%;
     .mobile & {
       left: 0;
+      width: 100%;
     }
     ul li {
       cursor: default;

@@ -18,7 +18,6 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use WebsocketServerBundle\Exception\PlayzoneServerException;
-use WebsocketServerBundle\Model\GameObserver;
 use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSend;
 use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSubscribe;
 use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageMessageSend;
@@ -31,6 +30,10 @@ use WebsocketServerBundle\Model\WebsocketUser;
 use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageScope;
 use WebsocketServerBundle\Model\Message\Server\WelcomeMessage;
 
+/**
+ * Class PlayzoneServer
+ * @package WebsocketServerBundle\Service
+ */
 class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterface
 {
     /**

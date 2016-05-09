@@ -135,5 +135,10 @@
   "Win count": "Побед",
   "Draw count": "Ничьих",
   "Lose count": "Поражений",
-  "Download player games": "Скачать все партии игрока"
+  "Download player games": "Скачать все партии игрока",
+  "Message": "Сообщение",
+  "Chat": "Чат",
+  "Time": "Время",
+  "games": "партии",
+  "Show notation": "Показывать координаты доски"
 }

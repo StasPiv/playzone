@@ -1,0 +1,16 @@
+[
+  {
+    "referenceName": "chat-message-0",
+    "user": "user-stas",
+    "message": "kisa kuku",
+    "time": "yesterday",
+    "type": 1
+  },
+  {
+    "referenceName": "chat-message-1",
+    "user": "user-petro",
+    "message": "kisa kuku 2",
+    "time": "-2hour",
+    "type": 1
+  }
+]

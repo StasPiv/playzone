@@ -36,3 +36,4 @@ parameters:
     app_immortalchess.forum_playzone: 143
     app_immortalchess.post_username_for_calls: 'PozitiFF_Chess'
     app_immortalchess.post_userid_for_calls: 87
+    app_last_chat_messages_count: 100

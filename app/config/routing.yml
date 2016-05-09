@@ -1,3 +1,9 @@
+chat_api:
+    resource: "@ApiBundle/Controller/ChatController.php"
+    type:     rest
+    prefix:   /
+    defaults: {_format: json}
+
 user_api:
     resource: "@ApiBundle/Controller/UserController.php"
     type:     rest

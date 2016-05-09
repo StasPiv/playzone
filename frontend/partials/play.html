@@ -3,35 +3,71 @@
         {{ 'Opponent is offline' | translate }}
     </div>
     <div class="play-chess-board chess-board-legal" data-board="board">
-        <chess-timer
-                class="white"
-                data-time="game.time_white"
-                data-zeitnot="gameConfig.zeitnotLimit"
-                data-current="game.move_color === 'w'"
-                data-game="game"
-                data-fix-time="savePgnAndSendToObservers()"
-        ></chess-timer>
-        <chess-timer
-                class="black"
-                data-time="game.time_black"
-                data-zeitnot="gameConfig.zeitnotLimit"
-                data-current="game.move_color === 'b'"
-                data-game="game"
-                data-fix-time="savePgnAndSendToObservers()"
-        ></chess-timer>
-        <div class="clear">&nbsp;</div>
-        <div class="action" ng-if="game.status == 'play' && game.mine">
-            <span ng-class="{'btn-success': game.draw && game.draw !== game.color}"
-                  class="btn btn-primary draw"
-                  ng-click="draw()">{{ "Draw" | translate }}</span>
-            <span class="btn btn-danger resign" ng-click="resign()">{{ "Resign" | translate }}</span>
+        <div class="left-column">
+            <chess-timer
+                    ng-if="game.status == 'play'"
+                    class="white"
+                    data-time="game.time_white"
+                    data-user="game.user_white"
+                    data-zeitnot="gameConfig.zeitnotLimit"
+                    data-current="game.move_color === 'w'"
+                    data-game="game"
+                    data-fix-time="savePgnAndSendToObservers()"
+            ></chess-timer>
+            <chess-timer
+                    ng-if="game.status == 'play'"
+                    class="black"
+                    data-time="game.time_black"
+                    data-user="game.user_black"
+                    data-zeitnot="gameConfig.zeitnotLimit"
+                    data-current="game.move_color === 'b'"
+                    data-game="game"
+                    data-fix-time="savePgnAndSendToObservers()"
+            ></chess-timer>
+            <div ng-if="game.status == 'end'"
+                 ng-class="{
+                 'alert-info': !game.mine,
+                 'alert-success': game.my_result == 1,
+                 'alert-danger': game.my_result == 0,
+                 'alert-warning': game.my_result == 0.5
+                 }"
+                 class="alert">
+                {{game.user_white.login}} - {{game.user_black.login}}: {{game.result_white}} - {{game.result_black}}
+            </div>
+            <div class="clear">&nbsp;</div>
+            <div class="action" ng-if="game.status == 'play' && game.mine">
+                <span ng-class="{'btn-success': game.draw && game.draw !== game.color}"
+                      class="btn btn-primary draw"
+                      ng-click="draw()"
+                      ng-if="game.opponent.login !== 'Robot'"
+                >{{ "Draw" | translate }}</span>
+                <span class="btn btn-danger resign" ng-click="resign()">{{ "Resign" | translate }}</span>
+            </div>
+            <div id="board"></div>
+            <div class="clear">&nbsp;</div>
         </div>
-        <div id="board"></div>
-        <div class="pgn">
-            <h1>{{game.user_white.login}} - {{game.user_black.login}}</h1>
-            {{game.pgn}}
-            <h2 ng-if="game.status == 'end'">{{game.result_white}} - {{game.result_black}}</h2>
+        <div class="right-column">
+            <div class="pgn">
+                <h1>
+                    <user-link
+                            data-user="game.user_white"
+                    ></user-link>
+                     -
+                    <user-link
+                            data-user="game.user_black"
+                    ></user-link>
+                </h1>
+                <pgn-notation
+                           data-pgn-string="game.pgn"
+                ></pgn-notation>
+                <h2 ng-if="game.status == 'end'">{{game.result_white}} - {{game.result_black}}</h2>
+            </div>
+            <playzone-chat ng-if="game.mine" class="pgn table-responsive"
+                           data-message-container="game"
+                           data-rest-container="'game'"
+                           data-rest-container-id="game.id"
+                           data-chat-room="game.id"
+            ></playzone-chat>
         </div>
-        <div class="clear">&nbsp;</div>
     </div>
 </div>

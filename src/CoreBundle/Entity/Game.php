@@ -2,9 +2,12 @@
 
 namespace CoreBundle\Entity;
 
+use CoreBundle\Model\ChatMessage\ChatMessageContainerInterface;
 use CoreBundle\Model\Game\GameColor;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * Game
@@ -12,7 +15,7 @@ use JMS\Serializer\Annotation as JMS;
  * @ORM\Table(name="game")
  * @ORM\Entity(repositoryClass="CoreBundle\Repository\GameRepository")
  */
-class Game
+class Game implements ChatMessageContainerInterface
 {
     /**
      * @var int
@@ -190,6 +193,28 @@ class Game
      * @ORM\Column(type="text", length=1, nullable=true)
      */
     private $draw;
+
+    /**
+     * @var ChatMessage[]
+     *
+     * @JMS\Expose()
+     * @JMS\Type("array<CoreBundle\Entity\ChatMessage>")
+     * @ORM\ManyToMany(targetEntity="ChatMessage")
+     * @ORM\OrderBy({"id" = "DESC"})
+     * @JoinTable(name="game_chat_messages",
+     *      joinColumns={@JoinColumn(name="game_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="chat_message_id", referencedColumnName="id", unique=true)}
+     *      )
+     */
+    private $chatMessages;
+
+    /**
+     * @var float
+     *
+     * @JMS\Expose
+     * @JMS\Type("float")
+     */
+    private $myResult;
 
     /**
      * Game constructor.
@@ -654,6 +679,43 @@ class Game
     public function getMoveColor() : string
     {
         return $this->getUserWhite() == $this->getUserToMove() ? GameColor::WHITE : GameColor::BLACK;
+    }
+
+    /**
+     * @param ChatMessage $message
+     * @return Game
+     */
+    public function addChatMessage(ChatMessage $message) : Game
+    {
+        $this->chatMessages[] = $message;
+        return $this;
+    }
+
+    /**
+     * @return ChatMessage[]
+     */
+    public function getChatMessages() : array
+    {
+        return $this->chatMessages;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMyResult()
+    {
+        return $this->myResult;
+    }
+
+    /**
+     * @param float $myResult
+     * @return Game
+     */
+    public function setMyResult($myResult)
+    {
+        $this->myResult = $myResult;
+
+        return $this;
     }
 }
 

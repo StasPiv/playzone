@@ -32,6 +32,18 @@
                 {{ user.lose }}
             </td>
         </tr>
+        <tr>
+            <td>
+                <span>
+                    {{ "See" | translate }} {{ "games" | translate }}:
+                </span>
+            </td>
+            <td>
+                <a class="btn btn-info glyphicon glyphicon-eye-open" href="/#/user/{{user.id}}/archive">
+                    {{ "games" | translate }}
+                </a>
+            </td>
+        </tr>
         <tr ng-if="user.pgn_link">
             <td>
                 <span>

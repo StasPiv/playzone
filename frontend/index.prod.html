@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="playzoneApp"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PlayZone.Immortalchess.Net</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- end bootstrap -->
+
+    <script src="dist/lib.js"></script>
+    <script src="dist/app.js"></script>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker.css" />
+    <link href="css/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
+    <link rel="icon" type="image/x-icon" href="favicons/Black Q.ico" />
+    <link rel="stylesheet" href="css/chessboard-0.3.0.min.css" />
+</head>
+<body ng-class="{'mobile': $root.isMobile}">
+    <div class="content" ng-cloak>
+        <div class="header">
+            <a class="logo" href="#/games/"><img src="images/logo.png" /></a>
+
+            <div class="menu" ng-controller="TopMenuCtrl">
+                <ul>
+                    <div class="btn-group-justified">
+                        <a href="{{item.url}}" class="btn btn-default" ng-repeat="item in menu">
+                            {{item.label | translate}}
+                        </a>
+                    </div>
+                </ul>
+            </div>
+            <div class="language btn-group" ng-controller="LanguageCtrl">
+                <a class="btn btn-default" ng-click="changeLanguage('en')" href="/#/">en</a>
+                <a class="btn btn-default" ng-click="changeLanguage('ru')" href="/#/">ru</a>
+            </div>
+            <div class="register" ng-controller="TopRegisterCtrl">
+                <div class="for-unauthorized btn-group" ng-if="!$root.user.isAuth">
+                    <a class="btn btn-default" href="/#/register">{{ 'Sign Up' | translate }}</a>
+                    <a class="btn btn-default enter" href="/#/auth">{{ 'Sign In' | translate }}</a>
+                </div>
+                <div class="for-authorized" ng-if="$root.user.isAuth">
+                    <div ng-class="[
+                        'pic-connect',
+                        {'connect-not-success': !$root.connected},
+                        {'connect-success': !!$root.connected}]">
+                        &nbsp;
+                    </div>
+                    <div class="user-action btn-group">
+                        <a class="btn btn-primary glyphicon glyphicon-user" title="{{ 'My profile' | translate }}" href="/#/profile"></a>
+                        <a class="btn btn-primary glyphicon glyphicon-log-out" href="/#/logout" ng-click="logout()" title="{{ 'Logout' | translate }}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-danger" ng-if="!$root.browserSupported">
+            {{ 'Your browser is not supported for play. Try' | translate }}
+            <a href='https://www.google.com/chrome/browser/desktop/'>Google Chrome</a>.
+        </div>
+        <div class="alert alert-danger" ng-if="!$root.connected">
+            {{ 'Can not connect' | translate }}
+        </div>
+        <div class="middle" ng-view>
+
+        </div>
+        <div class="footer">
+            <div class="overlay"></div>
+        </div>
+    </div>
+
+    <!-- WebRTC -->
+    <!--script src="js/webrtc/adapter.js"></script>
+    <script src="js/webrtc/common.js"></script-->
+    <!-- WebRTC -->
+</body>
+</html>

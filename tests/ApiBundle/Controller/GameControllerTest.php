@@ -50,4 +50,9 @@ class GameControllerTest extends BaseControllerTest
     {
         $this->assertFromJson('game/{id}/acceptdraw');
     }
+
+    public function testAddMessage()
+    {
+        $this->assertFromJson('game/{id}/addmessage');
+    }
 }

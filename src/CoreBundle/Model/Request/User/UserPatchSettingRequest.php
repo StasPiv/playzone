@@ -120,7 +120,7 @@ class UserPatchSettingRequest extends UserRequest implements SecurityRequestInte
      */
     public function getValue() : string 
     {
-        return $this->value;
+        return (string)$this->value;
     }
 
     /**

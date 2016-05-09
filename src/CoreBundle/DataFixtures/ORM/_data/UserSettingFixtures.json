@@ -58,5 +58,11 @@
     "name": "Zeitnot limit",
     "type": "number",
     "sort": 100
+  },
+  {
+    "referenceName": "setting-show-notation",
+    "name": "Show notation",
+    "type": "checkbox",
+    "sort": 110
   }
 ]

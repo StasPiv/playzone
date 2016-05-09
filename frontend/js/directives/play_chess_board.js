@@ -36,24 +36,12 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
     return {
         restrict: 'C',
         link: function(scope, element) {
-            scope.highlightLastMove = function (scope, element, lastMove) {
-                $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
-                var history = element.game.history({verbose: true});
-
-                !lastMove && (lastMove = history[history.length - 1]);
-
-                $(element).find('.square-' + lastMove.from).addClass(scope.boardConfig.highlightClass);
-                $(element).find('.square-' + lastMove.to).addClass(scope.boardConfig.highlightClass);
-            };
-
             scope.game.$promise.then(
                 function() {
                     element.loadBoard(scope.boardConfig);
                     element.loadPgn(scope.game.pgn);
-
-                    if (scope.game.color === 'b') {
-                        element.board.flip();
-                    }
+                    scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());
+                    scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
 
                     if (
                         scope.game.opponent && scope.game.opponent.login === 'Robot' &&
@@ -95,12 +83,14 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                             // it means that game is finished or drawn and we have to fix result
                             scope.game.$get().then( // get game from server
                                 function () {
-                                    scope.game.mine && element.game.game_over() &&
-                                    !element.game.in_checkmate() && scope.draw(); // fix draw
+                                    scope.game.mine &&
+                                    (element.game.game_over() && !element.game.in_checkmate() ||
+                                    element.game.insufficient_material()) &&
+                                    scope.draw(); // fix draw
 
                                     if (scope.game.mine && scope.game.status === 'end') {
                                         // it means that opponent has resigned or draw
-                                        scope.game.result_white != '0.5' ?
+                                        scope.game.my_result == '1' ?
                                             AudioService.win() : AudioService.draw();
                                     }
                                 }
@@ -151,6 +141,9 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
 
                 scope.game.pgn = element.game.pgn();
+                console.log('fen after move', element.game.fen());
+                scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());
+                scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
 
                 if (scope.game.opponent.login === "Robot") { // isRobot
                     scope.savePgnAndSendToObservers(true);
@@ -183,7 +176,9 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     scope.savePgnAndSendToObservers(true);
                 }
 
-                element.game.game_over() && !element.game.in_checkmate() && scope.draw();
+                (element.game.game_over() && !element.game.in_checkmate() ||
+                    element.game.insufficient_material())
+                && scope.draw();
                 element.game.in_checkmate() && AudioService.win();
                 scope.highlightLastMove(scope, element);
 

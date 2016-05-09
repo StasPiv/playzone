@@ -16,6 +16,7 @@ use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\Request\RequestErrorInterface;
 use CoreBundle\Model\Request\SecurityRequestInterface;
 use CoreBundle\Model\Response\ResponseStatusCode;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -57,6 +58,9 @@ class SecurityService
         } catch (TokenNotCorrectException $e) {
             $securityError->addError("token", "Forbidden for user with this credentials")
                           ->throwException(ResponseStatusCode::FORBIDDEN);
+        } catch (FatalThrowableError $e) {
+            $securityError->addError("token", "Forbidden for user with this credentials")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
         }
     }
 }

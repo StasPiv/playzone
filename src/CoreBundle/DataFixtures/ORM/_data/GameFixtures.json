@@ -148,5 +148,31 @@
     "time_last_move": "yesterday",
     "result_white": 0.5,
     "result_black": 0.5
+  },
+  {
+    "referenceName": "game-single-king",
+    "user_white": "user-stas",
+    "user_black": "user-test-login",
+    "user_to_move": "user-test-login",
+    "pgn": "1. d4 e5 2. dxe5 f6 3. exf6 Nxf6 4. Nd2 Qe7 5. a3 Qxe2+ 6. Bxe2 Nc6 7. Ndf3 Bc5 8. Nd4 Bxd4 9. Qxd4 Nxd4 10. Bf3 Nxc2+ 11. Kd1 Nxa1 12. b4 d5 13. Bxd5 Nxd5 14. Bf4 Nxf4 15. h4 Nxg2 16. Kc1 Nxh4 17. Kb2 Nb3 18. Kxb3 Nf3 19. Nxf3 Bh3 20. Rxh3 h5 21. Rxh5 Rh7 22. Ng5 g6 23. Rxh7 b6 24. Kc4 Rd8 25. Ne6 Rd7 26. Nxc7+ Rxc7+ 27. Kb5 Rxh7 28. Ka6 b5 29. Kxb5 Rh3 30. f3 Rxf3 31. Ka6 Rxa3+ 32. Kb5 a6+ 33. Kb6 Ra4 34. Kc6 Rxb4 35. Kd6",
+    "pgn_alt": "",
+    "status": "play",
+    "rate": false,
+    "time_white": 180000,
+    "time_black": 180000,
+    "time_last_move": "yesterday"
+  },
+  {
+    "referenceName": "game-single-king-and-time-almost-over",
+    "user_white": "user-stas",
+    "user_black": "user-test-login",
+    "user_to_move": "user-test-login",
+    "pgn": "1. d4 e5 2. dxe5 f6 3. exf6 Nxf6 4. Nd2 Qe7 5. a3 Qxe2+ 6. Bxe2 Nc6 7. Ndf3 Bc5 8. Nd4 Bxd4 9. Qxd4 Nxd4 10. Bf3 Nxc2+ 11. Kd1 Nxa1 12. b4 d5 13. Bxd5 Nxd5 14. Bf4 Nxf4 15. h4 Nxg2 16. Kc1 Nxh4 17. Kb2 Nb3 18. Kxb3 Nf3 19. Nxf3 Bh3 20. Rxh3 h5 21. Rxh5 Rh7 22. Ng5 g6 23. Rxh7 b6 24. Kc4 Rd8 25. Ne6 Rd7 26. Nxc7+ Rxc7+ 27. Kb5 Rxh7 28. Ka6 b5 29. Kxb5 Rh3 30. f3 Rxf3 31. Ka6 Rxa3+ 32. Kb5 a6+ 33. Kb6 Ra4 34. Kc6 Rxb4 35. Kd6",
+    "pgn_alt": "",
+    "status": "play",
+    "rate": false,
+    "time_white": 10000,
+    "time_black": 5000,
+    "time_last_move": "yesterday"
   }
 ]

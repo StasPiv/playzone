@@ -58,6 +58,14 @@ class GameGetListRequest extends GameRequest implements SecurityRequestInterface
     private $callType;
 
     /**
+     * @var integer
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     */
+    private $limit = 100;
+
+    /**
      * @return string
      */
     public function getLogin()
@@ -67,10 +75,12 @@ class GameGetListRequest extends GameRequest implements SecurityRequestInterface
 
     /**
      * @param string $login
+     * @return GameGetListRequest
      */
     public function setLogin($login)
     {
         $this->login = $login;
+        return $this;
     }
 
     /**
@@ -135,5 +145,24 @@ class GameGetListRequest extends GameRequest implements SecurityRequestInterface
     public function setCallType($callType)
     {
         $this->callType = $callType;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLimit()
+    {
+        return $this->limit;
+    }
+
+    /**
+     * @param int $limit
+     * @return GameGetListRequest
+     */
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
+
+        return $this;
     }
 }

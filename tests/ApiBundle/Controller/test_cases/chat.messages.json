@@ -1,0 +1,25 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\UserSettingFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\ChatFixtures"
+  ],
+  "correct": {
+    "method": "GET",
+    "request": {
+    },
+    "response": {
+      "status": 200,
+      "data": [
+        {
+          "message": "kisa kuku 2",
+          "login": "Petro"
+        },
+        {
+          "message": "kisa kuku",
+          "login": "Stas"
+        }
+      ]
+    }
+  }
+}

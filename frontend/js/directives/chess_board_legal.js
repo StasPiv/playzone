@@ -6,7 +6,7 @@
  * Also drag and drop functions will be defined.
  * This small library is useful for separating drag&drop logic and application logic
  */
-playzoneControllers.directive('chessBoardLegal', function (SettingService, $timeout) {
+playzoneControllers.directive('chessBoardLegal', function (SettingService, $timeout, $rootScope) {
     function isMyTurn(scope, element) {
         return element.game.turn() === scope.game.color;
     }
@@ -86,7 +86,7 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
     return {
         restrict: 'C',
         link: function(scope, element) {
-            element.game = new Chess();
+            $rootScope.chess = element.game = new Chess();
 
             var statusEl = $(element).find('.status'),
                 fenEl = $(element).find('.fen'),
@@ -226,17 +226,46 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
             };
 
             element.loadBoard = function (userConfig) {
-                element.board = ChessBoard(element.data('board'), {
+                if (!$('#' + element.data('board')).length) {
+                    return;
+                }
+
+                $rootScope.chessBoard = element.board = ChessBoard(element.data('board'), {
                     draggable: scope.boardConfig.draggable,
                     moveSpeed: 1,
                     position: 'start',
                     onDragStart: onDragStart,
                     onDrop: onDrop,
                     onSnapEnd: onSnapEnd,
-                    pieceTheme: 'img/chesspieces/' + userConfig.pieceType + '/{piece}.png'
+                    pieceTheme: 'img/chesspieces/' + userConfig.pieceType + '/{piece}.png',
+                    showNotation: scope.boardConfig.showNotation
                 });
+                if (scope.game.color === 'b') {
+                    element.board.flip();
+                }
                 element.updateStatus();
             };
+
+            var rtime;
+            var timeout = false;
+            var delta = 200;
+            $(window).resize(function() {
+                rtime = new Date();
+                if (timeout === false) {
+                    timeout = true;
+                    setTimeout(resizeend, delta);
+                }
+            });
+
+            function resizeend() {
+                if (new Date() - rtime < delta) {
+                    setTimeout(resizeend, delta);
+                } else {
+                    timeout = false;
+                    element.loadBoard(scope.boardConfig);
+                    element.loadPgn(scope.game.pgn);
+                }
+            }
 
             element.loadPgn = function (pgn) {
                 element.game.load_pgn(pgn);

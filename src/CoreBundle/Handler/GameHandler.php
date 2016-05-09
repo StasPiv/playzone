@@ -8,14 +8,18 @@
 
 namespace CoreBundle\Handler;
 
+use CoreBundle\Entity\ChatMessage;
 use CoreBundle\Exception\Handler\GameHandlerException;
 use CoreBundle\Exception\Handler\User\UserHandlerException;
+use CoreBundle\Exception\Handler\User\UserNotFoundException;
 use CoreBundle\Exception\Processor\ProcessorException;
+use CoreBundle\Model\ChatMessage\ChatMessageType;
 use CoreBundle\Model\Game\GameMove;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
+use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
@@ -68,13 +72,22 @@ class GameHandler implements GameProcessorInterface
         switch ($listRequest->getUser()) {
             case UserType::ME:
                 return $this->getGamesForUser(
-                    $this->container->get("core.service.security")->getUserIfCredentialsIsOk($listRequest,$this->getRequestError()),
-                    $listRequest->getStatus()
-                );
+                    $this->container->get("core.service.security")->getUserIfCredentialsIsOk($listRequest,
+                        $this->getRequestError()), $listRequest->getStatus());
             case UserType::ALL:
                 return $this->repository->findBy(['status' => $listRequest->getStatus()], ["id" => "ASC"]);
             default:
-                return [];
+                try {
+                    $user = $this->container->get("core.handler.user")->getRepository()->find($listRequest->getUser());
+                } catch (UserNotFoundException $e) {
+                    $this->getRequestError()->addError("user", "User not found")
+                                            ->throwException(ResponseStatusCode::NOT_FOUND);
+                }
+
+                /** @var User $user */
+                return $this->getGamesForUser(
+                    $user, $listRequest->getStatus(), $listRequest->getLimit()
+                );
         }
     }
 
@@ -208,13 +221,7 @@ class GameHandler implements GameProcessorInterface
             }
         }
 
-        if ($pgnRequest->getTimeWhite() !== null && $game->getTimeWhite() <= 100) {
-            $game->setResultWhite(0)->setResultBlack(1)->setStatus(GameStatus::END);
-        }
-
-        if ($pgnRequest->getTimeBlack() !== null && $game->getTimeBlack() <= 100) {
-            $game->setResultWhite(1)->setResultBlack(0)->setStatus(GameStatus::END);
-        }
+        $this->fixResultIfTimeOver($pgnRequest, $game);
 
         if ($this->container->get("core.service.chess")->isGameInCheckmate($game->getPgn())) {
             $game->setResultWhite((int)($game->getUserToMove() === $game->getUserBlack()))
@@ -333,21 +340,57 @@ class GameHandler implements GameProcessorInterface
     }
 
     /**
+     * @param GamePostAddmessageRequest $request
+     * @return Game
+     */
+    public function processPostAddmessage(GamePostAddmessageRequest $request) : Game
+    {
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request, $this->getRequestError());
+
+        $game = $this->repository->find($request->getId());
+
+        if (!$game instanceof Game) {
+            $this->getRequestError()->addError("id", "Game is not found");
+            $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        $chatMessage = (new ChatMessage())->setMessage($request->getMessage())
+                                          ->setUser($me)
+                                          ->setType(ChatMessageType::GAME());
+
+
+        $game->addChatMessage($chatMessage);
+
+        $this->manager->persist($chatMessage);
+        $this->manager->persist($game);
+
+        $this->manager->flush();
+
+        return $this->getUserGame($game, $me);
+    }
+
+    /**
      * @param User $user
      * @param null $status
-     * @return Game[]
+     * @param int $limit
+     * @return \CoreBundle\Entity\Game[]
      */
-    public function getGamesForUser(User $user, $status)
+    public function getGamesForUser(User $user, $status, $limit = null)
     {
-        $games = $this->manager
+        $gamesQuery = $this->manager
             ->createQuery(
                 "SELECT g FROM CoreBundle:Game g
                           WHERE (g.userWhite = :user OR g.userBlack = :user) AND g.status = :status
-                          ORDER BY g.id ASC"
+                          ORDER BY g.id DESC"
             )
             ->setParameter("status", $status)
-            ->setParameter("user", $user)
-            ->getResult();
+            ->setParameter("user", $user);
+
+        if ($limit) {
+            $gamesQuery->setMaxResults($limit);
+        }
+
+        $games = $gamesQuery->getResult();
 
         foreach ($games as $game) {
             $this->defineUserColorForGame($user, $game);
@@ -480,6 +523,17 @@ class GameHandler implements GameProcessorInterface
         $this->defineUserColorForGame($user, $game);
         $this->defineUserMoveAndOpponentForGame($user, $game);
 
+        if ($game->getStatus() == GameStatus::END) {
+            switch ($game->getColor()) {
+                case GameColor::WHITE:
+                    $game->setMyResult($game->getResultWhite());
+                    break;
+                case GameColor::BLACK:
+                    $game->setMyResult($game->getResultBlack());
+                    break;
+            }
+        }
+
         return $game;
     }
 
@@ -491,5 +545,40 @@ class GameHandler implements GameProcessorInterface
     private function isMyGame(Game $game, User $user)
     {
         return in_array($user, [$game->getUserWhite(), $game->getUserBlack()]);
+    }
+
+    /**
+     * @param GamePutPgnRequest $pgnRequest
+     * @param Game $game
+     */
+    private function fixResultIfTimeOver(GamePutPgnRequest $pgnRequest, Game $game)
+    {
+        if ($pgnRequest->getTimeWhite() !== null && $game->getTimeWhite() <= 100) {
+            switch ($pgnRequest->isInsufficientMaterialBlack()) {
+                case false:
+                    $game->setResultWhite(0)
+                         ->setResultBlack(1)
+                         ->setStatus(GameStatus::END);
+                    break;
+                case true:
+                    $game->setResultWhite(0.5)
+                         ->setResultBlack(0.5)
+                         ->setStatus(GameStatus::END);
+                    break;
+            }
+        } elseif ($pgnRequest->getTimeBlack() !== null && $game->getTimeBlack() <= 100) {
+            switch ($pgnRequest->isInsufficientMaterialWhite()) {
+                case false:
+                    $game->setResultWhite(1)
+                         ->setResultBlack(0)
+                         ->setStatus(GameStatus::END);
+                    break;
+                case true:
+                    $game->setResultWhite(0.5)
+                         ->setResultBlack(0.5)
+                         ->setStatus(GameStatus::END);
+                    break;
+            }
+        }
     }
 }

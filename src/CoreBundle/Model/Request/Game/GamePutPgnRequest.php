@@ -62,6 +62,22 @@ class GamePutPgnRequest extends GameRequest implements SecurityRequestInterface
     private $timeBlack;
 
     /**
+     * @var boolean
+     *
+     * @JMS\Expose
+     * @JMS\Type("boolean")
+     */
+    private $insufficientMaterialWhite = false;
+
+    /**
+     * @var boolean
+     *
+     * @JMS\Expose
+     * @JMS\Type("boolean")
+     */
+    private $insufficientMaterialBlack = false;
+
+    /**
      * @return int
      */
     public function getId()
@@ -171,6 +187,44 @@ class GamePutPgnRequest extends GameRequest implements SecurityRequestInterface
     public function setTimeBlack($timeBlack)
     {
         $this->timeBlack = $timeBlack;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isInsufficientMaterialWhite() : bool
+    {
+        return $this->insufficientMaterialWhite;
+    }
+
+    /**
+     * @param boolean $insufficientMaterialWhite
+     * @return GamePutPgnRequest
+     */
+    public function setInsufficientMaterialWhite(bool $insufficientMaterialWhite)
+    {
+        $this->insufficientMaterialWhite = $insufficientMaterialWhite;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isInsufficientMaterialBlack() : bool
+    {
+        return $this->insufficientMaterialBlack;
+    }
+
+    /**
+     * @param boolean $insufficientMaterialBlack
+     * @return GamePutPgnRequest
+     */
+    public function setInsufficientMaterialBlack(bool $insufficientMaterialBlack)
+    {
+        $this->insufficientMaterialBlack = $insufficientMaterialBlack;
 
         return $this;
     }

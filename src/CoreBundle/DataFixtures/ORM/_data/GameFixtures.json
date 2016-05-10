@@ -164,15 +164,28 @@
   },
   {
     "referenceName": "game-single-king-and-time-almost-over",
-    "user_white": "user-stas",
-    "user_black": "user-test-login",
-    "user_to_move": "user-test-login",
-    "pgn": "1. d4 e5 2. dxe5 f6 3. exf6 Nxf6 4. Nd2 Qe7 5. a3 Qxe2+ 6. Bxe2 Nc6 7. Ndf3 Bc5 8. Nd4 Bxd4 9. Qxd4 Nxd4 10. Bf3 Nxc2+ 11. Kd1 Nxa1 12. b4 d5 13. Bxd5 Nxd5 14. Bf4 Nxf4 15. h4 Nxg2 16. Kc1 Nxh4 17. Kb2 Nb3 18. Kxb3 Nf3 19. Nxf3 Bh3 20. Rxh3 h5 21. Rxh5 Rh7 22. Ng5 g6 23. Rxh7 b6 24. Kc4 Rd8 25. Ne6 Rd7 26. Nxc7+ Rxc7+ 27. Kb5 Rxh7 28. Ka6 b5 29. Kxb5 Rh3 30. f3 Rxf3 31. Ka6 Rxa3+ 32. Kb5 a6+ 33. Kb6 Ra4 34. Kc6 Rxb4 35. Kd6",
+    "user_white": "user-test-login",
+    "user_black": "user-stas",
+    "user_to_move": "user-stas",
+    "pgn": "1. g3  d5  2. Nf3  c6  3. d4  Nf6  4. Bg2  Bf5  5. Nh4  Bc8  6. Nd2  g6  7. O-O  Bg7  8. b3  O-O  9. c4  a5  10. Bb2  Na6  11. Rc1  b6  12. Nhf3  Bb7  13. Ne5  Nd7  14. Ndf3  f6  15. cxd5  Nxe5  16. dxe5  cxd5  17. exf6  exf6  18. Nd4  Nc5  19. Ba3  Qe7  20. e3  Rfd8  21. Ne2  Rac8  22. Qd2  Qe5  23. Bxc5  bxc5  24. Qxa5  Ba8  25. Rxc5  Rxc5  26. Qxc5  Bf8  27. Qb5  Qd6  28. Rc1  Rb8  29. Qa5  Qb6  30. Qxb6  Rxb6  31. Rc8  Ra6  32. Rxa8  Rd6  33. Ra5  d4  34. Bd5+  Kg7  35. Nxd4  h5  36. Ne6+  Kg8  37. Nxf8+  Kxf8  38. e4  f5  39. f3  fxe4  40. fxe4  Ke7  41. Kf2  Kf6  42. Kf3  Kg7  43. Ra7+  Kh6  44. h4  g5  45. hxg5+  Kxg5  46. Rg7+  Kh6  47. Rf7  Ra6  48. a4  Rb6  49. Kf4  Rb4  50. Kf5  Rd4  51. Rf6+  Kg7  52. Ke5  Rd1  53. Rf5  Rg1  54. Rg5+  Kf8  55. Kf4  Rf1+  56. Ke3  Re1+  57. Kd2  Rf1  58. Rf5+  Rxf5  59. exf5  Ke7  60. Bf3  Kf6  61. Bxh5  Kxf5  62. g4+  Ke5  63. a5  Kd5  64. a6  Ke5  65. a7  Kf4  66. a8=Q  Kg5  67. Qd5+  Kh4  68. Ke3  Kg3  69. Qf5  Kh4  70. Bf7  Kg3  71. g5  Kh4  72. g6  Kg3  73. g7",
     "pgn_alt": "",
     "status": "play",
     "rate": false,
-    "time_white": 10000,
-    "time_black": 5000,
+    "time_white": 5000,
+    "time_black": 10000,
+    "time_last_move": "yesterday"
+  },
+  {
+    "referenceName": "game-long-pgn",
+    "user_white": "user-stas",
+    "user_black": "user-test-login",
+    "user_to_move": "user-test-login",
+    "pgn": "1. Nf3  d5  2. c4  c6  3. e3  Nf6  4. d4  e6  5. Nc3  Nbd7  6. cxd5  exd5  7. Be2  Bd6  8. O-O  O-O  9. b3  Qe7  10. Bb2  Ne4  11. Rc1  Ndf6  12. Ne5  Bxe5  13. dxe5  Nd7  14. f4  Nxc3  15. Bxc3  f6  16. Qd2  fxe5  17. fxe5  Nxe5  18. Bb4  Rxf1+  19. Rxf1  c5  20. Bc3  d4  21. exd4  Ng6  22. Bc4+  Be6  23. Re1",
+    "pgn_alt": "",
+    "status": "play",
+    "rate": false,
+    "time_white": 18000000,
+    "time_black": 18000000,
     "time_last_move": "yesterday"
   }
 ]

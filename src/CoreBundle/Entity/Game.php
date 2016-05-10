@@ -217,6 +217,22 @@ class Game implements ChatMessageContainerInterface
     private $myResult;
 
     /**
+     * @var bool
+     *
+     * @JMS\Expose
+     * @JMS\Type("boolean")
+     */
+    private $insufficientMaterialWhite = false;
+
+    /**
+     * @var bool
+     *
+     * @JMS\Expose
+     * @JMS\Type("boolean")
+     */
+    private $insufficientMaterialBlack = false;
+
+    /**
      * Get id
      *
      * @return int
@@ -706,6 +722,44 @@ class Game implements ChatMessageContainerInterface
     public function setMyResult($myResult)
     {
         $this->myResult = $myResult;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isInsufficientMaterialWhite() : bool 
+    {
+        return $this->insufficientMaterialWhite;
+    }
+
+    /**
+     * @param boolean $insufficientMaterialWhite
+     * @return Game
+     */
+    public function setInsufficientMaterialWhite(bool $insufficientMaterialWhite)
+    {
+        $this->insufficientMaterialWhite = $insufficientMaterialWhite;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isInsufficientMaterialBlack() : bool 
+    {
+        return $this->insufficientMaterialBlack;
+    }
+
+    /**
+     * @param boolean $insufficientMaterialBlack
+     * @return Game
+     */
+    public function setInsufficientMaterialBlack(bool $insufficientMaterialBlack)
+    {
+        $this->insufficientMaterialBlack = $insufficientMaterialBlack;
 
         return $this;
     }

@@ -38,6 +38,6 @@ playzoneControllers.directive('chessTimer', function (dateFilter, $interval) {
             user: '=',
             fixTime: '&fixTime'
         },
-        templateUrl: 'partials/chess_timer_with_user.html'
+        templateUrl: 'partials/chess_timer_with_user.html?rand=' + Math.random()
     }
 });

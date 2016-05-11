@@ -119,6 +119,7 @@ h2 {
   height: 0;
 }
 .content {
+  max-width: 1200px;
   margin: auto;
   padding: 10px;
   .mobile & {
@@ -589,80 +590,71 @@ th.header {
       color: $green;
     }
     .left-column {
+      width: 30%;
+      float: left;
+      padding: 0 15px 0 0;
+      .mobile & {
+        display: none;
+      }
+      playzone-chat {
+        display: block;
+        margin-top: -23px;
+        .message {
+          width: 77%
+        }
+        .add-message {
+          width: 20%;
+        }
+      }
+    }
+    .middle-column {
       .mobile & {
         width: 100%;
         float: none;
       }
       float: left;
-      width: 40%;
+      width: 55%;
       #board {
         width: 100%;
         float: left;
         margin: 5px 0;
         max-height: 600px;
+        &.dev {
+          visibility: hidden;
+        }
       }
       chess-timer {
-         &.white {
-           * {
-             background-color: $white;
-             color: $black;
-           }
-           .timer {
-             border-color: $white;
-           }
-         }
-         &.black {
-           * {
-             background-color: $black;
-             color: $white;
-           }
-           .timer {
-             border-color: $black;
-           }
-         }
-         .timer {
-           width: 50%;
-           float: left;
-           text-align: center;
-           border: 2px solid;
-           &.zeitnot {
-             color: $red
-           }
-           &.active {
-             border-color: $red;
-           }
-           span {
-             font-size: 26px;
-           }
-         }
-       }
-      .action {
-        text-align: center;
-        margin-top: 8px;
-        .mobile & {
-          width: auto;
+        &.white {
+          * {
+            background-color: $white;
+            color: $black;
+          }
+          .timer {
+            border-color: $white;
+          }
         }
-        .button {
-          font-size: 26px;
-          padding: 4px;
-          .mobile & {
-            font-size: inherit;
+        &.black {
+          * {
+            background-color: $black;
+            color: $white;
           }
-          &.draw {
-            background-color: $color_japanese_laurel_approx;
-            margin-right: 10px;
-            &.offered {
-              font-weight: bold;
-              border: 4px solid greenyellow;
-              color: greenyellow;
-            }
+          .timer {
+            border-color: $black;
           }
-          &.draw_accept {
-            background-color: $color_japanese_laurel_approx;
-            font-weight: bold;
+        }
+        .timer {
+          width: 50%;
+          float: left;
+          text-align: center;
+          border: 2px solid;
+          &.zeitnot {
+            color: $red
           }
-          &.resign {
-            background-color: $red;
+          &.active {
+            border-color: $red;
+          }
+          span {
+            font-size: 26px;
           }
         }
       }
@@ -671,16 +663,14 @@ th.header {
       .mobile & {
         display: none;
       }
-      padding-left: 15px;
+      padding-left: 7px;
       float: left;
-      width: 60%;
+      width: 15%;
       .mobile & {
         float: none;
       }
       pgn-notation {
-        height: 350px;
         margin: -2px 0 0 5px;
-        overflow-y: scroll;
         display: block;
         .move {
           cursor: pointer;
@@ -689,14 +679,48 @@ th.header {
             color: $red;
           }
         }
-        .navigation span {
-          cursor: pointer;
-          border: 1px solid black;
+        .navigation {
+          text-align: center;
+          span {
+            cursor: pointer;
+            border: 1px solid black;
+          }
+        }
+        .notation {
+          height: 350px;
+          overflow-y: scroll;
         }
       }
-      playzone-chat {
-        display: block;
-      }
+      .action {
+         text-align: center;
+         margin-top: 10px;
+         .mobile & {
+           width: auto;
+         }
+         .button {
+           font-size: 26px;
+           padding: 4px;
+           .mobile & {
+             font-size: inherit;
+           }
+           &.draw {
+             background-color: $color_japanese_laurel_approx;
+             margin-right: 10px;
+             &.offered {
+               font-weight: bold;
+               border: 4px solid greenyellow;
+               color: greenyellow;
+             }
+           }
+           &.draw_accept {
+             background-color: $color_japanese_laurel_approx;
+             font-weight: bold;
+           }
+           &.resign {
+             background-color: $red;
+           }
+         }
+       }
     }
   }
 }

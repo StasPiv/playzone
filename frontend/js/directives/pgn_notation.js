@@ -94,6 +94,6 @@ playzoneControllers.directive('pgnNotation', function ($rootScope) {
         scope: {
             pgnString: '='
         },
-        templateUrl: 'partials/pgn_notation.html'
+        templateUrl: 'partials/pgn_notation.html?rand=' + Math.random()
     }
 });

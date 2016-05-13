@@ -1,4 +1,4 @@
-<div id="playroom">
+<div id="playroom" ng-class="{'observer': !game.mine}">
     <div ng-if="game.mine && game.opponent.login !== 'Robot' && game.opponent.offline" class="alert alert-warning">
         {{ 'Opponent is offline' | translate }}
     </div>
@@ -9,6 +9,11 @@
                            data-rest-container="'game'"
                            data-rest-container-id="game.id"
                            data-chat-room="game.id"
+            ></playzone-chat>
+            <playzone-chat data-message-container="chat"
+                           data-rest-container="'chat'"
+                           data-chat-room="'common_chat'"
+                           ng-if="!game.mine"
             ></playzone-chat>
         </div>
         <div class="middle-column">
@@ -43,23 +48,21 @@
                 {{game.user_white.login}} - {{game.user_black.login}}: {{game.result_white}} - {{game.result_black}}
             </div>
             <div class="clear">&nbsp;</div>
-            <div id="board" ng-class="{'dev': dev}"></div>
+            <div id="board" ng-class="{'dev': dev}"></div><div class="clear">&nbsp;</div>
+            <div class="action" ng-if="game.status == 'play' && game.mine">
+                <span ng-class="{'btn-success': game.draw && game.draw !== game.color}"
+                      class="btn btn-primary draw"
+                      ng-click="draw()"
+                      ng-if="game.opponent.login !== 'Robot'"
+                >{{ "Draw" | translate }}</span>
+                <span class="btn btn-danger resign" ng-click="resign()">{{ "Resign" | translate }}</span>
+            </div>
         </div>
         <div class="right-column">
             <div class="pgn">
                 <pgn-notation
                            data-pgn-string="game.pgn"
                 ></pgn-notation>
-
-                <div class="clear">&nbsp;</div>
-                <div class="action" ng-if="game.status == 'play' && game.mine">
-                <span ng-class="{'btn-success': game.draw && game.draw !== game.color}"
-                      class="btn btn-primary draw"
-                      ng-click="draw()"
-                      ng-if="game.opponent.login !== 'Robot'"
-                >{{ "Draw" | translate }}</span>
-                    <span class="btn btn-danger resign" ng-click="resign()">{{ "Resign" | translate }}</span>
-                </div>
             </div>
         </div>
     </div>

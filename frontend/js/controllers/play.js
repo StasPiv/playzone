@@ -3,7 +3,9 @@
  */
 'use strict';
 
-playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService, SettingService) {
+playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService, SettingService, ChatRest) {
+    $scope.chat = ChatRest.query();
+
     $rootScope.robot = false;
     $scope.boardConfig = {
         pieceType: SettingService.getSetting('Piece type') ?

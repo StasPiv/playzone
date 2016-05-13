@@ -124,6 +124,8 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                         scope.highlightLastMove(scope, element);
                         makePreMoveIfExists(scope, element);
+                        var date = new Date();
+                        console.log("latency", date.getTime() - data.milliseconds);
                     });
                 }
             );
@@ -137,6 +139,9 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
             };
 
             element.onMove = function (move) {
+                var date = new Date();
+
+                console.log("send", date.getTime());
                 scope.current_move = scope.pre_move = false;
                 $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
 
@@ -182,9 +187,11 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 element.game.in_checkmate() && AudioService.win();
                 scope.highlightLastMove(scope, element);
 
+                var dateRTC = new Date();
                 WebRTCService.sendMessage({
                     gameId: scope.game.id,
-                    move: move
+                    move: move,
+                    ms: dateRTC.getTime()
                 });
             };
 
@@ -193,6 +200,9 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     if (scope.game.status !== 'play' || !webRTCMessage.gameId || webRTCMessage.gameId !== scope.game.id) {
                         return;
                     }
+
+                    var date = new Date();
+                    console.log("latency webRTC", date.getTime() - webRTCMessage.ms);
 
                     element.game.move(webRTCMessage.move);
 

@@ -127,7 +127,8 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
     public function onMessage(ConnectionInterface $from, $msg)
     {
         try {
-            $this->logger->info("Client: " . $msg);
+            $microtime = microtime(true);
+            $this->logger->info("Client ($microtime): " . $msg);
             $messageObject = $this->getMessageObject($msg);
 
             if ($this->container->get('validator')->validate($messageObject)->count() > 0) {

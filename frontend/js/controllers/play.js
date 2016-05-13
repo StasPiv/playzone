@@ -4,6 +4,7 @@
 'use strict';
 
 playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService, SettingService) {
+    $scope.dev = true;
     $rootScope.robot = false;
     $scope.boardConfig = {
         pieceType: SettingService.getSetting('Piece type') ?
@@ -29,7 +30,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         function () {
             WebsocketService.subscribeToGame($scope.game.id);
             
-            if (true || !EnvService.isWebRTC()) { // TODO: need to remove "true" for webRTC support
+            if (!EnvService.isWebRTC()) { // TODO: need to remove "true" for webRTC support
                 return;
             }
 

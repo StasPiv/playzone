@@ -13,7 +13,11 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
         dataStream = $websocket(webSocketPath);
         dataStream.onMessage(
             function (message) {
-                console.log("message.data", message.data);
+                var date = new Date();
+                console.log("receive begin", date.getTime());
+
+                console.log("message", message);
+                
                 var receivedMessage = angular.fromJson(message.data);
                 console.log("received message", receivedMessage);
 
@@ -49,6 +53,8 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
         },
         send: function(data) {
             console.log(data);
+            var date = new Date();
+            data.data.milliseconds = date.getTime();
             var dataToSend = angular.toJson(data);
             console.log(dataToSend);
             dataStream.send(dataToSend);

@@ -145,8 +145,9 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());
                 scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
 
+                scope.savePgnAndSendToObservers(true);
+
                 if (scope.game.opponent.login === "Robot") { // isRobot
-                    scope.savePgnAndSendToObservers(true);
                     GameRest.getRobotmove(
                         {
                             encoded_fen: window.btoa(element.game.fen()),
@@ -169,11 +170,14 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                             element.game.game_over() && scope.game.$get();
                             scope.highlightLastMove(scope, element);
 
-                            makePreMoveIfExists(scope, element);
+                            $timeout(
+                                function () {
+                                    makePreMoveIfExists(scope, element);
+                                },
+                                0
+                            );
                         }
                     );
-                } else {
-                    scope.savePgnAndSendToObservers(true);
                 }
 
                 (element.game.game_over() && !element.game.in_checkmate() ||

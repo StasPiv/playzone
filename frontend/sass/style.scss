@@ -658,10 +658,43 @@ th.header {
           }
         }
       }
+      .action {
+        text-align: center;
+        margin-top: 10px;
+        .mobile & {
+          width: auto;
+        }
+        .button {
+          font-size: 26px;
+          padding: 4px;
+          .mobile & {
+            font-size: inherit;
+          }
+          &.draw {
+            background-color: $color_japanese_laurel_approx;
+            margin-right: 10px;
+            &.offered {
+              font-weight: bold;
+              border: 4px solid greenyellow;
+              color: greenyellow;
+            }
+          }
+          &.draw_accept {
+            background-color: $color_japanese_laurel_approx;
+            font-weight: bold;
+          }
+          &.resign {
+            background-color: $red;
+          }
+        }
+      }
     }
     .right-column {
       .mobile & {
         display: none;
+      }
+      .observer & {
+        width: 40%;
       }
       padding-left: 7px;
       float: left;
@@ -691,36 +724,6 @@ th.header {
           overflow-y: scroll;
         }
       }
-      .action {
-         text-align: center;
-         margin-top: 10px;
-         .mobile & {
-           width: auto;
-         }
-         .button {
-           font-size: 26px;
-           padding: 4px;
-           .mobile & {
-             font-size: inherit;
-           }
-           &.draw {
-             background-color: $color_japanese_laurel_approx;
-             margin-right: 10px;
-             &.offered {
-               font-weight: bold;
-               border: 4px solid greenyellow;
-               color: greenyellow;
-             }
-           }
-           &.draw_accept {
-             background-color: $color_japanese_laurel_approx;
-             font-weight: bold;
-           }
-           &.resign {
-             background-color: $red;
-           }
-         }
-       }
     }
   }
 }

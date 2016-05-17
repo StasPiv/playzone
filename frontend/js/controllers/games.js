@@ -4,8 +4,8 @@
 'use strict';
 
 playzoneControllers.controller('GamesCtrl', function ($scope, $rootScope, $location, CallRest, GameRest, WebsocketService, WebRTCService, AudioService, ChatRest) {
-    $rootScope.chat = ChatRest.query();
-
+    $scope.chat = ChatRest.query();
+    
     $scope.calls_from_me = CallRest.query({type: "from"});
     $scope.calls_to_me = CallRest.query({type: "to"});
     $scope.current = GameRest.query({status: "play", user:"all"});

@@ -3,8 +3,10 @@
  */
 'use strict';
 
-playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService, SettingService) {
+playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService, SettingService, ChatRest) {
     $scope.dev = true;
+    $scope.chat = ChatRest.query();
+
     $rootScope.robot = false;
     $scope.boardConfig = {
         pieceType: SettingService.getSetting('Piece type') ?
@@ -92,7 +94,6 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     $scope.sendWithWebsockets = function () {
         console.log('sendWithWS');
         if ($scope.game.status === 'play') {
-            console.log($scope.game.pgn);
             WebsocketService.sendGameToObservers(
                 $scope.game.id, 
                 window.btoa($scope.game.pgn), 
@@ -111,6 +112,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
             $scope.sendWithWebsockets();
         }
 
+        console.log('before savePgn', $scope.game.pgn);
         $scope.game.$savePgn().then(
             function () {
                 $scope.game.opponent.offline = !$rootScope.loginsOnline.searchById($scope.game.opponent.id);
@@ -124,7 +126,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     $scope.highlightLastMove = highlightLastMove;
 
     WebsocketService.addListener('listen_opponent_gone', 'user_gone', function (user) {
-        if (user['login'] === $scope.game.opponent.login) {
+        if ($scope.game.opponent && user['login'] === $scope.game.opponent.login) {
             console.log('opponent has gone');
             $scope.savePgnAndSendToObservers();
             $scope.game.opponent.offline = true;

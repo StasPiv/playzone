@@ -73,13 +73,25 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                                 element.game.game_over() && scope.game.$get();
                                 scope.highlightLastMove(scope, element);
 
-                                makePreMoveIfExists(scope, element);
+                                $timeout(
+                                    function () {
+                                        makePreMoveIfExists(scope, element);
+                                    },
+                                    1
+                                );
                             }
                         );
                     }
 
                     WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
-                        if (!data.encoded_pgn && scope.game.status === 'play') {
+
+                        var dateWebsocket = new Date();
+                        GameRest.addMove("", {
+                            id: scope.game.id,
+                            lag: (dateWebsocket.getTime() - data.milliseconds) / 1000
+                        });
+
+                        if (!data.move && scope.game.status === 'play') {
                             // it means that game is finished or drawn and we have to fix result
                             scope.game.$get().then( // get game from server
                                 function () {
@@ -98,32 +110,49 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                             return;
                         }
 
-                        var receivedPgn = window.atob(data.encoded_pgn);
+                        var move = data.move;
+                        var moveNumber = data.moveNumber;
 
-                        if (receivedPgn.length <= scope.game.pgn.length) {
+                        if (element.game.history().length != moveNumber - 1) {
+                            scope.game.$get().then(
+                                function () {
+                                    element.game.pgn(scope.game.pgn);
+                                    scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
+                                    AudioService.move();
+                                    element.board.position(element.game.fen());
+                                    element.updateStatus();
+                                    element.game.game_over() && scope.game.$get();
+
+                                    scope.highlightLastMove(scope, element);
+                                    $timeout(
+                                        function () {
+                                            makePreMoveIfExists(scope, element);
+                                        },
+                                        1
+                                    );
+                                }
+                            );
                             return;
                         }
 
+                        element.game.move(move);
                         scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
                         scope.game.time_black = data.time_black;
 
                         scope.game.time_white = data.time_white;
 
-                        if (receivedPgn.length <= scope.game.pgn.length) {
-                            scope.highlightLastMove(scope, element);
-                            makePreMoveIfExists(scope, element);
-                            return;
-                        }
-
-                        scope.game.pgn = receivedPgn;
-                        element.game.load_pgn(receivedPgn);
                         AudioService.move();
                         element.board.position(element.game.fen());
                         element.updateStatus();
                         element.game.game_over() && scope.game.$get();
 
                         scope.highlightLastMove(scope, element);
-                        makePreMoveIfExists(scope, element);
+                        $timeout(
+                            function () {
+                                makePreMoveIfExists(scope, element);
+                            },
+                            1
+                        );
                     });
                 }
             );
@@ -145,7 +174,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());
                 scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
 
-                scope.savePgnAndSendToObservers(true);
+                scope.savePgnAndSendToObservers(true, move, element.game.history().length);
 
                 if (scope.game.opponent.login === "Robot") { // isRobot
                     GameRest.getRobotmove(
@@ -186,9 +215,11 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 element.game.in_checkmate() && AudioService.win();
                 scope.highlightLastMove(scope, element);
 
+                var dateRTC = new Date();
                 WebRTCService.sendMessage({
                     gameId: scope.game.id,
-                    move: move
+                    move: move,
+                    ms: dateRTC.getTime()
                 });
             };
 
@@ -197,6 +228,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     if (scope.game.status !== 'play' || !webRTCMessage.gameId || webRTCMessage.gameId !== scope.game.id) {
                         return;
                     }
+
 
                     element.game.move(webRTCMessage.move);
 

@@ -5,6 +5,7 @@ namespace CoreBundle\Entity;
 use CoreBundle\Model\ChatMessage\ChatMessageContainerInterface;
 use CoreBundle\Model\Game\GameColor;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -207,6 +208,15 @@ class Game implements ChatMessageContainerInterface
      *      )
      */
     private $chatMessages;
+
+    /**
+     * @var GameMove[]|PersistentCollection
+     *
+     * @JMS\Expose()
+     * @JMS\Type("array<CoreBundle\Entity\GameMove>")
+     * @ORM\OneToMany(targetEntity="GameMove", mappedBy="game", cascade={"persist"})
+     */
+    private $moves;
 
     /**
      * @var float
@@ -762,6 +772,24 @@ class Game implements ChatMessageContainerInterface
         $this->insufficientMaterialBlack = $insufficientMaterialBlack;
 
         return $this;
+    }
+
+    /**
+     * @param GameMove $move
+     * @return Game
+     */
+    public function addMove(GameMove $move)
+    {
+        $this->moves->add($move->setGame($this));
+        return $this;
+    }
+
+    /**
+     * @return GameMove[]
+     */
+    public function getMoves()
+    {
+        return $this->moves;
     }
 }
 

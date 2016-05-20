@@ -12,6 +12,8 @@ class ResponseStatusCode
 {
     const OK = 200;
 
+    const CREATED = 201;
+
     const BAD_FORMAT = 400;
 
     const FORBIDDEN = 403;

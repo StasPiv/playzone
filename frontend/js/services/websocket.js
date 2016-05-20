@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneServices.factory('WebsocketService', function($websocket, $location, $rootScope, $interval) {
+playzoneServices.factory('WebsocketService', function($websocket, $location, $rootScope) {
     var listenersMap = {};
     // Open a WebSocket connection
     var webSocketPath = 'ws://ws.' + $location.host() + ':8081/';
@@ -13,8 +13,6 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
         dataStream = $websocket(webSocketPath);
         dataStream.onMessage(
             function (message) {
-                var date = new Date();
-                console.log("receive begin", date.getTime());
 
                 console.log("message", message);
                 
@@ -120,6 +118,30 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
                     data: {
                         game_id: gameId,
                         encoded_pgn: encodedPgn,
+                        time_white: timeWhite,
+                        time_black: timeBlack,
+                        color: color
+                    }
+                }
+            )
+        },
+        
+        /**
+         * @param gameId
+         * @param move
+         * @param timeWhite
+         * @param timeBlack
+         * @param color
+         */
+        sendMoveToObservers: function (gameId, move, timeWhite, timeBlack, color, moveNumber) {
+            this.send(
+                {
+                    scope: 'send_to_game_observers',
+                    method: 'send_pgn_to_observers',
+                    data: {
+                        game_id: gameId,
+                        move: move,
+                        moveNumber: moveNumber,
                         time_white: timeWhite,
                         time_black: timeBlack,
                         color: color

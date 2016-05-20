@@ -95,6 +95,15 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
                         message: data.message
                     });
                 }
+            },
+            addMove: {
+                method: 'POST',
+                url: ApiService.base_url + 'game/:id/addmove',
+                transformRequest: function (data) {
+                    return angular.toJson({
+                        lag: data.lag
+                    });
+                }
             }
         }
     );

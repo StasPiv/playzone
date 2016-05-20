@@ -3,8 +3,8 @@
  */
 'use strict';
 
-playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService, SettingService, ChatRest) {
-    $scope.dev = true;
+playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService, SettingService, ChatRest, $timeout) {
+    //$scope.dev = true;
     $scope.chat = ChatRest.query();
 
     $rootScope.robot = false;
@@ -32,7 +32,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         function () {
             WebsocketService.subscribeToGame($scope.game.id);
             
-            if (!EnvService.isWebRTC()) { // TODO: need to remove "true" for webRTC support
+            if (true || !EnvService.isWebRTC()) { // TODO: need to remove "true" for webRTC support
                 return;
             }
 
@@ -96,7 +96,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         if ($scope.game.status === 'play') {
             WebsocketService.sendGameToObservers(
                 $scope.game.id, 
-                window.btoa($scope.game.pgn), 
+                window.btoa($scope.game.pgn),
                 $scope.game.time_white, 
                 $scope.game.time_black, 
                 $scope.game.color
@@ -106,20 +106,41 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         }
     };
 
-    $scope.savePgnAndSendToObservers = function (withoutSaving) {
+    $scope.savePgnAndSendToObservers = function (withoutSaving, move, moveNumber) {
         if (withoutSaving) {
             $scope.game.move_color = $scope.game.move_color === 'w' ? 'b' : 'w';
-            $scope.sendWithWebsockets();
+            if (move) {
+                WebsocketService.sendMoveToObservers(
+                    $scope.game.id,
+                    move,
+                    $scope.game.time_white,
+                    $scope.game.time_black,
+                    $scope.game.color,
+                    moveNumber
+                );
+            } else {
+                $timeout(
+                    function () {
+                        $scope.sendWithWebsockets();
+                    },
+                    1
+                );
+            }
+            
         }
 
-        console.log('before savePgn', $scope.game.pgn);
-        $scope.game.$savePgn().then(
+        $timeout(
             function () {
-                $scope.game.opponent.offline = !$rootScope.loginsOnline.searchById($scope.game.opponent.id);
-                if (!withoutSaving) {
-                    $scope.sendWithWebsockets();
-                }
-            }
+                $scope.game.$savePgn().then(
+                    function () {
+                        $scope.game.opponent.offline = !$rootScope.loginsOnline.searchById($scope.game.opponent.id);
+                        if (!withoutSaving) {
+                            $scope.sendWithWebsockets();
+                        }
+                    }
+                );
+            },
+            1
         );
     };
 

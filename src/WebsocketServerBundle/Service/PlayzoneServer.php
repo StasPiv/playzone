@@ -18,7 +18,6 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use WebsocketServerBundle\Exception\PlayzoneServerException;
-use WebsocketServerBundle\Model\GameObserver;
 use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSend;
 use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSubscribe;
 use WebsocketServerBundle\Model\Message\Client\Game\ClientMessageMessageSend;
@@ -127,8 +126,6 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
     public function onMessage(ConnectionInterface $from, $msg)
     {
         try {
-            $microtime = microtime(true);
-            $this->logger->info("Client ($microtime): " . $msg);
             $messageObject = $this->getMessageObject($msg);
 
             if ($this->container->get('validator')->validate($messageObject)->count() > 0) {
@@ -282,7 +279,9 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         foreach ($this->users as $wsUser) {
             if ($wsUser->getConnection() != $from && isset($wsUser->getGamesToListenMap()[$gameSendMessage->getGameId()
                     ])) {
-                $messageObject->setMethod("game_pgn_" . $gameSendMessage->getGameId());
+                $messageObject->setMethod("game_pgn_" . $gameSendMessage->getGameId())
+                              ->setMs(microtime(true) * 10000);
+
                 $this->send($messageObject, $wsUser);
             }
         }

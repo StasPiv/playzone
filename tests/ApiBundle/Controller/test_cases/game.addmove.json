@@ -1,0 +1,44 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserSettingFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\CallFixtures"
+  ],
+  "login_and_token_is_incorrect": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "bba37b62d15cc5f8671fd3d1b034c354",
+      "lag": 0.15
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "token": "Forbidden for user with this credentials"
+      }
+    }
+  },
+  "correct": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "lag": 0.15,
+      "reference": {
+        "name": "id",
+        "value": "game-0"
+      }
+    },
+    "response": {
+      "status": 201,
+      "data": {
+        "moves": [
+          {
+            "lag": 0.15
+          }
+        ]
+      }
+    }
+  }
+}

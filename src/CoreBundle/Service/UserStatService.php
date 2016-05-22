@@ -70,6 +70,10 @@ class UserStatService
                     }
                 }
                 
+                if ($game->getResultWhite() == 0.5) {
+                    $game->setResultWhite("1/2")->setResultBlack("1/2");
+                }
+
                 $pgnFormatted[] = $this->container->get("templating")
                                        ->render(":Chess:pgn.html.twig", ["game" => $game]);
             }

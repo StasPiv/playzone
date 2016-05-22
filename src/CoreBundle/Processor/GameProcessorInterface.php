@@ -14,6 +14,7 @@ use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
 use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
+use CoreBundle\Model\Request\Game\GamePostAddmoveRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
@@ -76,4 +77,10 @@ interface GameProcessorInterface extends ProcessorInterface
      * @return Game
      */
     public function processPostAddmessage(GamePostAddmessageRequest $request) : Game;
+
+    /**
+     * @param GamePostAddmoveRequest $request
+     * @return Game
+     */
+    public function processPostAddmove(GamePostAddmoveRequest $request) : Game;
 }

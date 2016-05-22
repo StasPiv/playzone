@@ -130,7 +130,6 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
     public function onMessage(ConnectionInterface $from, $msg)
     {
         try {
-            $this->logger->info("Client: " . $msg);
             $messageObject = $this->getMessageObject($msg);
 
             if ($this->container->get('validator')->validate($messageObject)->count() > 0) {
@@ -284,7 +283,9 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         foreach ($this->users as $wsUser) {
             if ($wsUser->getConnection() != $from && isset($wsUser->getGamesToListenMap()[$gameSendMessage->getGameId()
                     ])) {
-                $messageObject->setMethod("game_pgn_" . $gameSendMessage->getGameId());
+                $messageObject->setMethod("game_pgn_" . $gameSendMessage->getGameId())
+                              ->setMs(microtime(true) * 10000);
+
                 $this->send($messageObject, $wsUser);
             }
         }

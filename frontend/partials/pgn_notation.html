@@ -1,18 +1,18 @@
-<div ng-if="!!$root.chess">
-    <span class="move move-{{$index}}"
-          data-move-index="{{$index}}"
-          ng-repeat="move in $root.chess.history() track by $index"
-    >
-        <span ng-if="$index % 2 === 0" class="number">
-            {{$index / 2 + 1}}.
-        </span>
-        {{move}}&nbsp;
-    </span>
-</div>
 <div class="navigation">
     <span class="start glyphicon glyphicon-fast-backward"></span>
     <span class="back glyphicon glyphicon-chevron-left"></span>
     <span class="go glyphicon glyphicon-chevron-right"></span>
     <span class="end glyphicon glyphicon-fast-forward"></span>
     <span class="flip glyphicon glyphicon-refresh"></span>
+</div>
+<div ng-if="!!$root.chess" class="notation">
+    <span ng-repeat="move in $root.chess.history() track by $index">
+        <span ng-if="$index % 2 === 0" class="number">{{$index / 2 + 1}}. </span>
+        <span class="move move-{{$index}}"
+              data-move-index="{{$index}}"
+        >
+            {{move}}&nbsp;
+        </span>
+        <br class="clear" ng-if="$index % 2 !== 0" />
+    </span>
 </div>

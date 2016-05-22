@@ -51,6 +51,14 @@ class PlayzoneMessage
     protected $logins;
 
     /**
+     * @var int
+     * 
+     * @JMS\Expose()
+     * @JMS\Type("float")
+     */
+    protected $ms;
+
+    /**
      * @return mixed
      */
     public function getScope()
@@ -122,6 +130,25 @@ class PlayzoneMessage
     public function setLogins($logins)
     {
         $this->logins = $logins;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMs()
+    {
+        return $this->ms;
+    }
+
+    /**
+     * @param int $ms
+     * @return PlayzoneMessage
+     */
+    public function setMs($ms)
+    {
+        $this->ms = $ms;
 
         return $this;
     }

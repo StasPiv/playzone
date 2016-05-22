@@ -1,9 +1,22 @@
-<div id="playroom">
+<div id="playroom" ng-class="{'observer': !game.mine}">
     <div ng-if="game.mine && game.opponent.login !== 'Robot' && game.opponent.offline" class="alert alert-warning">
         {{ 'Opponent is offline' | translate }}
     </div>
     <div class="play-chess-board chess-board-legal" data-board="board">
-        <div class="left-column">
+        <div class="left-column">&nbsp;
+            <playzone-chat ng-if="game.mine" class="pgn table-responsive"
+                           data-message-container="game"
+                           data-rest-container="'game'"
+                           data-rest-container-id="game.id"
+                           data-chat-room="game.id"
+            ></playzone-chat>
+            <playzone-chat data-message-container="chat"
+                           data-rest-container="'chat'"
+                           data-chat-room="'common_chat'"
+                           ng-if="!game.mine"
+            ></playzone-chat>
+        </div>
+        <div class="middle-column">
             <chess-timer
                     ng-if="game.status == 'play'"
                     class="white"
@@ -35,6 +48,7 @@
                 {{game.user_white.login}} - {{game.user_black.login}}: {{game.result_white}} - {{game.result_black}}
             </div>
             <div class="clear">&nbsp;</div>
+            <div id="board" ng-class="{'dev': dev}"></div><div class="clear">&nbsp;</div>
             <div class="action" ng-if="game.status == 'play' && game.mine">
                 <span ng-class="{'btn-success': game.draw && game.draw !== game.color}"
                       class="btn btn-primary draw"
@@ -43,31 +57,13 @@
                 >{{ "Draw" | translate }}</span>
                 <span class="btn btn-danger resign" ng-click="resign()">{{ "Resign" | translate }}</span>
             </div>
-            <div id="board"></div>
-            <div class="clear">&nbsp;</div>
         </div>
         <div class="right-column">
             <div class="pgn">
-                <h1>
-                    <user-link
-                            data-user="game.user_white"
-                    ></user-link>
-                     -
-                    <user-link
-                            data-user="game.user_black"
-                    ></user-link>
-                </h1>
                 <pgn-notation
                            data-pgn-string="game.pgn"
                 ></pgn-notation>
-                <h2 ng-if="game.status == 'end'">{{game.result_white}} - {{game.result_black}}</h2>
             </div>
-            <playzone-chat ng-if="game.mine" class="pgn table-responsive"
-                           data-message-container="game"
-                           data-rest-container="'game'"
-                           data-rest-container-id="game.id"
-                           data-chat-room="game.id"
-            ></playzone-chat>
         </div>
     </div>
 </div>

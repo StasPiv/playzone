@@ -9,6 +9,7 @@
 namespace ApiBundle\Controller;
 
 use CoreBundle\Model\Request\Tournament\TournamentDeleteUnrecordRequest;
+use CoreBundle\Model\Request\Tournament\TournamentGetCurrentgameRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetListRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetRequest;
 use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
@@ -42,6 +43,16 @@ class TournamentController extends BaseController
     public function getAction(Request $request, $tournament_id)
     {
         return $this->process($request, new TournamentGetRequest());
+    }
+
+    /**
+     * @param Request $request
+     * @param int $tournament_id
+     * @return Response
+     */
+    public function getCurrentgameAction(Request $request, $tournament_id)
+    {
+        return $this->process($request, new TournamentGetCurrentgameRequest());
     }
 
     /**

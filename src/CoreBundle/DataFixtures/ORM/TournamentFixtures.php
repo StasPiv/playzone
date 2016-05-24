@@ -29,7 +29,8 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
     protected function createEntity($data)
     {
         $tournament = new Tournament();
-        $tournament->setName($data['name']);
+        $tournament->setName($data['name'])
+                   ->setCurrentRound((int)@$data["current_round"]);
         
         if (isset($data['players'])) {
             foreach ($data['players'] as $referencePlayer) {

@@ -575,7 +575,7 @@ class GameHandler implements GameProcessorInterface
      * @param User $user
      * @return bool
      */
-    private function isMyGame(Game $game, User $user)
+    public function isMyGame(Game $game, User $user)
     {
         return in_array($user, [$game->getUserWhite(), $game->getUserBlack()]);
     }

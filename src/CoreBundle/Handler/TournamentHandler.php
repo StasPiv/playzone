@@ -14,12 +14,14 @@ use CoreBundle\Entity\TournamentGame;
 use CoreBundle\Entity\TournamentPlayer;
 use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\Tournament\TournamentGameShouldBeSkippedException;
+use CoreBundle\Exception\Handler\Tournament\TournamentMissRoundException;
 use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
 use CoreBundle\Exception\Handler\Tournament\TournamentPlayerNotFoundException;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Tournament\TournamentDeleteUnrecordRequest;
+use CoreBundle\Model\Request\Tournament\TournamentGetCurrentgameRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetListRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetRequest;
 use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
@@ -103,6 +105,38 @@ class TournamentHandler implements TournamentProcessorInterface
 
         /** @var Tournament $tournament */
         return $tournament;
+    }
+
+    /**
+     * @param TournamentGetCurrentgameRequest $request
+     * @return Game
+     */
+    public function processGetCurrentgame(TournamentGetCurrentgameRequest $request) : Game
+    {
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request, $this->getRequestError());
+
+        try {
+            $tournament = $this->repository->find($request->getTournamentId());
+        } catch (TournamentNotFoundException $e) {
+            $this->getRequestError()->addError("tournament_id", "Tournament is not found")
+                ->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        /** @var Tournament $tournament */
+        try {
+            $this->searchTournamentPlayer($tournament, $me);
+        } catch (TournamentPlayerNotFoundException $e) {
+            $this->getRequestError()->addError("tournament_id", "This is not your tournament")->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        try {
+            $game = $this->getGameForCurrentRound($tournament, $me);
+        } catch (TournamentMissRoundException $e) {
+            $this->getRequestError()->addError("tournament_id", "You miss this round")->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        /** @var Game $game */
+        return $game;
     }
 
     /**
@@ -328,6 +362,29 @@ class TournamentHandler implements TournamentProcessorInterface
     {
         return $this->manager->getRepository("CoreBundle:TournamentPlayer")
                     ->findByTournamentAndUser($tournament, $user);
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param User $user
+     * @return Game
+     * @throws TournamentMissRoundException
+     */
+    private function getGameForCurrentRound(Tournament $tournament, User $user) : Game
+    {
+        $tournamentGames = $this->manager->getRepository("CoreBundle:TournamentGame")
+                               ->findBy([
+                                   "tournament" => $tournament,
+                                   "round" => $tournament->getCurrentRound()
+                               ]);
+
+        foreach ($tournamentGames as $tournamentGame) {
+            if ($this->container->get("core.handler.game")->isMyGame($tournamentGame->getGame(), $user)) {
+                return $tournamentGame->getGame();
+            }
+        }
+
+        throw new TournamentMissRoundException;
     }
 
 }

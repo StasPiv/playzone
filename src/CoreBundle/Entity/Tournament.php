@@ -80,6 +80,13 @@ class Tournament
     private $games;
 
     /**
+     * @var int
+     * 
+     * @ORM\Column(type="integer")
+     */
+    private $currentRound = 0;
+
+    /**
      * Tournament constructor.
      */
     public function __construct()
@@ -219,6 +226,25 @@ class Tournament
     public function setGames(ArrayCollection $games) : Tournament
     {
         $this->games = $games;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentRound() : int
+    {
+        return $this->currentRound;
+    }
+
+    /**
+     * @param int $currentRound
+     * @return Tournament
+     */
+    public function setCurrentRound(int $currentRound)
+    {
+        $this->currentRound = $currentRound;
 
         return $this;
     }

@@ -35,5 +35,10 @@ class TournamentControllerTest extends BaseControllerTest
         $this->assertFromJson('tournament/{tournament_id}');
     }
 
+    public function testTournamentCurrentGame()
+    {
+        $this->assertFromJson('tournament/{tournament_id}/currentgame');
+    }
+
 
 }

@@ -8,6 +8,7 @@
 
 namespace CoreBundle\Model\Request\User;
 
+use CoreBundle\Model\Request\SecurityRequestAwareTrait;
 use CoreBundle\Model\Request\SecurityRequestInterface;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,30 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class UserPatchSettingRequest extends UserRequest implements SecurityRequestInterface
 {
-    /**
-     * @var string
-     *
-     * @JMS\Expose()
-     * @JMS\Type("string")
-     *
-     * @Assert\NotBlank(
-     *     message = "Login is required for this request"
-     * )
-     */
-    private $login;
-
-    /**
-     * @var string
-     *
-     * @JMS\Expose()
-     * @JMS\Type("string")
-     *
-     * @Assert\NotBlank(
-     *     message = "Token is required for this request"
-     * )
-     */
-    private $token;
-
+    use SecurityRequestAwareTrait;
+    
     /**
      * @var string
      *
@@ -61,40 +40,6 @@ class UserPatchSettingRequest extends UserRequest implements SecurityRequestInte
      * @JMS\Type("string")
      */
     private $value;
-
-    /**
-     * @return string
-     */
-    public function getLogin()
-    {
-        return $this->login;
-    }
-
-    /**
-     * @param string $login
-     * @return void
-     */
-    public function setLogin($login)
-    {
-        $this->login = $login;
-    }
-
-    /**
-     * @return string
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * @param string $token
-     * @return void
-     */
-    public function setToken($token)
-    {
-        $this->token = $token;
-    }
 
     /**
      * @return int

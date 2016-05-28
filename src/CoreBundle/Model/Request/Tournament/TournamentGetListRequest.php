@@ -2,6 +2,7 @@
 
 namespace CoreBundle\Model\Request\Tournament;
 
+use CoreBundle\Model\Request\SecurityRequestAwareTrait;
 use CoreBundle\Model\Request\SecurityRequestInterface;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -14,55 +15,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class TournamentGetListRequest extends TournamentRequest implements SecurityRequestInterface
 {
-    /**
-     * @var string
-     *
-     * @JMS\Expose()
-     * @JMS\Type("string")
-     */
-    private $login;
+    use SecurityRequestAwareTrait;
 
     /**
      * @var string
      *
-     * @JMS\Expose()
+     * @JMS\Expose
      * @JMS\Type("string")
      */
-    private $token;
+    protected $login;
 
     /**
-     * @return string
+     * @var string
+     *
+     * @JMS\Expose
+     * @JMS\Type("string")
      */
-    public function getLogin()
-    {
-        return $this->login;
-    }
-
-    /**
-     * @param string $login
-     * @return $this|string
-     */
-    public function setLogin($login)
-    {
-        $this->login = $login;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * @param string $token
-     * @return $this
-     */
-    public function setToken($token)
-    {
-        $this->token = $token;
-        return $this;
-    }
+    protected $token;
 }

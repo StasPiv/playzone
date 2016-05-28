@@ -10,28 +10,19 @@ namespace CoreBundle\Model\Request\Game;
 
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Call\CallType;
+use CoreBundle\Model\Request\SecurityRequestAwareTrait;
 use CoreBundle\Model\Request\SecurityRequestInterface;
 use CoreBundle\Model\User\UserType;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class GameGetListRequest
+ * @package CoreBundle\Model\Request\Game
+ */
 class GameGetListRequest extends GameRequest implements SecurityRequestInterface
 {
-    /**
-     * @var string
-     *
-     * @JMS\Expose
-     * @JMS\Type("string")
-     */
-    private $login;
-
-    /**
-     * @var string
-     *
-     * @JMS\Expose
-     * @JMS\Type("string")
-     */
-    private $token;
+    use SecurityRequestAwareTrait;    
 
     /**
      * @var string
@@ -64,40 +55,6 @@ class GameGetListRequest extends GameRequest implements SecurityRequestInterface
      * @JMS\Type("integer")
      */
     private $limit = 100;
-
-    /**
-     * @return string
-     */
-    public function getLogin()
-    {
-        return $this->login;
-    }
-
-    /**
-     * @param string $login
-     * @return GameGetListRequest
-     */
-    public function setLogin($login)
-    {
-        $this->login = $login;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * @param mixed $token
-     */
-    public function setToken($token)
-    {
-        $this->token = $token;
-    }
 
     /**
      * @return mixed

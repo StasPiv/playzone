@@ -8,12 +8,19 @@
 
 namespace CoreBundle\Model\Request\User;
 
+use CoreBundle\Model\Request\SecurityRequestAwareTrait;
 use CoreBundle\Model\Request\SecurityRequestInterface;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class UserPostAuthRequest
+ * @package CoreBundle\Model\Request\User
+ */
 class UserPostAuthRequest extends UserRequest implements SecurityRequestInterface
 {
+    use SecurityRequestAwareTrait;
+
     /**
      * @var string
      *
@@ -24,8 +31,16 @@ class UserPostAuthRequest extends UserRequest implements SecurityRequestInterfac
      *     message = "Enter login"
      * )
      */
-    private $login;
+    protected $login;
 
+    /**
+     * @var string
+     *
+     * @JMS\Expose
+     * @JMS\Type("string")
+     */
+    protected $token;
+    
     /**
      * @var string
      *
@@ -37,32 +52,6 @@ class UserPostAuthRequest extends UserRequest implements SecurityRequestInterfac
      * )
      */
     private $password;
-
-    /**
-     * @var string
-     *
-     * @JMS\Expose
-     * @JMS\Type("string")
-     */
-    private $token;
-
-    /**
-     * @return string
-     */
-    public function getLogin()
-    {
-        return $this->login;
-    }
-
-    /**
-     * @param string $login
-     * @return $this|string
-     */
-    public function setLogin($login)
-    {
-        $this->login = $login;
-        return $this;
-    }
 
     /**
      * @return string
@@ -78,21 +67,5 @@ class UserPostAuthRequest extends UserRequest implements SecurityRequestInterfac
     public function setPassword($password)
     {
         $this->password = $password;
-    }
-
-    /**
-     * @return string
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * @param string $token
-     */
-    public function setToken($token)
-    {
-        $this->token = $token;
     }
 }

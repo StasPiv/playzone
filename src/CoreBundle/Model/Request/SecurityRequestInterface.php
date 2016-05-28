@@ -8,6 +8,10 @@
 
 namespace CoreBundle\Model\Request;
 
+/**
+ * Interface SecurityRequestInterface
+ * @package CoreBundle\Model\Request
+ */
 interface SecurityRequestInterface extends RequestInterface
 {
     /**

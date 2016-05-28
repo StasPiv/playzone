@@ -27,6 +27,7 @@ use CoreBundle\Model\Request\Tournament\TournamentGetListRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetRequest;
 use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
+use CoreBundle\Model\Tournament\TournamentStatus;
 use CoreBundle\Processor\TournamentProcessorInterface;
 use CoreBundle\Repository\TournamentRepository;
 use Doctrine\ORM\EntityManager;
@@ -70,16 +71,29 @@ class TournamentHandler implements TournamentProcessorInterface
     }
     
     /**
-     * @param TournamentGetListRequest $listRequest
+     * @param TournamentGetListRequest $request
      * @return Tournament[]
      */
-    public function processGetList(TournamentGetListRequest $listRequest) : array
+    public function processGetList(TournamentGetListRequest $request) : array
     {
-        $tournaments = $this->repository->findAll();
+        switch ($request->getStatus()) {
+            case TournamentStatus::NEW():
+                $tournaments = $this->repository->findBy(["currentRound" => 0]);
+                break;
+            case TournamentStatus::CURRENT():
+                $tournaments = $this->repository->createQueryBuilder("t")
+                    ->where("t.currentRound > 0")
+                    ->getQuery()
+                    ->getResult();
+                break;
+            default:
+                $tournaments = $this->repository->findAll();
+        }
 
-        if ($listRequest->getToken()) {
+
+        if ($request->getToken()) {
             $user = $this->container->get("core.service.security")->getUserIfCredentialsIsOk(
-                $listRequest,
+                $request,
                 $this->getRequestError()
             );
 
@@ -92,13 +106,13 @@ class TournamentHandler implements TournamentProcessorInterface
     }
 
     /**
-     * @param TournamentGetRequest $getRequest
+     * @param TournamentGetRequest $request
      * @return Tournament
      */
-    public function processGet(TournamentGetRequest $getRequest) : Tournament
+    public function processGet(TournamentGetRequest $request) : Tournament
     {
         try {
-            $tournament = $this->repository->find($getRequest->getTournamentId());
+            $tournament = $this->repository->find($request->getTournamentId());
         } catch (TournamentNotFoundException $e) {
             $this->getRequestError()->addError("tournament_id", "Tournament is not found")
                  ->throwException(ResponseStatusCode::NOT_FOUND);

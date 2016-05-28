@@ -6,7 +6,9 @@
 playzoneControllers.controller('TournamentsCtrl', function ($scope, TournamentRest) {
     $scope.header = 'Tournaments';
     
-    $scope.tournaments = TournamentRest.query();
+    $scope.tournaments = TournamentRest.query({
+        status: "new"
+    });
     
     $scope.recordIntoTournament = function (tournament) {
         tournament.$record();

@@ -23,16 +23,16 @@ use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
 interface TournamentProcessorInterface
 {
     /**
-     * @param TournamentGetListRequest $listRequest
+     * @param TournamentGetListRequest $request
      * @return Tournament[]
      */
-    public function processGetList(TournamentGetListRequest $listRequest) : array;
+    public function processGetList(TournamentGetListRequest $request) : array;
 
     /**
-     * @param TournamentGetRequest $getRequest
+     * @param TournamentGetRequest $request
      * @return Tournament
      */
-    public function processGet(TournamentGetRequest $getRequest) : Tournament;
+    public function processGet(TournamentGetRequest $request) : Tournament;
 
     /**
      * @param TournamentGetCurrentgameRequest $request

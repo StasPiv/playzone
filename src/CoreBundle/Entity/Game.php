@@ -243,14 +243,6 @@ class Game implements ChatMessageContainerInterface
     private $insufficientMaterialBlack = false;
 
     /**
-     * Game constructor.
-     */
-    public function __construct()
-    {
-        $this->timeLastMove = new \DateTime();
-    }
-
-    /**
      * Get id
      *
      * @return int

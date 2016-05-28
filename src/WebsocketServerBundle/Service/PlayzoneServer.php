@@ -302,11 +302,11 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
 
         foreach ($this->users as $wsUser) {
             if ($wsUser->getConnection() == $from) {
-                $chatMessage = new ChatMessage();
+                $chatMessage = $this->container->get("core.handler.chat")->createEntity();
 
                 $chatMessage->setUser($wsUser->getPlayzoneUser())
                             ->setMessage($messageGame->getMessage())
-                            ->setTime(new \DateTime());
+                            ->setTime($this->container->get("core.service.date")->getDateTime());
 
                 $messageObject->setData(
                     json_decode(

@@ -131,10 +131,7 @@ class TournamentInitializator extends Event implements TournamentInitializatorIn
     public function initTournament() : Tournament
     {
         return (new Tournament())->setName($this->getTournamentName())
-            ->setTournamentParams(
-                $this->getTournamentParams()
-                     ->setTimeBegin(new \DateTime($this->getTimeBegin()))
-            )
+            ->setTournamentParams($this->getTournamentParams())
             ->setGameParams($this->getGameParams());
     }
 

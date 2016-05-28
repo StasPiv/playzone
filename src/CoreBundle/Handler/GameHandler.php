@@ -14,6 +14,8 @@ use CoreBundle\Exception\Handler\User\UserHandlerException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
 use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\ChatMessage\ChatMessageType;
+use CoreBundle\Model\Event\Game\GameEvent;
+use CoreBundle\Model\Event\Game\GameEvents;
 use CoreBundle\Model\Game\GameMove;
 use CoreBundle\Entity\GameMove as GameMoveEntity;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
@@ -40,6 +42,10 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use CoreBundle\Entity\User;
 
+/**
+ * Class GameHandler
+ * @package CoreBundle\Handler
+ */
 class GameHandler implements GameProcessorInterface
 {
     use ContainerAwareTrait;
@@ -334,7 +340,8 @@ class GameHandler implements GameProcessorInterface
         switch (true) {
             case $me == $game->getUserBlack() && ($game->getDraw() == GameColor::WHITE || $gameAgainstRobot):
             case $me == $game->getUserWhite() && ($game->getDraw() == GameColor::BLACK || $gameAgainstRobot):
-                $game->setResultWhite(0.5)->setResultBlack(0.5)->setStatus(GameStatus::END);
+                $game->setResultWhite(0.5)->setResultBlack(0.5);
+                $this->changeGameStatus($game, GameStatus::END);
                 break;
             default:
                 $this->getRequestError()->addError("id", "Draw was not offered by opponent");
@@ -361,9 +368,10 @@ class GameHandler implements GameProcessorInterface
             $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
-        $chatMessage = (new ChatMessage())->setMessage($request->getMessage())
-                                          ->setUser($me)
-                                          ->setType(ChatMessageType::GAME());
+        $chatMessage = $this->container->get("core.handler.chat")->createEntity()
+                                        ->setMessage($request->getMessage())
+                                        ->setUser($me)
+                                        ->setType(ChatMessageType::GAME());
 
 
         $game->addChatMessage($chatMessage);
@@ -394,7 +402,7 @@ class GameHandler implements GameProcessorInterface
         $game->addMove(
             (new GameMoveEntity())
                 ->setLag($request->getLag())
-                ->setTime(new \DateTime())
+                ->setTime($this->container->get("core.service.date")->getDateTime())
         );
 
         $this->manager->persist($game);
@@ -513,7 +521,7 @@ class GameHandler implements GameProcessorInterface
      */
     public function createMyGame(User $me, User $opponent, $myColor)
     {
-        $game = new Game();
+        $game = $this->createEntity();
 
         switch ($myColor) {
             case GameColor::WHITE:
@@ -528,7 +536,7 @@ class GameHandler implements GameProcessorInterface
                 throw new GameHandlerException("Color is incorrect");
         }
 
-        $game->setTimeLastMove(new \DateTime())
+        $game->setTimeLastMove($this->container->get("core.service.date")->getDateTime())
             ->setUserToMove($game->getUserWhite());
         
         $this->changeGameStatus($game, GameStatus::PLAY);
@@ -625,5 +633,18 @@ class GameHandler implements GameProcessorInterface
     public function changeGameStatus(Game $game, $status)
     {
         $game->setStatus($status);
+
+        $this->container->get("event_dispatcher")->dispatch(
+            GameEvents::CHANGE_STATUS,
+            (new GameEvent())->setGame($game)
+        );
+    }
+
+    /**
+     * @return Game
+     */
+    public function createEntity()
+    {
+        return (new Game())->setTimeLastMove($this->container->get("core.service.date")->getDateTime());
     }
 }

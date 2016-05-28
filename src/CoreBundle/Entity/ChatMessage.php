@@ -59,14 +59,6 @@ class ChatMessage
     private $type;
 
     /**
-     * ChatMessage constructor.
-     */
-    public function __construct()
-    {
-        $this->time = new \DateTime();
-    }
-
-    /**
      * Get id
      *
      * @return int

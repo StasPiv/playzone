@@ -14,6 +14,6 @@ namespace CoreBundle\Model\Event\Tournament;
  */
 class TournamentEvents
 {
-    const TOURNAMENT_NEW = 'tournament.new';
-    const ROUND_FINISHED = 'round_finished';
+    const NEW = 'tournament.new';
+    const ROUND_FINISHED = 'tournament.round_finished';
 }

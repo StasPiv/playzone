@@ -76,7 +76,10 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
             $tournamentParams = TournamentParamsFactory::create($data["tournament_params"]["type"]);
             
             if (isset($data["tournament_params"]["time_begin"])) {
-                $tournamentParams->setTimeBegin(new \DateTime($data["tournament_params"]["time_begin"]));
+                $tournamentParams->setTimeBegin(
+                    $this->container->get("core.service.date")
+                         ->getDateTime($data["tournament_params"]["time_begin"])
+                );
             }
 
             $tournament->setTournamentParams($tournamentParams);

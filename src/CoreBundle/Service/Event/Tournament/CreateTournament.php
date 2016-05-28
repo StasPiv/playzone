@@ -44,13 +44,16 @@ class CreateTournament implements EventCommandInterface
     public function run()
     {
         $tournament = $this->tournamentInitializator->initTournament();
+        $tournament->getTournamentParams()->setTimeBegin(
+            $this->container->get("core.service.date")->getDateTime($this->tournamentInitializator->getTimeBegin())
+        );
         $manager = $this->container->get("doctrine")->getManager();
         $manager->persist($tournament);
         $manager->flush();
 
         $this->container->get("event_dispatcher")
              ->dispatch(
-                 TournamentEvents::TOURNAMENT_NEW,
+                 TournamentEvents::NEW,
                  (new TournamentScheduler())->setTournamentId($tournament->getId())
                      ->setFrequency(
                          $tournament->getTournamentParams()->getTimeBegin()->format("i H d n N Y")

@@ -40,3 +40,4 @@ parameters:
     app_max_players_for_round_robin: 12
     app_core_site_host: playzone.immortalchess.net
     app_core_websocket_server: ws://ws.playzone.immortalchess.net:8081/
+    app_core_timezone: 'Europe/Moscow'

@@ -61,7 +61,7 @@ class ChatHandler implements ChatProcessorInterface
                                     ->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
-        $chatMessage = new ChatMessage();
+        $chatMessage = $this->createEntity();
 
         $chatMessage->setType(ChatMessageType::COMMON())
                     ->setMessage($request->getMessage())
@@ -89,5 +89,16 @@ class ChatHandler implements ChatProcessorInterface
                     ->setMaxResults($this->container->getParameter("app_last_chat_messages_count"))
                     ->getQuery()
                     ->getResult();
+    }
+
+    /**
+     * @param string $time
+     * @return ChatMessage
+     */
+    public function createEntity(string $time = "now")
+    {
+        return (new ChatMessage())->setTime(
+            $this->container->get("core.service.date")->getDateTime($time)
+        );
     }
 }

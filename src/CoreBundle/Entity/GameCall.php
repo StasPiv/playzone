@@ -68,14 +68,6 @@ class GameCall
      */
     private $createdAt;
 
-    /**
-     * GameCall constructor.
-     */
-    public function __construct()
-    {
-        $this->createdAt = new \DateTime('now');
-    }
-
 
     /**
      * Get id

@@ -26,14 +26,13 @@ class ChatFixtures extends AbstractPlayzoneFixtures
      */
     protected function createEntity($data)
     {
-        $chatMessage = new ChatMessage();
+        $chatMessage = $this->container->get("core.handler.chat")->createEntity($data["time"]);
 
         /** @var User $user */
         $user = $this->getReference($data["user"]);
         
         $chatMessage->setMessage($data["message"])
                     ->setType(new ChatMessageType($data["type"]))
-                    ->setTime(new \DateTime($data["time"]))
                     ->setUser($user);
         
         return $chatMessage;

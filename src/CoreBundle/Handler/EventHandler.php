@@ -92,7 +92,6 @@ class EventHandler
     public function saveEvent(Event $event)
     {
         $this->manager->persist($event);
-
         $this->manager->flush();
     }
 
@@ -106,7 +105,7 @@ class EventHandler
         $command->setEventModel($event->getEventModel());
         $command->run();
 
-        $event->setLastRun(new \DateTime());
+        $event->setLastRun($this->container->get("core.service.date")->getDateTime());
 
         try {
             $this->initNextRun($event);
@@ -126,8 +125,9 @@ class EventHandler
     {
         if (!$event->getFrequency()) {
             throw new EventFrequencyEmptyException;
-        } 
+        }
 
+        date_default_timezone_set($this->container->getParameter("app_core_timezone"));
         $cron = CronExpression::factory($event->getFrequency());
         $cron->isDue();
         $event->setNextRun($cron->getNextRunDate());
@@ -140,7 +140,7 @@ class EventHandler
     {
         return $this->repository->createQueryBuilder('e')
                     ->where('e.nextRun <= :now')
-                    ->setParameter('now', new \DateTime())
+                    ->setParameter('now', $this->container->get("core.service.date")->getDateTime())
                     ->getQuery()
                     ->getResult();
     }

@@ -15,7 +15,7 @@ class WebsocketServerBundle extends Bundle
      * @var array
      */
     private $subscriberServices = [
-        "ws.service.event.tournament.start"
+        "ws.service.event.tournament.start_round"
     ];
     
     /**

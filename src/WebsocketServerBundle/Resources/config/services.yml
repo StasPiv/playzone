@@ -10,8 +10,8 @@ services:
         class: WebsocketServerBundle\Service\Signaling\Server\GameSignalerServer
         calls:
             - [setContainer, ['@service_container']]
-    ws.service.event.tournament.start:
-        class: WebsocketServerBundle\Service\Event\Tournament\StartTournament
+    ws.service.event.tournament.start_round:
+        class: WebsocketServerBundle\Service\Event\Tournament\StartTournamentRound
         calls:
             - [setContainer, ['@service_container']]
     ws.playzone.server:

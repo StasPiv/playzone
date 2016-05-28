@@ -20,4 +20,9 @@ interface TournamentInitializatorInterface
      * @return Tournament
      */
     function initTournament() : Tournament;
+
+    /**
+     * @return string
+     */
+    public function getTimeBegin() : string;
 }

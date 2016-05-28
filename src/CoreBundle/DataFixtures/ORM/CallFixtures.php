@@ -14,6 +14,10 @@ use CoreBundle\Entity\User;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Model\Game\GameParams;
 
+/**
+ * Class CallFixtures
+ * @package CoreBundle\DataFixtures\ORM
+ */
 class CallFixtures extends AbstractPlayzoneFixtures
 {
     /**
@@ -22,7 +26,7 @@ class CallFixtures extends AbstractPlayzoneFixtures
      */
     protected function createEntity($data)
     {
-        $gameCall = new GameCall();
+        $gameCall = $this->container->get("core.handler.game.call")->createEntity();
 
         /** @var User $fromUser */
         $fromUser = $this->getReference($data['fromUser']);

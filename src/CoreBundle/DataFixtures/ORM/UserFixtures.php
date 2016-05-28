@@ -37,8 +37,8 @@ class UserFixtures extends AbstractPlayzoneFixtures
             ->setConfirm($data['confirm'])
             ->setInRest($data['in_rest'])
             ->setLeftRest($data['left_rest'])
-            ->setGoneInRest(new \DateTime($data['gone_in_rest']))
-            ->setLastAuth(new \DateTime($data['last_auth']))
+            ->setGoneInRest($this->container->get("core.service.date")->getDateTime($data['gone_in_rest']))
+            ->setLastAuth($this->container->get("core.service.date")->getDateTime($data['last_auth']))
             ->setClass($data['class'])
             ->setRating($data['rating'])
             ->setWin($data['win'])
@@ -47,7 +47,7 @@ class UserFixtures extends AbstractPlayzoneFixtures
             ->setLoseTime($data['lose_time'])
             ->setImmortalId($data['immortal_id'])
             ->setAnotherLogin($data['another_login'])
-            ->setLastMove(new \DateTime($data['last_move']))
+            ->setLastMove($this->container->get("core.service.date")->getDateTime($data['last_move']))
             ->setBalance($data['balance']);
 
         if (isset($data["settings"])) {

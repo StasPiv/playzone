@@ -13,6 +13,7 @@ use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\TournamentGame;
 use CoreBundle\Entity\TournamentPlayer;
 use CoreBundle\Entity\User;
+use CoreBundle\Exception\Handler\Tournament\TournamentGameNotFoundException;
 use CoreBundle\Exception\Handler\Tournament\TournamentGameShouldBeSkippedException;
 use CoreBundle\Exception\Handler\Tournament\TournamentMissRoundException;
 use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
@@ -247,6 +248,21 @@ class TournamentHandler implements TournamentProcessorInterface
 
     /**
      * @param Tournament $tournament
+     * @return bool
+     */
+    public function isCurrentRoundFinished(Tournament $tournament) : bool
+    {
+        foreach ($this->getRoundGames($tournament, $tournament->getCurrentRound()) as $tournamentGame) {
+            if ($tournamentGame->getGame()->getStatus() != GameStatus::END) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Tournament $tournament
      * @param User $user
      * @return TournamentPlayer
      * @throws \Exception
@@ -294,7 +310,7 @@ class TournamentHandler implements TournamentProcessorInterface
             throw new TournamentGameShouldBeSkippedException;
         }
 
-        $game = new Game();
+        $game = $this->container->get("core.handler.game")->createEntity();
 
         switch (true) {
             case $firstPlayer->getRequiredColor() == GameColor::BLACK ||
@@ -337,6 +353,29 @@ class TournamentHandler implements TournamentProcessorInterface
         foreach ($existingTournamentGames as $exTournamentGame) {
             $this->manager->remove($exTournamentGame);
         }
+    }
+
+    /**
+     * @param Game $game
+     * @return Tournament
+     * @throws TournamentGameNotFoundException
+     */
+    public function getTournamentForGame(Game $game) : Tournament 
+    {
+        try {
+            $tournamentGame = $this->manager->getRepository("CoreBundle:TournamentGame")
+                ->findOneBy([
+                    "game" => $game
+                ]);
+        } catch (\Exception $e) {
+            throw new TournamentGameNotFoundException;
+        }
+        
+        if (!$tournamentGame instanceof TournamentGame) {
+            throw new TournamentGameNotFoundException;
+        }
+        
+        return $tournamentGame->getTournament();
     }
 
     /**

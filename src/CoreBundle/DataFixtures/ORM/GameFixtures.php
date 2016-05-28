@@ -30,7 +30,7 @@ class GameFixtures extends AbstractPlayzoneFixtures
      */
     protected function createEntity($data)
     {
-        $game = new Game();
+        $game = $this->container->get("core.handler.game")->createEntity();
 
         /** @var User $userWhite */
         $userWhite = $this->getReference($data['user_white']);
@@ -50,7 +50,7 @@ class GameFixtures extends AbstractPlayzoneFixtures
             ->setTimeBlack($data['time_black'])
             ->setResultWhite(@$data['result_white'])
             ->setResultBlack(@$data['result_black'])
-            ->setTimeLastMove(new \DateTime($data['time_last_move']))
+            ->setTimeLastMove($this->container->get("core.service.date")->getDateTime($data['time_last_move']))
             ->setDraw(@$data['draw']);
 
         return $game;

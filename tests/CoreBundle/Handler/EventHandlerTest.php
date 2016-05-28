@@ -46,7 +46,7 @@ class EventHandlerTest extends KernelAwareTest
      */
     private function createTournamentEvent() : TournamentInitializator
     {
-        $frequency = '10 7 * * * *';
+        $frequency = '09 16 * * * *';
         $timeBegin = "+1minute";
         $tournamentName = "Create new tournament";
         $timeBase = 180000;

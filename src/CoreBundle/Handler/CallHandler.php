@@ -90,7 +90,7 @@ class CallHandler implements CallProcessorInterface
      */
     private function createGameCallToUser(User $me, GameParams $gameParams, User $opponent) : GameCall
     {
-        $call = new GameCall();
+        $call = $this->createEntity();
 
         $call->setFromUser($me)
              ->setToUser($opponent)
@@ -108,7 +108,7 @@ class CallHandler implements CallProcessorInterface
      */
     private function createCommonGameCall(User $me, GameParams $gameParams) : GameCall
     {
-        $call = new GameCall();
+        $call = $this->createEntity();
 
         $call->setFromUser($me)
              ->setGameParams($gameParams);
@@ -357,9 +357,17 @@ class CallHandler implements CallProcessorInterface
         $queryBuilder->where('game_call.createdAt > :limitAgo')
             ->setParameter(
                 'limitAgo',
-                new \DateTime('-' . $this->container->getParameter('app_call.lifetime') . 'second')
+                $this->container->get("core.service.date")->getDateTime('-' . $this->container->getParameter('app_call.lifetime') . 'second')
             );
 
         return $queryBuilder;
+    }
+
+    /**
+     * @return GameCall
+     */
+    public function createEntity()
+    {
+        return (new GameCall())->setCreatedAt($this->container->get("core.service.date")->getDateTime());
     }
 }

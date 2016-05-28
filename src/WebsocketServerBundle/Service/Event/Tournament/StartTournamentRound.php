@@ -10,10 +10,14 @@
 namespace WebsocketServerBundle\Service\Event\Tournament;
 
 use CoreBundle\Entity\Tournament;
+use CoreBundle\Exception\Handler\Tournament\TournamentGameNotFoundException;
 use CoreBundle\Model\Event\EventCommandInterface;
 use CoreBundle\Model\Event\EventInterface;
+use CoreBundle\Model\Event\Game\GameEvent;
+use CoreBundle\Model\Event\Game\GameEvents;
 use CoreBundle\Model\Event\Tournament\TournamentScheduler;
 use CoreBundle\Model\Event\Tournament\TournamentEvents;
+use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Tournament\Params\TournamentParamsFactory;
 use CoreBundle\Model\Tournament\TournamentContainerInterface;
 use CoreBundle\Model\Tournament\TournamentType;
@@ -32,7 +36,7 @@ use WebsocketServerBundle\Service\Client\PlayzoneClientSender;
  * Class NewTournamentEventCommand
  * @package CoreBundle\Model\Event\Tournament
  */
-class StartTournament implements EventCommandInterface, EventSubscriberInterface
+class StartTournamentRound implements EventCommandInterface, EventSubscriberInterface
 {
     use ContainerAwareTrait;
 
@@ -107,7 +111,7 @@ class StartTournament implements EventCommandInterface, EventSubscriberInterface
 
     /**
      * @param int $tournamentId
-     * @return StartTournament
+     * @return StartTournamentRound
      */
     public function setTournamentId(int $tournamentId)
     {
@@ -160,11 +164,11 @@ class StartTournament implements EventCommandInterface, EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            TournamentEvents::TOURNAMENT_NEW => [
+            TournamentEvents::NEW => [
                 ['onTournamentNew', 10]
             ],
-            TournamentEvents::ROUND_FINISHED => [
-                ['onRoundFinished', 10]
+            GameEvents::CHANGE_STATUS => [
+                ['onGameChangeStatus', 10]
             ]
         ];
     }
@@ -175,23 +179,42 @@ class StartTournament implements EventCommandInterface, EventSubscriberInterface
     public function onTournamentNew(TournamentScheduler $tournamentScheduler)
     {
         $this->container->get("core.handler.event")->initEventAndSave(
-            $tournamentScheduler, "ws.service.event.tournament.start"
+            $tournamentScheduler, "ws.service.event.tournament.start_round"
         );
     }
 
     /**
-     * @param TournamentScheduler $tournamentScheduler
-     */
-    public function onRoundFinished(TournamentScheduler $tournamentScheduler)
+     * @param GameEvent $gameEvent*/
+    public function onGameChangeStatus(GameEvent $gameEvent)
     {
         // TODO: check if tournament is finished
+        
+        if ($gameEvent->getGame()->getStatus() != GameStatus::END) {
+            return;
+        }
 
+        try {
+            $tournament = $this->container->get("core.handler.tournament")
+                               ->getTournamentForGame($gameEvent->getGame());
+        } catch (TournamentGameNotFoundException $e) {
+            return;
+        }
+        
+        if (!$this->container->get("core.handler.tournament")->isCurrentRoundFinished($tournament)) {
+            return;
+        }
+
+        $tournamentScheduler =
+            (new TournamentScheduler())
+                ->setFrequency(
+                    $this->container->get("core.service.date")
+                        ->getDateTime("+1minute")->format("i H d n N Y")
+                )
+                ->setTournamentId($tournament->getId());
         $this->container->get("core.handler.event")->initEventAndSave(
-            $tournamentScheduler->setFrequency(
-                (new \DateTime("+1minute"))->format("i H d n N Y")
-            ), "ws.service.event.tournament.start"
+            $tournamentScheduler, "ws.service.event.tournament.start_round"
         );
-    }
 
+    }
 
 }

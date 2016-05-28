@@ -28,6 +28,7 @@ class PlayzoneClientMessageMethod extends Enum
     const CALL_DECLINE = 'call_decline';
     const SEND_PGN_TO_OBSERVERS = 'send_pgn_to_observers';
     const SEND_MESSAGE_TO_OBSERVERS = 'send_message_to_observers';
+    const NEW_TOURNAMENT_ROUND = 'new_tournament_round';
     const SEND_FEN_TO_ROBOT= 'send_fen_to_robot';
     const SEND_MOVE_FROM_ROBOT= 'send_move_from_robot';
     const USER_IN = 'user_in';

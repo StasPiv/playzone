@@ -19,7 +19,13 @@ interface TournamentDrawInterface
     /**
      * @param Tournament $tournament
      * @param int $round
-     * @return
+     * @return void
      */
     public function makeDraw(Tournament $tournament, int $round);
+
+    /**
+     * @param Tournament $tournament
+     * @return void
+     */
+    public function makeDrawForNextRound(Tournament $tournament);
 }

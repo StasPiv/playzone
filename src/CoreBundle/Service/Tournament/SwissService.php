@@ -80,6 +80,18 @@ class SwissService implements TournamentDrawInterface
 
     /**
      * @param Tournament $tournament
+     * @return void
+     */
+    public function makeDrawForNextRound(Tournament $tournament)
+    {
+        $nextRound = $tournament->getCurrentRound() + 1;
+        $this->makeDraw($tournament, $nextRound);
+        $tournament->setCurrentRound($nextRound);
+        $this->manager->flush($tournament);
+    }
+
+    /**
+     * @param Tournament $tournament
      * @param int $round
      */
     private function processDraw(Tournament $tournament, int $round)

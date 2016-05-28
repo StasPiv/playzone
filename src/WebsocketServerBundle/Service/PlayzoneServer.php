@@ -154,7 +154,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                     break;
             }
         } catch (\Exception $exception) {
-            $this->logger->err("Error on message: " . $exception->getMessage() . ' ' . $exception->getFile() . ' ' . $exception->getLine());
+            $this->logger->err("Error on message: " . $exception->getCode() . " " . $exception->getMessage() . ' ' . $exception->getFile() . ' ' . $exception->getLine());
             $from->send($exception->getMessage());
         }
     }
@@ -281,8 +281,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
             'WebsocketServerBundle\Model\Message\Client\Game\ClientMessageGameSend');
 
         foreach ($this->users as $wsUser) {
-            if ($wsUser->getConnection() != $from && isset($wsUser->getGamesToListenMap()[$gameSendMessage->getGameId()
-                    ])) {
+            if ($wsUser->getConnection() != $from && isset($wsUser->getGamesToListenMap()[$gameSendMessage->getGameId()])) {
                 $messageObject->setMethod("game_pgn_" . $gameSendMessage->getGameId())
                               ->setMs(microtime(true) * 10000);
 

@@ -148,7 +148,7 @@ class GameHandler implements GameProcessorInterface
             $request->getColor()
         );
         
-        $game->setStatus(GameStatus::PLAY);
+        $this->changeGameStatus($game, GameStatus::PLAY);
 
         $game->setTimeWhite($request->getTime()->getBase())
              ->setTimeBlack($request->getTime()->getBase());
@@ -230,8 +230,8 @@ class GameHandler implements GameProcessorInterface
 
         if ($this->container->get("core.service.chess")->isGameInCheckmate($game->getPgn())) {
             $game->setResultWhite((int)($game->getUserToMove() === $game->getUserBlack()))
-                 ->setResultBlack((int)($game->getUserToMove() === $game->getUserWhite()))
-                 ->setStatus(GameStatus::END);
+                 ->setResultBlack((int)($game->getUserToMove() === $game->getUserWhite()));
+            $this->changeGameStatus($game, GameStatus::END);
         }
 
         $this->manager->flush($game);
@@ -261,10 +261,12 @@ class GameHandler implements GameProcessorInterface
 
         switch (true) {
             case $me == $game->getUserBlack():
-                $game->setResultWhite(1)->setResultBlack(0)->setStatus(GameStatus::END);
+                $game->setResultWhite(1)->setResultBlack(0);
+                $this->changeGameStatus($game, GameStatus::END);
                 break;
             case $me == $game->getUserWhite():
-                $game->setResultWhite(0)->setResultBlack(1)->setStatus(GameStatus::END);
+                $game->setResultWhite(0)->setResultBlack(1);
+                $this->changeGameStatus($game, GameStatus::END);
                 break;
         }
 
@@ -526,9 +528,10 @@ class GameHandler implements GameProcessorInterface
                 throw new GameHandlerException("Color is incorrect");
         }
 
-        $game->setStatus(GameStatus::PLAY)
-            ->setTimeLastMove(new \DateTime())
+        $game->setTimeLastMove(new \DateTime())
             ->setUserToMove($game->getUserWhite());
+        
+        $this->changeGameStatus($game, GameStatus::PLAY);
 
         $this->container->get("core.handler.game")->defineUserColorForGame($me, $game);
         
@@ -590,28 +593,37 @@ class GameHandler implements GameProcessorInterface
             switch ($pgnRequest->isInsufficientMaterialBlack()) {
                 case false:
                     $game->setResultWhite(0)
-                         ->setResultBlack(1)
-                         ->setStatus(GameStatus::END);
+                         ->setResultBlack(1);
+                    $this->changeGameStatus($game, GameStatus::END);
                     break;
                 case true:
                     $game->setResultWhite(0.5)
-                         ->setResultBlack(0.5)
-                         ->setStatus(GameStatus::END);
+                         ->setResultBlack(0.5);
+                    $this->changeGameStatus($game, GameStatus::END);
                     break;
             }
         } elseif ($pgnRequest->getTimeBlack() !== null && $game->getTimeBlack() <= 100) {
             switch ($pgnRequest->isInsufficientMaterialWhite()) {
                 case false:
                     $game->setResultWhite(1)
-                         ->setResultBlack(0)
-                         ->setStatus(GameStatus::END);
+                         ->setResultBlack(0);
+                    $this->changeGameStatus($game, GameStatus::END);
                     break;
                 case true:
                     $game->setResultWhite(0.5)
-                         ->setResultBlack(0.5)
-                         ->setStatus(GameStatus::END);
+                         ->setResultBlack(0.5);
+                    $this->changeGameStatus($game, GameStatus::END);
                     break;
             }
         }
+    }
+
+    /**
+     * @param Game $game
+     * @param $status
+     */
+    public function changeGameStatus(Game $game, $status)
+    {
+        $game->setStatus($status);
     }
 }

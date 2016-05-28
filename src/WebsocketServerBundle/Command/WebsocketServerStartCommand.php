@@ -8,6 +8,7 @@
 
 namespace WebsocketServerBundle\Command;
 
+use Ratchet\Server\EchoServer;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -55,6 +56,7 @@ class WebsocketServerStartCommand extends ContainerAwareCommand
         $app = new RatchetApp($input->getArgument('host'), $input->getArgument('port'), $input->getArgument('address'));
         $this->addPlayzoneServer($app);
         $this->addSignalerServer($app, $output);
+        $this->addEchoServer($app);
         $output->writeln("Server starting on {$input->getArgument('host')}:{$input->getArgument('port')}...");
         $app->run();
     }
@@ -78,5 +80,14 @@ class WebsocketServerStartCommand extends ContainerAwareCommand
         $signalerServer = $this->getContainer()->get("ws.service.signaling.server_game");
         $signalerServer->setOutput($output);
         $app->route('/signaler', $signalerServer, ['*']);
+    }
+
+    /**
+     * @param RatchetApp $app
+     */
+    private function addEchoServer(RatchetApp $app)
+    {
+        $server = new EchoServer();
+        $app->route('/echo', $server, ['*']);
     }
 }

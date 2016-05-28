@@ -11,6 +11,10 @@ namespace WebsocketServerBundle\Model\Message;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class PlayzoneMessage
+ * @package WebsocketServerBundle\Model\Message
+ */
 class PlayzoneMessage
 {
     /**

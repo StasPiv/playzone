@@ -228,7 +228,9 @@ class CallHandler implements CallProcessorInterface
             $me,
             GameColor::getOppositeColor($call->getGameParams()->getColor())
         );
-        $game->setStatus(GameStatus::PLAY);
+        
+        $this->container->get("core.handler.game")->changeGameStatus($game, GameStatus::PLAY);
+        
         $game->setTimeWhite($call->getGameParams()->getTimeBase())
              ->setTimeBlack($call->getGameParams()->getTimeBase());
 

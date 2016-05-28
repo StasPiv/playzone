@@ -136,7 +136,7 @@ class Tournament
     /**
      * @return ArrayCollection
      */
-    public function getPlayers() : ArrayCollection
+    public function getPlayers()
     {
         return $this->players;
     }

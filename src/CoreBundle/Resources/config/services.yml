@@ -53,6 +53,11 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         calls:
           - [setContainer, ['@service_container']]
+    core.service.draw.factory:
+        class: CoreBundle\Service\Tournament\TournamentDrawFactoryService
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+          - [setContainer, ['@service_container']]
     core.service.chess.uci:
         class: CoreBundle\Service\Chess\UciService
     core.handler.chat:
@@ -61,3 +66,17 @@ services:
         calls:
           - [setContainer, ['@service_container']]
           - [setRequestError, ['@core.request.error']]
+    core.handler.event:
+        class: CoreBundle\Handler\EventHandler
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+          - [setContainer, ['@service_container']]
+    core.service.event.tournament.create:
+        class: CoreBundle\Service\Event\Tournament\CreateTournament
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+          - [setContainer, ['@service_container']]
+    core.service.playzone_serializer:
+        class: CoreBundle\Service\PlayzoneSerializer
+        calls:
+          - [setContainer, ['@service_container']]

@@ -12,7 +12,7 @@ var playzoneApp = angular.module('playzoneApp', [
     'playzoneServices',
     'pascalprecht.translate',
     'LocalStorageModule'
-]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'ChatRest', 'WebsocketService', 'EnvService', '$interval', '$location', '$templateCache', function ($http, $rootScope, $cookies, UserRest, ChatRest, WebsocketService, EnvService, $interval, $location, $templateCache) {
+]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'ChatRest', 'WebsocketService', 'EnvService', '$interval', '$location', '$templateCache', 'TournamentRest', function ($http, $rootScope, $cookies, UserRest, ChatRest, WebsocketService, EnvService, $interval, $location, $templateCache, TournamentRest) {
 
     $rootScope.$on('$viewContentLoaded', function() {
         $templateCache.removeAll();
@@ -87,6 +87,22 @@ var playzoneApp = angular.module('playzoneApp', [
         if (user) {
             user.count ? user.count-- : $rootScope.loginsOnline.pullById(user['id'])
         }
+    });
+
+    WebsocketService.addListener('listener_new_tournament_round', 'new_tournament_round', function (data) {
+        console.log('new tournament round', data);
+        TournamentRest.get_current_game(
+            "",
+            {
+                "id": data.tournament_id
+            },
+            function (game) {
+                $location.path( '/play/' + game.id );
+            },
+            function (errorData) {
+                console.log('error_data', data);
+            }
+        );
     });
 }]);
 

@@ -155,10 +155,10 @@
             "login": "Stas"
           },
           "user_black": {
-            "login": "TestLogin"
+            "login": "Petro"
           },
           "user_to_move": {
-            "login": "TestLogin"
+            "login": "Stas"
           },
           "status": "play"
         }

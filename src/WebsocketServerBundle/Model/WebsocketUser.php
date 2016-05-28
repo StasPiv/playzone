@@ -136,6 +136,9 @@ class WebsocketUser implements SecurityRequestInterface
         throw new PlayzoneServerException($this->getLogin(), $code);
     }
 
+    /**
+     * @param $gameId
+     */
     public function addGameToListen($gameId)
     {
         $this->gamesToListenMap[$gameId] = $gameId;

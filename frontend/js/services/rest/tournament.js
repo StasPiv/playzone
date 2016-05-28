@@ -27,6 +27,10 @@ playzoneServices.factory('TournamentRest', function($resource, ApiService) {
             unrecord: {
                 method: "DELETE",
                 url: ApiService.base_url + 'tournament/:id/unrecord'
+            },
+            get_current_game: {
+                method: "GET",
+                url: ApiService.base_url + 'tournament/:id/currentgame'
             }
         }
     );

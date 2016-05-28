@@ -27,7 +27,9 @@
         "jms/serializer-bundle": "dev-master",
         "nelmio/cors-bundle": "^1.4",
         "nelmio/api-doc-bundle": "^2.11",
-        "myclabs/php-enum": "^1.4"
+        "myclabs/php-enum": "^1.4",
+        "textalk/websocket": "1.0.*",
+        "mtdowling/cron-expression": "^1.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

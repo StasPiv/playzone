@@ -99,6 +99,18 @@ class RoundrobinService implements TournamentDrawInterface
     }
 
     /**
+     * @param Tournament $tournament
+     * @return void
+     */
+    public function makeDrawForNextRound(Tournament $tournament)
+    {
+        $nextRound = $tournament->getCurrentRound() + 1;
+        $this->makeDraw($tournament, $nextRound);
+        $tournament->setCurrentRound($nextRound);
+        $this->manager->flush($tournament);
+    }
+
+    /**
      * @return TournamentHandler
      */
     private function getTournamentHandler()

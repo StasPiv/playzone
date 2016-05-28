@@ -27,11 +27,6 @@ class EventHandlerTest extends KernelAwareTest
         );
     }
 
-    public function testRunCurrentEvents()
-    {
-        $this->getEventHandler()->runAllCurrentEvents();
-    }
-
     /**
      * @return \CoreBundle\Handler\EventHandler
      * @throws \Exception
@@ -46,7 +41,7 @@ class EventHandlerTest extends KernelAwareTest
      */
     private function createTournamentEvent() : TournamentInitializator
     {
-        $frequency = '09 16 * * * *';
+        $frequency = '42 17 * * * *';
         $timeBegin = "+1minute";
         $tournamentName = "Create new tournament";
         $timeBase = 180000;

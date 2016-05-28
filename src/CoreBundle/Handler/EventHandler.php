@@ -111,7 +111,6 @@ class EventHandler
             $this->initNextRun($event);
             $this->saveEvent($event);
         } catch (\RuntimeException $e) {
-            $this->container->get("logger")->error($e->getMessage(), $e->getTrace());
             $this->manager->remove($event);
             $this->manager->flush();
         }

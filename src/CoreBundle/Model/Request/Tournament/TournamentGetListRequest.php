@@ -40,7 +40,7 @@ class TournamentGetListRequest extends TournamentRequest implements SecurityRequ
      * @JMS\Expose
      * @JMS\Type("string")
      */
-    private $status;
+    private $status = TournamentStatus::NEW;
 
     /**
      * @return TournamentStatus

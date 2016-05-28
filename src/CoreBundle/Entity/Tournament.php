@@ -10,6 +10,7 @@ namespace CoreBundle\Entity;
 
 use CoreBundle\Model\Game\GameParams;
 use CoreBundle\Model\Tournament\TournamentParams;
+use CoreBundle\Model\Tournament\TournamentStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
@@ -85,6 +86,20 @@ class Tournament
      * @ORM\Column(type="integer")
      */
     private $currentRound = 0;
+
+    /**
+     * @var int
+     * 
+     * @ORM\Column(type="integer")
+     */
+    private $rounds = 0;
+
+    /**
+     * @var TournamentStatus
+     * 
+     * @ORM\Column(type="string")
+     */
+    private $status = TournamentStatus::NEW;
 
     /**
      * Tournament constructor.
@@ -245,6 +260,44 @@ class Tournament
     public function setCurrentRound(int $currentRound)
     {
         $this->currentRound = $currentRound;
+
+        return $this;
+    }
+
+    /**
+     * @return TournamentStatus
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param TournamentStatus $status
+     * @return Tournament
+     */
+    public function setStatus(TournamentStatus $status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRounds() : int 
+    {
+        return $this->rounds;
+    }
+
+    /**
+     * @param int $rounds
+     * @return Tournament
+     */
+    public function setRounds(int $rounds)
+    {
+        $this->rounds = $rounds;
 
         return $this;
     }

@@ -15,10 +15,6 @@
     },
     "games": [
       {
-        "reference": "game-0",
-        "round": 1
-      },
-      {
         "reference": "game-1",
         "round": 2
       }

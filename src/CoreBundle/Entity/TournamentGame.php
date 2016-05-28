@@ -63,6 +63,26 @@ class TournamentGame
     private $round = 0;
 
     /**
+     * @var TournamentPlayer
+     *
+     * @ORM\OneToOne(targetEntity="TournamentPlayer", cascade={"persist"})
+     * @ORM\JoinColumn(name="player_white_id", referencedColumnName="id")
+     *
+     * @JMS\Type("CoreBundle\Entity\TournamentPlayer")
+     */
+    private $playerWhite;
+
+    /**
+     * @var TournamentPlayer
+     *
+     * @ORM\OneToOne(targetEntity="TournamentPlayer", cascade={"persist"})
+     * @ORM\JoinColumn(name="player_black_id", referencedColumnName="id")
+     *
+     * @JMS\Type("CoreBundle\Entity\TournamentPlayer")
+     */
+    private $playerBlack;
+
+    /**
      * @return int
      */
     public function getId() : int 
@@ -123,6 +143,44 @@ class TournamentGame
     public function setRound(int $round) : TournamentGame
     {
         $this->round = $round;
+
+        return $this;
+    }
+
+    /**
+     * @return TournamentPlayer
+     */
+    public function getPlayerWhite() : TournamentPlayer
+    {
+        return $this->playerWhite;
+    }
+
+    /**
+     * @param TournamentPlayer $playerWhite
+     * @return TournamentGame
+     */
+    public function setPlayerWhite($playerWhite)
+    {
+        $this->playerWhite = $playerWhite;
+
+        return $this;
+    }
+
+    /**
+     * @return TournamentPlayer
+     */
+    public function getPlayerBlack() : TournamentPlayer
+    {
+        return $this->playerBlack;
+    }
+
+    /**
+     * @param TournamentPlayer $playerBlack
+     * @return TournamentGame
+     */
+    public function setPlayerBlack($playerBlack)
+    {
+        $this->playerBlack = $playerBlack;
 
         return $this;
     }

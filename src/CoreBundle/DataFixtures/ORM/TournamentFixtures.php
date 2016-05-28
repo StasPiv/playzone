@@ -32,6 +32,7 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
         $tournament->setName($data['name'])
                    ->setCurrentRound((int)@$data["current_round"]);
         
+        $tournamentPlayersMap = [];
         if (isset($data['players'])) {
             foreach ($data['players'] as $referencePlayer) {
                 /** @var User $player */
@@ -58,6 +59,7 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
                 }
                 
                 $tournament->getPlayers()->add($tournamentPlayer);
+                $tournamentPlayersMap[$player->getId()] = $tournamentPlayer;
             }
         }
 
@@ -90,7 +92,13 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
                 /** @var Game $game */
                 $game = $this->getReference($dataGame["reference"]);
                 $this->container->get("core.handler.tournament")
-                     ->addGameToTournament($tournament, $game, $dataGame["round"]);
+                     ->addGameToTournament(
+                         $tournament, 
+                         $game, 
+                         $dataGame["round"], 
+                         $tournamentPlayersMap[$game->getUserWhite()->getId()],
+                         $tournamentPlayersMap[$game->getUserBlack()->getId()]
+                     );
             }
         }
 

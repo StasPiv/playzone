@@ -84,7 +84,7 @@ class Game implements ChatMessageContainerInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="text")
+     * @ORM\Column(name="status", type="string")
      */
     private $status;
 

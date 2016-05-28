@@ -16,9 +16,11 @@ use MyCLabs\Enum\Enum;
  *
  * @method static TournamentStatus NEW()
  * @method static TournamentStatus CURRENT()
+ * @method static TournamentStatus END()
  */
 class TournamentStatus extends Enum
 {
     const NEW = 'new';
     const CURRENT = 'current';
+    const END = 'end';
 }

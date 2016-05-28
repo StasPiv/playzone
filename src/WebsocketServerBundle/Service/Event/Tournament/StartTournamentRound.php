@@ -15,11 +15,13 @@ use CoreBundle\Model\Event\EventCommandInterface;
 use CoreBundle\Model\Event\EventInterface;
 use CoreBundle\Model\Event\Game\GameEvent;
 use CoreBundle\Model\Event\Game\GameEvents;
+use CoreBundle\Model\Event\Tournament\TournamentContainer;
 use CoreBundle\Model\Event\Tournament\TournamentScheduler;
 use CoreBundle\Model\Event\Tournament\TournamentEvents;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Tournament\Params\TournamentParamsFactory;
 use CoreBundle\Model\Tournament\TournamentContainerInterface;
+use CoreBundle\Model\Tournament\TournamentStatus;
 use CoreBundle\Model\Tournament\TournamentType;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -71,9 +73,23 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
             $this->changeTournamentTypeOnSwiss($tournament);
         }
 
+        $event = (new TournamentContainer())->setTournament($tournament);
+        if ($tournament->getCurrentRound() == 0) {
+            $this->container->get("event_dispatcher")->dispatch(
+                TournamentEvents::START,
+                $event
+            );
+        }
+
         $this->container->get("core.service.draw.factory")
              ->create($tournament)
              ->makeDrawForNextRound($tournament);
+
+
+        $this->container->get("event_dispatcher")->dispatch(
+            TournamentEvents::ROUND_START,
+            $event
+        );
 
         $this->sendMessageToWebsocketServer($tournament);
     }
@@ -187,8 +203,6 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
      * @param GameEvent $gameEvent*/
     public function onGameChangeStatus(GameEvent $gameEvent)
     {
-        // TODO: check if tournament is finished
-        
         if ($gameEvent->getGame()->getStatus() != GameStatus::END) {
             return;
         }
@@ -204,15 +218,19 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
             return;
         }
 
-        $tournamentScheduler =
+        if ($tournament->getStatus() == TournamentStatus::END()) {
+            // TODO: send message to users about finishing tournament
+            return;
+        }
+
+        $this->container->get("core.handler.event")->initEventAndSave(
             (new TournamentScheduler())
                 ->setFrequency(
                     $this->container->get("core.service.date")
                         ->getDateTime("+1minute")->format("i H d n N Y")
                 )
-                ->setTournamentId($tournament->getId());
-        $this->container->get("core.handler.event")->initEventAndSave(
-            $tournamentScheduler, "ws.service.event.tournament.start_round"
+                ->setTournamentId($tournament->getId()), 
+            "ws.service.event.tournament.start_round"
         );
 
     }

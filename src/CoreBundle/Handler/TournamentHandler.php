@@ -18,6 +18,10 @@ use CoreBundle\Exception\Handler\Tournament\TournamentGameShouldBeSkippedExcepti
 use CoreBundle\Exception\Handler\Tournament\TournamentMissRoundException;
 use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
 use CoreBundle\Exception\Handler\Tournament\TournamentPlayerNotFoundException;
+use CoreBundle\Model\Event\Game\GameEvent;
+use CoreBundle\Model\Event\Game\GameEvents;
+use CoreBundle\Model\Event\Tournament\TournamentContainer;
+use CoreBundle\Model\Event\Tournament\TournamentEvents;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
@@ -32,12 +36,13 @@ use CoreBundle\Processor\TournamentProcessorInterface;
 use CoreBundle\Repository\TournamentRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class TournamentHandler
  * @package CoreBundle\Handler
  */
-class TournamentHandler implements TournamentProcessorInterface
+class TournamentHandler implements TournamentProcessorInterface, EventSubscriberInterface
 {
     use ContainerAwareTrait;
     use ErrorAwareTrait;
@@ -76,20 +81,7 @@ class TournamentHandler implements TournamentProcessorInterface
      */
     public function processGetList(TournamentGetListRequest $request) : array
     {
-        switch ($request->getStatus()) {
-            case TournamentStatus::NEW():
-                $tournaments = $this->repository->findBy(["currentRound" => 0]);
-                break;
-            case TournamentStatus::CURRENT():
-                $tournaments = $this->repository->createQueryBuilder("t")
-                    ->where("t.currentRound > 0")
-                    ->getQuery()
-                    ->getResult();
-                break;
-            default:
-                $tournaments = $this->repository->findAll();
-        }
-
+        $tournaments = $this->repository->findBy(['status' => $request->getStatus()]);
 
         if ($request->getToken()) {
             $user = $this->container->get("core.service.security")->getUserIfCredentialsIsOk(
@@ -222,12 +214,22 @@ class TournamentHandler implements TournamentProcessorInterface
      * @param Tournament $tournament
      * @param Game $game
      * @param int $round
+     * @param TournamentPlayer $white
+     * @param TournamentPlayer $black
      */
-    public function addGameToTournament(Tournament $tournament, Game $game, int $round = 0)
+    public function addGameToTournament(
+        Tournament $tournament,
+        Game $game,
+        int $round = 0,
+        TournamentPlayer $white,
+        TournamentPlayer $black
+    )
     {
         $tournamentGame = (new TournamentGame())->setTournament($tournament)
                                                 ->setGame($game)
-                                                ->setRound($round);
+                                                ->setRound($round)
+                                                ->setPlayerWhite($white)
+                                                ->setPlayerBlack($black);
         
         $this->manager->persist($tournamentGame);
     }
@@ -331,10 +333,14 @@ class TournamentHandler implements TournamentProcessorInterface
                 $secondPlayer->getRequiredColor() == GameColor::WHITE:
                 $game->setUserWhite($secondPlayer->getPlayer())
                     ->setUserBlack($firstPlayer->getPlayer());
+                $whiteTournamentPlayer = $secondPlayer;
+                $blackTournamentPlayer = $firstPlayer;
                 break;
             default:
                 $game->setUserWhite($firstPlayer->getPlayer())
                     ->setUserBlack($secondPlayer->getPlayer());
+                $whiteTournamentPlayer = $firstPlayer;
+                $blackTournamentPlayer = $secondPlayer;
         }
 
         $game->setUserToMove($game->getUserWhite());
@@ -343,8 +349,10 @@ class TournamentHandler implements TournamentProcessorInterface
         $tournamentGame = new TournamentGame();
 
         $tournamentGame->setGame($game)
-            ->setTournament($tournament)
-            ->setRound($round);
+                       ->setTournament($tournament)
+                       ->setRound($round)
+                       ->setPlayerWhite($whiteTournamentPlayer)
+                       ->setPlayerBlack($blackTournamentPlayer);
         
         return $tournamentGame;
     }
@@ -440,4 +448,171 @@ class TournamentHandler implements TournamentProcessorInterface
         throw new TournamentMissRoundException;
     }
 
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
+     *
+     * @return array The event names to listen to
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            TournamentEvents::START => [
+                ['onTournamentStart', 20]    
+            ],
+            TournamentEvents::ROUND_START => [
+                ['onTournamentRoundStart', 20]
+            ],
+            GameEvents::CHANGE_STATUS => [
+                ['onGameChangeStatus', 20]
+            ]
+        ];
+    }
+
+    /**
+     * @param GameEvent $gameEvent*/
+    public function onGameChangeStatus(GameEvent $gameEvent)
+    {
+        if ($gameEvent->getGame()->getStatus() != GameStatus::END) {
+            return;
+        }
+
+        try {
+            $tournament = $this->container->get("core.handler.tournament")
+                ->getTournamentForGame($gameEvent->getGame());
+        } catch (TournamentGameNotFoundException $e) {
+            return;
+        }
+
+        $this->updatePlayersTotals($gameEvent->getGame());
+
+        if (!$this->container->get("core.handler.tournament")->isCurrentRoundFinished($tournament)) {
+            return;
+        }
+
+        if ($tournament->getRounds() == $tournament->getCurrentRound()) {
+            $tournament->setStatus(TournamentStatus::END());
+            $this->manager->flush($tournament);
+        }
+        
+    }
+
+    /**
+     * @param TournamentContainer $tournamentContainer
+     */
+    public function onTournamentRoundStart(TournamentContainer $tournamentContainer)
+    {
+        $this->searchPlayerWhoMissCurrentRound($tournamentContainer->getTournament());
+    }
+
+    /**
+     * @param TournamentContainer $tournamentContainer
+     */
+    public function onTournamentStart(TournamentContainer $tournamentContainer)
+    {
+        $tournament = $tournamentContainer->getTournament();
+
+        $tournament->setStatus(TournamentStatus::CURRENT());
+        $this->calculateRounds($tournament);
+
+        $this->manager->flush($tournament);
+    }
+
+    /**
+     * @param Tournament $tournament
+     */
+    public function calculateRounds(Tournament $tournament)
+    {
+        if ($tournament->getRounds() != 0) {
+            return;
+        }
+
+        $countPlayers = count($tournament->getPlayers());
+
+        $tournament->setRounds(
+            $countPlayers % 2 === 0 ? $countPlayers - 1 : $countPlayers
+        );
+    }
+
+    /**
+     * @param Game $game
+     */
+    private function updatePlayersTotals(Game $game)
+    {
+        $tournamentGame = $this->getTournamentGameByGame($game);
+
+        $playerWhite = $tournamentGame->getPlayerWhite();
+        $playerBlack = $tournamentGame->getPlayerBlack();
+
+        $playerWhite->setPoints($playerWhite->getPoints() + $game->getResultWhite());
+        $playerBlack->setPoints($playerBlack->getPoints() + $game->getResultBlack());
+
+        $playerWhite->setBlackInRow(0)->setWhiteInRow($playerWhite->getWhiteInRow() + 1);
+        $playerBlack->setBlackInRow($playerBlack->getBlackInRow() + 1)->setWhiteInRow(0);
+
+        $playerWhite->setCountWhite($playerWhite->getCountWhite() + 1);
+        $playerBlack->setCountBlack($playerWhite->getCountBlack() + 1);
+
+        $playerWhite->addOpponent($playerBlack->getPlayer());
+        $playerBlack->addOpponent($playerWhite->getPlayer());
+
+        $this->manager->persist($playerWhite);
+        $this->manager->persist($playerBlack);
+
+        $this->manager->flush();
+    }
+
+    /**
+     * @param Game $game
+     * @return TournamentGame
+     */
+    public function getTournamentGameByGame(Game $game) : TournamentGame
+    {
+        $tournamentGame = $this->manager->getRepository("CoreBundle:TournamentGame")
+            ->findOneBy([
+                "game" => $game
+            ]);
+        
+        if (!$tournamentGame instanceof TournamentGame) {
+            throw new TournamentGameNotFoundException;
+        }
+        
+        return $tournamentGame;
+    }
+
+    /**
+     * @param Tournament $tournament
+     */
+    private function searchPlayerWhoMissCurrentRound(Tournament $tournament)
+    {
+        $roundGames = $this->getRoundGames($tournament, $tournament->getCurrentRound());
+        $players = $this->getPlayers($tournament);
+
+        $playersForCurrentRound = [];
+        foreach ($roundGames as $game) {
+            $playersForCurrentRound[$game->getPlayerWhite()->getId()] = $game->getPlayerWhite()->getId();
+            $playersForCurrentRound[$game->getPlayerBlack()->getId()] = $game->getPlayerBlack()->getId();
+        }
+
+        foreach ($players as $player) {
+            if (!isset($playersForCurrentRound[$player->getId()])) {
+                $player->setMissedRound(true);
+                $this->manager->persist($player);
+            }
+        }
+
+        $this->manager->flush();
+    }
 }

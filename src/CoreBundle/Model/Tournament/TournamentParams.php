@@ -21,6 +21,13 @@ abstract class TournamentParams
     private $timeBegin;
 
     /**
+     * @var int
+     * 
+     * @JMS\Type("integer")
+     */
+    private $gamesVsOpponent = 1;
+
+    /**
      * @JMS\VirtualProperty()
      * @JMS\SerializedName("type")
      * @JMS\Type("string")
@@ -44,6 +51,25 @@ abstract class TournamentParams
     public function setTimeBegin(DateTime $timeBegin)
     {
         $this->timeBegin = $timeBegin;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGamesVsOpponent() : int 
+    {
+        return $this->gamesVsOpponent;
+    }
+
+    /**
+     * @param int $gamesVsOpponent
+     * @return TournamentParams
+     */
+    public function setGamesVsOpponent(int $gamesVsOpponent)
+    {
+        $this->gamesVsOpponent = $gamesVsOpponent;
 
         return $this;
     }

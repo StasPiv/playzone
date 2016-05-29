@@ -141,5 +141,9 @@
   "Time": "Время",
   "games": "партии",
   "Show notation": "Показывать координаты доски",
-  "round_robin": "Круговой"
+  "round_robin": "Круговой",
+  "Points": "Очки",
+  "New tournaments": "Новые турниры",
+  "Current tournaments": "Текущие турниры",
+  "Finished tournaments": "Завершенные турниры"
 }

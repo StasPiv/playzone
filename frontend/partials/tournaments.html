@@ -1,39 +1,12 @@
-<h1>{{ header | translate }}</h1>
+<h1>{{ "New tournaments" | translate }}</h1>
+<tournaments-list
+        data-tournaments="tournaments_new"
+        data-record="recordIntoTournament"
+        data-unrecord="unrecordFromTournament"
+>
 
-<div class="table-responsive">
-    <table class="table">
-        <tr>
-            <th>№</th>
-            <th>{{ "Tournament" | translate }}</th>
-            <th>{{ "Parameters" | translate }}</th>
-            <th>{{ "Type" | translate }}</th>
-            <th>{{ "Time begin" | translate }}</th>
-            <th>{{ "Action" | translate }}</th>
-        </tr>
-        <tr ng-repeat="tournament in tournaments track by $index">
-            <td>
-                <a href="">{{ tournament.id }}</a>
-            </td>
-            <td>
-                <a href="/#/tournament/{{ tournament.id }}">{{ tournament.name }}</a>
-            </td>
-            <td>
-                <a href="">{{ tournament.game_params.time_base / 60000 }}{{ "m" | translate }}</a>
-            </td>
-            <td>
-                <a href="">{{ tournament.tournament_params.type | translate }}</a>
-            </td>
-            <td>
-                <a href="">{{ tournament.tournament_params.time_begin }}</a>
-            </td>
-            <td>
-                <a ng-if="!tournament.mine" class="btn btn-success" ng-click="recordIntoTournament(tournament)">
-                    {{ 'Record' | translate }}
-                </a>
-                <a ng-if="tournament.mine" class="btn btn-danger" ng-click="unrecordFromTournament(tournament)">
-                    {{ 'Unrecord' | translate }}
-                </a>
-            </td>
-        </tr>
-    </table>
-</div>
+</tournaments-list>
+<h1>{{ "Current tournaments" | translate }}</h1>
+<tournaments-list data-tournaments="tournaments_current"></tournaments-list>
+<h1>{{ "Finished tournaments" | translate }}</h1>
+<tournaments-list data-tournaments="tournaments_finished"></tournaments-list>

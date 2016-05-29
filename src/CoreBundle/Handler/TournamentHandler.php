@@ -111,6 +111,8 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
 
         /** @var Tournament $tournament */
+        $this->mixAllGames($tournament);
+        $this->mixGamesForRoundRobin($tournament);
         return $tournament;
     }
 
@@ -614,5 +616,44 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
 
         $this->manager->flush();
+    }
+
+    /**
+     * @param Tournament $tournament
+     */
+    private function mixAllGames(Tournament $tournament)
+    {
+        $games = [];
+        foreach ($tournament->getGames() as $tournamentGame) {
+            /** @var TournamentGame $tournamentGame */
+            $games[] = $tournamentGame->getGame();
+        }
+        $tournament->setAllGames($games);
+    }
+
+    /**
+     * @param Tournament $tournament
+     */
+    private function mixGamesForRoundRobin(Tournament $tournament)
+    {
+        $gamesMap = [];
+
+        foreach ($tournament->getPlayers() as $firstPlayer) {
+            foreach ($tournament->getPlayers() as $secondPlayer) {
+                if ($firstPlayer == $secondPlayer) {
+                    continue;
+                }
+                $gamesMap[$firstPlayer->getId()][$secondPlayer->getId()] = '';
+                $gamesMap[$secondPlayer->getId()][$firstPlayer->getId()] = '';
+            }
+        }
+
+        foreach ($tournament->getGames() as $tournamentGame) {
+            $gamesMap[$tournamentGame->getPlayerWhite()->getId()][$tournamentGame->getPlayerBlack()->getId()] = $tournamentGame->getGame()->getResultWhite();
+
+            $gamesMap[$tournamentGame->getPlayerBlack()->getId()][$tournamentGame->getPlayerWhite()->getId()] = $tournamentGame->getGame()->getResultBlack();
+        }
+
+        $tournament->setResultsForRoundRobin($gamesMap);
     }
 }

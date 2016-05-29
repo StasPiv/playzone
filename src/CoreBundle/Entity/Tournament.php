@@ -45,6 +45,7 @@ class Tournament
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="TournamentPlayer", mappedBy="tournament", cascade={"persist", "remove"})
+     * @ORM\OrderBy({"points" = "DESC"})
      */
     private $players;
 
@@ -102,6 +103,22 @@ class Tournament
     private $status = TournamentStatus::NEW;
 
     /**
+     * @var Game[]
+     *
+     * @JMS\Expose()
+     * @JMS\Type("array<CoreBundle\Entity\Game>")
+     */
+    private $allGames;
+
+    /**
+     * @var int
+     *
+     * @JMS\Expose()
+     * @JMS\Type("array")
+     */
+    private $resultsForRoundRobin;
+
+    /**
      * Tournament constructor.
      */
     public function __construct()
@@ -149,7 +166,7 @@ class Tournament
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|TournamentPlayer[]
      */
     public function getPlayers()
     {
@@ -227,9 +244,9 @@ class Tournament
     }
 
     /**
-     * @return ArrayCollection
+     * @return PersistentCollection|TournamentGame[]
      */
-    public function getGames() : ArrayCollection
+    public function getGames()
     {
         return $this->games;
     }
@@ -298,6 +315,44 @@ class Tournament
     public function setRounds(int $rounds)
     {
         $this->rounds = $rounds;
+
+        return $this;
+    }
+
+    /**
+     * @return Game[]
+     */
+    public function getAllGames()
+    {
+        return $this->allGames;
+    }
+
+    /**
+     * @param Game[] $allGames
+     * @return Tournament
+     */
+    public function setAllGames($allGames)
+    {
+        $this->allGames = $allGames;
+
+        return $this;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getResultsForRoundRobin()
+    {
+        return $this->resultsForRoundRobin;
+    }
+
+    /**
+     * @param int[] $resultsForRoundRobin
+     * @return Tournament
+     */
+    public function setResultsForRoundRobin($resultsForRoundRobin)
+    {
+        $this->resultsForRoundRobin = $resultsForRoundRobin;
 
         return $this;
     }

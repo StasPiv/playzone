@@ -1,0 +1,43 @@
+<div class="table-responsive">
+    <table class="table current">
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>{{ "Action" | translate }}</th>
+            <th>{{ "White" | translate }}</th>
+            <th>{{ "Black" | translate }}</th>
+            <th>{{ "Result" | translate }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="game in games">
+            <td>
+                <a href="/#/play/{{ game.id }}">
+                    {{game.id}}
+                </a>
+            </td>
+            <td>
+                <a ng-show="game.user_move" href="/#/play/{{ game.id }}" class="btn btn-success glyphicon glyphicon-play" title="{{ 'Do move' | translate }}"></a>
+                <a ng-show="!game.user_move" href="/#/play/{{ game.id }}" class="btn btn-info glyphicon glyphicon-eye-open" title="{{ 'See' | translate }}"></a>
+            </td>
+            <td>
+                <span>
+                    <user-link
+                            data-user="game.user_white"
+                    ></user-link>
+                </span>
+            </td>
+            <td>
+                <span>
+                    <user-link
+                            data-user="game.user_black"
+                    ></user-link>
+                </span>
+            </td>
+            <td>
+                <span>{{ game.result_white }} - {{ game.result_black }}</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

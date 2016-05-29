@@ -1,0 +1,25 @@
+<div class="table-responsive">
+    <table class="table tournament_table">
+        <tr>
+            <th class="player">#</th>
+            <th class="player">{{ "Player" | translate }}</th>
+            <th ng-repeat="firstPlayer in tournament.players">{{ $index + 1 }}</th>
+            <th class="result">{{ "Points" | translate }}</th>
+        </tr>
+        <tr ng-repeat="firstPlayer in tournament.players">
+            <td class="player">{{ $index+1 }}</td>
+            <td class="player"><user-link data-user="firstPlayer.player"></user-link></td>
+            <td
+                    ng-repeat="secondPlayer in tournament.players"
+                    ng-class="{
+                    draw: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id] == 0.5,
+                    win: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id] == 1,
+                    lost: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id] == 0,
+                    self: firstPlayer.id == secondPlayer.id}"
+            >
+                {{ beautyResult(tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]) }}
+            </td>
+            <td class="result">{{ firstPlayer.points }}</td>
+        </tr>
+    </table>
+</div>

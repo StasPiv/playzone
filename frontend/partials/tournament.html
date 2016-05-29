@@ -1,17 +1,5 @@
-<h1>{{ "Players" | translate }}</h1>
-<div class="table-responsive">
-    <table class="table">
-        <tr>
-            <th>№</th>
-            <th>{{ "Player" | translate }}</th>
-        </tr>
-        <tr ng-repeat="tournamentPlayer in tournament.players">
-            <td>
-                <a href="">{{ $index + 1 }}</a>
-            </td>
-            <td>
-                <a href="/#/profile/">{{ tournamentPlayer.player.login }}</a>
-            </td>
-        </tr>
-    </table>
-</div>
+<h1>{{ "Table" | translate }}</h1>
+<tournament-table data-tournament="tournament"></tournament-table>
+
+<h1>{{ "Games" | translate }} ({{ tournament.all_games.length }})</h1>
+<games-list data-games="tournament.all_games"></games-list>

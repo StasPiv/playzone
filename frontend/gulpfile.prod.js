@@ -84,6 +84,7 @@ gulp.task('compressJs', function() {
         "js/services/rest/user.js",
         "js/services/rest/chat.js",
         "js/services/rest/pgn.js",
+        "js/services/rest/tournament.js",
         "js/utils.js"
     ])
         .pipe(concat('app.js'))

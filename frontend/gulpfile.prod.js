@@ -60,6 +60,8 @@ gulp.task('compressJs', function() {
         "js/controllers/myprofile.js",
         "js/controllers/profile.js",
         "js/controllers/user_archive.js",
+        "js/controllers/tournament.js",
+        "js/controllers/tournaments.js",
         "js/directives/drop_down_menu.js",
         "js/directives/open_popup.js",
         "js/directives/chess_board_legal.js",

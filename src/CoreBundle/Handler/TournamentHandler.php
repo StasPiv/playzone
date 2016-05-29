@@ -22,7 +22,9 @@ use CoreBundle\Model\Event\Game\GameEvent;
 use CoreBundle\Model\Event\Game\GameEvents;
 use CoreBundle\Model\Event\Tournament\TournamentContainer;
 use CoreBundle\Model\Event\Tournament\TournamentEvents;
+use CoreBundle\Model\Event\Tournament\TournamentInitializator;
 use CoreBundle\Model\Game\GameColor;
+use CoreBundle\Model\Game\GameParams;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Tournament\TournamentDeleteUnrecordRequest;
@@ -31,7 +33,9 @@ use CoreBundle\Model\Request\Tournament\TournamentGetListRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetRequest;
 use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
+use CoreBundle\Model\Tournament\Params\TournamentParamsFactory;
 use CoreBundle\Model\Tournament\TournamentStatus;
+use CoreBundle\Model\Tournament\TournamentType;
 use CoreBundle\Processor\TournamentProcessorInterface;
 use CoreBundle\Repository\TournamentRepository;
 use Doctrine\ORM\EntityManager;
@@ -592,6 +596,29 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
         
         return $tournamentGame;
+    }
+
+    /**
+     * @param string $frequency
+     * @param string $timeBegin
+     * @param string $tournamentName
+     * @param int $timeBase
+     */
+    public function createTournamentEvent(string $frequency, string $timeBegin, string $tournamentName, int $timeBase)
+    {
+        $this->container->get("core.handler.event")->initEventAndSave(
+            (new TournamentInitializator())
+                ->setFrequency($frequency)
+                ->setTournamentName($tournamentName)
+                ->setGameParams(
+                    (new GameParams())->setTimeBase($timeBase)
+                )
+                ->setTimeBegin($timeBegin)
+                ->setTournamentParams(
+                    TournamentParamsFactory::create(TournamentType::ROUND_ROBIN())
+                )
+            , "core.service.event.tournament.create"
+        );
     }
 
     /**

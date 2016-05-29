@@ -46,6 +46,8 @@ var playzoneApp = angular.module('playzoneApp', [
         }
     );
 
+    $rootScope.chat = ChatRest.query();
+
     $rootScope.loginsOnline = [];
 
     WebsocketService.addListener('listen_welcome', 'welcome', function (data) {

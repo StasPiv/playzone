@@ -1,4 +1,16 @@
-<h1>{{ "Table" | translate }}</h1>
+<playzone-chat data-message-container="$root.chat"
+               data-rest-container="'chat'"
+               data-chat-room="'common_chat'"
+               ng-if="$root.connected && $root.user && $root.user.id"
+>
+
+</playzone-chat>
+<h1>
+    {{ "Tournament" | translate }} #{{ tournament.id }}. {{ tournament.name }}
+    <button type="button" class="btn btn-info btn-sm" ng-click="refresh()">
+        <span class="glyphicon glyphicon-refresh"></span> Refresh
+    </button>
+</h1>
 <tournament-table data-tournament="tournament"></tournament-table>
 
 <h1>{{ "Games" | translate }} ({{ tournament.all_games.length }})</h1>

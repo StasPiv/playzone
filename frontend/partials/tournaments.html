@@ -1,3 +1,10 @@
+<playzone-chat data-message-container="$root.chat"
+               data-rest-container="'chat'"
+               data-chat-room="'common_chat'"
+               ng-if="$root.connected && $root.user && $root.user.id"
+>
+
+</playzone-chat>
 <h1>{{ "New tournaments" | translate }}</h1>
 <tournaments-list
         data-tournaments="tournaments_new"

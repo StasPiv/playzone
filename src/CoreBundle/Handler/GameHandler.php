@@ -627,6 +627,23 @@ class GameHandler implements GameProcessorInterface
     }
 
     /**
+     * @param int $gameId
+     * @param string $status
+     * @param float $resultWhite
+     * @param float $resultBlack
+     */
+    public function changeGameStatusById(int $gameId, string $status, float $resultWhite, float $resultBlack)
+    {
+        $game = $this->repository->find($gameId);
+
+        $game->setResultWhite($resultWhite);
+        $game->setResultBlack($resultBlack);
+
+        $this->changeGameStatus($game, $status);
+        $this->manager->flush($game);
+    }
+
+    /**
      * @param Game $game
      * @param $status
      */

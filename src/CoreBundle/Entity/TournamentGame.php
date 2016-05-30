@@ -65,7 +65,7 @@ class TournamentGame
     /**
      * @var TournamentPlayer
      *
-     * @ORM\OneToOne(targetEntity="TournamentPlayer", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="TournamentPlayer")
      * @ORM\JoinColumn(name="player_white_id", referencedColumnName="id")
      *
      * @JMS\Type("CoreBundle\Entity\TournamentPlayer")
@@ -75,7 +75,7 @@ class TournamentGame
     /**
      * @var TournamentPlayer
      *
-     * @ORM\OneToOne(targetEntity="TournamentPlayer", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="TournamentPlayer")
      * @ORM\JoinColumn(name="player_black_id", referencedColumnName="id")
      *
      * @JMS\Type("CoreBundle\Entity\TournamentPlayer")

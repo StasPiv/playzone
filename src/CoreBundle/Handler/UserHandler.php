@@ -188,7 +188,8 @@ class UserHandler implements UserProcessorInterface
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($settingRequest, $this->getRequestError());
         
         try {
-            $userSetting = $this->manager->getRepository('CoreBundle:UserSetting')->find($settingRequest->getSettingId());
+            $userSetting = $this->manager->getRepository('CoreBundle:UserSetting')
+                ->find($settingRequest->getSettingId());
         } catch (UserSettingNotFoundException $e) {
             $this->getRequestError()
                  ->addError("setting_id", "Setting {$settingRequest->getSettingId()} is not found")

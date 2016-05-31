@@ -25,7 +25,7 @@ class UserPatchSettingRequest extends UserRequest implements SecurityRequestInte
      * @var string
      *
      * @JMS\Expose()
-     * @JMS\Type("integer")
+     * @JMS\Type("string")
      *
      * @Assert\NotBlank(
      *     message = "Setting id is required for this request"
@@ -44,7 +44,7 @@ class UserPatchSettingRequest extends UserRequest implements SecurityRequestInte
     /**
      * @return int
      */
-    public function getSettingId() : int
+    public function getSettingId()
     {
         return $this->settingId;
     }

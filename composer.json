@@ -29,7 +29,8 @@
         "nelmio/api-doc-bundle": "^2.11",
         "myclabs/php-enum": "^1.4",
         "textalk/websocket": "1.0.*",
-        "mtdowling/cron-expression": "^1.1"
+        "mtdowling/cron-expression": "^1.1",
+        "gedmo/doctrine-extensions": "2.3.12"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

@@ -139,6 +139,12 @@ h2 {
     background-color: $green;
   }
 }
+.full-label {
+  font-size: 13px;
+  .mobile & {
+    display: none;
+  }
+}
 .header {
   height: 100px;
   padding: 10px;
@@ -148,7 +154,6 @@ h2 {
     margin-top: 77px;
     position: absolute;
     top: -20px;
-    width: 40%;
     .mobile & {
       left: 0;
       width: 100%;
@@ -187,6 +192,10 @@ h2 {
     .user-action {
       font-weight: bold;
       float: right;
+      margin-top: 2px;
+      .mobile & {
+        margin-top: 0;
+      }
     }
     .enter {
       font-weight: bold;
@@ -481,6 +490,14 @@ input[type="password"] {
   td {
     border: 1px solid $black;
     padding: 2px;
+  }
+}
+.chat-header {
+  .right-chat-column {
+    width: 20px;
+  }
+  .hide-button {
+    float: right;
   }
 }
 .chat {

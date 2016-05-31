@@ -21,5 +21,21 @@
         "value": "1"
       }
     }
+  },
+  "update_correct_by_code": {
+    "method": "PATCH",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "setting_id": "show-chat",
+      "value": "1"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "name": "Show chat",
+        "value": "1"
+      }
+    }
   }
 }

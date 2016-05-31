@@ -64,5 +64,11 @@
     "name": "Show notation",
     "type": "checkbox",
     "sort": 110
+  },
+  {
+    "referenceName": "setting-show-chat",
+    "name": "Show chat",
+    "type": "checkbox",
+    "sort": 120
   }
 ]

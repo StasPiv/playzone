@@ -65,10 +65,10 @@ class UserController extends BaseController
 
     /**
      * @param Request $request
-     * @param int $setting_id
+     * @param int|string $setting_id
      * @return Response
      */
-    public function patchSettingAction(Request $request, int $setting_id)
+    public function patchSettingAction(Request $request, $setting_id)
     {
         return $this->process($request, new UserPatchSettingRequest());
     }

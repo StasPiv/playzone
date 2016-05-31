@@ -8,6 +8,7 @@
 
 namespace CoreBundle\Entity;
 
+use Behat\Transliterator\Transliterator;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
@@ -44,6 +45,13 @@ class UserSetting
      * @JMS\Type("string")
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=128, nullable=true)
+     */
+    private $code;
 
     /**
      * @var string
@@ -110,6 +118,8 @@ class UserSetting
     {
         $this->name = $name;
 
+        $this->code = Transliterator::transliterate($name);
+
         return $this;
     }
 
@@ -166,6 +176,25 @@ class UserSetting
     public function setSort(int $sort) : UserSetting
     {
         $this->sort = $sort;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode() : string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     * @return UserSetting
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
 
         return $this;
     }

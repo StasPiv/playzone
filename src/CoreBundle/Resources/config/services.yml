@@ -84,3 +84,7 @@ services:
         class: CoreBundle\Service\DateService
         calls:
           - [setContainer, ['@service_container']]
+    core.user_setting.codes:
+        class: CoreBundle\Service\UserSettingService
+        calls:
+          - [setContainer, ['@service_container']]

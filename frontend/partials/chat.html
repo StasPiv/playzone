@@ -1,12 +1,31 @@
-<table class="table table-bordered">
+<table class="chat-header table table-bordered">
     <tr>
-        <td colspan="2">
+        <td ng-if="isChatDisplayed">
             <input placeholder="{{ 'Your message' | translate }}" class="message" id="message" type="text">&nbsp;
             <input class="btn btn-primary add-message" value="OK" type="submit" data-ng-click="addMessage()">
         </td>
+        <td
+                ng-class="{
+                    'right-chat-column': isChatDisplayed
+                }"
+        >
+            <a
+                    ng-class="{
+                        'glyphicon-chevron-down': !isChatDisplayed,
+                        'glyphicon-chevron-up': isChatDisplayed
+                    }"
+                    title="{{ 'Hide messages' | translate }}"
+                    class="hide-button glyphicon btn btn-info" ng-click="toggleChatMessages()"
+            >
+                <span ng-if="!isChatDisplayed">{{ "Show chat" | translate }}</span>
+            </a>
+        </td>
     </tr>
 </table>
-<div class="chat">
+<div
+        ng-if="isChatDisplayed"
+        class="chat"
+>
     <table class="table table-striped">
         <tbody>
             <tr ng-repeat="chatMessage in chat_messages">

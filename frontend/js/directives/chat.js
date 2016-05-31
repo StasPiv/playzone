@@ -3,11 +3,30 @@
  */
 'use strict';
 
-playzoneControllers.directive('playzoneChat', function ($rootScope, WebsocketService, GameRest, ChatRest) {
+playzoneControllers.directive('playzoneChat', function ($rootScope, WebsocketService, GameRest, ChatRest, UserRest, SettingService) {
     return {
         restrict: 'E',
         link: function(scope, element) {
             var messageInput = $(element).find(".message");
+
+            console.log($rootScope.user.settings, !!SettingService.getSetting('Show chat'));
+            scope.isChatDisplayed = !!parseInt(SettingService.getSetting('Show chat'));
+
+            scope.toggleChatMessages = function () {
+                $(element).find('.chat').slideToggle();
+                scope.isChatDisplayed = !scope.isChatDisplayed;
+
+                var value = scope.isChatDisplayed ? 1 : 0;
+                UserRest.edit_setting(
+                    {
+                        setting_id: 'show-chat',
+                        value: value
+                    },
+                    function () {
+                        $rootScope.user.settings['Show chat'].value = value;
+                    }
+                );
+            };
 
             scope.messageContainer.$promise.then(
                 function () {

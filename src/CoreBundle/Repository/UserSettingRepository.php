@@ -32,8 +32,12 @@ class UserSettingRepository extends EntityRepository
      */
     public function find($id, $lockMode = null, $lockVersion = null) : UserSetting
     {
-        $userSetting = parent::find($id, $lockMode, $lockVersion);
-        
+        if (is_numeric($id)) {
+            $userSetting = parent::find($id, $lockMode, $lockVersion);
+        } else {
+            $userSetting = $this->findOneBy(["code" => $id]);
+        }
+
         if (!$userSetting instanceof UserSetting) {
             throw new UserSettingNotFoundException;
         }

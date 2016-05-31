@@ -21,60 +21,69 @@
     <link rel="stylesheet" href="css/chessboard-0.3.0.min.css" />
 </head>
 <body ng-class="{'mobile': $root.isMobile}">
-    <div class="content" ng-cloak>
-        <div class="header">
-            <a class="logo" href="#/games/"><img src="images/logo.png" /></a>
+<div class="content" ng-cloak>
+    <div class="header">
+        <a class="logo" href="#/games/"><img src="images/logo.png" /></a>
 
-            <div class="menu" ng-controller="TopMenuCtrl">
-                <ul>
-                    <div class="btn-group-justified">
-                        <a href="{{item.url}}" class="btn btn-default" ng-repeat="item in menu">
-                            {{item.label | translate}}
-                        </a>
-                    </div>
-                </ul>
-            </div>
-            <div class="language btn-group" ng-controller="LanguageCtrl">
-                <a class="btn btn-default" ng-click="changeLanguage('en')" href="/#/">en</a>
-                <a class="btn btn-default" ng-click="changeLanguage('ru')" href="/#/">ru</a>
-            </div>
-            <div class="register" ng-controller="TopRegisterCtrl">
-                <div class="for-unauthorized btn-group" ng-if="!$root.user.isAuth">
-                    <a class="btn btn-default" href="/#/register">{{ 'Sign Up' | translate }}</a>
-                    <a class="btn btn-default enter" href="/#/auth">{{ 'Sign In' | translate }}</a>
+        <div class="menu" ng-controller="TopMenuCtrl">
+            <ul>
+                <div class="btn-group-justified">
+                    <a href="{{item.url}}" class="btn btn-default" ng-repeat="item in menu">
+                        {{item.label | translate}}
+                    </a>
                 </div>
-                <div class="for-authorized" ng-if="$root.user.isAuth">
-                    <div ng-class="[
+            </ul>
+        </div>
+        <div class="language btn-group" ng-controller="LanguageCtrl">
+            <a class="btn btn-default" ng-click="changeLanguage('en')" href="/#/">en</a>
+            <a class="btn btn-default" ng-click="changeLanguage('ru')" href="/#/">ru</a>
+        </div>
+        <div class="register" ng-controller="TopRegisterCtrl">
+            <div class="for-unauthorized btn-group" ng-if="!$root.user.isAuth">
+                <a class="btn btn-default" href="/#/register">{{ 'Sign Up' | translate }}</a>
+                <a class="btn btn-default enter" href="/#/auth">{{ 'Sign In' | translate }}</a>
+            </div>
+            <div class="for-authorized" ng-if="$root.user.isAuth">
+                <div ng-class="[
                         'pic-connect',
                         {'connect-not-success': !$root.connected},
                         {'connect-success': !!$root.connected}]">
-                        &nbsp;
-                    </div>
-                    <div class="user-action btn-group">
-                        <a class="btn btn-primary glyphicon glyphicon-user" title="{{ 'My profile' | translate }}" href="/#/profile"></a>
-                        <a class="btn btn-primary glyphicon glyphicon-log-out" href="/#/logout" ng-click="logout()" title="{{ 'Logout' | translate }}"></a>
-                    </div>
+                    &nbsp;
+                </div>
+                <div class="user-action btn-group">
+                    <a class="btn btn-primary glyphicon glyphicon-user" title="{{ 'My profile' | translate }}" href="/#/profile">
+                        <span class="full-label">{{ 'My profile' | translate }}</span>
+                    </a>
+                    <a class="btn btn-primary glyphicon glyphicon-log-out" href="/#/logout" ng-click="logout()" title="{{ 'Logout' | translate }}">
+                        <span class="full-label">{{ 'Logout' | translate }}</span>
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="alert alert-danger" ng-if="!$root.browserSupported">
-            {{ 'Your browser is not supported for play. Try' | translate }}
-            <a href='https://www.google.com/chrome/browser/desktop/'>Google Chrome</a>.
-        </div>
-        <div class="alert alert-danger" ng-if="!$root.connected">
-            {{ 'Can not connect' | translate }}
-        </div>
-        <div class="middle" ng-view>
-
-        </div>
-        <div class="footer">
-            <div class="overlay"></div>
-        </div>
     </div>
+    <div class="alert alert-danger" ng-if="!$root.browserSupported">
+        {{ 'Your browser is not supported for play. Try' | translate }}
+        <a href='https://www.google.com/chrome/browser/desktop/'>Google Chrome</a>.
+    </div>
+    <div class="alert alert-danger" ng-if="!$root.connected">
+        {{ 'Can not connect' | translate }}
+    </div>
+    <div class="middle" ng-view>
 
-    <!-- WebRTC -->
-    <!--script src="js/webrtc/adapter.js"></script>
-    <script src="js/webrtc/common.js"></script-->
-    <!-- WebRTC -->
+    </div>
+    <div class="footer">
+        <div class="overlay"></div>
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+<script type="text/javascript" src="js/jquery.zclip.js"></script>
+<script src="js/jquery.ui.draggable.js" type="text/javascript"></script>
+<script src="js/jquery.alerts.js" type="text/javascript"></script>
+
+<!-- WebRTC -->
+<script src="js/webrtc/adapter.js"></script>
+<script src="js/webrtc/common.js"></script>
+<!-- WebRTC -->
 </body>
 </html>

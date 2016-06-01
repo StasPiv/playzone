@@ -14,20 +14,13 @@
       "status": 200,
       "data": [
         {
-          "name": "First test tournament",
-          "players": [
-            {
-              "player": {
-                "login": "Stas"
-              }
-            }
-          ]
+
         },
         {
-          "name": "Second test tournament"
+
         },
         {
-          "name": "Third test tournament"
+
         }
       ]
     }
@@ -42,22 +35,15 @@
       "status": 200,
       "data": [
         {
-          "name": "First test tournament",
-          "players": [
-            {
-              "player": {
-                "login": "Stas"
-              }
-            }
-          ],
+          "name": "Round robin test",
           "mine": false
         },
         {
-          "name": "Second test tournament",
-          "mine": true
+          "name": "Test switz tournament odd",
+          "mine": false
         },
         {
-          "name": "Third test tournament",
+          "name": "Test switz tournament even",
           "mine": true
         }
       ]

@@ -10,7 +10,9 @@
       "reference": {
         "name": "id",
         "value": "game-0"
-      }
+      },
+      "login": "Petro",
+      "token": "d10f4fcce69f443f38827d7ffc2ef0ed"
     },
     "response": {
       "status": 200,

@@ -174,6 +174,17 @@ class Tournament
     }
 
     /**
+     * @param ArrayCollection $players
+     * @return Tournament
+     */
+    public function setPlayers($players)
+    {
+        $this->players = $players;
+
+        return $this;
+    }
+
+    /**
      * @param User $player
      * @return Tournament
      */

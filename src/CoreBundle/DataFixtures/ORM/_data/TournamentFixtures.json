@@ -87,7 +87,8 @@
       "user-w",
       "user-x",
       "user-y",
-      "user-z"
+      "user-z",
+      "user-test-login"
     ],
     "game_params": {
       "time_base": 600000

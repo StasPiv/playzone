@@ -38,6 +38,7 @@ use CoreBundle\Model\Tournament\TournamentStatus;
 use CoreBundle\Model\Tournament\TournamentType;
 use CoreBundle\Processor\TournamentProcessorInterface;
 use CoreBundle\Repository\TournamentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -95,6 +96,8 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
             );
 
             foreach ($tournaments as $tournament) {
+                $tournament->setGames(new ArrayCollection());
+                $tournament->setPlayers(new ArrayCollection());
                 $this->setMineToTournament($tournament, $user);
             }
         }

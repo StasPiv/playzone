@@ -19,14 +19,10 @@
         "name": "First test tournament",
         "players": [
           {
-            "player": {
-              "login": "Stas"
-            }
+
           },
           {
-            "player": {
-              "login": "Petro"
-            }
+
           }
         ]
       }

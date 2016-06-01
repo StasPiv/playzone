@@ -54,7 +54,7 @@ playzoneControllers.directive('playzoneChat', function ($rootScope, WebsocketSer
                     return;
                 }
 
-                var messageText = messageInput.val();
+                var messageText = $(element).find(".message").val();
 
                 if (messageText === "") {
                     return;

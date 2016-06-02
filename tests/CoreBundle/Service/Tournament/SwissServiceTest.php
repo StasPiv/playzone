@@ -42,8 +42,6 @@ class SwissServiceTest extends KernelAwareTest
         $this->swissService->makeDraw($tournament, $round);
         $this->assertPlayerPlaysOnlyOneGame($tournament, $round);
 
-        $this->assertAllPlayersTakePartInTheRound($tournament, $round);
-
         $this->assertNoSameOpponent($tournament, $round);
         $this->assertRequiredColors($tournament, $round);
     }

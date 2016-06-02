@@ -49,10 +49,7 @@
           "login": "Robot"
         },
         "color": "w",
-        "status": "play",
-        "time_white": 180000,
-        "time_black": 180000,
-        "time_over": false
+        "status": "play"
       }
     }
   },
@@ -83,10 +80,7 @@
           "login": "Robot"
         },
         "color": "b",
-        "status": "play",
-        "time_white": 300000,
-        "time_black": 300000,
-        "time_over": false
+        "status": "play"
       }
     }
   }

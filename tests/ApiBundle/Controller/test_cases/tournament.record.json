@@ -32,24 +32,7 @@
     "response": {
       "status": 201,
       "data": {
-        "name": "First test tournament",
-        "players": [
-          {
-            "player": {
-              "login": "Stas"
-            }
-          },
-          {
-            "player": {
-              "login": "Petro"
-            }
-          },
-          {
-            "player": {
-              "login": "TestLogin"
-            }
-          }
-        ]
+        "name": "First test tournament"
       }
     }
   }

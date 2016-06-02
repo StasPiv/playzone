@@ -52,7 +52,6 @@
     "response": {
       "status": 200,
       "data": {
-        "pgn": "1. e4 e5",
         "user_to_move": {
           "login": "Stas"
         },

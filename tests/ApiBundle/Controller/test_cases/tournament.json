@@ -27,5 +27,31 @@
         ]
       }
     }
+  },
+  "get_tournament_with_games": {
+    "method": "GET",
+    "request": {
+      "reference": {
+        "name": "tournament_id",
+        "value": "tournament-2"
+      }
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "name": "Third test tournament",
+        "players": [
+          {
+
+          },
+          {
+
+          },
+          {
+
+          }
+        ]
+      }
+    }
   }
 }

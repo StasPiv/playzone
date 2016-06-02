@@ -60,50 +60,28 @@
       "data": [
         {
           "user_white": {
-            "login": "Stas",
-            "email": "piv1986@yandex.ru",
-            "class": "N",
-            "rating": 2200
+            "login": "Stas"
           },
           "user_black": {
-            "login": "TestLogin",
-            "email": "test-login@yandex.ru",
-            "class": "D",
-            "rating": 2243
+            "login": "TestLogin"
           },
           "user_to_move": {
-            "login": "Stas",
-            "email": "piv1986@yandex.ru",
-            "class": "N",
-            "rating": 2200
+            "login": "Stas"
           },
-          "status": "play",
-          "rate": false,
-          "time_over": false
+          "status": "play"
         },
         {
           "user_white": {
             "login": "Stas",
-            "email": "piv1986@yandex.ru",
-            "class": "N",
-            "rating": 2200,
             "token": ""
           },
           "user_black": {
-            "login": "Petro",
-            "email": "petro@yandex.ru",
-            "class": "D",
-            "rating": 2443
+            "login": "Petro"
           },
           "user_to_move": {
-            "login": "Stas",
-            "email": "piv1986@yandex.ru",
-            "class": "N",
-            "rating": 2200
+            "login": "Stas"
           },
-          "status": "play",
-          "rate": false,
-          "time_over": false
+          "status": "play"
         }
       ]
     }

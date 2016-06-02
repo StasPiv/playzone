@@ -24,7 +24,7 @@ class UserRepository extends EntityRepository
         $user = parent::findOneBy(['login' => $login]);
 
         if (!$user instanceof User) {
-            throw new UserNotFoundException;
+            throw new UserNotFoundException($login . " is not found");
         }
 
         return $user;

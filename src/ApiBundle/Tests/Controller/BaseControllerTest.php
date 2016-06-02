@@ -24,9 +24,10 @@ abstract class BaseControllerTest extends WebTestCase
 
     /**
      * @param string $baseUri
+     * @param array $dump
      * @throws \Exception
      */
-    protected function assertFromJson($baseUri)
+    protected function assertFromJson($baseUri, &$dump = [])
     {
         $client = static::createClient();
         $action = preg_replace('/\/\{\w+\}/', '', $baseUri);
@@ -91,6 +92,8 @@ abstract class BaseControllerTest extends WebTestCase
             );
 
             $actualResponse = json_decode($client->getResponse()->getContent(), true);
+            
+            $dump[$caseName] = $actualResponse;
 
             if (intval($expectedResponse['status'] / 100) == 4) { // error responses
                 $this->assertEmpty(array_diff_assoc($expectedResponse['errors'],

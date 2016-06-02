@@ -58,10 +58,7 @@
       "data": [
         {
           "to_user": {
-            "login": "Stas",
-            "email": "piv1986@yandex.ru",
-            "class": "N",
-            "rating": 2200
+            "login": "Stas"
           }
         }
       ]
@@ -79,10 +76,7 @@
       "data": [
         {
           "from_user": {
-            "login": "Petro",
-            "email": "petro@yandex.ru",
-            "class": "D",
-            "rating": 2443
+            "login": "Petro"
           },
           "game_params": {
             "color": "b"
@@ -90,10 +84,7 @@
         },
         {
           "from_user": {
-            "login": "Petro",
-            "email": "petro@yandex.ru",
-            "class": "D",
-            "rating": 2443
+            "login": "Petro"
           },
           "game_params": {
             "color": "w"

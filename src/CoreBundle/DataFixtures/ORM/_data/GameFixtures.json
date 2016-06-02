@@ -199,6 +199,13 @@
     "rate": false,
     "time_white": 180000,
     "time_black": 180000,
-    "time_last_move": "yesterday"
+    "result_white": 1,
+    "result_black": 0,
+    "time_last_move": "yesterday",
+    "moves": [
+      {
+        "lag": 0.2
+      }
+    ]
   }
 ]

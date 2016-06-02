@@ -67,9 +67,6 @@
       "status": 200,
       "data": {
         "login": "TestLogin",
-        "email": "test-login@yandex.ru",
-        "rating": 2243,
-        "class": "D",
         "token": "aba37b62d15cc5f8671fd3d1b034c354",
         "isAuth": true,
         "settings": {
@@ -91,9 +88,6 @@
       "status": 200,
       "data": {
         "login": "TestLogin",
-        "email": "test-login@yandex.ru",
-        "rating": 2243,
-        "class": "D",
         "token": "aba37b62d15cc5f8671fd3d1b034c354",
         "isAuth": true,
         "settings": {
@@ -129,9 +123,6 @@
       "status": 200,
       "data": {
         "login": "Стас",
-        "email": "loveliverpool@yandex.ru",
-        "rating": 2200,
-        "class": "N",
         "token": "921e24103de9d393fdf7bfab278737f9",
         "isAuth": true
       }

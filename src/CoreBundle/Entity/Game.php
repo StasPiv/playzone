@@ -4,6 +4,7 @@ namespace CoreBundle\Entity;
 
 use CoreBundle\Model\ChatMessage\ChatMessageContainerInterface;
 use CoreBundle\Model\Game\GameColor;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use JMS\Serializer\Annotation as JMS;
@@ -71,6 +72,8 @@ class Game implements ChatMessageContainerInterface
      * @var string
      *
      * @ORM\Column(name="pgn", type="text")
+     * 
+     * @JMS\Groups({"get_game", "put_game_pgn"})
      */
     private $pgn = "";
 
@@ -78,6 +81,8 @@ class Game implements ChatMessageContainerInterface
      * @var string
      *
      * @ORM\Column(name="pgn_alt", type="text")
+     *
+     * @JMS\Exclude()
      */
     private $pgnAlt = "";
 
@@ -92,6 +97,8 @@ class Game implements ChatMessageContainerInterface
      * @var bool
      *
      * @ORM\Column(name="rate", type="boolean")
+     *
+     * @JMS\Groups({"get_game"})
      */
     private $rate = false;
 
@@ -113,6 +120,8 @@ class Game implements ChatMessageContainerInterface
      * @var int
      *
      * @ORM\Column(name="time_white", type="integer")
+     *
+     * @JMS\Groups({"get_game", "put_game_pgn"})
      */
     private $timeWhite = 180000;
 
@@ -120,6 +129,8 @@ class Game implements ChatMessageContainerInterface
      * @var int
      *
      * @ORM\Column(name="time_black", type="integer")
+     *
+     * @JMS\Groups({"get_game", "put_game_pgn"})
      */
     private $timeBlack = 180000;
 
@@ -127,6 +138,8 @@ class Game implements ChatMessageContainerInterface
      * @var \DateTime
      *
      * @ORM\Column(name="time_last_move", type="datetime")
+     *
+     * @JMS\Exclude()
      */
     private $timeLastMove;
 
@@ -134,6 +147,8 @@ class Game implements ChatMessageContainerInterface
      * @var bool
      *
      * @ORM\Column(name="time_over", type="boolean")
+     *
+     * @JMS\Groups({"get_game", "put_game_pgn"})
      */
     private $timeOver = false;
 
@@ -165,6 +180,8 @@ class Game implements ChatMessageContainerInterface
      *
      * @JMS\Expose
      * @JMS\Type("boolean")
+     *
+     * @JMS\Groups({"get_game", "put_game_pgn"})
      */
     private $mine = false;
 
@@ -206,13 +223,15 @@ class Game implements ChatMessageContainerInterface
      *      joinColumns={@JoinColumn(name="game_id", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="chat_message_id", referencedColumnName="id", unique=true)}
      *      )
+     *
+     * @JMS\Groups({"get_game"})
      */
     private $chatMessages;
 
     /**
      * @var GameMove[]|PersistentCollection
      *
-     * @JMS\Expose()
+     * @JMS\Exclude()
      * @JMS\Type("array<CoreBundle\Entity\GameMove>")
      * @ORM\OneToMany(targetEntity="GameMove", mappedBy="game", cascade={"persist"})
      */
@@ -231,6 +250,8 @@ class Game implements ChatMessageContainerInterface
      *
      * @JMS\Expose
      * @JMS\Type("boolean")
+     *
+     * @JMS\Groups({"get_game"})
      */
     private $insufficientMaterialWhite = false;
 
@@ -239,8 +260,18 @@ class Game implements ChatMessageContainerInterface
      *
      * @JMS\Expose
      * @JMS\Type("boolean")
+     *
+     * @JMS\Groups({"get_game"})
      */
     private $insufficientMaterialBlack = false;
+
+    /**
+     * Game constructor.
+     */
+    public function __construct()
+    {
+        $this->moves = new ArrayCollection();
+    }
 
     /**
      * Get id

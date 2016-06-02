@@ -32,19 +32,7 @@
     "response": {
       "status": 200,
       "data": {
-        "name": "Third test tournament",
-        "players": [
-          {
-            "player": {
-              "login": "Stas"
-            }
-          },
-          {
-            "player": {
-              "login": "Petro"
-            }
-          }
-        ]
+        "name": "Third test tournament"
       }
     }
   }

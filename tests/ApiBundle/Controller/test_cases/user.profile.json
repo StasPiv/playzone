@@ -14,10 +14,7 @@
     "response" : {
       "status" : 200,
       "data" : {
-        "login" : "Stas",
-        "email" : "piv1986@yandex.ru",
-        "rating" : 2200,
-        "class" : "N"
+        "login" : "Stas"
       }
     }
   }

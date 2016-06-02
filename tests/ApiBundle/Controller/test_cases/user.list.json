@@ -9,10 +9,7 @@
       "status" : 200,
       "data" : [
         {
-          "login" : "User-Z",
-          "email" : "user-z@yandex.ru",
-          "rating" : 2443,
-          "class" : "D"
+          "login" : "User-Z"
         }
       ]
     }
@@ -27,16 +24,10 @@
       "status" : 200,
       "data" : [
         {
-          "login" : "TestLogin",
-          "email" : "test-login@yandex.ru",
-          "rating" : 2243,
-          "class" : "D"
+          "login" : "TestLogin"
         },
         {
-          "login" : "Stas",
-          "email" : "piv1986@yandex.ru",
-          "rating" : 2200,
-          "class" : "N"
+          "login" : "Stas"
         }
       ]
     }

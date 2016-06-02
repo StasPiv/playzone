@@ -18,16 +18,10 @@
       "status": 200,
       "data": {
         "user_white": {
-          "login": "Stas",
-          "email": "piv1986@yandex.ru",
-          "class": "N",
-          "rating": 2200
+          "login": "Stas"
         },
         "user_black": {
-          "login": "TestLogin",
-          "email": "test-login@yandex.ru",
-          "class": "D",
-          "rating": 2243
+          "login": "TestLogin"
         },
         "status": "play",
         "rate": false,
@@ -51,29 +45,17 @@
       "status": 200,
       "data": {
         "user_white": {
-          "login": "Stas",
-          "email": "piv1986@yandex.ru",
-          "class": "N",
-          "rating": 2200
+          "login": "Stas"
         },
         "user_black": {
-          "login": "TestLogin",
-          "email": "test-login@yandex.ru",
-          "class": "D",
-          "rating": 2243
+          "login": "TestLogin"
         },
         "user_to_move": {
-          "login": "Stas",
-          "email": "piv1986@yandex.ru",
-          "class": "N",
-          "rating": 2200
+          "login": "Stas"
         },
         "user_move": false,
         "opponent": {
-          "login": "Stas",
-          "email": "piv1986@yandex.ru",
-          "class": "N",
-          "rating": 2200
+          "login": "Stas"
         },
         "color": "b",
         "status": "play",

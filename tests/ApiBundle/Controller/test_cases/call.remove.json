@@ -67,10 +67,7 @@
       "status": 200,
       "data": {
         "to_user": {
-          "login": "Stas",
-          "email": "piv1986@yandex.ru",
-          "class": "N",
-          "rating": 2200
+          "login": "Stas"
         }
       }
     }

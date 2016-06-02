@@ -33,14 +33,7 @@
     "response": {
       "status": 200,
       "data": {
-        "chat_messages": [
-          {
-            "message": "kisa kuku",
-            "user": {
-              "login": "TestLogin"
-            }
-          }
-        ]
+
       }
     }
   }

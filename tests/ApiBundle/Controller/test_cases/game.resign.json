@@ -69,14 +69,12 @@
         "user_white": {
           "login": "Stas",
           "email": "piv1986@yandex.ru",
-          "class": "N",
-          "rating": 2200
+          "class": "N"
         },
         "user_black": {
           "login": "TestLogin",
           "email": "test-login@yandex.ru",
-          "class": "D",
-          "rating": 2243
+          "class": "D"
         },
         "status": "end",
         "result_white": 1,

@@ -43,7 +43,7 @@ playzoneControllers.directive('playzoneChat', function ($rootScope, WebsocketSer
                 }
             );
 
-            messageInput.on('keyup', function (event) {
+            $(element).on('keyup', '.message', function (event) {
                 if(event.which === 13) {
                     scope.addMessage();
                 }
@@ -54,7 +54,8 @@ playzoneControllers.directive('playzoneChat', function ($rootScope, WebsocketSer
                     return;
                 }
 
-                var messageText = $(element).find(".message").val();
+                var messageInput = $(element).find(".message");
+                var messageText = messageInput.val();
 
                 if (messageText === "") {
                     return;

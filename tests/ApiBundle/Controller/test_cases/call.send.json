@@ -108,10 +108,7 @@
       "status": 200,
       "data": {
         "to_user": {
-          "login": "Stas",
-          "email": "piv1986@yandex.ru",
-          "class": "N",
-          "rating": 2200
+          "login": "Stas"
         },
         "game_params": {
           "color": "b"
@@ -137,10 +134,7 @@
       "status": 200,
       "data": {
         "to_user": {
-          "login": "Stas",
-          "email": "piv1986@yandex.ru",
-          "class": "N",
-          "rating": 2200
+          "login": "Stas"
         }
       }
     }
@@ -162,10 +156,7 @@
       "status": 200,
       "data": {
         "from_user": {
-          "login": "TestLogin",
-          "email": "test-login@yandex.ru",
-          "class": "D",
-          "rating": 2243
+          "login": "TestLogin"
         },
         "game_params": {
           "color": "b",

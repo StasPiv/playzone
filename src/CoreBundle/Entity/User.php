@@ -12,8 +12,6 @@ use JMS\Serializer\Annotation as JMS;
 /**
  * User
  *
- * @JMS\ExclusionPolicy("all")
- *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="CoreBundle\Repository\UserRepository")
  */
@@ -51,6 +49,8 @@ class User
      * @JMS\Expose
      * @JMS\SerializedName("email")
      * @JMS\Type("string")
+     *
+     * @JMS\Groups({"get_user_profile"})
      */
     private $email;
 
@@ -58,6 +58,8 @@ class User
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
+     *
+     * @JMS\Exclude()
      */
     private $password;
 
@@ -65,6 +67,8 @@ class User
      * @var string
      *
      * @ORM\Column(name="hash", type="string", length=255, nullable=true)
+     *
+     * @JMS\Exclude()
      */
     private $hash;
 
@@ -72,6 +76,8 @@ class User
      * @var bool
      *
      * @ORM\Column(name="confirm", type="boolean", nullable=true)
+     *
+     * @JMS\Exclude()
      */
     private $confirm;
 
@@ -79,6 +85,8 @@ class User
      * @var bool
      *
      * @ORM\Column(name="in_rest", type="boolean", nullable=true)
+     *
+     * @JMS\Exclude()
      */
     private $inRest;
 
@@ -86,6 +94,8 @@ class User
      * @var int
      *
      * @ORM\Column(name="left_rest", type="integer", nullable=true)
+     *
+     * @JMS\Exclude()
      */
     private $leftRest;
 
@@ -93,6 +103,8 @@ class User
      * @var \DateTime
      *
      * @ORM\Column(name="gone_in_rest", type="datetime", nullable=true)
+     *
+     * @JMS\Exclude()
      */
     private $goneInRest;
 
@@ -104,6 +116,8 @@ class User
      * @JMS\Expose
      * @JMS\SerializedName("class")
      * @JMS\Type("string")
+     *
+     * @JMS\Groups({"get_user_profile"})
      */
     private $class = 'N';
 
@@ -123,6 +137,8 @@ class User
      * @JMS\Expose
      * @JMS\SerializedName("rating")
      * @JMS\Type("integer")
+     *
+     * @JMS\Exclude()
      */
     private $rating = 2200;
 
@@ -134,6 +150,8 @@ class User
      * @JMS\Expose
      * @JMS\SerializedName("win")
      * @JMS\Type("integer")
+     *
+     * @JMS\Groups({"get_user_profile", "get_user_list"})
      */
     private $win = 0;
 
@@ -145,6 +163,8 @@ class User
      * @JMS\Expose
      * @JMS\SerializedName("draw")
      * @JMS\Type("integer")
+     *
+     * @JMS\Groups({"get_user_profile", "get_user_list"})
      */
     private $draw = 0;
 
@@ -156,6 +176,8 @@ class User
      * @JMS\Expose
      * @JMS\SerializedName("lose")
      * @JMS\Type("integer")
+     *
+     * @JMS\Groups({"get_user_profile", "get_user_list"})
      */
     private $lose = 0;
 
@@ -163,6 +185,8 @@ class User
      * @var int
      *
      * @ORM\Column(name="lose_time", type="integer")
+     *
+     * @JMS\Exclude()
      */
     private $loseTime = 0;
 
@@ -170,6 +194,8 @@ class User
      * @var \DateTime
      *
      * @ORM\Column(name="last_auth", type="datetime", nullable=true)
+     *
+     * @JMS\Exclude()
      */
     private $lastAuth;
 
@@ -177,6 +203,8 @@ class User
      * @var int
      *
      * @ORM\Column(name="immortal_id", type="integer", nullable=true)
+     *
+     * @JMS\Exclude()
      */
     private $immortalId;
 
@@ -184,6 +212,8 @@ class User
      * @var string
      *
      * @ORM\Column(name="another_login", type="string", length=255, nullable=true)
+     *
+     * @JMS\Exclude()
      */
     private $anotherLogin;
 
@@ -191,6 +221,8 @@ class User
      * @var \DateTime
      *
      * @ORM\Column(name="last_move", type="datetime", nullable=true)
+     *
+     * @JMS\Exclude()
      */
     private $lastMove;
 
@@ -198,6 +230,8 @@ class User
      * @var int
      *
      * @ORM\Column(name="balance", type="bigint")
+     *
+     * @JMS\Exclude()
      */
     private $balance = 0;
 
@@ -220,6 +254,8 @@ class User
      * @ORM\OneToMany(targetEntity="TournamentPlayer", mappedBy="player", cascade={"persist"})
      * 
      * @var PersistentCollection
+     *
+     * @JMS\Exclude()
      */
     private $tournaments;
 
@@ -229,8 +265,10 @@ class User
      * @ORM\Column(type="array")
      * @JMS\Expose
      * @JMS\Type("array<CoreBundle\Entity\UserSetting>")
+     *
+     * @JMS\Groups({"get_user_profile", "post_user_auth"})
      */
-    private $settings;
+    protected $settings;
 
     /**
      * @var string
@@ -257,6 +295,8 @@ class User
      * @JMS\Type("boolean")
      *
      * @ORM\Column(type="boolean")
+     *
+     * @JMS\Groups({"get_user_profile"})
      */
     private $banned = false;
 

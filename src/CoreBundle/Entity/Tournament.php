@@ -46,6 +46,8 @@ class Tournament
      *
      * @ORM\OneToMany(targetEntity="TournamentPlayer", mappedBy="tournament", cascade={"persist", "remove"})
      * @ORM\OrderBy({"points" = "DESC"})
+     *
+     * @JMS\Groups({"get_tournament"})
      */
     private $players;
 
@@ -57,6 +59,8 @@ class Tournament
      * @JMS\SerializedName("game_params")
      *
      * @ORM\Column(name="game_params", type="object")
+     *
+     * @JMS\Groups({"get_tournament_list"})
      */
     private $gameParams;
 
@@ -67,6 +71,8 @@ class Tournament
      * @JMS\Type("CoreBundle\Model\Tournament\TournamentParams")
      *
      * @ORM\Column(name="tournament_params", type="object")
+     *
+     * @JMS\Groups({"get_tournament_list"})
      */
     private $tournamentParams;
 
@@ -78,6 +84,8 @@ class Tournament
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="TournamentGame", mappedBy="tournament", cascade={"persist", "remove"})
+     *
+     * @JMS\Exclude()
      */
     private $games;
 

@@ -21,6 +21,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Validator\ConstraintViolation;
 
+/**
+ * Class BaseController
+ * @package ApiBundle\Controller
+ */
 abstract class BaseController extends FOSRestController
 {
     /**
@@ -99,9 +103,11 @@ abstract class BaseController extends FOSRestController
             $statusCode = ResponseStatusCode::ISE;
         }
 
-        return $this->handleView(
-            $this->view($data, $statusCode)
-        );
+        $view = $this->view($data, $statusCode);
+
+        $view->getContext()->setGroups(["Default", $request->get('_route')]);
+
+        return $this->handleView($view);
     }
 
     /**

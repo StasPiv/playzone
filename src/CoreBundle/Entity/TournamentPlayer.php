@@ -16,6 +16,7 @@ use JMS\Serializer\Annotation as JMS;
 
 /**
  * Class TournamentPlayer
+ *
  * @package CoreBundle\Entity
  * 
  * @ORM\Entity(repositoryClass="CoreBundle\Repository\TournamentPlayerRepository")
@@ -59,6 +60,8 @@ class TournamentPlayer
 
     /**
      * @var float
+     *
+     * @JMS\Exclude()
      */
     private $pointsForDraw = 0;
 
@@ -66,6 +69,8 @@ class TournamentPlayer
      * @var int
      *
      * @ORM\Column(type="integer", name="count_white")
+     *
+     * @JMS\Exclude()
      */
     private $countWhite = 0;
 
@@ -73,6 +78,8 @@ class TournamentPlayer
      * @var int
      *
      * @ORM\Column(type="integer", name="count_black")
+     *
+     * @JMS\Exclude()
      */
     private $countBlack = 0;
 
@@ -80,6 +87,8 @@ class TournamentPlayer
      * @var int
      *
      * @ORM\Column(type="integer", name="white_in_row")
+     *
+     * @JMS\Exclude()
      */
     private $whiteInRow = 0;
 
@@ -87,6 +96,8 @@ class TournamentPlayer
      * @var int
      *
      * @ORM\Column(type="integer", name="black_in_row")
+     *
+     * @JMS\Exclude()
      */
     private $blackInRow = 0;
 
@@ -94,6 +105,8 @@ class TournamentPlayer
      * @var boolean
      *
      * @ORM\Column(type="boolean", name="missed_round")
+     *
+     * @JMS\Exclude()
      */
     private $missedRound = false;
 
@@ -101,11 +114,15 @@ class TournamentPlayer
      * @ORM\Column(type="array")
      *
      * @var array
+     *
+     * @JMS\Exclude()
      */
     private $opponents;
 
     /**
      * @var string
+     *
+     * @JMS\Exclude()
      */
     private $requiredColor;
 

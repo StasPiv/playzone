@@ -33,11 +33,7 @@
     "response": {
       "status": 201,
       "data": {
-        "moves": [
-          {
-            "lag": 0.15
-          }
-        ]
+
       }
     }
   }

@@ -29,6 +29,22 @@ class GameGetRequest extends GameRequest implements SecurityRequestInterface
     private $id;
 
     /**
+     * @var string
+     *
+     * @JMS\Expose
+     * @JMS\Type("string")
+     */
+    protected $login;
+
+    /**
+     * @var string
+     *
+     * @JMS\Expose
+     * @JMS\Type("string")
+     */
+    protected $token;
+
+    /**
      * @return int
      */
     public function getId()

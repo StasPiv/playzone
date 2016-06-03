@@ -30,8 +30,6 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
 
     $scope.game.$promise.then(
         function () {
-            $scope.game.time_white = 10000;
-            $scope.game.time_black = 10000;
             WebsocketService.subscribeToGame($scope.game.id);
             
             if (true || !EnvService.isWebRTC()) { // TODO: need to remove "true" for webRTC support

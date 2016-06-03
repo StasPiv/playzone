@@ -13,6 +13,7 @@ use CoreBundle\Entity\UserSetting;
 use CoreBundle\Model\Request\RequestErrorInterface;
 use CoreBundle\Model\Request\User\UserGetListRequest;
 use CoreBundle\Model\Request\User\UserGetProfileRequest;
+use CoreBundle\Model\Request\User\UserPatchPingRequest;
 use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserPostRegisterRequest;
@@ -49,4 +50,10 @@ interface UserProcessorInterface extends ProcessorInterface
      * @return UserSetting
      */
     public function processPatchSetting(UserPatchSettingRequest $settingRequest) : UserSetting;
+
+    /**
+     * @param UserPatchPingRequest $request
+     * @return User
+     */
+    public function processPatchPing(UserPatchPingRequest $request) : User;
 }

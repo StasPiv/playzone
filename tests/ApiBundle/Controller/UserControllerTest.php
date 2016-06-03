@@ -34,4 +34,9 @@ class UserControllerTest extends BaseControllerTest
     {
         $this->assertFromJson('user/{setting_id}/setting');
     }
+
+    public function testPing()
+    {
+        $this->assertFromJson('user/ping');
+    }
 }

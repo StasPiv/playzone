@@ -9,6 +9,7 @@
 namespace ApiBundle\Controller;
 
 use CoreBundle\Model\Request\User\UserGetProfileRequest;
+use CoreBundle\Model\Request\User\UserPatchPingRequest;
 use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserGetListRequest;
@@ -71,6 +72,15 @@ class UserController extends BaseController
     public function patchSettingAction(Request $request, $setting_id)
     {
         return $this->process($request, new UserPatchSettingRequest());
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function patchPingAction(Request $request)
+    {
+        return $this->process($request, new UserPatchPingRequest());
     }
 
     /**

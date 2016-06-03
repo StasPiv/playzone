@@ -26,6 +26,16 @@ playzoneServices.factory('UserRest', function($resource, $rootScope, ApiService)
                     ApiService.getSecurityParams() // send with login and token
                 )
             },
+            ping: {
+                method: 'PATCH',
+                url: ApiService.base_url + 'user/ping',
+                params: $.extend(
+                    {
+                        ping:'@ping'
+                    },
+                    ApiService.getSecurityParams() // send with login and token
+                )
+            },
             profile: {
                 method: 'GET',
                 url: ApiService.base_url + 'user/:id/profile',

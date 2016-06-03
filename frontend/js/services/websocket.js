@@ -3,10 +3,11 @@
  */
 'use strict';
 
-playzoneServices.factory('WebsocketService', function($websocket, $location, $rootScope) {
+playzoneServices.factory('WebsocketService', function($websocket, $location, $rootScope, $timeout, $interval, UserRest) {
     var listenersMap = {};
     // Open a WebSocket connection
     var webSocketPath = 'ws://ws.' + $location.host() + ':8081/';
+    var webSocketEchoPath = 'ws://ws.' + $location.host() + ':8081/echo';
     var dataStream;
 
     function createDataStream() {
@@ -33,7 +34,47 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
             }
         );
     }
+    
+    var testLag = function() {
+        var echoStream;
+        var counter = 0;
+        var stop = false;
 
+        echoStream = $websocket(webSocketEchoPath);
+        echoStream.onMessage(
+            function (message) {
+                if (stop) {
+                    return;
+                }
+                echoStream.send("hello");
+                counter++;
+            }
+        );
+
+        echoStream.send("hello");
+
+        $timeout(
+            function () {
+                stop = true;
+                UserRest.ping(
+                    {
+                        ping: 1 / (counter * 10)
+                    },
+                    function (user) {
+                        counter = 0;
+                    }
+                );
+            },
+            100
+        );
+    };
+
+    $interval(
+        function () {
+            testLag();
+        },
+        10000
+    );
     createDataStream();
 
     return {

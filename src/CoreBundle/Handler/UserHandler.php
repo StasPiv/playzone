@@ -16,8 +16,10 @@ use CoreBundle\Exception\Handler\User\UserSettingNotFoundException;
 use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\RequestErrorInterface;
+use CoreBundle\Model\Request\SecurityRequestInterface;
 use CoreBundle\Model\Request\User\UserGetListRequest;
 use CoreBundle\Model\Request\User\UserGetProfileRequest;
+use CoreBundle\Model\Request\User\UserPatchPingRequest;
 use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserPostRegisterRequest;
@@ -206,6 +208,19 @@ class UserHandler implements UserProcessorInterface
     }
 
     /**
+     * @param UserPatchPingRequest $request
+     * @return User
+     */
+    public function processPatchPing(UserPatchPingRequest $request) : User
+    {
+        $this->manager->flush(
+            $me = $this->getMe($request)->setPing($request->getPing())
+        );
+
+        return $me;
+    }
+
+    /**
      * @param User $user
      */
     private function saveUser(User $user)
@@ -330,5 +345,15 @@ class UserHandler implements UserProcessorInterface
     {
         return $this->container->get("core.service.chess")->getPgnDir() . 
                     DIRECTORY_SEPARATOR . $user . ".pgn";
+    }
+
+    /**
+     * @param SecurityRequestInterface $request
+     * @return User
+     */
+    private function getMe(SecurityRequestInterface $request)
+    {
+        return $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request,
+            $this->getRequestError());
     }
 }

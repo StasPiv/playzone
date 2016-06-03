@@ -301,6 +301,18 @@ class User
     private $banned = false;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(type="float")
+     *
+     * @JMS\Expose
+     * @JMS\Type("float")
+     *
+     * @JMS\Groups({"patch_user_ping"})
+     */
+    private $ping = 0;
+
+    /**
      * Get id
      *
      * @return int
@@ -962,6 +974,25 @@ class User
     public function setBanned($banned)
     {
         $this->banned = $banned;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPing() : float
+    {
+        return $this->ping;
+    }
+
+    /**
+     * @param float $ping
+     * @return User
+     */
+    public function setPing(float $ping)
+    {
+        $this->ping = $ping;
 
         return $this;
     }

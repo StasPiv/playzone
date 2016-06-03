@@ -71,7 +71,7 @@ class UserStatService
                 }
                 
                 if ($game->getResultWhite() == 0.5) {
-                    $game->setResultWhite("1/2")->setResultBlack("1/2");
+                    //$game->setResultWhite("1/2")->setResultBlack("1/2");
                 }
 
                 $pgnFormatted[] = $this->container->get("templating")

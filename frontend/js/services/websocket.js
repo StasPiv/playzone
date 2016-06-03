@@ -34,11 +34,12 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
             }
         );
     }
-    
+
+    var counter = 0;
+    var tryAmount = 0;
+
     var testLag = function() {
         var echoStream;
-        var counter = 0;
-        var tryAmount = 0;
         var stop = false;
 
         echoStream = $websocket(webSocketEchoPath);

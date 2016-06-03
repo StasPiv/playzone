@@ -58,14 +58,14 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
                 stop = true;
                 UserRest.ping(
                     {
-                        ping: 1 / (counter * 10)
+                        ping: 1 / counter
                     },
                     function (user) {
                         counter = 0;
                     }
                 );
             },
-            100
+            1000
         );
     };
 

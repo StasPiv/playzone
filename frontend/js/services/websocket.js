@@ -38,6 +38,7 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
     var testLag = function() {
         var echoStream;
         var counter = 0;
+        var tryAmount = 0;
         var stop = false;
 
         echoStream = $websocket(webSocketEchoPath);
@@ -58,10 +59,7 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
                 stop = true;
                 UserRest.ping(
                     {
-                        ping: 1 / counter
-                    },
-                    function (user) {
-                        counter = 0;
+                        ping: ++tryAmount / counter
                     }
                 );
             },

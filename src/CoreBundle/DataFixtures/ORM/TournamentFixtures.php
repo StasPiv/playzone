@@ -15,6 +15,7 @@ use CoreBundle\Entity\User;
 use CoreBundle\Model\Game\GameParams;
 use CoreBundle\Model\Tournament\Params\TournamentParamsFactory;
 use CoreBundle\Model\Tournament\TournamentParams;
+use CoreBundle\Model\Tournament\TournamentStatus;
 
 /**
  * Class TournamentFixtures
@@ -31,6 +32,10 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
         $tournament = new Tournament();
         $tournament->setName($data['name'])
                    ->setCurrentRound((int)@$data["current_round"]);
+
+        if (isset($data["status"])) {
+            $tournament->setStatus(new TournamentStatus($data["status"]));
+        }
         
         $tournamentPlayersMap = [];
         if (isset($data['players'])) {

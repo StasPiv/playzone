@@ -173,6 +173,12 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
             $this->getRequestError()->addError("tournament_id", "Tournament is not found")
                                     ->throwException(ResponseStatusCode::NOT_FOUND);
         }
+
+        /** @var Tournament $tournament */
+        if ($tournament->getStatus() != TournamentStatus::NEW()) {
+            $this->getRequestError()->addError("login", "Tournament has already been started")
+                 ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
         
         /** @var Tournament $tournament */
         $tournament->addPlayer($user);

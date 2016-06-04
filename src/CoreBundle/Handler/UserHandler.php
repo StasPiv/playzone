@@ -219,6 +219,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
         $this->manager->flush(
             $me = $this->getSecureUser($request)
                        ->setLag($request->getLag())
+                       ->setOnline(true)
                        ->setLastPing(new \DateTime())
         );
 

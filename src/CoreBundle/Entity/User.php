@@ -300,7 +300,7 @@ class User
      *
      * @ORM\Column(type="boolean")
      *
-     * @JMS\Groups({"get_user_profile", "patch_user_lag"})
+     * @JMS\Groups({"get_user_profile"})
      */
     private $online = false;
 

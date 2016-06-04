@@ -10,6 +10,8 @@ namespace WebsocketServerBundle\Service;
 
 use CoreBundle\Entity\ChatMessage;
 use CoreBundle\Entity\User;
+use CoreBundle\Model\Event\User\UserEvent;
+use CoreBundle\Model\Event\User\UserEvents;
 use CoreBundle\Model\Request\RequestErrorInterface;
 use Monolog\Logger;
 use Ratchet\ConnectionInterface;
@@ -91,6 +93,11 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
         foreach ($this->users as $user) {
             if ($user->getConnection() == $conn) {
                 $this->users->detach($user);
+
+                $this->container->get("event_dispatcher")->dispatch(
+                    UserEvents::USER_OUT,
+                    (new UserEvent())->setUser($user->getPlayzoneUser())
+                );
 
                 if (!$user->getPlayzoneUser()) {
                     continue;
@@ -187,6 +194,11 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
             }
 
             $wsUser->setPlayzoneUser($playzoneUser);
+            
+            $this->container->get("event_dispatcher")->dispatch(
+                UserEvents::USER_IN,
+                (new UserEvent())->setUser($playzoneUser)
+            );
 
             $this->sendWelcomeMessage($wsUser);
 

@@ -14,8 +14,7 @@
       "status": 200,
       "data": {
         "lag": 0.2,
-        "last_ping": null,
-        "online": true
+        "last_ping": null
       }
     }
   }

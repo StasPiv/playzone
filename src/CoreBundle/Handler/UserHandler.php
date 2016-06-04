@@ -14,6 +14,8 @@ use CoreBundle\Exception\Handler\User\TokenNotCorrectException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
 use CoreBundle\Exception\Handler\User\UserSettingNotFoundException;
 use CoreBundle\Exception\Processor\ProcessorException;
+use CoreBundle\Model\Event\User\UserEvent;
+use CoreBundle\Model\Event\User\UserEvents;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\RequestErrorInterface;
 use CoreBundle\Model\Request\SecurityRequestInterface;
@@ -31,13 +33,14 @@ use CoreBundle\Repository\UserSettingRepository;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class UserHandler
  * @package CoreBundle\Handler
  */
-class UserHandler implements UserProcessorInterface
+class UserHandler implements UserProcessorInterface, EventSubscriberInterface
 {
     use ContainerAwareTrait;
     use ErrorAwareTrait;
@@ -217,7 +220,6 @@ class UserHandler implements UserProcessorInterface
             $me = $this->getMe($request)
                        ->setLag($request->getLag())
                        ->setLastPing(new \DateTime())
-                       ->setOnline(true)
         );
 
         return $me;
@@ -378,5 +380,55 @@ class UserHandler implements UserProcessorInterface
         }
         
         $this->manager->flush();
+    }
+
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
+     *
+     * @return array The event names to listen to
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            UserEvents::USER_IN => [
+                ['onUserIn', 20]
+            ],
+            UserEvents::USER_OUT => [
+                ['onUserOut', 20]
+            ]
+        ];
+    }
+
+    /**
+     * @param UserEvent $event
+     */
+    public function onUserIn(UserEvent $event)
+    {
+        $this->saveUser(
+            $event->getUser()->setOnline(true)
+        );
+    }
+
+    /**
+     * @param UserEvent $event
+     */
+    public function onUserOut(UserEvent $event)
+    {
+        $this->saveUser(
+            $event->getUser()->setOnline(false)
+        );
     }
 }

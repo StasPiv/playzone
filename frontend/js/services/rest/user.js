@@ -28,10 +28,10 @@ playzoneServices.factory('UserRest', function($resource, $rootScope, ApiService)
             },
             ping: {
                 method: 'PATCH',
-                url: ApiService.base_url + 'user/ping',
+                url: ApiService.base_url + 'user/lag',
                 params: $.extend(
                     {
-                        ping:'@ping'
+                        lag:'@ping'
                     },
                     ApiService.getSecurityParams() // send with login and token
                 )

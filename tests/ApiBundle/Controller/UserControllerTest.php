@@ -35,8 +35,8 @@ class UserControllerTest extends BaseControllerTest
         $this->assertFromJson('user/{setting_id}/setting');
     }
 
-    public function testPing()
+    public function testLag()
     {
-        $this->assertFromJson('user/ping');
+        $this->assertFromJson('user/lag');
     }
 }

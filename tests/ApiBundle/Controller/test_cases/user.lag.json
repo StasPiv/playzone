@@ -8,12 +8,12 @@
     "request": {
       "login": "TestLogin",
       "token": "aba37b62d15cc5f8671fd3d1b034c354",
-      "ping": 0.2
+      "lag": 0.2
     },
     "response": {
       "status": 200,
       "data": {
-        "ping": 0.2
+        "lag": 0.2
       }
     }
   }

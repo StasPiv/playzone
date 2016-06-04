@@ -308,9 +308,9 @@ class User
      * @JMS\Expose
      * @JMS\Type("float")
      *
-     * @JMS\Groups({"patch_user_ping"})
+     * @JMS\Groups({"patch_user_lag"})
      */
-    private $ping = 0;
+    private $lag = 0;
 
     /**
      * Get id
@@ -981,18 +981,18 @@ class User
     /**
      * @return float
      */
-    public function getPing() : float
+    public function getLag() : float
     {
-        return $this->ping;
+        return $this->lag;
     }
 
     /**
-     * @param float $ping
+     * @param float $lag
      * @return User
      */
-    public function setPing(float $ping)
+    public function setLag(float $lag)
     {
-        $this->ping = $ping;
+        $this->lag = $lag;
 
         return $this;
     }

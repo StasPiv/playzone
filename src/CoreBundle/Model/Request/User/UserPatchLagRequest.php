@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class UserPatchSettingRequest
  * @package CoreBundle\Model\Request\User
  */
-class UserPatchPingRequest extends UserRequest implements SecurityRequestInterface
+class UserPatchLagRequest extends UserRequest implements SecurityRequestInterface
 {
     use SecurityRequestAwareTrait;
 
@@ -28,26 +28,26 @@ class UserPatchPingRequest extends UserRequest implements SecurityRequestInterfa
      * @JMS\Type("float")
      *
      * @Assert\NotBlank(
-     *     message = "Ping is required for this request"
+     *     message = "Lag is required for this request"
      * )
      */
-    private $ping;
+    private $lag;
 
     /**
      * @return float
      */
-    public function getPing()
+    public function getLag()
     {
-        return $this->ping;
+        return $this->lag;
     }
 
     /**
-     * @param float $ping
-     * @return UserPatchPingRequest
+     * @param float $lag
+     * @return UserPatchLagRequest
      */
-    public function setPing($ping)
+    public function setLag($lag)
     {
-        $this->ping = $ping;
+        $this->lag = $lag;
 
         return $this;
     }

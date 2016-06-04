@@ -9,7 +9,7 @@
 namespace ApiBundle\Controller;
 
 use CoreBundle\Model\Request\User\UserGetProfileRequest;
-use CoreBundle\Model\Request\User\UserPatchPingRequest;
+use CoreBundle\Model\Request\User\UserPatchLagRequest;
 use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserGetListRequest;
@@ -78,9 +78,9 @@ class UserController extends BaseController
      * @param Request $request
      * @return Response
      */
-    public function patchPingAction(Request $request)
+    public function patchLagAction(Request $request)
     {
-        return $this->process($request, new UserPatchPingRequest());
+        return $this->process($request, new UserPatchLagRequest());
     }
 
     /**

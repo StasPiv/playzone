@@ -19,7 +19,7 @@ use CoreBundle\Model\Request\RequestErrorInterface;
 use CoreBundle\Model\Request\SecurityRequestInterface;
 use CoreBundle\Model\Request\User\UserGetListRequest;
 use CoreBundle\Model\Request\User\UserGetProfileRequest;
-use CoreBundle\Model\Request\User\UserPatchPingRequest;
+use CoreBundle\Model\Request\User\UserPatchLagRequest;
 use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserPostRegisterRequest;
@@ -208,13 +208,13 @@ class UserHandler implements UserProcessorInterface
     }
 
     /**
-     * @param UserPatchPingRequest $request
+     * @param UserPatchLagRequest $request
      * @return User
      */
-    public function processPatchPing(UserPatchPingRequest $request) : User
+    public function processPatchLag(UserPatchLagRequest $request) : User
     {
         $this->manager->flush(
-            $me = $this->getMe($request)->setPing($request->getPing())
+            $me = $this->getMe($request)->setLag($request->getLag())
         );
 
         return $me;

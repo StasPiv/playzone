@@ -217,7 +217,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
     public function processPatchLag(UserPatchLagRequest $request) : User
     {
         $this->manager->flush(
-            $me = $this->getMe($request)
+            $me = $this->getSecureUser($request)
                        ->setLag($request->getLag())
                        ->setLastPing(new \DateTime())
         );
@@ -356,7 +356,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
      * @param SecurityRequestInterface $request
      * @return User
      */
-    private function getMe(SecurityRequestInterface $request)
+    public function getSecureUser(SecurityRequestInterface $request)
     {
         return $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request,
             $this->getRequestError());

@@ -25,12 +25,19 @@
                 <a href="">{{ tournament.tournament_params.time_begin }}</a>
             </td>
             <td ng-if="tournament.status == 'new'">
-                <a ng-if="!tournament.mine" class="btn btn-success" ng-click="record(tournament)">
-                    {{ 'Record' | translate }}
-                </a>
-                <a ng-if="tournament.mine" class="btn btn-danger" ng-click="unrecord(tournament)">
-                    {{ 'Unrecord' | translate }}
-                </a>
+                <div ng-if="!tournament.forbidden">
+                    <a ng-if="!tournament.mine" class="btn btn-success" ng-click="record(tournament)">
+                        {{ 'Record' | translate }}
+                    </a>
+                    <a ng-if="tournament.mine" class="btn btn-danger" ng-click="unrecord(tournament)">
+                        {{ 'Unrecord' | translate }}
+                    </a>
+                </div>
+                <div ng-if="tournament.forbidden">
+                    <div class="alert alert-danger">
+                        {{ tournament.error | translate }}
+                    </div>
+                </div>
             </td>
         </tr>
     </table>

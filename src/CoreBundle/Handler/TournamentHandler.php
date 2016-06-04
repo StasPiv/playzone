@@ -157,18 +157,15 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
     }
 
     /**
-     * @param TournamentPostRecordRequest $recordRequest
+     * @param TournamentPostRecordRequest $request
      * @return Tournament
      */
-    public function processPostRecord(TournamentPostRecordRequest $recordRequest) : Tournament
+    public function processPostRecord(TournamentPostRecordRequest $request) : Tournament
     {
-        $user = $this->container->get("core.service.security")->getUserIfCredentialsIsOk(
-            $recordRequest,
-            $this->getRequestError()
-        );
+        $user = $this->container->get("core.handler.user")->getSecureUser($request);
 
         try {
-            $tournament = $this->repository->find($recordRequest->getTournamentId());
+            $tournament = $this->repository->find($request->getTournamentId());
         } catch (TournamentNotFoundException $e) {
             $this->getRequestError()->addError("tournament_id", "Tournament is not found")
                                     ->throwException(ResponseStatusCode::NOT_FOUND);
@@ -178,6 +175,11 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         if ($tournament->getStatus() != TournamentStatus::NEW()) {
             $this->getRequestError()->addError("login", "Tournament has already been started")
                  ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        if ($user->getLag() > $this->container->getParameter("max_lag_for_record")) {
+            $this->getRequestError()->addError("login", "Your lag is too big")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
         }
         
         /** @var Tournament $tournament */

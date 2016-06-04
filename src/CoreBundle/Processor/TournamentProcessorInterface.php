@@ -41,10 +41,10 @@ interface TournamentProcessorInterface
     public function processGetCurrentgame(TournamentGetCurrentgameRequest $request) : Game;
 
     /**
-     * @param TournamentPostRecordRequest $recordRequest
+     * @param TournamentPostRecordRequest $request
      * @return Tournament
      */
-    public function processPostRecord(TournamentPostRecordRequest $recordRequest) : Tournament;
+    public function processPostRecord(TournamentPostRecordRequest $request) : Tournament;
 
     /**
      * @param TournamentDeleteUnrecordRequest $unrecordRequest

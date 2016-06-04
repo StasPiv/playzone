@@ -52,5 +52,22 @@
         "login": "Tournament has already been started"
       }
     }
+  },
+  "deny_record_with_lag": {
+    "method": "POST",
+    "request": {
+      "login": "Petro",
+      "token": "d10f4fcce69f443f38827d7ffc2ef0ed",
+      "reference": {
+        "name": "tournament_id",
+        "value": "tournament-round-robin"
+      }
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "login": "Your lag is too big"
+      }
+    }
   }
 }

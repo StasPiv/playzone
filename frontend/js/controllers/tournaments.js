@@ -17,7 +17,15 @@ playzoneControllers.controller('TournamentsCtrl', function ($scope, TournamentRe
     });
     
     $scope.recordIntoTournament = function (tournament) {
-        tournament.$record();
+        tournament.$record().then(
+            function (data) {
+
+            },
+            function (errors) {
+                tournament.forbidden = true;
+                tournament.error = errors.data.login
+            }
+        );
     };
     
     $scope.unrecordFromTournament = function (tournament) {

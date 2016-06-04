@@ -48,7 +48,8 @@ class UserFixtures extends AbstractPlayzoneFixtures
             ->setImmortalId($data['immortal_id'])
             ->setAnotherLogin($data['another_login'])
             ->setLastMove($this->container->get("core.service.date")->getDateTime($data['last_move']))
-            ->setBalance($data['balance']);
+            ->setBalance($data['balance'])
+            ->setLag((float)@$data["lag"]);
 
         if (isset($data["settings"])) {
             foreach ($data["settings"] as $settingArray) {

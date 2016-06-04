@@ -147,5 +147,7 @@
   "Current tournaments": "Текущие турниры",
   "Finished tournaments": "Завершенные турниры",
   "Show chat": "Показать чат",
-  "Hide messages": "Скрыть сообщения"
+  "Hide messages": "Скрыть сообщения",
+  "Your lag is too big": "Лаг слишком большой",
+  "Tournament has already been started": "Турнир уже начался"
 }

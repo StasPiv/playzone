@@ -72,6 +72,14 @@ class GameHandler implements GameProcessorInterface
     }
 
     /**
+     * @return GameRepository
+     */
+    public function getRepository()
+    {
+        return $this->repository;
+    }
+
+    /**
      * @param GameGetListRequest $listRequest
      * @return array|Game[]
      */
@@ -663,5 +671,46 @@ class GameHandler implements GameProcessorInterface
     public function createEntity()
     {
         return (new Game())->setTimeLastMove($this->container->get("core.service.date")->getDateTime());
+    }
+
+    public function fixResultGames()
+    {
+        $this->fixResultGamesByColor("White");
+        $this->fixResultGamesByColor("Black");
+
+        $this->manager->flush();
+    }
+
+    /**
+     * @param string $color "White" or "Black"
+     */
+    private function fixResultGamesByColor(string $color)
+    {
+        $queryBuilder = $this->getRepository()->createQueryBuilder("g");
+        /** @var Game[] $games */
+        $games = $queryBuilder
+            ->where("g.status = :status")
+            ->andWhere("g.userToMove = g.user{$color}")
+            ->andWhere(
+                "TIMESTAMPDIFF(SECOND, g.timeLastMove, CURRENT_TIMESTAMP()) > g.time{$color} / 1000 
+                OR u.online = 0"
+            )
+            ->setParameter("status", GameStatus::PLAY)
+            ->innerJoin("CoreBundle:User", "u", "WITH", "u.id = g.user{$color}")
+            ->getQuery()
+            ->getResult();
+
+        foreach ($games as $game) {
+            switch ($color) {
+                case "White":
+                    $game->setResultWhite(0)->setResultBlack(1);
+                    break;
+                case "Black";
+                    $game->setResultWhite(1)->setResultBlack(0);
+                    break;
+            }
+            $this->changeGameStatus($game, GameStatus::END);
+            $this->manager->persist($game);
+        }
     }
 }

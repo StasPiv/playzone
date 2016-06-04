@@ -30,7 +30,9 @@
         "myclabs/php-enum": "^1.4",
         "textalk/websocket": "1.0.*",
         "mtdowling/cron-expression": "^1.1",
-        "gedmo/doctrine-extensions": "2.3.12"
+        "gedmo/doctrine-extensions": "2.3.12",
+        "luxifer/doctrine-functions": "dev-master",
+        "beberlei/DoctrineExtensions": "^1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

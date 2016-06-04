@@ -33,5 +33,6 @@ class CronCommand extends ContainerAwareCommand
     {
         $this->getContainer()->get("core.handler.event")->runAllCurrentEvents();
         $this->getContainer()->get("core.handler.user")->markUsersOfflineWhoJustGone();
+        $this->getContainer()->get("core.handler.game")->fixResultGames();
     }
 }

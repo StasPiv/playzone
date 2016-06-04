@@ -14,3 +14,14 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: true
+
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                dql:
+                    datetime_functions:
+                        date:     Luxifer\DQL\Datetime\Date
+                        datediff: Luxifer\DQL\Datetime\DateDiff
+                        timestampdiff: DoctrineExtensions\Query\Mysql\TimestampDiff
+                        # etc

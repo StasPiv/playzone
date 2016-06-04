@@ -8,22 +8,23 @@
 
 namespace CoreBundle\Tests\Handler;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\DependencyInjection\Container;
+use CoreBundle\Handler\UserHandler;
+use CoreBundle\Service\User\UserHanderContainerAwareTrait;
+use CoreBundle\Tests\KernelAwareTest;
 
-class UserHandlerTest extends KernelTestCase
+/**
+ * Class UserHandlerTest
+ * @package CoreBundle\Tests\Handler
+ */
+class UserHandlerTest extends KernelAwareTest
 {
-    public function setUp()
-    {
-        self::bootKernel();
-        $this->container = self::$kernel->getContainer();
-    }
+    use UserHanderContainerAwareTrait;
 
     public function testGetUserByTokenCorrect()
     {
         $this->assertInstanceOf(
             'CoreBundle\Entity\User',
-            $this->container->get("core.handler.user")->getUserByLoginAndToken(
+            $this->getUserHandler()->getUserByLoginAndToken(
                 "TestLogin", "aba37b62d15cc5f8671fd3d1b034c354"
             )
         );
@@ -32,7 +33,7 @@ class UserHandlerTest extends KernelTestCase
     public function testGetUserByTokenNull()
     {
         $this->expectException('CoreBundle\Exception\Handler\User\TokenNotCorrectException');
-        $this->container->get("core.handler.user")->getUserByLoginAndToken(
+        $this->getUserHandler()->getUserByLoginAndToken(
             "TestLogin", "sba37b62d15cc5f8671fd3d1b034c354"
         );
     }

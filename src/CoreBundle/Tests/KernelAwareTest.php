@@ -84,4 +84,13 @@ abstract class KernelAwareTest extends \PHPUnit_Framework_TestCase
     {
         return $this->objectManager->getMetadataFactory()->getAllMetadata();
     }
+
+    /**
+     * @return \Doctrine\Common\Persistence\ObjectManager|object
+     * @throws \Exception
+     */
+    protected function getManager()
+    {
+        return $this->container->get("doctrine")->getManager();
+    }
 }

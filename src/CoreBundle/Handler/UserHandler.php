@@ -214,7 +214,10 @@ class UserHandler implements UserProcessorInterface
     public function processPatchLag(UserPatchLagRequest $request) : User
     {
         $this->manager->flush(
-            $me = $this->getMe($request)->setLag($request->getLag())
+            $me = $this->getMe($request)
+                       ->setLag($request->getLag())
+                       ->setLastPing(new \DateTime())
+                       ->setOnline(true)
         );
 
         return $me;
@@ -355,5 +358,25 @@ class UserHandler implements UserProcessorInterface
     {
         return $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request,
             $this->getRequestError());
+    }
+
+    /**
+     * @return void
+     */
+    public function markUsersOfflineWhoJustGone()
+    {
+        /** @var User[] $users */
+        $users = $this->repository->createQueryBuilder("u")
+                      ->where("u.online = 1")
+                      ->andWhere("u.lastPing < :agoPeriod")
+                      ->setParameter("agoPeriod", new \DateTime("-1minute"))
+                      ->getQuery()
+                      ->getResult();
+        
+        foreach ($users as $user) {
+            $this->manager->persist($user->setOnline(false));
+        }
+        
+        $this->manager->flush();
     }
 }

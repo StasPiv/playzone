@@ -693,4 +693,22 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
 
         $tournament->setResultsForRoundRobin($gamesMap);
     }
+
+    /**
+     * @param Tournament $tournament
+     */
+    public function removeOfflinePlayers(Tournament $tournament)
+    {
+        $offlinePlayers = $tournament->getPlayers()->filter(
+            function (TournamentPlayer $tournamentPlayer) {
+                return !$tournamentPlayer->getPlayer()->isOnline();
+            }
+        );
+
+        foreach ($offlinePlayers as $player) {
+            $this->manager->remove($player);
+        }
+
+        $this->manager->flush();
+    }
 }

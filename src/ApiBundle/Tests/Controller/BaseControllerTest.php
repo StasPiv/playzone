@@ -139,19 +139,26 @@ abstract class BaseControllerTest extends WebTestCase
      */
     private function assertActualContainsExpected(array $actualData, array $expectedData, $errorMessage)
     {
-        $multiDimensional = false;
+        $skipEmptyChecking = false;
 
         foreach ($expectedData as $key => $expectedChunk) {
             $this->assertArrayHasKey($key, $actualData, $errorMessage);
+
+            if (is_null($expectedChunk)) {
+                $skipEmptyChecking = true;
+                continue;
+            }
+
             if (is_array(($expectedChunk))) {
                 $this->assertActualContainsExpected($actualData[$key], $expectedChunk, $errorMessage);
-                $multiDimensional = true;
-            } else {
-                $this->assertEquals($expectedChunk, $actualData[$key], $errorMessage . PHP_EOL . "`$key` is not correct");
+                $skipEmptyChecking = true;
+                continue;
             }
+
+            $this->assertEquals($expectedChunk, $actualData[$key], $errorMessage . PHP_EOL . "`$key` is not correct");
         }
 
-        if ($multiDimensional) {
+        if ($skipEmptyChecking) {
             return;
         }
 

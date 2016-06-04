@@ -13,7 +13,9 @@
     "response": {
       "status": 200,
       "data": {
-        "lag": 0.2
+        "lag": 0.2,
+        "last_ping": null,
+        "online": true
       }
     }
   }

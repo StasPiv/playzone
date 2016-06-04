@@ -10,6 +10,7 @@
 namespace WebsocketServerBundle\Service\Event\Tournament;
 
 use CoreBundle\Entity\Tournament;
+use CoreBundle\Entity\TournamentPlayer;
 use CoreBundle\Exception\Handler\Tournament\TournamentGameNotFoundException;
 use CoreBundle\Model\Event\EventCommandInterface;
 use CoreBundle\Model\Event\EventInterface;
@@ -61,10 +62,10 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
      */
     public function run()
     {
-        $tournament = $this->container->get("core.handler.tournament")
+        $tournament = $this->getTournamentHandler()
                            ->getRepository()->find($this->tournamentContainer->getTournamentId());
-        
-        // TODO: remove all offline players
+
+        $this->getTournamentHandler()->removeOfflinePlayers($tournament);
         
         if (
             $tournament->getCurrentRound() == 0 && 
@@ -146,9 +147,8 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
 
         $tournament->setTournamentParams($tournamentParams);
 
-        $manager = $this->container->get("doctrine")->getManager();
-        $manager->persist($tournament);
-        $manager->flush();
+        $this->getManager()->persist($tournament);
+        $this->getManager()->flush();
     }
 
     /**
@@ -208,13 +208,13 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
         }
 
         try {
-            $tournament = $this->container->get("core.handler.tournament")
+            $tournament = $this->getTournamentHandler()
                                ->getTournamentForGame($gameEvent->getGame());
         } catch (TournamentGameNotFoundException $e) {
             return;
         }
         
-        if (!$this->container->get("core.handler.tournament")->isCurrentRoundFinished($tournament)) {
+        if (!$this->getTournamentHandler()->isCurrentRoundFinished($tournament)) {
             return;
         }
 
@@ -233,6 +233,22 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
             "ws.service.event.tournament.start_round"
         );
 
+    }
+
+    /**
+     * @return \Doctrine\Common\Persistence\ObjectManager|object
+     */
+    private function getManager()
+    {
+        return $this->container->get("doctrine")->getManager();
+    }
+
+    /**
+     * @return \CoreBundle\Handler\TournamentHandler
+     */
+    private function getTournamentHandler()
+    {
+        return $this->container->get("core.handler.tournament");
     }
 
 }

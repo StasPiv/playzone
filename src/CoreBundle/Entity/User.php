@@ -193,11 +193,11 @@ class User
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="last_auth", type="datetime", nullable=true)
+     * @ORM\Column(name="last_ping", type="datetime", nullable=true)
      *
-     * @JMS\Exclude()
+     * @JMS\Groups({"patch_user_lag"})
      */
-    private $lastAuth;
+    private $lastPing;
 
     /**
      * @var int
@@ -241,14 +241,6 @@ class User
      * @JMS\Type("boolean")
      */
     private $auth = true;
-
-    /**
-     * @var boolean
-     *
-     * @JMS\Expose
-     * @JMS\Type("boolean")
-     */
-    private $offline = false;
 
     /**
      * @ORM\OneToMany(targetEntity="TournamentPlayer", mappedBy="player", cascade={"persist"})
@@ -299,6 +291,18 @@ class User
      * @JMS\Groups({"get_user_profile"})
      */
     private $banned = false;
+
+    /**
+     * @var boolean
+     *
+     * @JMS\Expose
+     * @JMS\Type("boolean")
+     *
+     * @ORM\Column(type="boolean")
+     *
+     * @JMS\Groups({"get_user_profile", "patch_user_lag"})
+     */
+    private $online = false;
 
     /**
      * @var float
@@ -661,13 +665,13 @@ class User
     /**
      * Set lastAuth
      *
-     * @param \DateTime $lastAuth
+     * @param \DateTime $lastPing
      *
      * @return User
      */
-    public function setLastAuth($lastAuth)
+    public function setLastPing($lastPing)
     {
-        $this->lastAuth = $lastAuth;
+        $this->lastPing = $lastPing;
 
         return $this;
     }
@@ -677,9 +681,9 @@ class User
      *
      * @return \DateTime
      */
-    public function getLastAuth()
+    public function getLastPing()
     {
-        return $this->lastAuth;
+        return $this->lastPing;
     }
 
     /**
@@ -811,25 +815,6 @@ class User
     public function setAuth($auth)
     {
         $this->auth = $auth;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getOffline() : boolean
-    {
-        return $this->offline;
-    }
-
-    /**
-     * @param boolean $offline
-     * @return User
-     */
-    public function setOffline(bool $offline)
-    {
-        $this->offline = $offline;
-
-        return $this;
     }
 
     /**
@@ -971,9 +956,28 @@ class User
      * @param boolean $banned
      * @return User
      */
-    public function setBanned($banned)
+    public function setBanned(bool $banned)
     {
         $this->banned = $banned;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isOnline() : bool
+    {
+        return $this->online;
+    }
+
+    /**
+     * @param boolean $online
+     * @return User
+     */
+    public function setOnline(bool $online)
+    {
+        $this->online = $online;
 
         return $this;
     }

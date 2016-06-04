@@ -38,7 +38,7 @@ class UserFixtures extends AbstractPlayzoneFixtures
             ->setInRest($data['in_rest'])
             ->setLeftRest($data['left_rest'])
             ->setGoneInRest($this->container->get("core.service.date")->getDateTime($data['gone_in_rest']))
-            ->setLastAuth($this->container->get("core.service.date")->getDateTime($data['last_auth']))
+            ->setLastPing($this->container->get("core.service.date")->getDateTime($data['last_ping']))
             ->setClass($data['class'])
             ->setRating($data['rating'])
             ->setWin($data['win'])

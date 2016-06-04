@@ -145,7 +145,7 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
         $tournamentParams = TournamentParamsFactory::create(TournamentType::SWITZ())
             ->setTimeBegin($tournament->getTournamentParams()->getTimeBegin());
 
-        $tournament->setTournamentParams($tournamentParams);
+        $tournament->setTournamentParams($tournamentParams)->setRounds($this->container->getParameter("rounds_for_swiss"));
 
         $this->getManager()->persist($tournament);
         $this->getManager()->flush();

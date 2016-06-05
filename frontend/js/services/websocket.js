@@ -7,7 +7,7 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
     var listenersMap = {};
     // Open a WebSocket connection
     var webSocketPath = 'ws://ws.' + $location.host() + ':8081/';
-    var webSocketEchoPath = 'ws://ws.' + $location.host() + ':8081/echo2';
+    var webSocketEchoPath = 'ws://ws.' + $location.host() + ':8081/echo3';
     var dataStream;
 
     function createDataStream() {
@@ -59,15 +59,15 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
                 stop = true;
                 UserRest.ping(
                     {
-                        ping: ++tryAmount / counter
+                        ping: 3 * (++tryAmount) / counter
                     }
                 );
             },
-            1000
+            3000
         );
     };
 
-    $interval(
+    $timeout(
         function () {
             testLag();
         },

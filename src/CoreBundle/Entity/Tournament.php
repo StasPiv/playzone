@@ -72,7 +72,7 @@ class Tournament
      *
      * @ORM\Column(name="tournament_params", type="object")
      *
-     * @JMS\Groups({"get_tournament_list", "post_tournament_record", "delete_tournament_unrecord"})
+     * @JMS\Groups({"get_tournament", "get_tournament_list", "post_tournament_record", "delete_tournament_unrecord"})
      */
     private $tournamentParams;
 
@@ -119,12 +119,24 @@ class Tournament
     private $allGames;
 
     /**
-     * @var int
+     * @var array
      *
      * @JMS\Expose()
      * @JMS\Type("array")
+     *
+     * @JMS\Groups({"get_tournament"})
      */
     private $resultsForRoundRobin;
+
+    /**
+     * @var array
+     *
+     * @JMS\Expose()
+     * @JMS\Type("array")
+     *
+     * @JMS\Groups({"get_tournament"})
+     */
+    private $resultsForSwiss;
 
     /**
      * Tournament constructor.
@@ -369,9 +381,28 @@ class Tournament
      * @param int[] $resultsForRoundRobin
      * @return Tournament
      */
-    public function setResultsForRoundRobin($resultsForRoundRobin)
+    public function setResultsForRoundRobin(array $resultsForRoundRobin)
     {
         $this->resultsForRoundRobin = $resultsForRoundRobin;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getResultsForSwiss()
+    {
+        return $this->resultsForSwiss;
+    }
+
+    /**
+     * @param array $resultsForSwiss
+     * @return Tournament
+     */
+    public function setResultsForSwiss(array $resultsForSwiss)
+    {
+        $this->resultsForSwiss = $resultsForSwiss;
 
         return $this;
     }

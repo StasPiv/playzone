@@ -65,8 +65,6 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
         $tournament = $this->getTournamentHandler()
                            ->getRepository()->find($this->tournamentContainer->getTournamentId());
 
-        $this->getTournamentHandler()->removeOfflinePlayers($tournament);
-        
         if (
             $tournament->getCurrentRound() == 0 && 
             count($tournament->getPlayers()) > $this->container->getParameter("app_max_players_for_round_robin")

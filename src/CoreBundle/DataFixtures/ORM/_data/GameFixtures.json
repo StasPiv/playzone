@@ -207,5 +207,85 @@
         "lag": 0.2
       }
     ]
+  },
+  {
+    "referenceName": "game-from-swiss-tournament",
+    "user_white": "user-a",
+    "user_black": "user-b",
+    "user_to_move": "user-a",
+    "pgn": "1. e4 e5",
+    "pgn_alt": "1",
+    "status": "play",
+    "rate": false,
+    "time_white": 180000,
+    "time_black": 180000,
+    "result_white": 1,
+    "result_black": 0,
+    "time_last_move": "yesterday",
+    "moves": [
+      {
+        "lag": 0.2
+      }
+    ]
+  },
+  {
+    "referenceName": "game-from-swiss-tournament-2",
+    "user_white": "user-g",
+    "user_black": "user-h",
+    "user_to_move": "user-g",
+    "pgn": "1. e4 e5",
+    "pgn_alt": "1",
+    "status": "play",
+    "rate": false,
+    "time_white": 180000,
+    "time_black": 180000,
+    "result_white": 1,
+    "result_black": 0,
+    "time_last_move": "yesterday",
+    "moves": [
+      {
+        "lag": 0.2
+      }
+    ]
+  },
+  {
+    "referenceName": "game-from-swiss-tournament-3",
+    "user_white": "user-e",
+    "user_black": "user-f",
+    "user_to_move": "user-e",
+    "pgn": "1. e4 e5",
+    "pgn_alt": "1",
+    "status": "play",
+    "rate": false,
+    "time_white": 180000,
+    "time_black": 180000,
+    "result_white": 1,
+    "result_black": 0,
+    "time_last_move": "yesterday",
+    "moves": [
+      {
+        "lag": 0.2
+      }
+    ]
+  },
+  {
+    "referenceName": "game-from-swiss-tournament-4",
+    "user_white": "user-c",
+    "user_black": "user-d",
+    "user_to_move": "user-c",
+    "pgn": "1. e4 e5",
+    "pgn_alt": "1",
+    "status": "play",
+    "rate": false,
+    "time_white": 180000,
+    "time_black": 180000,
+    "result_white": 1,
+    "result_black": 0,
+    "time_last_move": "yesterday",
+    "moves": [
+      {
+        "lag": 0.2
+      }
+    ]
   }
 ]

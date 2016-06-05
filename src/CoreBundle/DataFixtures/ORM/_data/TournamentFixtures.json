@@ -96,7 +96,25 @@
     "tournament_params": {
       "type": "switz",
       "time_begin": "+1minute"
-    }
+    },
+    "games": [
+      {
+        "reference": "game-from-swiss-tournament",
+        "round": 1
+      },
+      {
+        "reference": "game-from-swiss-tournament-2",
+        "round": 2
+      },
+      {
+        "reference": "game-from-swiss-tournament-3",
+        "round": 3
+      },
+      {
+        "reference": "game-from-swiss-tournament-4",
+        "round": 4
+      }
+    ]
   },
   {
     "referenceName": "tournament-switz-even",

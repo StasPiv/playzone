@@ -119,8 +119,13 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
 
         /** @var Tournament $tournament */
-        $this->mixAllGames($tournament);
-        $this->mixGamesForRoundRobin($tournament);
+        if ($tournament->getTournamentParams()->getType() == TournamentType::ROUND_ROBIN()) {
+            $this->mixAllGames($tournament);
+            $this->mixGamesForRoundRobin($tournament);
+        } else {
+            $this->mixGamesForSwiss($tournament);
+        }
+
         return $tournament;
     }
 
@@ -542,6 +547,8 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
     {
         $tournament = $tournamentContainer->getTournament();
 
+        $this->removeOfflinePlayers($tournament);
+
         $tournament->setStatus(TournamentStatus::CURRENT());
         $this->calculateRounds($tournament);
 
@@ -694,6 +701,37 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
 
         $tournament->setResultsForRoundRobin($gamesMap);
+    }
+
+    /**
+     * @param Tournament $tournament
+     */
+    private function mixGamesForSwiss(Tournament $tournament)
+    {
+        $gamesMap = [];
+
+        foreach ($tournament->getPlayers() as $player) {
+            $gamesMap[$player->getId()]["player"] = $player;
+            for ($round = 1; $round <= $tournament->getCurrentRound(); $round++) {
+                $gamesMap[$player->getId()]["rounds"][$round] = [];
+            }
+        }
+
+        foreach ($tournament->getGames() as $tournamentGame) {
+            $gamesMap[$tournamentGame->getPlayerWhite()->getId()]["rounds"][$tournamentGame->getRound()] = [
+                "color" => GameColor::WHITE,
+                "result" => $tournamentGame->getGame()->getResultWhite(),
+                "opponent" => $tournamentGame->getPlayerBlack()->getPlayer()
+            ];
+
+            $gamesMap[$tournamentGame->getPlayerBlack()->getId()]["rounds"][$tournamentGame->getRound()] = [
+                "color" => GameColor::BLACK,
+                "result" => $tournamentGame->getGame()->getResultBlack(),
+                "opponent" => $tournamentGame->getPlayerWhite()->getPlayer()
+            ];
+        }
+
+        $tournament->setResultsForSwiss($gamesMap);
     }
 
     /**

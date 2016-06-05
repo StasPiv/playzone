@@ -69,6 +69,7 @@ class TournamentGame
      * @ORM\JoinColumn(name="player_white_id", referencedColumnName="id")
      *
      * @JMS\Type("CoreBundle\Entity\TournamentPlayer")
+     * @JMS\Exclude()
      */
     private $playerWhite;
 
@@ -79,6 +80,7 @@ class TournamentGame
      * @ORM\JoinColumn(name="player_black_id", referencedColumnName="id")
      *
      * @JMS\Type("CoreBundle\Entity\TournamentPlayer")
+     * @JMS\Exclude()
      */
     private $playerBlack;
 

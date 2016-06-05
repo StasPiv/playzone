@@ -38,26 +38,25 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
     var counter = 0;
     var tryAmount = 0;
 
-    var testLag = function() {
-        var echoStream;
-        var stop = false;
+    var echoStream = $websocket(webSocketEchoPath);
+    var stop = false;
 
-        echoStream = $websocket(webSocketEchoPath);
-        echoStream.onMessage(
-            function (message) {
-                if (stop) {
-                    return;
-                }
-                echoStream.send("hello");
-                counter++;
+    echoStream.onMessage(
+        function () {
+            if (stop) {
+                return;
             }
-        );
-
+            echoStream.send("hello");
+            counter++;
+        }
+    );
+    var testLag = function() {
         echoStream.send("hello");
 
         $timeout(
             function () {
                 stop = true;
+                echoStream.close();
                 UserRest.ping(
                     {
                         ping: ++tryAmount / counter

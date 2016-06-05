@@ -7,7 +7,7 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
     var listenersMap = {};
     // Open a WebSocket connection
     var webSocketPath = 'ws://ws.' + $location.host() + ':8081/';
-    var webSocketEchoPath = 'ws://ws.' + $location.host() + ':8081/echo';
+    var webSocketEchoPath = 'ws://ws.' + $location.host() + ':8081/echo2';
     var dataStream;
 
     function createDataStream() {

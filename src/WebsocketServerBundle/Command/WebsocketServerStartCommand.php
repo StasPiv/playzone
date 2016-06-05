@@ -88,6 +88,6 @@ class WebsocketServerStartCommand extends ContainerAwareCommand
     private function addEchoServer(RatchetApp $app)
     {
         $server = new EchoServer();
-        $app->route('/echo', $server, ['*']);
+        $app->route('/echo2', $server, ['*']);
     }
 }

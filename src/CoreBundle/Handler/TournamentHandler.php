@@ -520,6 +520,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
 
         $this->updatePlayersTotals($gameEvent->getGame());
+        $this->recalculateCoefficients($tournament);
 
         if (!$this->container->get("core.handler.tournament")->isCurrentRoundFinished($tournament)) {
             return;
@@ -759,6 +760,50 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
             $this->manager->remove($player);
         }
 
+        $this->manager->flush();
+    }
+
+    /**
+     * @param int $tournamentId
+     */
+    public function recalculateCoefficientsById(int $tournamentId)
+    {
+        try {
+            $tournament = $this->repository->find($tournamentId);
+        } catch (TournamentNotFoundException $e) {
+            $this->container->get("logger")->error("Tournament $tournamentId is not found");
+            return;
+        }
+        
+        $this->recalculateCoefficients($tournament);
+    }
+
+    /**
+     * @param Tournament $tournament
+     */
+    private function recalculateCoefficients(Tournament $tournament)
+    {
+        foreach ($tournament->getPlayers() as $tournamentPlayer) {
+            $tournamentPlayer->setCoefficient(0);
+        }
+        
+        foreach ($tournament->getGames() as $tournamentGame) {
+            $tournamentGame->getPlayerWhite()->setCoefficient(
+                $tournamentGame->getPlayerWhite()->getCoefficient() + 
+                $tournamentGame->getGame()->getResultWhite() * 
+                $tournamentGame->getPlayerBlack()->getPoints()
+            );
+            
+            $tournamentGame->getPlayerBlack()->setCoefficient(
+                $tournamentGame->getPlayerBlack()->getCoefficient() + 
+                $tournamentGame->getGame()->getResultBlack() * 
+                $tournamentGame->getPlayerWhite()->getPoints()
+            );
+            
+            $this->manager->persist($tournamentGame->getPlayerWhite());
+            $this->manager->persist($tournamentGame->getPlayerBlack());
+        }
+        
         $this->manager->flush();
     }
 }

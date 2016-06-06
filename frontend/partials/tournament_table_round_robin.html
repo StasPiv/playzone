@@ -5,6 +5,7 @@
             <th class="player">{{ "Player" | translate }}</th>
             <th ng-repeat="firstPlayer in tournament.players">{{ $index + 1 }}</th>
             <th class="result">{{ "Points" | translate }}</th>
+            <th class="result">{{ "Berger" | translate }}</th>
         </tr>
         <tr ng-repeat="firstPlayer in tournament.players">
             <td class="player">{{ $index+1 }}</td>
@@ -22,6 +23,7 @@
                 </a>
             </td>
             <td class="result">{{ firstPlayer.points }}</td>
+            <td class="result">{{ firstPlayer.coefficient }}</td>
         </tr>
     </table>
 </div>

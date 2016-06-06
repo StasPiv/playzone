@@ -45,7 +45,7 @@ class Tournament
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="TournamentPlayer", mappedBy="tournament", cascade={"persist", "remove"})
-     * @ORM\OrderBy({"points" = "DESC"})
+     * @ORM\OrderBy({"points" = "DESC", "coefficient" = "DESC"})
      *
      * @JMS\Groups({"get_tournament"})
      */

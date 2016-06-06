@@ -28,6 +28,7 @@ class TournamentRepository extends EntityRepository
      * @param int|null $lockVersion The lock version.
      *
      * @return object|null The entity instance or NULL if the entity can not be found.
+     * @throws TournamentNotFoundException
      */
     public function find($id, $lockMode = null, $lockVersion = null) : Tournament
     {

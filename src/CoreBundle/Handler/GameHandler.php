@@ -701,6 +701,10 @@ class GameHandler implements GameProcessorInterface
             ->getQuery()
             ->getResult();
 
+        $this->container->get("logger")->info(
+            "Remove games: " . $queryBuilder->getQuery()->getSQL()
+        );
+
         foreach ($games as $game) {
             switch ($color) {
                 case "White":

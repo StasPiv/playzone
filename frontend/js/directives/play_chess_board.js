@@ -85,12 +85,6 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                     WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
 
-                        var dateWebsocket = new Date();
-                        GameRest.addMove("", {
-                            id: scope.game.id,
-                            lag: (dateWebsocket.getTime() - data.milliseconds) / 1000
-                        });
-
                         if (!data.move && scope.game.status === 'play') {
                             // it means that game is finished or drawn and we have to fix result
                             scope.game.$get().then( // get game from server

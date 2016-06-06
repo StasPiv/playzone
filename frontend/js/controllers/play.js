@@ -107,6 +107,10 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     };
 
     $scope.savePgnAndSendToObservers = function (withoutSaving, move, moveNumber) {
+        if (!$scope.game.mine) {
+            return;
+        }
+
         if (withoutSaving) {
             $scope.game.move_color = $scope.game.move_color === 'w' ? 'b' : 'w';
             if (move) {

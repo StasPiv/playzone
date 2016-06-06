@@ -38,7 +38,6 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
 
     var echoStream = $websocket(webSocketEchoPath);
     var counter = 0;
-    var tryAmount = 0;
     var stop = false;
 
     echoStream.onMessage(
@@ -55,11 +54,12 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
         checkLag: function (callback) {
             stop = false;
             echoStream.send("hello");
+            counter = 0;
 
             $timeout(
                 function () {
                     stop = true;
-                    var lag = 3 * ((++tryAmount) / counter);
+                    var lag = 3  / counter;
                     UserRest.ping(
                         {
                             lag: lag

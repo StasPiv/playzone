@@ -35,9 +35,11 @@ playzoneControllers.controller('MyProfileCtrl', function ($scope, $rootScope, Us
             };
 
             $scope.checkLag = function () {
+                $scope.checkingLag = true;
                 WebsocketService.checkLag(
                     function (lag) {
                         $rootScope.user.lag = $scope.lag = lag;
+                        $scope.checkingLag = false;
                     }
                 )
             };

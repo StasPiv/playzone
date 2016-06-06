@@ -4,7 +4,14 @@
         <tbody>
         <tr>
             <td>
-                <a class="btn btn-success" ng-click="checkLag()">{{ "Check lag" | translate }}</a>
+                <a ng-if="!checkingLag" class="btn btn-success" ng-click="checkLag()">
+                    {{ "Check lag" | translate }}
+                </a>
+                <div ng-if="checkingLag">
+                    <div class="btn btn-warning">
+                        {{ "Checking lag" | translate }}...
+                    </div>
+                </div>
             </td>
             <td
                     ng-class="{success:$root.user.good_quality, danger:!$root.user.good_quality}"

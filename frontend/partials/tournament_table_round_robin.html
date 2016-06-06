@@ -13,9 +13,9 @@
             <td
                     ng-repeat="secondPlayer in tournament.players"
                     ng-class="{
-                    draw: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id] == 0.5,
-                    win: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id] == 1,
-                    lost: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id] == 0,
+                    draw: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]['result'] == 0.5,
+                    win: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]['result'] == 1,
+                    lost: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]['result'] == 0,
                     self: firstPlayer.id == secondPlayer.id}"
             >
                 <a href="/#/play/{{ tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]['game_id'] }}">

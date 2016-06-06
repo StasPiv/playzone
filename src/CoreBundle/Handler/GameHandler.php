@@ -223,7 +223,8 @@ class GameHandler implements GameProcessorInterface
 
         if ($pgn !== $game->getPgn()) {
             $game->setDraw("")
-                 ->setPgn($pgn);
+                 ->setPgn($pgn)
+                 ->setTimeLastMove(new \DateTime());
 
             if (in_array("Robot", [$game->getUserWhite(), $game->getUserBlack()])) {
                 $game->setUserToMove(
@@ -544,7 +545,7 @@ class GameHandler implements GameProcessorInterface
                 throw new GameHandlerException("Color is incorrect");
         }
 
-        $game->setTimeLastMove($this->container->get("core.service.date")->getDateTime())
+        $game->setTimeLastMove(new \DateTime())
             ->setUserToMove($game->getUserWhite());
         
         $this->changeGameStatus($game, GameStatus::PLAY);
@@ -670,7 +671,7 @@ class GameHandler implements GameProcessorInterface
      */
     public function createEntity()
     {
-        return (new Game())->setTimeLastMove($this->container->get("core.service.date")->getDateTime());
+        return (new Game())->setTimeLastMove(new \DateTime());
     }
 
     public function fixResultGames()

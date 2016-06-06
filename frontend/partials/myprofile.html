@@ -2,6 +2,16 @@
 <div class="table-responsive">
     <table class="settings table">
         <tbody>
+        <tr>
+            <td>
+                <a class="btn btn-success" ng-click="checkLag()">{{ "Check lag" | translate }}</a>
+            </td>
+            <td
+                    ng-class="{success:$root.user.good_quality, danger:!$root.user.good_quality}"
+            >
+                {{ lag.toFixed(3) }} {{ "s" | translate }}
+            </td>
+        </tr>
         <tr ng-repeat="setting in $root.user.settings track by $index">
             <td>
                 <span>

@@ -127,6 +127,9 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
                           ->getUserIfCredentialsIsOk($authRequest,$this->getRequestError());
 
             $this->initUserSettings($user);
+            $user->setGoodQuality(
+                $user->getLag() < $this->container->getParameter("max_lag_for_record")
+            );
             return $user;
         }
 

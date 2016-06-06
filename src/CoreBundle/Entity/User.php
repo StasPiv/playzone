@@ -312,9 +312,19 @@ class User
      * @JMS\Expose
      * @JMS\Type("float")
      *
-     * @JMS\Groups({"patch_user_lag"})
+     * @JMS\Groups({"patch_user_lag", "post_user_auth"})
      */
     private $lag = 0;
+
+    /**
+     * @var bool
+     *
+     * @JMS\Expose
+     * @JMS\Type("boolean")
+     *
+     * @JMS\Groups({"post_user_auth"})
+     */
+    private $goodQuality = true;
 
     /**
      * Get id
@@ -997,6 +1007,25 @@ class User
     public function setLag(float $lag)
     {
         $this->lag = $lag;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isGoodQuality() : bool
+    {
+        return $this->goodQuality;
+    }
+
+    /**
+     * @param boolean $goodQuality
+     * @return User
+     */
+    public function setGoodQuality(bool $goodQuality)
+    {
+        $this->goodQuality = $goodQuality;
 
         return $this;
     }

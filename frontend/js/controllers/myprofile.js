@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('MyProfileCtrl', function ($scope, $rootScope, UserRest, $cookies) {
+playzoneControllers.controller('MyProfileCtrl', function ($scope, $rootScope, UserRest, $cookies, WebsocketService) {
     $scope.user_setting = {};
 
     $rootScope.user
@@ -14,6 +14,7 @@ playzoneControllers.controller('MyProfileCtrl', function ($scope, $rootScope, Us
         }).then(
         function () {
             $scope.user_setting['Piece type'] = $rootScope.user.settings['Piece type'].value;
+            $scope.lag = $rootScope.user.lag;
 
             $scope.changeSetting = function (settingId, type, settingName) {
                 var value = $scope.user_setting[settingName];
@@ -31,7 +32,17 @@ playzoneControllers.controller('MyProfileCtrl', function ($scope, $rootScope, Us
                         $rootScope.user.settings[settingName].value = value;
                     }
                 );
-            }
+            };
+
+            $scope.checkLag = function () {
+                WebsocketService.checkLag(
+                    function (lag) {
+                        $rootScope.user.lag = $scope.lag = lag;
+                    }
+                )
+            };
+            
+            $scope.checkLag();
         }
     );
 });

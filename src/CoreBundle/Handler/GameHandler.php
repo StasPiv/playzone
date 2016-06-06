@@ -274,6 +274,11 @@ class GameHandler implements GameProcessorInterface
             $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
+        if ($game->getStatus() !== GameStatus::PLAY) {
+            $this->getRequestError()->addError("id", "Game is not played")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
         switch (true) {
             case $me == $game->getUserBlack():
                 $game->setResultWhite(1)->setResultBlack(0);
@@ -310,6 +315,11 @@ class GameHandler implements GameProcessorInterface
             $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
+        if ($game->getStatus() !== GameStatus::PLAY) {
+            $this->getRequestError()->addError("id", "Game is not played")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
         switch (true) {
             case $me == $game->getUserBlack():
                 $game->setDraw(GameColor::BLACK);
@@ -342,6 +352,11 @@ class GameHandler implements GameProcessorInterface
         if (!$this->isMyGame($game, $me)) {
             $this->getRequestError()->addError("id", "Game is not mine");
             $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        if ($game->getStatus() !== GameStatus::PLAY) {
+            $this->getRequestError()->addError("id", "Game is not played")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
         $gameAgainstRobot = in_array("Robot", [$game->getUserWhite(), $game->getUserBlack()]);

@@ -127,6 +127,11 @@ class TournamentPlayer
     private $requiredColor;
 
     /**
+     * @var float
+     */
+    private $coefficient;
+
+    /**
      * @return int
      */
     public function getId() : int
@@ -373,6 +378,25 @@ class TournamentPlayer
             default:
                 return GameColor::RANDOM;
         }
+    }
+
+    /**
+     * @return float
+     */
+    public function getCoefficient()
+    {
+        return $this->coefficient;
+    }
+
+    /**
+     * @param float $coefficient
+     * @return TournamentPlayer
+     */
+    public function setCoefficient($coefficient)
+    {
+        $this->coefficient = $coefficient;
+
+        return $this;
     }
     
     

@@ -17,7 +17,9 @@
                     lost: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id] == 0,
                     self: firstPlayer.id == secondPlayer.id}"
             >
-                {{ beautyResult(tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]) }}
+                <a href="/#/play/{{ tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]['game_id'] }}">
+                    {{ beautyResult(tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]["result"]) }}
+                </a>
             </td>
             <td class="result">{{ firstPlayer.points }}</td>
         </tr>

@@ -695,9 +695,17 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
 
         foreach ($tournament->getGames() as $tournamentGame) {
-            $gamesMap[$tournamentGame->getPlayerWhite()->getId()][$tournamentGame->getPlayerBlack()->getId()] = $tournamentGame->getGame()->getResultWhite();
+            $gamesMap[$tournamentGame->getPlayerWhite()->getId()][$tournamentGame->getPlayerBlack()->getId()] =
+                [
+                    "game_id" => $tournamentGame->getGame()->getId(),
+                    "result" => $tournamentGame->getGame()->getResultWhite()
+                ];
 
-            $gamesMap[$tournamentGame->getPlayerBlack()->getId()][$tournamentGame->getPlayerWhite()->getId()] = $tournamentGame->getGame()->getResultBlack();
+            $gamesMap[$tournamentGame->getPlayerBlack()->getId()][$tournamentGame->getPlayerWhite()->getId()] =
+                [
+                    "game_id" => $tournamentGame->getGame()->getId(),
+                    "result" => $tournamentGame->getGame()->getResultBlack()
+                ];
         }
 
         $tournament->setResultsForRoundRobin($gamesMap);
@@ -719,12 +727,14 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
 
         foreach ($tournament->getGames() as $tournamentGame) {
             $gamesMap[$tournamentGame->getPlayerWhite()->getId()]["rounds"][$tournamentGame->getRound()] = [
+                "game_id" => $tournamentGame->getGame()->getId(),
                 "color" => GameColor::WHITE,
                 "result" => $tournamentGame->getGame()->getResultWhite(),
                 "opponent" => $tournamentGame->getPlayerBlack()->getPlayer()
             ];
 
             $gamesMap[$tournamentGame->getPlayerBlack()->getId()]["rounds"][$tournamentGame->getRound()] = [
+                "game_id" => $tournamentGame->getGame()->getId(),
                 "color" => GameColor::BLACK,
                 "result" => $tournamentGame->getGame()->getResultBlack(),
                 "opponent" => $tournamentGame->getPlayerWhite()->getPlayer()

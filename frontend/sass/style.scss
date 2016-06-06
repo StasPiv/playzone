@@ -435,13 +435,13 @@ input[type="password"] {
     border: 1px solid $color_blumine_approx;
     padding: 2px;
     text-align: center;
-    &.win {
+    &.win * {
       color: $red;
     }
-    &.draw {
+    &.draw * {
       color: #338e33;
     }
-    &.lost {
+    &.lost * {
       color: $black;
     }
     &.self {

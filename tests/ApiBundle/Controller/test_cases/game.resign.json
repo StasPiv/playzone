@@ -67,53 +67,11 @@
       "status": 200,
       "data": {
         "user_white": {
-          "login": "Stas",
-          "email": "piv1986@yandex.ru",
-          "class": "N"
+          "login": "Stas"
         },
         "user_black": {
-          "login": "TestLogin",
-          "email": "test-login@yandex.ru",
-          "class": "D"
+          "login": "TestLogin"
         },
-        "status": "end",
-        "result_white": 1,
-        "result_black": 0
-      }
-    }
-  },
-  "correct_result_white_resigned": {
-    "method": "PUT",
-    "request": {
-      "login": "Stas",
-      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
-      "reference": {
-        "name": "id",
-        "value": "game-real-pgn"
-      }
-    },
-    "response": {
-      "status": 200,
-      "data": {
-        "status": "end",
-        "result_white": 0,
-        "result_black": 1
-      }
-    }
-  },
-  "correct_result_black_resigned": {
-    "method": "PUT",
-    "request": {
-      "login": "TestLogin",
-      "token": "aba37b62d15cc5f8671fd3d1b034c354",
-      "reference": {
-        "name": "id",
-        "value": "game-real-pgn"
-      }
-    },
-    "response": {
-      "status": 200,
-      "data": {
         "status": "end",
         "result_white": 1,
         "result_black": 0

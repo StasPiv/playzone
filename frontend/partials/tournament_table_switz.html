@@ -17,7 +17,9 @@
                     lost: roundForPlayer.result == 0}"
             >
                 <div>
-                    {{ beautyResult(roundForPlayer.result) }}
+                    <a href="/#/play/{{ roundForPlayer.game_id }}">
+                        {{ beautyResult(roundForPlayer.result) }}
+                    </a>
                 </div>
                 <div class="swiss-opponent">
                     <user-link data-user="roundForPlayer.opponent"></user-link>

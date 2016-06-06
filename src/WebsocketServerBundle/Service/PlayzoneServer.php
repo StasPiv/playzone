@@ -94,14 +94,14 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
             if ($user->getConnection() == $conn) {
                 $this->users->detach($user);
 
+                if (!$user->getPlayzoneUser()) {
+                    continue;
+                }
+
                 $this->container->get("event_dispatcher")->dispatch(
                     UserEvents::USER_OUT,
                     (new UserEvent())->setUser($user->getPlayzoneUser())
                 );
-
-                if (!$user->getPlayzoneUser()) {
-                    continue;
-                }
 
                 $this->sendToUsers(
                     (new PlayzoneMessage())->setScope(PlayzoneServerMessageScope::USER_GONE)

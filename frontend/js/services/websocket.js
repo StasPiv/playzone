@@ -34,12 +34,12 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
             }
         );
     }
+    createDataStream();
 
+    var echoStream = $websocket(webSocketEchoPath);
     var counter = 0;
     var tryAmount = 0;
     var stop = false;
-
-    var echoStream = $websocket(webSocketEchoPath);
 
     echoStream.onMessage(
         function () {
@@ -50,32 +50,26 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
             counter++;
         }
     );
-    var testLag = function() {
-        stop = false;
-        echoStream.send("hello");
-
-        $timeout(
-            function () {
-                stop = true;
-                UserRest.ping(
-                    {
-                        ping: 3 * (++tryAmount) / counter
-                    }
-                );
-            },
-            3000
-        );
-    };
-
-    $timeout(
-        function () {
-            testLag();
-        },
-        10000
-    );
-    createDataStream();
 
     return {
+        checkLag: function (callback) {
+            stop = false;
+            echoStream.send("hello");
+
+            $timeout(
+                function () {
+                    stop = true;
+                    UserRest.ping(
+                        {
+                            lag: 3 * (++tryAmount) / counter
+                        },
+                        callback
+                    );
+                },
+                3000
+            );
+        },
+
         ping: function () {
             $rootScope.connected = dataStream.readyState === 1;
         },

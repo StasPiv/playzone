@@ -106,6 +106,8 @@ var playzoneApp = angular.module('playzoneApp', [
             }
         );
     });
+
+    WebsocketService.checkLag();
 }]);
 
 playzoneApp.filter('range', function() {

@@ -31,7 +31,7 @@ playzoneServices.factory('UserRest', function($resource, $rootScope, ApiService)
                 url: ApiService.base_url + 'user/lag',
                 params: $.extend(
                     {
-                        lag:'@ping'
+                        lag:'@lag'
                     },
                     ApiService.getSecurityParams() // send with login and token
                 )

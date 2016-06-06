@@ -51,6 +51,9 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
     /** @var Logger */
     private $logger;
 
+    /** @var array */
+    private $playzoneUsersMap = [];
+
     /**
      * PHP 5 allows developers to declare constructor methods for classes.
      * Classes which have a constructor method call this method on each newly-created object,
@@ -98,19 +101,24 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                     continue;
                 }
 
-                $this->container->get("event_dispatcher")->dispatch(
-                    UserEvents::USER_OUT,
-                    (new UserEvent())->setUser($user->getPlayzoneUser())
-                );
+                $countIn = $this->updatePlayzoneUsersMap($user->getPlayzoneUser(), -1);
 
-                $this->sendToUsers(
-                    (new PlayzoneMessage())->setScope(PlayzoneServerMessageScope::USER_GONE)
-                        ->setMethod(PlayzoneClientMessageMethod::USER_GONE)
-                        ->setData([
-                            'id' => $user->getPlayzoneUser()->getId(),
-                            'login' => $user->getPlayzoneUser()->getLogin()
-                        ])
-                );
+                if ($countIn == 0) {
+                    $this->container->get("event_dispatcher")->dispatch(
+                        UserEvents::USER_OUT,
+                        (new UserEvent())->setUser($user->getPlayzoneUser())
+                    );
+
+                    $this->sendToUsers(
+                        (new PlayzoneMessage())->setScope(PlayzoneServerMessageScope::USER_GONE)
+                            ->setMethod(PlayzoneClientMessageMethod::USER_GONE)
+                            ->setData([
+                                'id' => $user->getPlayzoneUser()->getId(),
+                                'login' => $user->getPlayzoneUser()->getLogin()
+                            ])
+                    );
+                }
+
             }
         }
     }
@@ -194,23 +202,27 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
             }
 
             $wsUser->setPlayzoneUser($playzoneUser);
-            
-            $this->container->get("event_dispatcher")->dispatch(
-                UserEvents::USER_IN,
-                (new UserEvent())->setUser($playzoneUser)
-            );
+
+            $countIn = $this->updatePlayzoneUsersMap($playzoneUser, 1);
+
+            if ($countIn == 1) {
+                $this->container->get("event_dispatcher")->dispatch(
+                    UserEvents::USER_IN,
+                    (new UserEvent())->setUser($playzoneUser)
+                );
+
+                $this->sendToUsers(
+                    (new PlayzoneMessage())
+                        ->setScope(PlayzoneServerMessageScope::USER_IN)
+                        ->setMethod(PlayzoneClientMessageMethod::USER_IN)
+                        ->setData([
+                            'id' => $wsUser->getPlayzoneUser()->getId(),
+                            'login' => $wsUser->getPlayzoneUser()->getLogin()
+                        ])
+                );
+            }
 
             $this->sendWelcomeMessage($wsUser);
-
-            $this->sendToUsers(
-                (new PlayzoneMessage())
-                    ->setScope(PlayzoneServerMessageScope::USER_IN)
-                    ->setMethod(PlayzoneClientMessageMethod::USER_IN)
-                    ->setData([
-                        'id' => $wsUser->getPlayzoneUser()->getId(),
-                        'login' => $wsUser->getPlayzoneUser()->getLogin()
-                    ])
-            );
         }
     }
 
@@ -437,5 +449,19 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
             ),
             $wsUser
         );
+    }
+
+    /**
+     * @param User $playzoneUser
+     * @param int $count
+     * @return int
+     */
+    private function updatePlayzoneUsersMap(User $playzoneUser, int $count)
+    {
+        if (!isset($this->playzoneUsersMap[$playzoneUser->getId()])) {
+            return $this->playzoneUsersMap[$playzoneUser->getId()] = 1;
+        }
+
+        return $this->playzoneUsersMap[$playzoneUser->getId()] += $count;
     }
 }

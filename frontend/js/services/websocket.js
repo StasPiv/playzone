@@ -59,10 +59,10 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
             $timeout(
                 function () {
                     stop = true;
-                    var lag = (++tryAmount) / counter;
+                    var lag = 3 * ((++tryAmount) / counter);
                     UserRest.ping(
                         {
-                            lag: 3 * lag
+                            lag: lag
                         },
                         typeof callback == "function" ? callback(lag) : null
                     );

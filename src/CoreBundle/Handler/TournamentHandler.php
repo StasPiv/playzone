@@ -371,6 +371,8 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
 
         $game->setUserToMove($game->getUserWhite());
+        $game->setTimeWhite($tournament->getGameParams()->getTimeBase())
+             ->setTimeBlack($tournament->getGameParams()->getTimeBase());
         $this->container->get("core.handler.game")->changeGameStatus($game, GameStatus::PLAY);
 
         $tournamentGame = new TournamentGame();

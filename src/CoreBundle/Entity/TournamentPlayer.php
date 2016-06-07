@@ -129,11 +129,11 @@ class TournamentPlayer
     /**
      * @var float
      *
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      *
      * @JMS\Groups({"get_tournament"})
      */
-    private $coefficient;
+    private $coefficient = 0;
 
     /**
      * @return int

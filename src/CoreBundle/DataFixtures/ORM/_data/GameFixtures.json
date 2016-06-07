@@ -166,13 +166,13 @@
     "referenceName": "game-single-king-and-time-almost-over",
     "user_white": "user-test-login",
     "user_black": "user-stas",
-    "user_to_move": "user-stas",
-    "pgn": "1. g3  d5  2. Nf3  c6  3. d4  Nf6  4. Bg2  Bf5  5. Nh4  Bc8  6. Nd2  g6  7. O-O  Bg7  8. b3  O-O  9. c4  a5  10. Bb2  Na6  11. Rc1  b6  12. Nhf3  Bb7  13. Ne5  Nd7  14. Ndf3  f6  15. cxd5  Nxe5  16. dxe5  cxd5  17. exf6  exf6  18. Nd4  Nc5  19. Ba3  Qe7  20. e3  Rfd8  21. Ne2  Rac8  22. Qd2  Qe5  23. Bxc5  bxc5  24. Qxa5  Ba8  25. Rxc5  Rxc5  26. Qxc5  Bf8  27. Qb5  Qd6  28. Rc1  Rb8  29. Qa5  Qb6  30. Qxb6  Rxb6  31. Rc8  Ra6  32. Rxa8  Rd6  33. Ra5  d4  34. Bd5+  Kg7  35. Nxd4  h5  36. Ne6+  Kg8  37. Nxf8+  Kxf8  38. e4  f5  39. f3  fxe4  40. fxe4  Ke7  41. Kf2  Kf6  42. Kf3  Kg7  43. Ra7+  Kh6  44. h4  g5  45. hxg5+  Kxg5  46. Rg7+  Kh6  47. Rf7  Ra6  48. a4  Rb6  49. Kf4  Rb4  50. Kf5  Rd4  51. Rf6+  Kg7  52. Ke5  Rd1  53. Rf5  Rg1  54. Rg5+  Kf8  55. Kf4  Rf1+  56. Ke3  Re1+  57. Kd2  Rf1  58. Rf5+  Rxf5  59. exf5  Ke7  60. Bf3  Kf6  61. Bxh5  Kxf5  62. g4+  Ke5  63. a5  Kd5  64. a6  Ke5  65. a7  Kf4  66. a8=Q  Kg5  67. Qd5+  Kh4  68. Ke3  Kg3  69. Qf5  Kh4  70. Bf7  Kg3  71. g5  Kh4  72. g6  Kg3  73. g7",
+    "user_to_move": "user-test-login",
+    "pgn": "1. e4 d5 2. d3 dxe4 3. dxe4 Qxd1+ 4. Kxd1 Nf6 5. f3 Nc6 6. c3 e5 7. Nd2 Be6 8. Bc4 Bxc4 9. Nxc4 Bd6 10. Kc2 O-O-O 11. Be3 Kb8 12. Ne2 Rhe8 13. a4 a5 14. Rhd1 Bf8 15. Ng3 Rxd1 16. Rxd1 Kc8 17. Bg5 Nd7 18. Nf5 f6 19. Be3 g6 20. Ng3 h5 21. h4 Nc5 22. b3 Ne6 23. Ne2 Bc5 24. Rd5 Bxe3 25. Nxe3 Rd8 26. Rxd8+ Kxd8 27. Nd5 f5 28. exf5 gxf5 29. Ng3 Ng7 30. Nf6 Ne7 31. Nfxh5 Ne6 32. Nf6 Nf4 33. h5 Nxg2 34. h6 Ng6 35. Nxf5 Ne1+ 36. Kd1 Nxf3 37. h7 Ng5 38. Ke2 Nh8 39. Kd3 e4+ 40. Ke3 c6 41. b4 b6 42. bxa5 bxa5 43. Kf4 Ne6+ 44. Kxe4 Nc5+ 45. Ke5 Nxa4 46. Kd4 Nb2 47. c4 a4 48. Kc3 a3 49. Ne3 Ke7 50. Nfg4 Ke6 51. Kb3 Nd3 52. Kxa3 Ne5 53. Nxe5 Kxe5 54. Kb4 Kd4 55. Nf5+ Ke5 56. Ne7 Kd6 57. Ng8 Ng6 58. Nf6 Nh8 59. Ne4+ Ke5 60. Nc3 Kd6 61. Ne4+ Ke5 62. Nc5 Kd6 63. Na6 Kd7 64. Kc5 Kc8 65. Nb4 Nf7 66. Nxc6 Ne5 67. Nxe5 Kd8 68. h8=Q+ Ke7 69. Qh7+ Ke6 70. Qd7+ Kxe5 71. Kc6 Ke4 72. c5 Ke3 73. Qd5 Ke2",
     "pgn_alt": "",
     "status": "play",
     "rate": false,
-    "time_white": 5000,
-    "time_black": 10000,
+    "time_white": 15000,
+    "time_black": 20000,
     "time_last_move": "yesterday"
   },
   {

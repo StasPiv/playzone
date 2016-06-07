@@ -273,7 +273,7 @@ class SwissService implements TournamentDrawInterface
 
             $secondPlayer = null;
 
-            foreach ((array)$playerArray["opponents"] as $opponentId => $opponent) {
+            foreach ((array)@$playerArray["opponents"] as $opponentId => $opponent) {
                 if (!isset($alreadyPlayed[$opponentId])) {
                     /** @var TournamentPlayer $secondPlayer */
                     $secondPlayer = $playerArray["opponents"][$opponentId];

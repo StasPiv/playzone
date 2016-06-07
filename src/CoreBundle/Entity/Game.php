@@ -251,7 +251,7 @@ class Game implements ChatMessageContainerInterface
      * @JMS\Expose
      * @JMS\Type("boolean")
      *
-     * @JMS\Groups({"get_game"})
+     * @JMS\Groups({"get_game", "put_game_pgn"})
      */
     private $insufficientMaterialWhite = false;
 
@@ -261,7 +261,7 @@ class Game implements ChatMessageContainerInterface
      * @JMS\Expose
      * @JMS\Type("boolean")
      *
-     * @JMS\Groups({"get_game"})
+     * @JMS\Groups({"get_game", "put_game_pgn"})
      */
     private $insufficientMaterialBlack = false;
 

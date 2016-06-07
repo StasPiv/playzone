@@ -291,6 +291,10 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
      */
     public function isCurrentRoundFinished(Tournament $tournament) : bool
     {
+        // when two games are finished at the same time we can have problems with two events about new round
+        // so, add sleep on 3 seconds here. It's not critical, but needed to avoid problem above
+        sleep(3);
+        
         foreach ($this->getRoundGames($tournament, $tournament->getCurrentRound()) as $tournamentGame) {
             if ($tournamentGame->getGame()->getStatus() != GameStatus::END) {
                 return false;

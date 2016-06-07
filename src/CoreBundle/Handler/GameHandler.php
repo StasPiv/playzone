@@ -170,9 +170,7 @@ class GameHandler implements GameProcessorInterface
         $this->defineUserColorForGame($me, $game);
         $this->defineUserMoveAndOpponentForGame($me, $game);
 
-        $this->manager->persist($game);
-
-        $this->manager->flush();
+        $this->saveEntity($game);
 
         return $game;
     }
@@ -401,9 +399,7 @@ class GameHandler implements GameProcessorInterface
         $game->addChatMessage($chatMessage);
 
         $this->manager->persist($chatMessage);
-        $this->manager->persist($game);
-
-        $this->manager->flush();
+        $this->saveEntity($game);
 
         return $this->getUserGame($game, $me);
     }
@@ -429,9 +425,7 @@ class GameHandler implements GameProcessorInterface
                 ->setTime($this->container->get("core.service.date")->getDateTime())
         );
 
-        $this->manager->persist($game);
-
-        $this->manager->flush();
+        $this->saveEntity($game);
 
         return $this->getUserGame($game, $me);
     }
@@ -674,6 +668,7 @@ class GameHandler implements GameProcessorInterface
     public function changeGameStatus(Game $game, $status)
     {
         $game->setStatus($status);
+        $this->saveEntity($game);
 
         $this->container->get("event_dispatcher")->dispatch(
             GameEvents::CHANGE_STATUS,
@@ -731,5 +726,14 @@ class GameHandler implements GameProcessorInterface
             $this->changeGameStatus($game, GameStatus::END);
             $this->manager->persist($game);
         }
+    }
+
+    /**
+     * @param Game $game
+     */
+    public function saveEntity(Game $game)
+    {
+        $this->manager->persist($game);
+        $this->manager->flush();
     }
 }

@@ -77,10 +77,4 @@ interface GameProcessorInterface extends ProcessorInterface
      * @return Game
      */
     public function processPostAddmessage(GamePostAddmessageRequest $request) : Game;
-
-    /**
-     * @param GamePostAddmoveRequest $request
-     * @return Game
-     */
-    public function processPostAddmove(GamePostAddmoveRequest $request) : Game;
 }

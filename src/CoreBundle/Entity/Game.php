@@ -229,15 +229,6 @@ class Game implements ChatMessageContainerInterface
     private $chatMessages;
 
     /**
-     * @var GameMove[]|PersistentCollection
-     *
-     * @JMS\Exclude()
-     * @JMS\Type("array<CoreBundle\Entity\GameMove>")
-     * @ORM\OneToMany(targetEntity="GameMove", mappedBy="game", cascade={"persist"})
-     */
-    private $moves;
-
-    /**
      * @var float
      *
      * @JMS\Expose
@@ -803,24 +794,6 @@ class Game implements ChatMessageContainerInterface
         $this->insufficientMaterialBlack = $insufficientMaterialBlack;
 
         return $this;
-    }
-
-    /**
-     * @param GameMove $move
-     * @return Game
-     */
-    public function addMove(GameMove $move)
-    {
-        $this->moves->add($move->setGame($this));
-        return $this;
-    }
-
-    /**
-     * @return GameMove[]
-     */
-    public function getMoves()
-    {
-        return $this->moves;
     }
 }
 

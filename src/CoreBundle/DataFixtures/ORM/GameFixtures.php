@@ -9,7 +9,6 @@
 namespace CoreBundle\DataFixtures\ORM;
 
 use CoreBundle\Entity\Game;
-use CoreBundle\Entity\GameMove;
 use CoreBundle\Entity\User;
 
 class GameFixtures extends AbstractPlayzoneFixtures
@@ -52,15 +51,6 @@ class GameFixtures extends AbstractPlayzoneFixtures
             ->setResultBlack(@$data['result_black'])
             ->setTimeLastMove($this->container->get("core.service.date")->getDateTime($data['time_last_move']))
             ->setDraw(@$data['draw']);
-
-        if (!empty($data["moves"])) {
-            foreach ($data["moves"] as $moveData) {
-                $game->addMove(
-                    (new GameMove())->setLag($moveData["lag"])
-                                    ->setTime(new \DateTime())
-                );
-            }
-        }
 
         return $game;
     }

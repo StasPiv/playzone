@@ -172,24 +172,6 @@ class GameController extends BaseController
     {
         return $this->process($request, new GamePostAddmessageRequest());
     }
-
-    /**
-     * @ApiDoc(
-     *  resource=true,
-     *  filters={
-     *      {"name"="login", "dataType"="string", "description"="Your name"},
-     *      {"name"="token", "dataType"="string", "description"="Your token"}
-     *  }
-     * )
-     *
-     * @param Request $request
-     * @param $id
-     * @return Response
-     */
-    public function postAddmoveAction(Request $request, $id)
-    {
-        return $this->process($request, new GamePostAddmoveRequest(), ResponseStatusCode::CREATED);
-    }
     
     /**
      * @return GameProcessorInterface

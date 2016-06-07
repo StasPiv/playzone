@@ -17,7 +17,6 @@ use CoreBundle\Model\ChatMessage\ChatMessageType;
 use CoreBundle\Model\Event\Game\GameEvent;
 use CoreBundle\Model\Event\Game\GameEvents;
 use CoreBundle\Model\Game\GameMove;
-use CoreBundle\Entity\GameMove as GameMoveEntity;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
@@ -399,32 +398,6 @@ class GameHandler implements GameProcessorInterface
         $game->addChatMessage($chatMessage);
 
         $this->manager->persist($chatMessage);
-        $this->saveEntity($game);
-
-        return $this->getUserGame($game, $me);
-    }
-
-    /**
-     * @param GamePostAddmoveRequest $request
-     * @return Game
-     */
-    public function processPostAddmove(GamePostAddmoveRequest $request) : Game
-    {
-        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request, $this->getRequestError());
-
-        $game = $this->repository->find($request->getId());
-
-        if (!$game instanceof Game) {
-            $this->getRequestError()->addError("id", "Game is not found");
-            $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
-        }
-
-        $game->addMove(
-            (new GameMoveEntity())
-                ->setLag($request->getLag())
-                ->setTime($this->container->get("core.service.date")->getDateTime())
-        );
-
         $this->saveEntity($game);
 
         return $this->getUserGame($game, $me);

@@ -22,7 +22,6 @@ use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
 use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
-use CoreBundle\Model\Request\Game\GamePostAddmoveRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
@@ -640,6 +639,7 @@ class GameHandler implements GameProcessorInterface
      */
     public function changeGameStatus(Game $game, $status)
     {
+        $this->container->get("logger")->debug(__METHOD__ . ' ' . $game->getId() . ' ' . $status);
         $game->setStatus($status);
         $this->saveEntity($game);
 

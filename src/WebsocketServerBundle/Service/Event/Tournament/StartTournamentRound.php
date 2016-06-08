@@ -11,6 +11,7 @@ namespace WebsocketServerBundle\Service\Event\Tournament;
 
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\TournamentPlayer;
+use CoreBundle\Exception\Handler\Event\EventAlreadyFoundException;
 use CoreBundle\Exception\Handler\Tournament\TournamentGameNotFoundException;
 use CoreBundle\Model\Event\EventCommandInterface;
 use CoreBundle\Model\Event\EventInterface;
@@ -41,6 +42,7 @@ use WebsocketServerBundle\Service\Client\PlayzoneClientSender;
  */
 class StartTournamentRound implements EventCommandInterface, EventSubscriberInterface
 {
+    const EVENT_COMMAND_TYPE = "ws.service.event.tournament.start_round";
     use ContainerAwareTrait;
 
     /** @var TournamentContainerInterface */
@@ -193,12 +195,13 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
     public function onTournamentNew(TournamentScheduler $tournamentScheduler)
     {
         $this->container->get("core.handler.event")->initEventAndSave(
-            $tournamentScheduler, "ws.service.event.tournament.start_round"
+            $tournamentScheduler, self::EVENT_COMMAND_TYPE
         );
     }
 
     /**
-     * @param GameEvent $gameEvent*/
+     * @param GameEvent $gameEvent
+     */
     public function onGameChangeStatus(GameEvent $gameEvent)
     {
         if ($gameEvent->getGame()->getStatus() != GameStatus::END) {
@@ -221,15 +224,14 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
             return;
         }
 
-        $this->container->get("core.handler.event")->initEventAndSave(
-            (new TournamentScheduler())
-                ->setFrequency(
-                    $this->container->get("core.service.date")
-                        ->getDateTime("+1minute")->format("i H d n N Y")
-                )
-                ->setTournamentId($tournament->getId()), 
-            "ws.service.event.tournament.start_round"
-        );
+        try {
+            $this->assertEventNotExists($tournament);
+            $this->addNextRoundToSchedule($tournament);
+        } catch (EventAlreadyFoundException $e) {
+            $this->container->get("logger")->error(
+                "Event is already found. Game #" . $gameEvent->getGame()->getId()
+            );
+        }
 
     }
 
@@ -247,6 +249,44 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
     private function getTournamentHandler()
     {
         return $this->container->get("core.handler.tournament");
+    }
+
+    /**
+     * @param Tournament $tournament
+     */
+    private function addNextRoundToSchedule(Tournament $tournament)
+    {
+        $this->container->get("core.handler.event")->initEventAndSave(
+            (new TournamentScheduler())
+                ->setFrequency(
+                    $this->container->get("core.service.date")
+                        ->getDateTime("+1minute")->format("i H d n N Y")
+                )
+                ->setTournamentId($tournament->getId()),
+            self::EVENT_COMMAND_TYPE
+        );
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @throws EventAlreadyFoundException
+     */
+    private function assertEventNotExists(Tournament $tournament)
+    {
+        $events = $this->container->get("core.handler.event")->getRepository()->findBy(
+            [
+                "event_command_type" => self::EVENT_COMMAND_TYPE
+            ]
+        );
+        
+        foreach ($events as $event) {
+            /** @var TournamentContainerInterface $tournamentContainer */
+            $tournamentContainer = $event->getEventModel();
+            
+            if ($tournamentContainer->getTournamentId() == $tournament->getId()) {
+                throw new EventAlreadyFoundException;
+            }
+        }
     }
 
 }

@@ -291,10 +291,6 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
      */
     public function isCurrentRoundFinished(Tournament $tournament) : bool
     {
-        // when two games are finished at the same time we can have problems with two events about new round
-        // so, add sleep on 3 seconds here. It's not critical, but needed to avoid problem above
-        sleep(3);
-        
         foreach ($this->getRoundGames($tournament, $tournament->getCurrentRound()) as $tournamentGame) {
             if ($tournamentGame->getGame()->getStatus() != GameStatus::END) {
                 return false;
@@ -511,7 +507,8 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
     }
 
     /**
-     * @param GameEvent $gameEvent*/
+     * @param GameEvent $gameEvent
+     */
     public function onGameChangeStatus(GameEvent $gameEvent)
     {
         if ($gameEvent->getGame()->getStatus() != GameStatus::END) {
@@ -526,11 +523,12 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
 
         $this->updatePlayersTotals($gameEvent->getGame());
-        $this->recalculateCoefficients($tournament);
 
         if (!$this->container->get("core.handler.tournament")->isCurrentRoundFinished($tournament)) {
             return;
         }
+        
+        $this->recalculateCoefficients($tournament);
 
         if ($tournament->getRounds() == $tournament->getCurrentRound()) {
             $tournament->setStatus(TournamentStatus::END());
@@ -599,6 +597,9 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
 
         $playerWhite->addOpponent($playerBlack->getPlayer());
         $playerBlack->addOpponent($playerWhite->getPlayer());
+        
+        $this->updateCoefficientAndPoints($playerWhite, $playerBlack, $game->getResultWhite());
+        $this->updateCoefficientAndPoints($playerBlack, $playerWhite, $game->getResultBlack());
 
         $this->manager->persist($playerWhite);
         $this->manager->persist($playerBlack);
@@ -790,20 +791,20 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
     private function recalculateCoefficients(Tournament $tournament)
     {
         foreach ($tournament->getPlayers() as $tournamentPlayer) {
-            $tournamentPlayer->setCoefficient(0);
+            $tournamentPlayer->setCoefficient(0)->setPoints(0);
         }
         
         foreach ($tournament->getGames() as $tournamentGame) {
-            $tournamentGame->getPlayerWhite()->setCoefficient(
-                $tournamentGame->getPlayerWhite()->getCoefficient() + 
-                $tournamentGame->getGame()->getResultWhite() * 
-                $tournamentGame->getPlayerBlack()->getPoints()
+            $this->updateCoefficientAndPoints(
+                $tournamentGame->getPlayerWhite(),
+                $tournamentGame->getPlayerBlack(),
+                $tournamentGame->getGame()->getResultWhite()
             );
             
-            $tournamentGame->getPlayerBlack()->setCoefficient(
-                $tournamentGame->getPlayerBlack()->getCoefficient() + 
-                $tournamentGame->getGame()->getResultBlack() * 
-                $tournamentGame->getPlayerWhite()->getPoints()
+            $this->updateCoefficientAndPoints(
+                $tournamentGame->getPlayerBlack(), 
+                $tournamentGame->getPlayerWhite(), 
+                $tournamentGame->getGame()->getResultBlack()
             );
             
             $this->manager->persist($tournamentGame->getPlayerWhite());
@@ -811,5 +812,24 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
         
         $this->manager->flush();
+    }
+
+    /**
+     * @param TournamentPlayer $player
+     * @param TournamentPlayer $opponent
+     * @param float $result
+     */
+    private function updateCoefficientAndPoints(
+        TournamentPlayer $player,
+        TournamentPlayer $opponent,
+        float $result
+    ) {
+        $player->setCoefficient(
+            $player->getCoefficient() + $result * $opponent->getPoints()
+        );
+
+        $player->setPoints(
+            $player->getPoints() + $result
+        );
     }
 }

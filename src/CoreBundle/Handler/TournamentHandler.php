@@ -598,8 +598,8 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         $playerWhite->addOpponent($playerBlack->getPlayer());
         $playerBlack->addOpponent($playerWhite->getPlayer());
         
-        $this->updateCoefficientAndPoints($playerWhite, $playerBlack, $game->getResultWhite());
-        $this->updateCoefficientAndPoints($playerBlack, $playerWhite, $game->getResultBlack());
+        $this->updateCoefficients($playerWhite, $playerBlack, $game->getResultWhite());
+        $this->updateCoefficients($playerBlack, $playerWhite, $game->getResultBlack());
 
         $this->manager->persist($playerWhite);
         $this->manager->persist($playerBlack);
@@ -795,18 +795,30 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
         
         foreach ($tournament->getGames() as $tournamentGame) {
-            $this->updateCoefficientAndPoints(
+            $this->updatePoints(
+                $tournamentGame->getPlayerWhite(),
+                $tournamentGame->getGame()->getResultWhite()
+            );
+
+            $this->updatePoints(
+                $tournamentGame->getPlayerBlack(),
+                $tournamentGame->getGame()->getResultBlack()
+            );
+        }
+
+        foreach ($tournament->getGames() as $tournamentGame) {
+            $this->updateCoefficients(
                 $tournamentGame->getPlayerWhite(),
                 $tournamentGame->getPlayerBlack(),
                 $tournamentGame->getGame()->getResultWhite()
             );
-            
-            $this->updateCoefficientAndPoints(
-                $tournamentGame->getPlayerBlack(), 
-                $tournamentGame->getPlayerWhite(), 
+
+            $this->updateCoefficients(
+                $tournamentGame->getPlayerBlack(),
+                $tournamentGame->getPlayerWhite(),
                 $tournamentGame->getGame()->getResultBlack()
             );
-            
+
             $this->manager->persist($tournamentGame->getPlayerWhite());
             $this->manager->persist($tournamentGame->getPlayerBlack());
         }
@@ -816,20 +828,29 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
 
     /**
      * @param TournamentPlayer $player
+     * @param float $result
+     */
+    private function updatePoints(
+        TournamentPlayer $player,
+        float $result
+    ) {
+        $player->setPoints(
+            $player->getPoints() + $result
+        );
+    }
+
+    /**
+     * @param TournamentPlayer $player
      * @param TournamentPlayer $opponent
      * @param float $result
      */
-    private function updateCoefficientAndPoints(
+    private function updateCoefficients(
         TournamentPlayer $player,
         TournamentPlayer $opponent,
         float $result
     ) {
         $player->setCoefficient(
             $player->getCoefficient() + $result * $opponent->getPoints()
-        );
-
-        $player->setPoints(
-            $player->getPoints() + $result
         );
     }
 }

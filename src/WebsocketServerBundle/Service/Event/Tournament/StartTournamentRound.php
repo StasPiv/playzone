@@ -275,7 +275,7 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
     {
         $events = $this->container->get("core.handler.event")->getRepository()->findBy(
             [
-                "event_command_type" => self::EVENT_COMMAND_TYPE
+                "eventCommandService" => self::EVENT_COMMAND_TYPE
             ]
         );
         

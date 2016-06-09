@@ -287,5 +287,25 @@
         "lag": 0.2
       }
     ]
+  },
+  {
+    "referenceName": "game-from-round-robin-current-test",
+    "user_white": "user-a",
+    "user_black": "user-b",
+    "user_to_move": "user-c",
+    "pgn": "1. e4 e5",
+    "pgn_alt": "1",
+    "status": "play",
+    "rate": false,
+    "time_white": 180000,
+    "time_black": 180000,
+    "result_white": 1,
+    "result_black": 0,
+    "time_last_move": "yesterday",
+    "moves": [
+      {
+        "lag": 0.2
+      }
+    ]
   }
 ]

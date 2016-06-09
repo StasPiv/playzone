@@ -7,11 +7,11 @@
             <th class="result">{{ "Points" | translate }}</th>
             <th class="result">{{ "Buhgolz" | translate }}</th>
         </tr>
-        <tr ng-repeat="swissPlayer in tournament.results_for_swiss">
+        <tr ng-repeat="swissPlayer in tournament.players">
             <td class="player">{{ $index+1 }}</td>
-            <td class="player"><user-link data-user="swissPlayer.player.player"></user-link></td>
+            <td class="player"><user-link data-user="swissPlayer.player"></user-link></td>
             <td
-                    ng-repeat="roundForPlayer in swissPlayer.rounds"
+                    ng-repeat="roundForPlayer in tournament.results_for_swiss[swissPlayer.id].rounds"
                     ng-class="{
                     draw: roundForPlayer.result == 0.5,
                     win: roundForPlayer.result == 1,
@@ -29,8 +29,8 @@
                     </div>
                 </div>
             </td>
-            <td class="result">{{ swissPlayer.player.points }}</td>
-            <td class="result">{{ swissPlayer.player.coefficient }}</td>
+            <td class="result">{{ tournament.results_for_swiss[swissPlayer.id].player.points }}</td>
+            <td class="result">{{ tournament.results_for_swiss[swissPlayer.id].player.coefficient }}</td>
         </tr>
     </table>
 </div>

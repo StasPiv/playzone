@@ -53,6 +53,7 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
                                  ->setCountBlack($countBlack)
                                  ->setCountWhite(9 - $countBlack)
                                  ->setPoints(mt_rand(0, 9))
+                                 ->setCoefficient(mt_rand(0,2))
                                  ->setMissedRound(!!mt_rand(0,1));
                 
                 $opponents = $this->getShuffleOpponents($data["players"], $referencePlayer, 

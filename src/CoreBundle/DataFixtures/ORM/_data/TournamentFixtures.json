@@ -114,7 +114,8 @@
         "reference": "game-from-swiss-tournament-4",
         "round": 4
       }
-    ]
+    ],
+    "current_round": 6
   },
   {
     "referenceName": "tournament-switz-even",
@@ -152,7 +153,8 @@
     "tournament_params": {
       "type": "switz",
       "time_begin": "+1minute"
-    }
+    },
+    "current_round": 6
   },
   {
     "referenceName": "tournament-round-robin",
@@ -185,6 +187,12 @@
       "user-e",
       "user-f",
       "user-g"
+    ],
+    "games": [
+      {
+        "reference": "game-from-round-robin-current-test",
+        "round": 1
+      }
     ],
     "game_params": {
       "time_base": 600000

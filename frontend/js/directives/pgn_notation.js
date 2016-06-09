@@ -71,8 +71,6 @@ playzoneControllers.directive('pgnNotation', function ($rootScope) {
             $(window).on('keydown', function(event) {
                 var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0;
 
-                console.log(key);
-                
                 var left = 37;
                 var right = 39;
 

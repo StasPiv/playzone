@@ -736,7 +736,9 @@ th.header {
     }
     .right-column {
       .mobile & {
-        display: none;
+        clear: both;
+        width: 100%;
+        margin-top: 10px;
       }
       .observer & {
         width: 40%;
@@ -767,6 +769,9 @@ th.header {
         .notation {
           height: 350px;
           overflow-y: scroll;
+          .mobile & {
+            display: none;
+          }
         }
       }
     }

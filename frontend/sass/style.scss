@@ -764,6 +764,9 @@ th.header {
           span {
             cursor: pointer;
             border: 1px solid black;
+            .mobile & {
+              width: 45px;
+            }
           }
         }
         .notation {

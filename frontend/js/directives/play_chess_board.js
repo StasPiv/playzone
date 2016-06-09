@@ -162,7 +162,12 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
             element.onMove = function (move) {
                 scope.current_move = scope.pre_move = false;
-                $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
+                $timeout(
+                    function () {
+                        $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);      
+                    },
+                    0
+                );
 
                 scope.game.pgn = element.game.pgn();
                 console.log('fen after move', element.game.fen());

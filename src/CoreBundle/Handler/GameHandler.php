@@ -238,10 +238,8 @@ class GameHandler implements GameProcessorInterface
              ->setInsufficientMaterialBlack($pgnRequest->isInsufficientMaterialBlack());
         
         $this->fixResultIfTimeOver($pgnRequest, $game);
-
-        if ($this->container->get("core.service.chess")->isGameInCheckmate($game->getPgn())) {
-            $game->setResultWhite((int)($game->getUserToMove() === $game->getUserBlack()))
-                 ->setResultBlack((int)($game->getUserToMove() === $game->getUserWhite()));
+        
+        if ($this->container->get("core.service.chess")->fixResultIfCheckmate($game)) {
             $this->changeGameStatus($game, GameStatus::END);
         }
 

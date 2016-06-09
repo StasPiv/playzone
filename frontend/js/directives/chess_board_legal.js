@@ -93,8 +93,13 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
                 pgnEl = $(element).find('.pgn');
 
             var highlightSquare = function (square) {
-                $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
-                $(element).find('.square-' + square).addClass(scope.boardConfig.highlightClass);
+                $timeout(
+                    function () {
+                        $(element).find('[class*="square"]').removeClass(scope.boardConfig.highlightClass);
+                        $(element).find('.square-' + square).addClass(scope.boardConfig.highlightClass);
+                    },
+                    0
+                );
             };
 
             // do not pick up pieces if the game is over

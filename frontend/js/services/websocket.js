@@ -83,6 +83,20 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
             }
             listenersMap[methodToListen][listenerName] = callback;
         },
+        removeListeners: function (listeners, exceptions) {
+            angular.forEach(listenersMap, function (value, key) {
+                if (listeners) { // for particular listeners
+                    if (listeners.indexOf(key) !== -1) { // if we found in listeners
+                        delete listenersMap[key];
+                    }
+                    return;
+                }
+
+                if (!exceptions || exceptions.indexOf(key) === 1) { // otherwise check exceptions
+                    delete listenersMap[key];
+                }
+            });
+        },
         send: function(data) {
             console.log(data);
             var date = new Date();

@@ -10,6 +10,7 @@ namespace CoreBundle\Service\Tournament\TournamentTable;
 
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Model\Game\GameColor;
+use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Tournament\TournamentGame\TournamentGameSwitz;
 use CoreBundle\Service\Tournament\TournamentTableInterface;
 
@@ -35,6 +36,10 @@ class TournamentTableSwitz implements TournamentTableInterface
         }
 
         foreach ($tournament->getGames() as $tournamentGame) {
+            if ($tournamentGame->getGame()->getStatus() != GameStatus::END) {
+                continue;
+            }
+            
             $playerWhite = $tournamentGame->getPlayerWhite();
             $playerBlack = $tournamentGame->getPlayerBlack();
 

@@ -11,6 +11,7 @@ namespace CoreBundle\Service\Tournament\TournamentTable;
 
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\TournamentGame;
+use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Tournament\TournamentGame\TournamentGameRoundRobin;
 use CoreBundle\Service\Tournament\TournamentTableInterface;
 
@@ -61,6 +62,10 @@ class TournamentTableRoundRobin implements TournamentTableInterface
         }
 
         foreach ($tournament->getGames() as $tournamentGame) {
+            if ($tournamentGame->getGame()->getStatus() != GameStatus::END) {
+                continue;
+            }
+
             $playerWhite = $tournamentGame->getPlayerWhite();
             $playerBlack = $tournamentGame->getPlayerBlack();
 

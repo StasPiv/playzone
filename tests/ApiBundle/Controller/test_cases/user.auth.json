@@ -99,6 +99,20 @@
       }
     }
   },
+  "correct_with_token_and_commercial_at": {
+    "method": "POST",
+    "request": {
+      "login": "QGxleA==",
+      "password": "aba37b62d15cc5f8671fd3d1b034c354",
+      "token": "1c632834d2e8f059868fbf0217791ee9"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "login": "@lex"
+      }
+    }
+  },
   "incorrect_password_from_immortal": {
     "method": "POST",
     "request": {

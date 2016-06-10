@@ -123,8 +123,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
     public function processPostAuth(UserPostAuthRequest $authRequest) : User
     {
         if ($authRequest->getToken()) {
-            $user = $this->container->get("core.service.security")
-                          ->getUserIfCredentialsIsOk($authRequest,$this->getRequestError());
+            $user = $this->getSecureUser($authRequest);
 
             $this->initUserSettings($user);
             $user->setGoodQuality(
@@ -247,7 +246,11 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
      */
     public function getUserByLoginAndToken(string $login, string $token) : User
     {
-        $user = $this->repository->findOneByLogin($login);
+        try {
+            $user = $this->repository->findOneByLogin($login);
+        } catch (UserNotFoundException $e) {
+            $user = $this->repository->findOneByLogin(base64_decode($login));
+        }
 
         $this->generateUserToken($user);
 

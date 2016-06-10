@@ -50,7 +50,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                         GameRest.getRobotmove(
                             {
-                                encoded_fen: window.btoa(element.game.fen()),
+                                fen: element.game.fen(),
                                 id: scope.game.id
                             },
                             function (data) {
@@ -179,7 +179,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 if (scope.game.opponent.login === "Robot") { // isRobot
                     GameRest.getRobotmove(
                         {
-                            encoded_fen: window.btoa(element.game.fen()),
+                            fen: element.game.fen(),
                             id: scope.game.id
                         },
                         function (data) {

@@ -138,9 +138,8 @@ class GameHandler implements GameProcessorInterface
             $request, $this->getRequestError()
         );
 
-        $fen = base64_decode($request->getEncodedFen());
-
-        $moveString = $this->container->get("core.service.chess")->getBestMoveFromFen($fen);
+        $moveString = $this->container->get("core.service.chess")
+                           ->getBestMoveFromFen($request->getFen());
 
         return (new GameMove())->setFrom(substr($moveString, 0, 2))
                                ->setTo(substr($moveString, 2, 2));

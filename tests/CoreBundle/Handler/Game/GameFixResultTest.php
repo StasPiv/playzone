@@ -28,7 +28,7 @@ class GameFixResultTest extends KernelAwareTest
         $this->getGameHandler()->fixResultGames();
 
         foreach ($games as $game) {
-            $this->assertEquals(GameStatus::END, $game->getStatus());
+            $this->assertEquals(GameStatus::END, $game->getStatus(), $game->getId());
             switch (true) {
                 case $game->getUserToMove() == $game->getUserBlack():
                     $this->assertEquals(1, $game->getResultWhite());

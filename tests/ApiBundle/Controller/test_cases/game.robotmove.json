@@ -7,7 +7,8 @@
   "fen": {
     "method": "GET",
     "request": {
-      "encoded_fen": "cm5icWtiMXIvcHBwMnBwcC80cG4yLzNwNC8yUFA0LzJOMVAzL1BQM1BQUC9SMUJRS0JOUiBiIEtRa3EgLSAwIDQ=",          "reference": {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N1P3/PP3PPP/R1BQKBNR b KQkq - 0 4",
+      "reference": {
         "name": "id",
         "value": "game-0"
       },

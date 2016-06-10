@@ -38,7 +38,7 @@ class GameGetRobotmoveAction extends GameRequest implements SecurityRequestInter
      *     message = "Fen is required for this request"
      * )
      */
-    private $encodedFen;
+    private $fen;
 
     /**
      * @return int
@@ -62,18 +62,18 @@ class GameGetRobotmoveAction extends GameRequest implements SecurityRequestInter
     /**
      * @return string
      */
-    public function getEncodedFen() : string 
+    public function getFen() : string
     {
-        return $this->encodedFen;
+        return $this->fen;
     }
 
     /**
-     * @param string $encodedFen
+     * @param string $fen
      * @return GameGetRobotmoveAction
      */
-    public function setEncodedFen($encodedFen)
+    public function setFen($fen)
     {
-        $this->encodedFen = $encodedFen;
+        $this->fen = $fen;
 
         return $this;
     }

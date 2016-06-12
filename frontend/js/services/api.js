@@ -49,16 +49,21 @@ playzoneServices.factory('ApiService', function(EnvService, $rootScope, $locatio
 
     return {
         getSecurityParams: function() {
-            if (!$rootScope.user || !$rootScope.user.login) {
-                return {};
-            }
             return {
                 login: function () {
+                    if (!$rootScope.user || !$rootScope.user.login) {
+                        return "";
+                    }
+
                     return $rootScope.user.login.indexOf("@") === -1 ?
                            $rootScope.user.login :
                            window.btoa($rootScope.user.login);
                 },
                 token: function () {
+                    if (!$rootScope.user || !$rootScope.user.login) {
+                        return "";
+                    }
+                    
                     return $rootScope.user.token;
                 }
             }

@@ -49,6 +49,9 @@ playzoneServices.factory('ApiService', function(EnvService, $rootScope, $locatio
 
     return {
         getSecurityParams: function() {
+            if (!$rootScope.user || !$rootScope.user.login) {
+                return {};
+            }
             return {
                 login: function () {
                     return $rootScope.user.login.indexOf("@") === -1 ?

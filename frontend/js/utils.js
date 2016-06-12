@@ -20,25 +20,19 @@ var pad = function (num, size) {
 };
 
 function getBlitzTimeObject(timeMs, dateFilter) {
-    var date = new Date(1970, 0, 1);
-    date.setMilliseconds(timeMs);
+    var ms = timeMs;
+    var minutes = parseInt(ms / 60000);
+    ms -= minutes * 60000;
+    var seconds = parseInt(ms / 1000);
+    ms -= seconds * 1000;
+    var deciSeconds = ms / 100;
 
-    switch (true) {
-        case timeMs >= 1000 * 60 * 60 - 1:
-            return {
-                days: parseInt(timeMs / (24 * 60 * 60 * 1000)),
-                time: dateFilter(date, 'HH:mm:ss'),
-                ms: timeMs
-            };
-        default:
-            var seconds = parseInt(timeMs / 1000);
-            return {
-                time: dateFilter(date, 'mm:ss'),
-                ms: timeMs,
-                beforeComaMs: seconds,
-                afterComaMs: (timeMs / 100) - (10 * seconds)
-            };
-    }
+    return {
+        minutes: minutes,
+        seconds: seconds,
+        deciSeconds: deciSeconds,
+        ms: timeMs
+    };
 }
 
 var insufficient_material_white = function (fen) {

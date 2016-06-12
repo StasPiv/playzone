@@ -6,6 +6,18 @@
 playzoneControllers.directive('chessTimer', function (dateFilter, $interval, $timeout) {
     return {
         link: function (scope, element) {
+
+            var dateBegin = new Date();
+
+            var testCount = 100000;
+            for (var i=0; i< testCount; i++) {
+                getBlitzTimeObject(i, dateFilter);
+            }
+
+            var dateEnd = new Date();
+
+            console.log("delay: ", testCount / ((dateEnd.getTime() - dateBegin.getTime()) / 1000) );
+
             scope.timer = $interval(
                 function () {
                     if (scope.time === 0) {
@@ -43,6 +55,6 @@ playzoneControllers.directive('chessTimer', function (dateFilter, $interval, $ti
             user: '=',
             fixTime: '&fixTime'
         },
-        templateUrl: 'partials/chess_timer_with_user.html'
+        templateUrl: 'partials/chess_timer_new.html'
     }
 });

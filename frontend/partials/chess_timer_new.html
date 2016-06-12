@@ -1,0 +1,5 @@
+<div ng-class="{'zeitnot': timeFormat.ms < zeitnot, 'active': current}" class="timer">
+    <div class="user"><user-link data-user="user"></user-link></div>
+    <span ng-if="timeFormat.ms >= zeitnot">{{timeFormat.minutes}}:{{timeFormat.seconds}}</span>
+    <span ng-if="timeFormat.ms < zeitnot">{{timeFormat.seconds}}.{{timeFormat.deciSeconds}}</span>
+</div>

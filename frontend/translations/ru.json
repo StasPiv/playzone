@@ -124,7 +124,7 @@
   "Board size": "Размер доски",
   "Draggable disabled": "Отключить перетаскивание",
   "Piece type": "Тип фигур",
-  "Immortalchess.Net login/password is allowed": "Логин/пароль с immortalchess.net допустимы",
+  "Immortalchess.Net credentials are allowed": "Данные с immortalchess.net допустимы. Если Ваш ник на immortalchess.net содержит русские символы - введите email с форума",
   "Connection succesful": "Соединение успешно",
   "Table": "Таблица",
   "One-click move": "Ввод хода одним щелчком",

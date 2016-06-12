@@ -28,10 +28,10 @@ interface UserProcessorInterface extends ProcessorInterface
     public function processPostRegister(UserPostRegisterRequest $registerRequest) : User;
 
     /**
-     * @param UserPostAuthRequest $authRequest
+     * @param UserPostAuthRequest $request
      * @return User
      */
-    public function processPostAuth(UserPostAuthRequest $authRequest) : User;
+    public function processPostAuth(UserPostAuthRequest $request) : User;
 
     /**
      * @param UserGetListRequest $listRequest

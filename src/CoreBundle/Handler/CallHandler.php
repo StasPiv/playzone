@@ -10,6 +10,8 @@ namespace CoreBundle\Handler;
 
 use CoreBundle\Exception\Handler\GameCallHandlerException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
+use CoreBundle\Model\Event\Call\CallEvent;
+use CoreBundle\Model\Event\Call\CallEvents;
 use CoreBundle\Model\Game\GameParams;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Request\Call\CallDeleteDeclineRequest;
@@ -121,7 +123,10 @@ class CallHandler implements CallProcessorInterface
 
         $this->manager->persist($call);
 
-        $this->container->get("core.service.immortalchessnet")->publishPostAboutNewCall($call);
+        $this->container->get("event_dispatcher")->dispatch(
+            CallEvents::NEW_CALL,
+            (new CallEvent())->setCall($call)
+        );
 
         return $call;
     }

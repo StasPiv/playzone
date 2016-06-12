@@ -16,4 +16,5 @@ class UserEvents
 {
     const USER_IN = "user.in";
     const USER_OUT = "user.out";
+    const USER_AUTH = "user.auth";
 }

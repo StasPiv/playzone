@@ -51,7 +51,9 @@ playzoneServices.factory('ApiService', function(EnvService, $rootScope, $locatio
         getSecurityParams: function() {
             return {
                 login: function () {
-                    return window.btoa($rootScope.user.login);
+                    return $rootScope.user.login.indexOf("@") === -1 ?
+                           $rootScope.user.login :
+                           window.btoa($rootScope.user.login);
                 },
                 token: function () {
                     return $rootScope.user.token;

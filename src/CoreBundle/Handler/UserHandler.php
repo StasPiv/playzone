@@ -14,6 +14,7 @@ use CoreBundle\Exception\Handler\User\TokenNotCorrectException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
 use CoreBundle\Exception\Handler\User\UserSettingNotFoundException;
 use CoreBundle\Exception\Processor\ProcessorException;
+use CoreBundle\Model\Event\User\UserAuthEvent;
 use CoreBundle\Model\Event\User\UserEvent;
 use CoreBundle\Model\Event\User\UserEvents;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
@@ -117,13 +118,13 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
     }
 
     /**
-     * @param UserPostAuthRequest $authRequest
+     * @param UserPostAuthRequest $request
      * @return User
      */
-    public function processPostAuth(UserPostAuthRequest $authRequest) : User
+    public function processPostAuth(UserPostAuthRequest $request) : User
     {
-        if ($authRequest->getToken()) {
-            $user = $this->getSecureUser($authRequest);
+        if ($request->getToken()) {
+            $user = $this->getSecureUser($request);
 
             $this->initUserSettings($user);
             $user->setGoodQuality(
@@ -134,9 +135,17 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
 
         try {
             try {
-                $user = $this->searchUserOnPlayzone($authRequest);
+                $user = $this->searchUserOnPlayzone($request);
             } catch (UserNotFoundException $e) {
-                $user = $this->searchUserOnImmortalchess($authRequest);
+                $this->container->get("event_dispatcher")->dispatch(
+                    UserEvents::USER_AUTH,
+                    $event = (new UserAuthEvent())
+                                         ->setLogin($request->getLogin())
+                                         ->setPassword($request->getPassword())
+                );
+
+                $user = $event->getUser();
+
                 $this->saveUser($user);
             }
         } catch (UserNotFoundException $e) {
@@ -265,7 +274,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
      * @param string $password
      * @return string
      */
-    private function generatePasswordHash($password) : string 
+    public function generatePasswordHash($password) : string 
     {
         return md5($password);
     }
@@ -284,22 +293,13 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
      * @throws UserNotFoundException
      * @throws PasswordNotCorrectException
      */
-    private function searchUserOnImmortalchess(UserPostAuthRequest $authRequest) : User
-    {
-        return $this->container->get('core.service.immortalchessnet')
-                    ->getUser($authRequest->getLogin(), $authRequest->getPassword())
-                    ->setPassword($this->generatePasswordHash($authRequest->getPassword()));
-    }
-
-    /**
-     * @param UserPostAuthRequest $authRequest
-     * @return User
-     * @throws UserNotFoundException
-     * @throws PasswordNotCorrectException
-     */
     private function searchUserOnPlayzone(UserPostAuthRequest $authRequest) : User
     {
-        $user = $this->repository->findOneByLogin($authRequest->getLogin());
+        try {
+            $user = $this->repository->findOneByLogin($authRequest->getLogin());
+        } catch (UserNotFoundException $e) {
+            $user = $this->repository->findOneByEmail($authRequest->getLogin());
+        }
 
         if ($user->getPassword() != $this->generatePasswordHash($authRequest->getPassword())) {
             throw new PasswordNotCorrectException;
@@ -390,22 +390,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
     }
 
     /**
-     * Returns an array of event names this subscriber wants to listen to.
-     *
-     * The array keys are event names and the value can be:
-     *
-     *  * The method name to call (priority defaults to 0)
-     *  * An array composed of the method name to call and the priority
-     *  * An array of arrays composed of the method names to call and respective
-     *    priorities, or 0 if unset
-     *
-     * For instance:
-     *
-     *  * array('eventName' => 'methodName')
-     *  * array('eventName' => array('methodName', $priority))
-     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
-     *
-     * @return array The event names to listen to
+     * @return array
      */
     public static function getSubscribedEvents()
     {

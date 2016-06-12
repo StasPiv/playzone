@@ -5,6 +5,7 @@ imports:
     - { resource: "@CoreBundle/Resources/config/services.yml" }
     - { resource: "@WebsocketServerBundle/Resources/config/services.yml" }
     - { resource: "@ApiBundle/Resources/config/services.yml" }
+    - { resource: "@ImmortalchessNetBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -73,9 +74,16 @@ doctrine:
               mapping_types:
                   enum: string
     orm:
+        default_entity_manager: default
         auto_generate_proxy_classes: "%kernel.debug%"
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+        entity_managers:
+          default:
+            naming_strategy: doctrine.orm.naming_strategy.underscore
+            auto_mapping: true
+          immortalchess:
+              connection: immortalchess
+              mappings:
+                ImmortalchessNetBundle: ~
 
 # Swiftmailer Configuration
 swiftmailer:

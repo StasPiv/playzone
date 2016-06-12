@@ -1,0 +1,5 @@
+services:
+  immortalchessnet.service.immortalchessnet:
+    class: ImmortalchessNetBundle\Service\ImmortalchessnetService
+    calls:
+      - [setContainer, ['@service_container']]

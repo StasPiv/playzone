@@ -14,7 +14,7 @@ class CoreBundle extends Bundle
     /**
      * @var array
      */
-    private $subscriberServices = [
+    protected $subscriberServices = [
         "core.handler.tournament",
         "core.handler.user"
     ];

@@ -141,5 +141,20 @@
         "isAuth": true
       }
     }
+  },
+  "correct_from_immortal_by_email": {
+    "method": "POST",
+    "request": {
+      "login": "loveliverpool@yandex.ru",
+      "password": "010586"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "login": "Стас",
+        "token": "921e24103de9d393fdf7bfab278737f9",
+        "isAuth": true
+      }
+    }
   }
 }

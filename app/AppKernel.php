@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new ApiBundle\ApiBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
+            new ImmortalchessNetBundle\ImmortalchessNetBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

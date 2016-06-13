@@ -3,53 +3,40 @@
  */
 'use strict';
 
-playzoneControllers.directive('chessTimer', function (dateFilter, $interval, $timeout, LogRest) {
+playzoneControllers.directive('chessTimer', function (dateFilter, $interval) {
     return {
-        link: function (scope, element) {
-            var counter = 0;
-            var dateBegin = new Date();
-            var timeBegin = dateBegin.getTime();
-            scope.timer = $interval(
-                function () {
-                    if (scope.time === 0) {
-                        $interval.cancel(scope.timer);
-                        scope.fixTime();
-                    }
-
-                    if (scope.game.status === 'end') {
-                        $interval.cancel(scope.timer);
-                    }
-
-                    $timeout(
-                        function () {
-                            scope.timeFormat = getBlitzTimeObject(scope.time, dateFilter);
-                        },
-                        0
-                    );
-
-                    if (counter++ % 100 === 0) {
-                        var dateCurrent = new Date();
-                        var timeCurrent = dateCurrent.getTime();
-
-                        var oneIncrementTime = (timeCurrent - timeBegin) / 100;
-                        LogRest.log(
-                            "",
-                            {
-                                message: "[Timer rate] " + (oneIncrementTime / 100)
-                            }
-                        );
-                        dateBegin = new Date();
-                        timeBegin = dateBegin.getTime();
-                    }
-
-                    if (!scope.current) {
-                        return;
-                    }
-
-                    scope.time -= 100;
-                },
-                100
+        link: function (scope) {
+            scope.$watch(
+                'current',
+                function (newVal, oldVal) {
+                    newVal ? (scope.timer = startTimer()) : stopTimer();
+                }
             );
+
+            scope.$watch(
+                'time',
+                function (newVal, oldVal) {
+                    if (newVal <= 0) {
+                        scope.fixTime();
+                        stopTimer();
+                    }
+                }
+            );
+
+            var startTimer = function () {
+                return $interval(
+                    function () {
+                        scope.timeFormat = getBlitzTimeObject(scope.time-=100, dateFilter);
+                    },
+                    100
+                );
+            };
+
+            var stopTimer = function () {
+                $interval.cancel(scope.timer);
+            };
+
+            scope.timeFormat = getBlitzTimeObject(scope.time, dateFilter);
         },
         restrict: 'E',
         transclude: true,

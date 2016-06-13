@@ -27,7 +27,10 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
             }).
             when('/games', {
                 templateUrl: 'partials/games.html',
-                controller: 'GamesCtrl'
+                controller: 'GamesCtrl',
+                resolve: {
+                    factory: checkIfAuthorized
+                }
             }).
             when('/play/:gameId', {
                 templateUrl: 'partials/play.html',

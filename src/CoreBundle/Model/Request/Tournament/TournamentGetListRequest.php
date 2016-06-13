@@ -43,6 +43,14 @@ class TournamentGetListRequest extends TournamentRequest implements SecurityRequ
     private $status = TournamentStatus::NEW;
 
     /**
+     * @var int
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     */
+    private $limit = 10;
+
+    /**
      * @return TournamentStatus
      */
     public function getStatus()
@@ -57,6 +65,25 @@ class TournamentGetListRequest extends TournamentRequest implements SecurityRequ
     public function setStatus($status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLimit()
+    {
+        return $this->limit;
+    }
+
+    /**
+     * @param int $limit
+     * @return TournamentGetListRequest
+     */
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
 
         return $this;
     }

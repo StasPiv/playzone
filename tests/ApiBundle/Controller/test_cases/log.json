@@ -1,0 +1,30 @@
+{
+  "log_forbidden": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "bba37b62d15cc5f8671fd3d1b034c354",
+      "message": "Hello world!"
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "token":"Forbidden for user with this credentials"
+      }
+    }
+  },
+  "log_correct": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "message": "Hello world!"
+    },
+    "response": {
+      "status": 201,
+      "data": {
+        "message": "Hello world!"
+      }
+    }
+  }
+}

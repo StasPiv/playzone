@@ -128,6 +128,12 @@ var checkIfUnauthorized = function ($q, $rootScope, $location) {
     }
 };
 
+var checkIfAuthorized = function ($q, $rootScope, $location) {
+    if (!$rootScope.user || !$rootScope.user.isAuth) {
+        $location.path('/auth');
+    }
+};
+
 var playzoneControllers = angular.module('playzoneControllers', []);
 
 var playzoneServices = angular.module('playzoneServices', []);

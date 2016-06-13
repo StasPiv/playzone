@@ -3,21 +3,12 @@
  */
 'use strict';
 
-playzoneControllers.directive('chessTimer', function (dateFilter, $interval, $timeout) {
+playzoneControllers.directive('chessTimer', function (dateFilter, $interval, $timeout, LogRest) {
     return {
         link: function (scope, element) {
-
+            var counter = 0;
             var dateBegin = new Date();
-
-            var testCount = 100000;
-            for (var i=0; i< testCount; i++) {
-                getBlitzTimeObject(i, dateFilter);
-            }
-
-            var dateEnd = new Date();
-
-            console.log("delay: ", testCount / ((dateEnd.getTime() - dateBegin.getTime()) / 1000) );
-
+            var timeBegin = dateBegin.getTime();
             scope.timer = $interval(
                 function () {
                     if (scope.time === 0) {
@@ -35,6 +26,21 @@ playzoneControllers.directive('chessTimer', function (dateFilter, $interval, $ti
                         },
                         0
                     );
+
+                    if (counter++ % 100 === 0) {
+                        var dateCurrent = new Date();
+                        var timeCurrent = dateCurrent.getTime();
+
+                        var oneIncrementTime = (timeCurrent - timeBegin) / 100;
+                        LogRest.log(
+                            "",
+                            {
+                                message: "[Timer rate] " + (oneIncrementTime / 100)
+                            }
+                        );
+                        dateBegin = new Date();
+                        timeBegin = dateBegin.getTime();
+                    }
 
                     if (!scope.current) {
                         return;

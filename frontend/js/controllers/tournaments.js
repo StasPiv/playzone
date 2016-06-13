@@ -13,7 +13,8 @@ playzoneControllers.controller('TournamentsCtrl', function ($scope, TournamentRe
     });
 
     $scope.tournaments_finished = TournamentRest.query({
-        status: "end"
+        status: "end",
+        limit: 5
     });
     
     $scope.recordIntoTournament = function (tournament) {

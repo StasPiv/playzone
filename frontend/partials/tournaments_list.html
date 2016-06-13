@@ -6,7 +6,7 @@
             <th>{{ "Parameters" | translate }}</th>
             <th>{{ "Type" | translate }}</th>
             <th>{{ "Time begin" | translate }}</th>
-            <th>{{ "Action" | translate }}</th>
+            <th ng-if="record">{{ "Action" | translate }}</th>
         </tr>
         <tr
                 ng-repeat="tournament in tournaments track by $index"

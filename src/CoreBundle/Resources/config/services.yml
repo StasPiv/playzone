@@ -25,6 +25,12 @@ services:
         calls:
           - [setContainer, ['@service_container']]
           - [setRequestError, ['@core.request.error']]
+    core.handler.log:
+        class: CoreBundle\Handler\LogHandler
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+          - [setContainer, ['@service_container']]
+          - [setRequestError, ['@core.request.error']]
     core.service.error:
         class: CoreBundle\Service\ErrorService
         arguments: ['@service_container']

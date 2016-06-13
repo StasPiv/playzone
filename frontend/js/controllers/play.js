@@ -123,28 +123,18 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
                     moveNumber
                 );
             } else {
-                $timeout(
-                    function () {
-                        $scope.sendWithWebsockets();
-                    },
-                    1
-                );
+                $scope.sendWithWebsockets();
             }
             
         }
 
-        $timeout(
+        $scope.game.$savePgn().then(
             function () {
-                $scope.game.$savePgn().then(
-                    function () {
-                        $scope.game.opponent.offline = !$rootScope.loginsOnline.searchById($scope.game.opponent.id);
-                        if (!withoutSaving) {
-                            $scope.sendWithWebsockets();
-                        }
-                    }
-                );
-            },
-            1
+                $scope.game.opponent.offline = !$rootScope.loginsOnline.searchById($scope.game.opponent.id);
+                if (!withoutSaving) {
+                    $scope.sendWithWebsockets();
+                }
+            }
         );
     };
 

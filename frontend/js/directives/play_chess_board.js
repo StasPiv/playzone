@@ -156,7 +156,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                 return true;
             };
 
-            element.isMyMove = function (piece) {
+            element.isMyPiece = function (piece) {
                 return !piece || piece.indexOf(scope.game.color) === 0;
             };
 
@@ -171,8 +171,14 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                 scope.game.pgn = element.game.pgn();
                 console.log('fen after move', element.game.fen());
-                scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());
-                scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
+                
+                $timeout(
+                    function () {
+                        scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());
+                        scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
+                    },
+                    0
+                );
 
                 scope.savePgnAndSendToObservers(true, move, element.game.history().length);
 

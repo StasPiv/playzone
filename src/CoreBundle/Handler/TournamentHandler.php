@@ -87,7 +87,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
     public function processGetList(TournamentGetListRequest $request) : array
     {
         $tournaments = $this->repository
-            ->findBy(['status' => $request->getStatus()], ['id' => 'DESC']);
+            ->findBy(['status' => $request->getStatus()], ['id' => 'DESC'], $request->getLimit());
 
         if ($request->getToken()) {
             $user = $this->container->get("core.service.security")->getUserIfCredentialsIsOk(

@@ -14,12 +14,7 @@ Array.prototype.pullById = function (idForSearch) {
     this.splice( this.indexOf(this.searchById(idForSearch)), 1);
 };
 
-var pad = function (num, size) {
-    var s = "000000000" + num;
-    return s.substr(s.length-size);
-};
-
-function getBlitzTimeObject(timeMs, dateFilter) {
+function getBlitzTimeObject(timeMs) {
     var ms = timeMs;
     var minutes = parseInt(ms / 60000);
     ms -= minutes * 60000;
@@ -28,8 +23,8 @@ function getBlitzTimeObject(timeMs, dateFilter) {
     var deciSeconds = ms / 100;
 
     return {
-        minutes: minutes,
-        seconds: seconds,
+        minutes: minutes < 10 ? "0" + minutes : minutes,
+        seconds: seconds < 10 ? "0" + seconds : seconds,
         deciSeconds: deciSeconds,
         ms: timeMs
     };

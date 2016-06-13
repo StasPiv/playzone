@@ -2,6 +2,8 @@
 
 namespace CoreBundle\Repository;
 
+use CoreBundle\Entity\Game;
+use CoreBundle\Exception\Handler\Game\GameNotFoundException;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,4 +14,27 @@ use Doctrine\ORM\EntityRepository;
  */
 class GameRepository extends EntityRepository
 {
+    /**
+     * Finds an entity by its primary key / identifier.
+     *
+     * @param mixed $id The identifier.
+     * @param int|null $lockMode One of the \Doctrine\DBAL\LockMode::* constants
+     *                              or NULL if no specific lock mode should be used
+     *                              during the search.
+     * @param int|null $lockVersion The lock version.
+     *
+     * @return Game
+     * @throws GameNotFoundException
+     */
+    public function find($id, $lockMode = null, $lockVersion = null) : Game
+    {
+        $game = parent::find($id, $lockMode, $lockVersion);
+
+        if (!$game instanceof Game) {
+            throw new GameNotFoundException;
+        }
+
+        return $game;
+    }
+
 }

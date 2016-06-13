@@ -431,35 +431,13 @@ class GameHandler implements GameProcessorInterface
     }
 
     /**
-     * @param User $user
-     * @param int $gameId
-     * @return Game
-     */
-    public function getUserGameByGameId(User $user, $gameId)
-    {
-        $game = $this->repository->find($gameId);
-
-        if (!$game instanceof Game) {
-            throw new GameHandlerException("Game is not found");
-        }
-
-        return $this->getUserGame($game, $user);
-    }
-
-    /**
      * @param int $gameId
      * @param User $user
      * @return Game
      */
-    public function getGameById($gameId, User $user = null)
+    public function getUserGameById(int $gameId, User $user = null) : Game
     {
-        $game = $this->repository->find($gameId);
-        
-        if (!$game instanceof Game) {
-            return null;
-        }
-        
-        return $this->getUserGame($game, $user);
+        return $this->getUserGame($this->repository->find($gameId), $user);
     }
 
     /**

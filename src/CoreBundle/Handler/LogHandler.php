@@ -55,7 +55,7 @@ class LogHandler implements LogProcessorInterface
 
         $log = (new Log())->setMessage($request->getMessage());
 
-        $this->container->get("logger")->debug($log->getMessage());
+        $this->container->get("logger")->info($log->getMessage());
         //$this->saveEntity($log);
 
         return $log;

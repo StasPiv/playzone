@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
  * User
  *
  * @ORM\Table(name="user", indexes={@ORM\Index(name="usergroupid", columns={"usergroupid"}), @ORM\Index(name="username", columns={"username"}), @ORM\Index(name="birthday", columns={"birthday", "showbirthday"}), @ORM\Index(name="birthday_search", columns={"birthday_search"}), @ORM\Index(name="referrerid", columns={"referrerid"}), @ORM\Index(name="post_thanks_thanked_times", columns={"post_thanks_thanked_times"}), @ORM\Index(name="posts", columns={"posts"}), @ORM\Index(name="lastactivity", columns={"lastactivity"})})
- * @ORM\Entity
  * @ORM\Entity(repositoryClass="ImmortalchessNetBundle\Repository\ImmortalUserRepository")
  */
 class ImmortalUser

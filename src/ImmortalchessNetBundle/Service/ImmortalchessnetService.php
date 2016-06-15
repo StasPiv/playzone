@@ -71,6 +71,7 @@ class ImmortalchessnetService implements EventSubscriberInterface
         );
 
         $threadForCalls = $this->container->getParameter("app_immortalchess.thread_for_calls");
+        $firstPostForCalls = $this->container->getParameter("app_immortalchess.first_post_for_calls");
         $forumPlayzone = $this->container->getParameter("app_immortalchess.forum_playzone");
         $userIdForSent = $this->container->getParameter("app_immortalchess.post_userid_for_calls");
 
@@ -81,9 +82,9 @@ class ImmortalchessnetService implements EventSubscriberInterface
         $this->getConnection()->exec(
             "
                 INSERT INTO post 
-                (threadid, username, userid, title, pagetext, visible, dateline)
+                (threadid, parentid, username, userid, title, pagetext, visible, dateline)
                 VALUE
-                ($threadForCalls, '{$call->getFromUser()}', $userIdForSent, '$title', '$pageText', 1, 
+                ($threadForCalls, $firstPostForCalls, '{$call->getFromUser()}', $userIdForSent, '$title', '$pageText', 1, 
                 UNIX_TIMESTAMP(CURRENT_TIMESTAMP())
                 );    
             "

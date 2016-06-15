@@ -24,10 +24,10 @@ abstract class BaseControllerTest extends WebTestCase
 
     /**
      * @param string $baseUri
-     * @param array $dump
+     * @param array $dumpCases
      * @throws \Exception
      */
-    protected function assertFromJson($baseUri, &$dump = [])
+    protected function assertFromJson($baseUri, $dumpCases = [])
     {
         $client = static::createClient();
         $action = preg_replace('/\/\{\w+\}/', '', $baseUri);
@@ -83,6 +83,16 @@ abstract class BaseControllerTest extends WebTestCase
             }
 
             $client->request($data['method'], '/' . $requestUri, $request);
+
+            $actualResponse = json_decode($client->getResponse()->getContent(), true);
+
+            $dump[$caseName] = $actualResponse;
+
+            if (in_array($caseName, $dumpCases)) {
+                echo $caseName . PHP_EOL;
+                var_dump($actualResponse);
+            }
+
             $expectedResponse = $data['response'];
             $errorMessage = "Failed $caseName.\nExpected response: " . json_encode($expectedResponse) . ".\nActual response: {$client->getResponse()->getContent()}.";
             $this->assertEquals(
@@ -90,10 +100,6 @@ abstract class BaseControllerTest extends WebTestCase
                 $client->getResponse()->getStatusCode(),
                 $errorMessage
             );
-
-            $actualResponse = json_decode($client->getResponse()->getContent(), true);
-            
-            $dump[$caseName] = $actualResponse;
 
             if (intval($expectedResponse['status'] / 100) == 4) { // error responses
                 $this->assertEmpty(array_diff_assoc($expectedResponse['errors'],

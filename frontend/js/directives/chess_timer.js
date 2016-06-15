@@ -9,7 +9,7 @@ playzoneControllers.directive('chessTimer', function (dateFilter, $interval) {
             scope.$watch(
                 'current',
                 function (newVal, oldVal) {
-                    newVal ? (scope.timer = startTimer()) : stopTimer();
+                    newVal ? startTimer() : stopTimer();
                 }
             );
 
@@ -24,11 +24,11 @@ playzoneControllers.directive('chessTimer', function (dateFilter, $interval) {
             );
 
             var startTimer = function () {
-                return $interval(
+                scope.timer = $interval(
                     function () {
-                        scope.timeFormat = getBlitzTimeObject(scope.time-=100, dateFilter);
+                        scope.timeFormat = getBlitzTimeObject(scope.time-=scope.refreshTime);
                     },
-                    100
+                    scope.refreshTime
                 );
             };
 
@@ -36,7 +36,7 @@ playzoneControllers.directive('chessTimer', function (dateFilter, $interval) {
                 $interval.cancel(scope.timer);
             };
 
-            scope.timeFormat = getBlitzTimeObject(scope.time, dateFilter);
+            scope.timeFormat = getBlitzTimeObject(scope.time);
         },
         restrict: 'E',
         transclude: true,
@@ -46,6 +46,7 @@ playzoneControllers.directive('chessTimer', function (dateFilter, $interval) {
             current: '=',
             game: '=',
             user: '=',
+            refreshTime: '=',
             fixTime: '&fixTime'
         },
         templateUrl: 'partials/chess_timer_new.html'

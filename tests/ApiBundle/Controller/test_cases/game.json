@@ -2,7 +2,8 @@
   "fixtures": [
     "CoreBundle\\DataFixtures\\ORM\\UserSettingFixtures",
     "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
-    "CoreBundle\\DataFixtures\\ORM\\GameFixtures"
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\TournamentFixtures"
   ],
   "correct_not_mine": {
     "method": "GET",
@@ -63,6 +64,40 @@
         "time_over": false,
         "mine": true,
         "move_color": "w"
+      }
+    }
+  },
+  "correct_mine_from_tournament": {
+    "method": "GET",
+    "request": {
+      "reference": {
+        "name": "id",
+        "value": "game-from-tournament-2"
+      },
+      "login": "Petro",
+      "token": "d10f4fcce69f443f38827d7ffc2ef0ed"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "user_white": {
+
+        },
+        "user_black": {
+
+        },
+        "user_to_move": {
+
+        },
+        "user_move": null,
+        "opponent": {
+
+        },
+        "tournament_game": {
+          "tournament": {
+            "id": null
+          }
+        }
       }
     }
   }

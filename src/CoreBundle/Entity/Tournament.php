@@ -38,6 +38,8 @@ class Tournament
      * @var string
      *
      * @ORM\Column(type="string")
+     *
+     * @JMS\Groups({"get_tournament", "get_tournament_list", "post_tournament_record", "delete_tournament_unrecord"})
      */
     private $name;
 
@@ -93,6 +95,7 @@ class Tournament
      * @var int
      * 
      * @ORM\Column(type="integer")
+     * @JMS\Groups({"get_tournament", "get_tournament_list", "post_tournament_record", "delete_tournament_unrecord"})
      */
     private $currentRound = 0;
 
@@ -100,6 +103,7 @@ class Tournament
      * @var int
      * 
      * @ORM\Column(type="integer")
+     * @JMS\Groups({"get_tournament", "get_tournament_list", "post_tournament_record", "delete_tournament_unrecord"})
      */
     private $rounds = 0;
 
@@ -107,6 +111,7 @@ class Tournament
      * @var TournamentStatus
      * 
      * @ORM\Column(type="string")
+     * @JMS\Groups({"get_tournament", "get_tournament_list", "post_tournament_record", "delete_tournament_unrecord"})
      */
     private $status = TournamentStatus::NEW;
 

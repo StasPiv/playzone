@@ -30,13 +30,14 @@ class TournamentGame
      * @JMS\Expose
      * @JMS\SerializedName("id")
      * @JMS\Type("integer")
+     * @JMS\Groups({"get_tournament", "get_tournament_list", "post_tournament_record", "delete_tournament_unrecord"})
      */
     private $id;
 
     /**
      * @var Game
      *
-     * @ORM\OneToOne(targetEntity="Game", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="Game", cascade={"persist", "remove"}, mappedBy="tournamentGame")
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id")
      *
      * @JMS\Type("CoreBundle\Entity\Game")
@@ -59,6 +60,7 @@ class TournamentGame
      * @ORM\Column(type="integer")
      * 
      * @JMS\Type("integer")
+     * @JMS\Groups({"get_tournament", "get_tournament_list", "post_tournament_record", "delete_tournament_unrecord"})
      */
     private $round = 0;
 

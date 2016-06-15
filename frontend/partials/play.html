@@ -26,6 +26,7 @@
                     data-current="game.move_color === 'w'"
                     data-game="game"
                     data-fix-time="savePgnAndSendToObservers()"
+                    data-refresh-time="100"
             ></chess-timer>
             <chess-timer
                     ng-if="game.status == 'play'"
@@ -36,6 +37,7 @@
                     data-current="game.move_color === 'b'"
                     data-game="game"
                     data-fix-time="savePgnAndSendToObservers()"
+                    data-refresh-time="100"
             ></chess-timer>
             <div ng-if="game.status == 'end'"
                  ng-class="{
@@ -45,7 +47,11 @@
                  'alert-warning': game.my_result == 0.5
                  }"
                  class="alert">
-                {{game.user_white.login}} - {{game.user_black.login}}: {{game.result_white}} - {{game.result_black}}
+                <user-link data-user="game.user_white"></user-link> - <user-link data-user="game.user_black"></user-link> {{game.result_white}} - {{game.result_black}}.
+                <a class="btn btn-primary glyphicon glyphicon-calendar" ng-if="game.status == 'end' && !!game.tournament_game"
+                   href="/#/tournament/{{ game.tournament_game.tournament.id }}">
+                    {{ "Back on the tournament page" | translate }}
+                </a>
             </div>
             <div class="clear">&nbsp;</div>
             <div id="board" ng-class="{'dev': dev}"></div><div class="clear">&nbsp;</div>

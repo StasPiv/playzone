@@ -257,12 +257,14 @@ class Game implements ChatMessageContainerInterface
     private $insufficientMaterialBlack = false;
 
     /**
-     * Game constructor.
+     * @var TournamentGame
+     *
+     * @ORM\OneToOne(targetEntity="TournamentGame", mappedBy="game")
+     *
+     * @JMS\Type("CoreBundle\Entity\TournamentGame")
+     * @JMS\Groups({"get_game", "put_game_pgn"})
      */
-    public function __construct()
-    {
-        $this->moves = new ArrayCollection();
-    }
+    private $tournamentGame;
 
     /**
      * Get id
@@ -792,6 +794,25 @@ class Game implements ChatMessageContainerInterface
     public function setInsufficientMaterialBlack(bool $insufficientMaterialBlack)
     {
         $this->insufficientMaterialBlack = $insufficientMaterialBlack;
+
+        return $this;
+    }
+
+    /**
+     * @return TournamentGame
+     */
+    public function getTournamentGame()
+    {
+        return $this->tournamentGame;
+    }
+
+    /**
+     * @param TournamentGame $tournamentGame
+     * @return Game
+     */
+    public function setTournamentGame($tournamentGame)
+    {
+        $this->tournamentGame = $tournamentGame;
 
         return $this;
     }

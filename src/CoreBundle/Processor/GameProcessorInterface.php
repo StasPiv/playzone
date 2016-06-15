@@ -49,28 +49,28 @@ interface GameProcessorInterface extends ProcessorInterface
     public function processPostNewrobot(GamePostNewrobotRequest $request) : Game;
 
     /**
-     * @param GamePutPgnRequest $pgnRequest
+     * @param GamePutPgnRequest $request
      * @return Game
      */
-    public function processPutPgn(GamePutPgnRequest $pgnRequest) : Game;
+    public function processPutPgn(GamePutPgnRequest $request) : Game;
 
     /**
-     * @param GamePutResignRequest $resignRequest
+     * @param GamePutResignRequest $request
      * @return Game
      */
-    public function processPutResign(GamePutResignRequest $resignRequest) : Game;
+    public function processPutResign(GamePutResignRequest $request) : Game;
 
     /**
-     * @param GamePutOfferdrawRequest $drawRequest
+     * @param GamePutOfferdrawRequest $request
      * @return Game
      */
-    public function processPutOfferdraw(GamePutOfferdrawRequest $drawRequest) : Game;
+    public function processPutOfferdraw(GamePutOfferdrawRequest $request) : Game;
 
     /**
-     * @param GamePutAcceptdrawRequest $drawRequest
+     * @param GamePutAcceptdrawRequest $request
      * @return Game
      */
-    public function processPutAcceptdraw(GamePutAcceptdrawRequest $drawRequest) : Game;
+    public function processPutAcceptdraw(GamePutAcceptdrawRequest $request) : Game;
 
     /**
      * @param GamePostAddmessageRequest $request

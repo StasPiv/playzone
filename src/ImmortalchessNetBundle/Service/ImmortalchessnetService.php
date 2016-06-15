@@ -102,7 +102,7 @@ class ImmortalchessnetService implements EventSubscriberInterface
 
         $this->getConnection()->exec("
             UPDATE forum SET lastpostid = '$newPostId', lastpost = UNIX_TIMESTAMP(CURRENT_TIMESTAMP()),
-            lastposter = '{$call->getFromUser()}'
+            lastposter = '{$call->getFromUser()}', lastthreadid = '{$threadForCalls}'
             WHERE forumid = '$forumPlayzone'
         ");
     }

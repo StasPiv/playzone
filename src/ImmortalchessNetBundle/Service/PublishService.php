@@ -55,7 +55,8 @@ class PublishService
                ->setLastpost($post->getDateline())
                ->setLastposter($post->getUsername())
                ->setTitle($post->getTitle())
-               ->setThreadid($post->getThreadid());
+               ->setThreadid($post->getThreadid())
+               ->setReplycount($thread->getReplycount() + 1);
         
         $this->getManager()->persist($thread);
 

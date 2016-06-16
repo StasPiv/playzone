@@ -1,0 +1,18 @@
+<div ng-if="tournament.checkingLag">
+    <div class="btn btn-warning">
+        {{ "Checking lag" | translate }}...
+    </div>
+</div>
+<div ng-if="!tournament.forbidden && !tournament.checkingLag">
+    <a ng-if="!tournament.mine" class="btn btn-success" ng-click="record()">
+        {{ 'Record' | translate }}
+    </a>
+    <a ng-if="tournament.mine" class="btn btn-warning" ng-click="unrecord()">
+        {{ 'Unrecord' | translate }}
+    </a>
+</div>
+<div ng-if="tournament.forbidden && !tournament.checkingLag">
+    <div class="btn btn-danger">
+        {{ tournament.error | translate }}
+    </div>
+</div>

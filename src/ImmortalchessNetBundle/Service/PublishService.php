@@ -9,7 +9,6 @@
 namespace ImmortalchessNetBundle\Service;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\DBAL\Driver\Connection;
 use ImmortalchessNetBundle\Entity\Thread;
 use ImmortalchessNetBundle\Exception\Forum\ForumNotFoundException;
 use ImmortalchessNetBundle\Exception\Thread\ThreadNotFoundException;
@@ -32,7 +31,7 @@ class PublishService
     public function publishNewPost(PostModel $postModel)
     {
         $post = (new Post())->setThreadid($postModel->getThreadId())
-            ->setParentid($postModel->getFirstThreadPostId())
+            ->setParentid(0)
             ->setUsername($postModel->getLastPosterName())
             ->setUserid($postModel->getLastPosterId())
             ->setTitle($this->convertText($postModel->getTitle()))

@@ -49,7 +49,6 @@ class Post
      * Post constructor.
      * @param int $forumId
      * @param int $threadId
-     * @param int $firstThreadPostId
      * @param string $lastPosterName
      * @param int $lastPosterId
      * @param string $title
@@ -58,7 +57,6 @@ class Post
     public function __construct(
         $forumId,
         $threadId,
-        $firstThreadPostId,
         $lastPosterName,
         $lastPosterId,
         $title,
@@ -66,7 +64,6 @@ class Post
     ) {
         $this->forumId = $forumId;
         $this->threadId = $threadId;
-        $this->firstThreadPostId = $firstThreadPostId;
         $this->lastPosterName = $lastPosterName;
         $this->lastPosterId = $lastPosterId;
         $this->title = $title;

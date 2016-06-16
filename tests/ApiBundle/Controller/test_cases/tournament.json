@@ -11,7 +11,9 @@
       "reference": {
         "name": "tournament_id",
         "value": "tournament-0"
-      }
+      },
+      "login": "",
+      "token": ""
     },
     "response": {
       "status": 200,
@@ -34,7 +36,9 @@
       "reference": {
         "name": "tournament_id",
         "value": "tournament-2"
-      }
+      },
+      "login": "",
+      "token": ""
     },
     "response": {
       "status": 200,

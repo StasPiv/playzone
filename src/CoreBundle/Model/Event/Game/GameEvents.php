@@ -16,4 +16,6 @@ namespace CoreBundle\Model\Event\Game;
 class GameEvents
 {
     const CHANGE_STATUS = 'game.change_status';
+    const PUBLISH_FEN = 'game.publish.fen';
+    const PUBLISH_PGN = 'game.publish.pgn';
 }

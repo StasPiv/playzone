@@ -52,6 +52,17 @@
                    href="/#/tournament/{{ game.tournament_game.tournament.id }}">
                     {{ "Back on the tournament page" | translate }}
                 </a>
+                <a class="btn btn-primary glyphicon glyphicon-knight"
+                   ng-if="game.status == 'end' && !publishLink" ng-click="publishPgn()">
+                    {{ "Publish" | translate }}
+                </a>
+                <a class="btn btn-primary glyphicon glyphicon-knight"
+                   ng-if="publishLink"
+                   ng-href="{{publishLink}}"
+                   target="_blank"
+                >
+                    {{ "Go" | translate }}
+                </a>
             </div>
             <div class="clear">&nbsp;</div>
             <div id="board" ng-class="{'dev': dev}"></div><div class="clear">&nbsp;</div>

@@ -35,6 +35,14 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
                     );
                 }
             },
+            publishPgn: {
+                method: 'POST',
+                url: ApiService.base_url + 'game/:id/publish'
+            },
+            publishFen: {
+                method: 'POST',
+                url: ApiService.base_url + 'game/:id/publish'
+            },
             createNewrobot: {
                 method: 'POST',
                 url: ApiService.base_url + 'game/newrobot'

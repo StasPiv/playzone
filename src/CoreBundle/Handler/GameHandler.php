@@ -17,6 +17,7 @@ use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\ChatMessage\ChatMessageType;
 use CoreBundle\Model\Event\Game\GameEvent;
 use CoreBundle\Model\Event\Game\GameEvents;
+use CoreBundle\Model\Event\Game\GamePublishEvent;
 use CoreBundle\Model\Game\GameMove;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
@@ -24,6 +25,7 @@ use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
 use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
+use CoreBundle\Model\Request\Game\GamePostPublishRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
@@ -248,6 +250,43 @@ class GameHandler implements GameProcessorInterface
         $this->manager->flush($game);
 
         return $this->getUserGame($game, $me);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function processPostPublish(GamePostPublishRequest $request) : Game
+    {
+        $user = $this->container->get("core.handler.user")->getSecureUser($request);
+        
+        try {
+            $game = $this->repository->find($request->getId());
+        } catch (GameNotFoundException $e) {
+            $this->getRequestError()->addError("id", "Game is not found")
+                 ->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        /** @var Game $game */
+        $gamePublishEvent = new GamePublishEvent();
+        $gamePublishEvent->setGame($game);
+        $gamePublishEvent->setUser($user);
+        
+        switch (true) {
+            case !empty($request->getFen()):
+                $this->container->get("event_dispatcher")->dispatch(
+                    GameEvents::PUBLISH_FEN,
+                    $gamePublishEvent->setFen($request->getFen())
+                );
+                break;
+            case !empty($request->getPgn()):
+                $this->container->get("event_dispatcher")->dispatch(
+                    GameEvents::PUBLISH_PGN,
+                    $gamePublishEvent->setPgn($request->getPgn())
+                );
+                break;
+        }
+
+        return $game;
     }
 
     /**

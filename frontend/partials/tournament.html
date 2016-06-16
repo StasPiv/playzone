@@ -7,9 +7,10 @@
 </playzone-chat>
 <h1>
     {{ "Tournament" | translate }} #{{ tournament.id }}. {{ tournament.name }}
-    <button type="button" class="btn btn-info btn-sm" ng-click="refresh()">
-        <span class="glyphicon glyphicon-refresh"></span> Refresh
-    </button>
+    <tournament-record
+            ng-if="tournament.status == 'new'"
+            data-tournament="tournament"
+    ></tournament-record>
 </h1>
 <tournament-table data-tournament="tournament"></tournament-table>
 

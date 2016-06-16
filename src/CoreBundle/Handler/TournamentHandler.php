@@ -123,6 +123,15 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
              ->create($tournament->getTournamentParams()->getType())
              ->mixTournamentTable($tournament);
 
+        try {
+            $this->setMineToTournament(
+                $tournament,
+                $this->container->get("core.handler.user")->getSecureUser($request)
+            );
+        } catch (\Exception $e) {
+            // it's ok
+        }
+
         return $tournament;
     }
 

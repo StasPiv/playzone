@@ -80,8 +80,11 @@ class Tournament
 
     /**
      * @var bool
+     *
+     * @JMS\Expose()
+     * @JMS\Type("boolean")
      */
-    private $mine;
+    private $mine = false;
 
     /**
      * @var ArrayCollection

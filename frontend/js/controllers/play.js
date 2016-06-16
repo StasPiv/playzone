@@ -138,6 +138,14 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         );
     };
 
+    $scope.publishPgn = function () {
+        $scope.game.$publishPgn().then(
+            function () {
+                $scope.publishLink = "http://immortalchess.net/forum/showthread.php?t=31003&goto=newpost";
+            }
+        );
+    };
+
     $scope.highlightLastMove = highlightLastMove;
 
     WebsocketService.addListener('listen_opponent_gone', 'user_gone', function (user) {

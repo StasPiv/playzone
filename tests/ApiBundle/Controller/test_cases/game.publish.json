@@ -1,0 +1,44 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserSettingFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures"
+  ],
+  "incorrect_token": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "bba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "id",
+        "value": "game-0"
+      },
+      "pgn": "abrakadabra"
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "token":"Forbidden for user with this credentials"
+      }
+    }
+  },
+  "correct_pgn_ruy_lopez": {
+    "method": "POST",
+    "request": {
+      "login": "Stas",
+      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
+      "reference": {
+        "name": "id",
+        "value": "game-0"
+      },
+      "pgn": "MS5lNCBlNSAyLk5mMyBOYzYgMy5CYjUgYTY="
+    },
+    "response": {
+      "status": 201,
+      "data": {
+        "postid": null,
+        "threadid": null
+      }
+    }
+  }
+}

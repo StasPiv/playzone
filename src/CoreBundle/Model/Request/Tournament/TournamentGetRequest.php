@@ -8,6 +8,8 @@
 
 namespace CoreBundle\Model\Request\Tournament;
 
+use CoreBundle\Model\Request\SecurityRequestAwareTrait;
+use CoreBundle\Model\Request\SecurityRequestInterface;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -15,8 +17,26 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class TournamentGetRequest
  * @package CoreBundle\Model\Request\Tournament
  */
-class TournamentGetRequest extends TournamentRequest
+class TournamentGetRequest extends TournamentRequest implements SecurityRequestInterface
 {
+    use SecurityRequestAwareTrait;
+
+    /**
+     * @var string
+     *
+     * @JMS\Expose
+     * @JMS\Type("string")
+     */
+    protected $login;
+
+    /**
+     * @var string
+     *
+     * @JMS\Expose
+     * @JMS\Type("string")
+     */
+    protected $token;
+
     /**
      * @var int
      *

@@ -14,6 +14,7 @@ use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
 use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
 use CoreBundle\Model\Request\Game\GamePostAddmoveRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
+use CoreBundle\Model\Request\Game\GamePostPublishRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
@@ -60,6 +61,21 @@ class GameController extends BaseController
     public function putPgnAction(Request $request, $id)
     {
         return $this->process($request, new GamePutPgnRequest());
+    }
+
+    /**
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Publish game"
+     * )
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    public function postPublishAction(Request $request, $id)
+    {
+        return $this->process($request, new GamePostPublishRequest(), ResponseStatusCode::CREATED);
     }
 
     /**

@@ -52,7 +52,7 @@ class ImmortalchessnetService implements EventSubscriberInterface
                 $this->container->getParameter("app_immortalchess.first_post_for_calls"),
                 $event->getCall()->getFromUser()->getLogin(),
                 $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
-                'New challenge from ' . $event->getCall()->getFromUser()->getLogin(),
+                'Новый вызов от ' . $event->getCall()->getFromUser()->getLogin(),
                 $this->container->get("templating")->render(
                     'Post/newcall.html.twig',
                     [

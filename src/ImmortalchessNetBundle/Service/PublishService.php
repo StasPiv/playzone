@@ -35,8 +35,8 @@ class PublishService
             ->setParentid($postModel->getFirstThreadPostId())
             ->setUsername($postModel->getLastPosterName())
             ->setUserid($postModel->getLastPosterId())
-            ->setTitle($postModel->getTitle())
-            ->setPagetext($postModel->getPageText())
+            ->setTitle($this->convertText($postModel->getTitle()))
+            ->setPagetext($this->convertText($postModel->getPageText()))
             ->setVisible(1)
             ->setDateline(time());
 
@@ -79,18 +79,23 @@ class PublishService
     }
 
     /**
-     * @return Connection
-     */
-    private function getConnection() : Connection
-    {
-        return $this->container->get('doctrine')->getConnection('immortalchess');
-    }
-
-    /**
      * @return ObjectManager
      */
     private function getManager() : ObjectManager
     {
         return $this->container->get('doctrine')->getManager('immortalchess');
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    private function convertText(string $text)
+    {
+        return str_replace(
+            ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', 'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я'],
+            ['Ð','Ð‘','Ð’','Ð“','Ð”','Ð•','Ð','Ð–','Ð—','Ð˜','Ð™','Ðš','Ð›','Ðœ','Ð','Ðž','ÐŸ','Ð ','Ð¡','Ð¢','Ð£','Ð¤','Ð¥','Ð¦','Ð§','Ð¨','Ð©','Ðª','Ð«','Ð¬','Ð­','Ð®','Ð¯','Ð°','Ð±','Ð²','Ð³','Ð´','Ðµ','Ñ‘','Ð¶','Ð·','Ð¸','Ð¹','Ðº','Ð»','Ð¼','Ð½','Ð¾','Ð¿','Ñ€','Ñ','Ñ‚','Ñƒ','Ñ„','Ñ…','Ñ†','Ñ‡','Ñˆ','Ñ‰','ÑŠ','Ñ‹','ÑŒ','Ñ','ÑŽ','Ñ'],
+            $text
+        );
     }
 }

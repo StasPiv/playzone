@@ -45,14 +45,14 @@ class ImmortalchessnetService implements EventSubscriberInterface
      */
     public function onNewCall(CallEvent $event)
     {
-        $this->container->get("immortalchessnet.service.publish")->publishNewPostNew(
+        $this->container->get("immortalchessnet.service.publish")->publishNewPost(
             new Post(
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
                 $this->container->getParameter("app_immortalchess.thread_for_calls"),
                 $this->container->getParameter("app_immortalchess.first_post_for_calls"),
                 $event->getCall()->getFromUser()->getLogin(),
                 $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
-                'New call from ' . $event->getCall()->getFromUser()->getLogin(),
+                'New challenge from ' . $event->getCall()->getFromUser()->getLogin(),
                 $this->container->get("templating")->render(
                     'Post/newcall.html.twig',
                     [

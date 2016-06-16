@@ -3,3 +3,11 @@ services:
     class: ImmortalchessNetBundle\Service\ImmortalchessnetService
     calls:
       - [setContainer, ['@service_container']]
+  immortalchessnet.service.publish:
+    class: ImmortalchessNetBundle\Service\PublishService
+    calls:
+      - [setContainer, ['@service_container']]
+  immortalchessnet.service.user:
+    class: ImmortalchessNetBundle\Service\ImmortalUserService
+    calls:
+      - [setContainer, ['@service_container']]

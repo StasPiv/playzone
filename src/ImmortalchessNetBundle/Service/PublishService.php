@@ -54,7 +54,6 @@ class PublishService
         $thread->setLastpostid($post->getPostid())
                ->setLastpost($post->getDateline())
                ->setLastposter($post->getUsername())
-               ->setTitle($post->getTitle())
                ->setThreadid($post->getThreadid())
                ->setReplycount($thread->getReplycount() + 1);
         

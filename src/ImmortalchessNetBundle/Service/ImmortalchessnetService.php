@@ -13,11 +13,13 @@ use CoreBundle\Model\Event\Call\CallEvent;
 use CoreBundle\Model\Event\Call\CallEvents;
 use CoreBundle\Model\Event\Game\GameEvents;
 use CoreBundle\Model\Event\Game\GamePublishEvent;
+use CoreBundle\Model\Event\Tournament\TournamentContainer;
 use CoreBundle\Model\Event\Tournament\TournamentEvents;
 use CoreBundle\Model\Event\Tournament\TournamentScheduler;
 use CoreBundle\Model\Event\User\UserAuthEvent;
 use CoreBundle\Model\Event\User\UserEvents;
 use CoreBundle\Model\Game\GameColor;
+use CoreBundle\Model\Tournament\TournamentType;
 use ImmortalchessNetBundle\Model\Post;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -30,6 +32,10 @@ class ImmortalchessnetService implements EventSubscriberInterface
 {
     use ContainerAwareTrait;
 
+    const USERNAME_FOR_POST = "PozitiFF_Chess";
+    const COMMON_USERID = 87;
+    const THREAD_FOR_CALLS = 30629;
+    const THREAD_WITH_INTERESTING_GAMES = 31003;
     const THREAD_FOR_3_MINUTES = 30991;
     const THREAD_FOR_5_MINUTES = 30984;
 
@@ -53,6 +59,9 @@ class ImmortalchessnetService implements EventSubscriberInterface
             ],
             GameEvents::PUBLISH_PGN => [
                 ['onGamePublishPgn', 10]
+            ],
+            TournamentEvents::TOURNAMENT_FINISHED => [
+                ['onTournamentFinish', 10]
             ]
         ];
     }
@@ -65,9 +74,9 @@ class ImmortalchessnetService implements EventSubscriberInterface
         $this->container->get("immortalchessnet.service.publish")->publishNewPost(
             new Post(
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
-                31003,
+                self::THREAD_WITH_INTERESTING_GAMES,
                 $event->getUser()->getLogin(),
-                $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
+                self::COMMON_USERID,
                 "Позиция из партии " . $event->getGame()->getUserWhite() . "-" . $event->getGame()->getUserBlack(),
                 $this->container->get("templating")->render(
                     'Post/gamefen.html.twig',
@@ -88,9 +97,9 @@ class ImmortalchessnetService implements EventSubscriberInterface
         $this->container->get("immortalchessnet.service.publish")->publishNewPost(
             new Post(
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
-                31003,
+                self::THREAD_WITH_INTERESTING_GAMES,
                 $event->getUser()->getLogin(),
-                $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
+                self::COMMON_USERID,
                 "Партия " . $event->getGame()->getUserWhite() . "-" . $event->getGame()->getUserBlack(),
                 $this->container->get("templating")->render(
                     'Post/gamepgn.html.twig',
@@ -111,9 +120,9 @@ class ImmortalchessnetService implements EventSubscriberInterface
         $this->container->get("immortalchessnet.service.publish")->publishNewPost(
             new Post(
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
-                $this->container->getParameter("app_immortalchess.thread_for_calls"),
+                self::THREAD_FOR_CALLS,
                 $event->getCall()->getFromUser()->getLogin(),
-                $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
+                self::COMMON_USERID,
                 'Новый вызов от ' . $event->getCall()->getFromUser()->getLogin(),
                 $this->container->get("templating")->render(
                     'Post/newcall.html.twig',
@@ -121,6 +130,39 @@ class ImmortalchessnetService implements EventSubscriberInterface
                         'user' => $event->getCall()->getFromUser(),
                         'time_minutes' => $event->getCall()->getGameParams()->getTimeBase() / 60000,
                         'color' => GameColor::getOppositeColor($event->getCall()->getGameParams()->getColor())
+                    ]
+                )
+            )
+        );
+    }
+
+    /**
+     * @param TournamentContainer $tournamentContainer
+     */
+    public function onTournamentFinish(TournamentContainer $tournamentContainer)
+    {
+        $tournament = $tournamentContainer->getTournament();
+        
+        if ($tournament->getTournamentParams()->getType() != TournamentType::ROUND_ROBIN()) {
+            return;
+        }
+
+        $this->container->get("core.service.tournament_table.factory")
+             ->create($tournament->getTournamentParams()->getType())
+             ->mixTournamentTable($tournament);
+
+        $this->container->get("immortalchessnet.service.publish")->publishNewPost(
+            new Post(
+                $this->container->getParameter("app_immortalchess.forum_playzone"),
+                $tournament->getGameParams()->getTimeBase() === 180000 ?
+                    self::THREAD_FOR_3_MINUTES : self::THREAD_FOR_5_MINUTES,
+                self::USERNAME_FOR_POST,
+                self::COMMON_USERID,
+                "Турнир #{$tournament->getName()} завершен",
+                $this->container->get("templating")->render(
+                    "Post/tournamenttable_round_robin.html.twig",
+                    [
+                        "tournament" => $tournament
                     ]
                 )
             )
@@ -144,8 +186,8 @@ class ImmortalchessnetService implements EventSubscriberInterface
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
                 $tournament->getGameParams()->getTimeBase() === 180000 ?
                     self::THREAD_FOR_3_MINUTES : self::THREAD_FOR_5_MINUTES,
-                "PozitiFF_Chess",
-                $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
+                self::USERNAME_FOR_POST,
+                self::COMMON_USERID,
                 "Запись в турнир открыта",
                 $this->container->get("templating")->render(
                     'Post/newtournament.html.twig',

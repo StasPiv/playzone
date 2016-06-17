@@ -9,9 +9,11 @@
 
 namespace ImmortachessNetBundle\Tests\Service;
 
+use CoreBundle\Model\Event\Tournament\TournamentContainer;
 use CoreBundle\Model\Event\Tournament\TournamentScheduler;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use ImmortalchessNetBundle\Service\ImmortalchessnetService;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Class ImmortachessNetBundleTest
@@ -23,6 +25,11 @@ class ImmortachessNetBundleTest extends KernelTestCase
      * @var ImmortalchessnetService
      */
     private $service;
+
+    /**
+     * @var Container
+     */
+    protected $container;
 
     public function setUp()
     {
@@ -37,5 +44,15 @@ class ImmortachessNetBundleTest extends KernelTestCase
         $event->setTournamentId(2151);
 
         $this->service->onTournamentNew($event);
+    }
+
+    public function testOnTournamentFinish()
+    {
+        $event = new TournamentContainer();
+        $tournament = $this->container->get("core.handler.tournament")->getRepository()->find(2163);
+
+        $event->setTournament($tournament);
+
+        $this->service->onTournamentFinish($event);
     }
 }

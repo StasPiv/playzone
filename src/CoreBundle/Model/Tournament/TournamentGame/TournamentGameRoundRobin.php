@@ -42,4 +42,42 @@ class TournamentGameRoundRobin
         $this->gameId = $gameId;
         $this->result = $result;
     }
+
+    /**
+     * @return int
+     */
+    public function getGameId()
+    {
+        return $this->gameId;
+    }
+
+    /**
+     * @param int $gameId
+     * @return TournamentGameRoundRobin
+     */
+    public function setGameId($gameId)
+    {
+        $this->gameId = $gameId;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param float $result
+     * @return TournamentGameRoundRobin
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
+
+        return $this;
+    }
 }

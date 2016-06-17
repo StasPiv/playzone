@@ -18,4 +18,5 @@ class TournamentEvents
     const START = 'tournament.start';
     const ROUND_START = 'tournament.round_start';
     const ROUND_FINISHED = 'tournament.round_finished';
+    const TOURNAMENT_FINISHED = 'tournament.tournament_finished';
 }

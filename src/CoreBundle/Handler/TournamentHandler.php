@@ -534,11 +534,21 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
             return;
         }
         
+        $this->container->get("event_dispatcher")->dispatch(
+            TournamentEvents::ROUND_FINISHED,
+            (new TournamentContainer())->setTournament($tournament)
+        );
+        
         $this->recalculateCoefficients($tournament);
 
         if ($tournament->getRounds() == $tournament->getCurrentRound()) {
             $tournament->setStatus(TournamentStatus::END());
             $this->manager->flush($tournament);
+
+            $this->container->get("event_dispatcher")->dispatch(
+                TournamentEvents::TOURNAMENT_FINISHED,
+                (new TournamentContainer())->setTournament($tournament)
+            );
         }
         
     }

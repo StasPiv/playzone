@@ -40,7 +40,7 @@ class ImmortalchessnetService implements EventSubscriberInterface
     {
         return [
             TournamentEvents::NEW => [
-                ['onTournamentNew', 10]
+                ['onTournamentNew', 20]
             ],
             CallEvents::NEW_CALL => [
                 ['onNewCall', 10]

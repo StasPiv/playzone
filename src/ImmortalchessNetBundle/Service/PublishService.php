@@ -40,7 +40,12 @@ class PublishService
             ->setDateline(time());
 
         $this->getManager()->persist($post);
-        $this->getManager()->flush();
+
+        try {
+            $this->getManager()->flush();
+        } catch (\Exception $e) {
+            $this->container->get("logger")->error(__METHOD__ . " " . $e->getMessage());
+        }
 
         try {
             $thread = $this->getManager()->getRepository("ImmortalchessNetBundle:Thread")
@@ -74,7 +79,11 @@ class PublishService
         
         $this->getManager()->persist($forum);
         
-        $this->getManager()->flush();
+        try {
+            $this->getManager()->flush();
+        } catch (\Exception $e) {
+            $this->container->get("logger")->error(__METHOD__ . " " . $e->getMessage());
+        }
     }
 
     /**

@@ -1,32 +1,7 @@
 <div class="games-home">
+    <challenges></challenges>
     <h1>{{ "Current games" | translate }} ({{ current.length }})</h1>
     <games-list data-games="current"></games-list>
-    <h1>{{ "Players online" | translate }}</h1>
-    <div class="table-responsive">
-        <table class="table">
-            <tr>
-                <th>№</th>
-                <th>{{ "Player" | translate }}</th>
-                <th>{{ "Action" | translate }}</th>
-            </tr>
-            <tr ng-repeat="player in $root.loginsOnline">
-                <td>
-                    <a href="">{{ $index + 1 }}</a>
-                </td>
-                <td>
-                    <user-link
-                            data-user="player"
-                    ></user-link>
-                </td>
-                <td>
-                    <a ng-if="player.login !== $root.user.login" class="btn btn-success open-popup" data-open-popup=".call-form"
-                       ng-click="openSendCallToPlayer(player)">
-                        {{ 'Call on the game' | translate }}
-                    </a>
-                </td>
-            </tr>
-        </table>
-    </div>
 </div>
 <div class="tournaments-home">
     <h1>{{ "New tournaments" | translate }}</h1>

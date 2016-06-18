@@ -8,13 +8,18 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     $scope.chat = ChatRest.query();
 
     $rootScope.robot = false;
-    $scope.boardConfig = {
-        pieceType: SettingService.getSetting('Piece type') ?
-            SettingService.getSetting('Piece type') : 'leipzig',
-        highlightClass: 'highlight1-32417',
-        draggable: SettingService.getSetting('Draggable disabled') != 1,
-        showNotation: !!SettingService.getSetting('Show notation')
+
+    $scope.getBoardConfig = function() {
+        return {
+            pieceType: SettingService.getSetting('Piece type') ?
+                SettingService.getSetting('Piece type') : 'leipzig',
+            highlightClass: 'highlight1-32417',
+            draggable: SettingService.getSetting('Draggable disabled') != 1,
+            showNotation: !!SettingService.getSetting('Show notation')
+        };
     };
+
+    $scope.boardConfig = $scope.getBoardConfig();
 
     $scope.gameConfig = {
         zeitnotLimit: SettingService.getSetting('Zeitnot limit') ?

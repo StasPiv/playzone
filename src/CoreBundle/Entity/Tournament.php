@@ -62,7 +62,7 @@ class Tournament
      *
      * @ORM\Column(name="game_params", type="object")
      *
-     * @JMS\Groups({"get_tournament_list", "post_tournament_record", "delete_tournament_unrecord"})
+     * @JMS\Groups({"get_tournament", "get_tournament_list", "post_tournament_record", "delete_tournament_unrecord"})
      */
     private $gameParams;
 

@@ -28,15 +28,15 @@ var playzoneApp = angular.module('playzoneApp', [
     $rootScope.isMobile = EnvService.isMobile();
     $rootScope.connected = true;
 
-    $rootScope.user = new UserRest({
-        login: $rootScope.user ? $rootScope.user.login : $cookies.get("user_login"),
-        token: $rootScope.user ? $rootScope.user.token : $cookies.get("user_token"),
-        password: $rootScope.user ? $rootScope.user.token : $cookies.get("user_token")
-    });
-
-    $rootScope.user.$auth().then(
-        function() {
-            WebsocketService.introduction($rootScope.user);
+    $rootScope.user = UserRest.auth(
+        "",
+        {
+            login: $rootScope.user ? $rootScope.user.login : $cookies.get("user_login"),
+            token: $rootScope.user ? $rootScope.user.token : $cookies.get("user_token"),
+            password: $rootScope.user ? $rootScope.user.token : $cookies.get("user_token")
+        },
+        function(user) {
+            WebsocketService.introduction(user);
             $interval(
                 function () {
                     WebsocketService.ping();
@@ -122,8 +122,8 @@ playzoneApp.filter('range', function() {
     };
 });
 
-var checkIfUnauthorized = function ($q, $rootScope, $location) {
-    if ($rootScope.user && $rootScope.user.isAuth) {
+var checkIfUnauthorized = function ($q, $rootScope, $location, $cookies) {
+    if ($cookies.get("user_login")) {
         $location.path('/');
     }
 };
@@ -134,8 +134,8 @@ var checkIfNotMobile = function ($q, $rootScope, $location) {
     }
 };
 
-var checkIfAuthorized = function ($q, $rootScope, $location) {
-    if (!$rootScope.user || !$rootScope.user.isAuth) {
+var checkIfAuthorized = function ($q, $rootScope, $location, $cookies) {
+    if (!$cookies.get("user_login")) {
         $location.path('/auth');
     }
 };

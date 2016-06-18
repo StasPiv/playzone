@@ -10,7 +10,7 @@
  * element.game - chess.js plugin (with pgn functions etc.)
  * element.board - chessboard.js plugin (without move validation, just board interface)
  */
-playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService, AudioService, $timeout, GameRest) {
+playzoneControllers.directive('playChessBoard', function (WebRTCService, WebsocketService, AudioService, $timeout, GameRest, $rootScope) {
     var makePreMoveIfExists = function (scope, element) {
         if (!scope.game.mine || !scope.pre_move) { //premove
             return;
@@ -38,6 +38,12 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
         link: function(scope, element) {
             scope.game.$promise.then(
                 function() {
+                    $rootScope.user.$promise.then(
+                        function () {
+                            element.loadBoard(scope.getBoardConfig());
+                        }
+                    );
+
                     element.loadBoard(scope.boardConfig);
                     element.loadPgn(scope.game.pgn);
                     scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());

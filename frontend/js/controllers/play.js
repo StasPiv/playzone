@@ -14,7 +14,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
             pieceType: SettingService.getSetting('Piece type') ?
                 SettingService.getSetting('Piece type') : 'leipzig',
             highlightClass: 'highlight1-32417',
-            draggable: SettingService.getSetting('Draggable disabled') != 1,
+            draggable: !$rootScope.isMobile && SettingService.getSetting('Draggable disabled') != 1,
             showNotation: !!SettingService.getSetting('Show notation')
         };
     };

@@ -189,14 +189,15 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                             id: scope.game.id
                         },
                         function (data) {
-                            element.game.move({
+                            var move = {
                                 from: data.from,
                                 to: data.to,
                                 promotion: "q"
-                            });
+                            };
+                            element.game.move(move);
                             scope.game.pgn = element.game.pgn();
 
-                            scope.savePgnAndSendToObservers(true);
+                            scope.savePgnAndSendToObservers(true, move, element.game.history().length);
 
                             element.board.position(element.game.fen());
                             AudioService.move();

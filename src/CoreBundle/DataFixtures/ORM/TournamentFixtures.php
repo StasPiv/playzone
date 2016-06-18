@@ -34,7 +34,8 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
                    ->setCurrentRound((int)@$data["current_round"]);
 
         if (isset($data["status"])) {
-            $tournament->setStatus(new TournamentStatus($data["status"]));
+            $this->container->get("core.handler.tournament")
+                 ->changeTournamentStatus($tournament, new TournamentStatus($data["status"]));
         }
         
         $tournamentPlayersMap = [];

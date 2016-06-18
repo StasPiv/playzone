@@ -542,7 +542,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         $this->recalculateCoefficients($tournament);
 
         if ($tournament->getRounds() == $tournament->getCurrentRound()) {
-            $tournament->setStatus(TournamentStatus::END());
+            $this->changeTournamentStatus($tournament, TournamentStatus::END());
             $this->manager->flush($tournament);
 
             $this->container->get("event_dispatcher")->dispatch(
@@ -569,8 +569,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         $tournament = $tournamentContainer->getTournament();
 
         $this->removeOfflinePlayers($tournament);
-
-        $tournament->setStatus(TournamentStatus::CURRENT());
+        $this->changeTournamentStatus($tournament, TournamentStatus::CURRENT());
         $this->calculateRounds($tournament);
 
         $this->manager->flush($tournament);
@@ -788,6 +787,20 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
     ) {
         $player->setCoefficient(
             $player->getCoefficient() + $result * $opponent->getPoints()
+        );
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param TournamentStatus $status
+     */
+    public function changeTournamentStatus(Tournament $tournament, TournamentStatus $status)
+    {
+        $tournament->setStatus($status);
+
+        $this->container->get("event_dispatcher")->dispatch(
+            TournamentEvents::CHANGE_STATUS,
+            (new TournamentContainer())->setTournament($tournament)
         );
     }
 }

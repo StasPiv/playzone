@@ -76,6 +76,12 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
 
         $event = (new TournamentContainer())->setTournament($tournament);
         if ($tournament->getCurrentRound() == 0) {
+            if (count($tournament->getPlayers()) < 2) {
+                $this->getManager()->remove($tournament);
+                $this->getManager()->flush();
+                return;
+            }
+            
             $this->container->get("event_dispatcher")->dispatch(
                 TournamentEvents::START,
                 $event

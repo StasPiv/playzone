@@ -41,6 +41,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     $rootScope.user.$promise.then(
                         function () {
                             element.loadBoard(scope.getBoardConfig());
+                            element.loadPgn(scope.game.pgn);
                         }
                     );
 

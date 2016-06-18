@@ -303,8 +303,9 @@ h2 {
   }
   .chat-home {
     width: 30%;
+    overflow-y: hidden;
     .chat {
-      height: auto;
+      height: 800px;
     }
   }
 }

@@ -158,5 +158,8 @@
   "Back on the tournament page": "Таблица",
   "Login is required for this request": "Требуется авторизация",
   "Publish": "Опубликовать",
-  "Go": "Перейти"
+  "Go": "Перейти",
+  "The are no tournaments": "Пока здесь ни одного турнира",
+  "The are no games": "Пока здесь ни одной партии",
+  "The are no challenges": "Пока здесь ни одного вызова"
 }

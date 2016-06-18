@@ -128,6 +128,12 @@ var checkIfUnauthorized = function ($q, $rootScope, $location) {
     }
 };
 
+var checkIfNotMobile = function ($q, $rootScope, $location) {
+    if ($rootScope.isMobile) {
+        $location.path('/games');
+    }
+};
+
 var checkIfAuthorized = function ($q, $rootScope, $location) {
     if (!$rootScope.user || !$rootScope.user.isAuth) {
         $location.path('/auth');

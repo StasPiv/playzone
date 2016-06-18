@@ -1,13 +1,18 @@
-<div class="table-responsive">
+<div class="alert alert-info" ng-if="tournaments.length == 0">
+    {{ "The are no tournaments" | translate }}
+</div>
+<div class="table-responsive" ng-if="tournaments.length > 0">
     <table class="table">
-        <tr>
-            <th>№</th>
-            <th>{{ "Tournament" | translate }}</th>
-            <th>{{ "Parameters" | translate }}</th>
-            <th>{{ "Type" | translate }}</th>
-            <th>{{ "Time begin" | translate }}</th>
-            <th ng-if="record">{{ "Action" | translate }}</th>
-        </tr>
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>{{ "Tournament" | translate }}</th>
+                <th>{{ "Parameters" | translate }}</th>
+                <th>{{ "Type" | translate }}</th>
+                <th>{{ "Time begin" | translate }}</th>
+                <th ng-if="record">{{ "Action" | translate }}</th>
+            </tr>
+        </thead>
         <tr
                 ng-repeat="tournament in tournaments track by $index"
                 ng-class="{success: tournament.mine, error: tournament.forbidden}"

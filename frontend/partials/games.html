@@ -56,7 +56,10 @@
     </div>
 </div>
 <h1>{{ "Your calls" | translate }}</h1>
-<div class="table-responsive">
+<div class="alert alert-info" ng-if="calls_from_me.length == 0">
+    {{ "The are no challenges" | translate }}
+</div>
+<div class="table-responsive" ng-if="calls_from_me.length > 0">
     <table class="table">
         <tr>
             <th>№</th>
@@ -81,7 +84,10 @@
     </table>
 </div>
 <h1>{{ "Calls to you" | translate }}</h1>
-<div class="table-responsive">
+<div class="alert alert-info" ng-if="calls_to_me.length == 0">
+    {{ "The are no challenges" | translate }}
+</div>
+<div class="table-responsive" ng-if="calls_to_me.length > 0">
     <table class="table">
         <tr>
             <th>№</th>
@@ -89,7 +95,7 @@
             <th>{{ "Time control (minutes)" | translate }}</th>
             <th width="20%">&nbsp;</th>
         </tr>
-        <tr ng-repeat="call in calls_to_me" ng-if="call.id && call.from_user.id != $root.user.id">
+        <tr ng-repeat="call in calls_to_me">
             <td>
                 <a href="" ng-click="acceptCall(call)">{{ call.id }}</a>
             </td>
@@ -102,7 +108,7 @@
                 {{ call.game_params.time_base / 60000 }}
             </td>
             <td>
-                <div class="btn btn-group">
+                <div class="btn btn-group" ng-if="call.id && call.from_user.id != $root.user.id">
                     <a href="" class="btn btn-success glyphicon glyphicon-ok" ng-click="acceptCall(call)">
 
                     </a>

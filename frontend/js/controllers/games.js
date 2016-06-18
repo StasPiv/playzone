@@ -36,6 +36,7 @@ playzoneControllers.controller('GamesCtrl', function ($scope, $rootScope, $locat
                     },
                     call.to_user ? [call.to_user.login] : []
                 );
+                $scope.calls_from_me.pullById(call.id);
             }
         );
     };

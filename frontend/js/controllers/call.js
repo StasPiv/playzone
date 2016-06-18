@@ -42,7 +42,6 @@ playzoneControllers.controller('CallCtrl', function ($scope, $rootScope, $locati
                     call && call.player ? [call.player] : []
                 );
                 call && (call.player = ""); // to prevent duplicate calls
-                $location.path('/games');
             },
             function(response) {
                 $scope.errors = response.data;

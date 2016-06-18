@@ -279,6 +279,34 @@ h2 {
       color: $black!important;
     }
   }
+  .games-home, .tournaments-home, .chat-home {
+    float: left;
+    max-height: 800px;
+    overflow-x: hidden;
+    * {
+      font-size: 12px;
+    }
+    h1 {
+      font-size: 14px;
+    }
+    thead {
+      display: none;
+    }
+    border: 1px dotted $color_blumine_approx;
+    padding: 2px;
+  }
+  .games-home {
+    width: 30%;
+  }
+  .tournaments-home {
+    width: 40%;
+  }
+  .chat-home {
+    width: 30%;
+    .chat {
+      height: auto;
+    }
+  }
 }
 .pagination {
   width: 100px;

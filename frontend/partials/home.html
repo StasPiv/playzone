@@ -1,51 +1,53 @@
-<div class="text">
-    <p style="font-weight: bold;margin-bottom: 10px;">{{ 'Welcome to the server for playing chess!' | translate }}</p>
-    <p>{{ 'The main server possibilities' | translate }}:
-    <ol style="list-style: inside;">
-        <li ng-repeat="possibility in mainPossibilities">
-            {{ possibility | translate }}
-        </li>
-    </ol>
-    </p>
-    <p ng-if="!$root.user.isAuth" style="margin: 10px 0;">{{ 'For playing chess here you must' | translate }} <a class="button accept" style="font-size:20px;" href="/#/register/">{{ 'register' | translate }}</a></p>
-    <p style="margin: 10px 0;">
-        {{ 'You may send your wishes about improving our server using feedback form below' | translate }}
-    </p>
-    <form action="/#/feedback/" method="post">
-        <table>
+<div class="games-home">
+    <h1>{{ "Current games" | translate }} ({{ current.length }})</h1>
+    <games-list data-games="current"></games-list>
+    <h1>{{ "Players online" | translate }}</h1>
+    <div class="table-responsive">
+        <table class="table">
             <tr>
-                <td>
-                    {{ 'Your name' | translate }}:
-                </td>
-                <td>
-                    <input name="name" required="" type="text" style="width: 300px;" />
-                </td>
+                <th>№</th>
+                <th>{{ "Player" | translate }}</th>
+                <th>{{ "Action" | translate }}</th>
             </tr>
-            <tr>
+            <tr ng-repeat="player in $root.loginsOnline">
                 <td>
-                    {{ 'Your e-mail' | translate }}:
+                    <a href="">{{ $index + 1 }}</a>
                 </td>
                 <td>
-                    <input name="email" required="" type="text" style="width: 300px;" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {{ 'Your message' | translate }}:
+                    <user-link
+                            data-user="player"
+                    ></user-link>
                 </td>
                 <td>
-                    <textarea name="message" required="" rows="10" style="width: 304px;"></textarea>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text" name="checkvalid" value="" style="display: none;" />
-                    <input type="hidden" name="postback" value="1" />
-                </td>
-                <td style="text-align: right;">
-                    <input type="submit" class="button" value="{{ 'Send' | translate }}" />
+                    <a ng-if="player.login !== $root.user.login" class="btn btn-success open-popup" data-open-popup=".call-form"
+                       ng-click="openSendCallToPlayer(player)">
+                        {{ 'Call on the game' | translate }}
+                    </a>
                 </td>
             </tr>
         </table>
-    </form>
+    </div>
+</div>
+<div class="tournaments-home">
+    <h1>{{ "New tournaments" | translate }}</h1>
+    <tournaments-list
+            data-tournaments="tournaments_new"
+            data-record="recordIntoTournament"
+            data-unrecord="unrecordFromTournament"
+    >
+
+    </tournaments-list>
+    <h1>{{ "Current tournaments" | translate }}</h1>
+    <tournaments-list data-tournaments="tournaments_current"></tournaments-list>
+    <h1>{{ "Finished tournaments" | translate }}</h1>
+    <tournaments-list data-tournaments="tournaments_finished"></tournaments-list>
+</div>
+<div class="chat-home">
+    <playzone-chat data-message-container="$root.chat"
+                   data-rest-container="'chat'"
+                   data-chat-room="'common_chat'"
+                   ng-if="$root.connected && $root.user && $root.user.id"
+    >
+
+    </playzone-chat>
 </div>

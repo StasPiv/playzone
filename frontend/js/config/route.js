@@ -8,8 +8,11 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
         $locationProvider.hashPrefix('');
         $routeProvider.
             when('/', {
-                templateUrl: 'partials/games.html',
-                controller: 'GamesCtrl'
+                templateUrl: 'partials/home.html',
+                controller: 'HomeCtrl',
+                resolve: {
+                    factory: checkIfNotMobile
+                }
             }).
             when('/register', {
                 templateUrl: 'partials/register.html',

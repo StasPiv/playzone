@@ -8,7 +8,7 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
         $locationProvider.hashPrefix('');
         $routeProvider.
             when('/', {
-                templateUrl: 'partials/home.html',
+                templateUrl: 'partials/home.html?v=1.0.1',
                 controller: 'HomeCtrl',
                 resolve: {
                     factory: checkIfNotMobile
@@ -29,7 +29,7 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 }
             }).
             when('/games', {
-                templateUrl: 'partials/games.html',
+                templateUrl: 'partials/games.html?v=1.0.1',
                 controller: 'GamesCtrl',
                 resolve: {
                     factory: checkIfAuthorized

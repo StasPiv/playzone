@@ -15,6 +15,6 @@ playzoneControllers.directive('tournamentsList', function () {
             record: '=',
             unrecord: '='
         },
-        templateUrl: 'partials/tournaments_list.html'
+        templateUrl: 'partials/tournaments_list.html?v=1.0.1'
     }
 });

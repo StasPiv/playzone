@@ -54,7 +54,7 @@
                 </a>
                 <a class="btn btn-primary glyphicon glyphicon-knight"
                    ng-if="game.status == 'end' && !publishLink" ng-click="publishPgn()">
-                    {{ "Publish" | translate }}
+                    {{ "Publish game" | translate }}
                 </a>
                 <a class="btn btn-primary glyphicon glyphicon-knight"
                    ng-if="publishLink"
@@ -79,6 +79,7 @@
             <div class="pgn">
                 <pgn-notation
                            data-pgn-string="game.pgn"
+                           data-game="game"
                 ></pgn-notation>
             </div>
         </div>

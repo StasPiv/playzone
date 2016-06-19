@@ -16,3 +16,9 @@
         <br class="clear" ng-if="$index % 2 !== 0" />
     </span>
 </div>
+<div class="publish">
+    <a ng-if="!publishLink" ng-click="publishFen()" class="btn btn-primary">
+        {{ "Publish position" | translate }}
+    </a>
+    <a ng-if="publishLink" class="btn btn-primary">{{ "Go" | translate }}</a>
+</div>

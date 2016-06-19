@@ -36,8 +36,7 @@
     "response": {
       "status": 201,
       "data": {
-        "postid": null,
-        "threadid": null
+        
       }
     }
   }

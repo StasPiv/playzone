@@ -262,7 +262,7 @@ class Game implements ChatMessageContainerInterface
      * @ORM\OneToOne(targetEntity="TournamentGame", mappedBy="game")
      *
      * @JMS\Type("CoreBundle\Entity\TournamentGame")
-     * @JMS\Groups({"get_game", "put_game_pgn"})
+     * @JMS\Groups({"get_game", "put_game_pgn", "put_game_resign", "put_game_acceptdraw", "put_game_offerdraw"})
      */
     private $tournamentGame;
 

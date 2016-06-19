@@ -3,10 +3,30 @@
  */
 'use strict';
 
-playzoneControllers.directive('pgnNotation', function ($rootScope) {
+playzoneControllers.directive('pgnNotation', function ($rootScope, GameRest, $timeout) {
     return {
         restrict: 'E',
         link: function (scope, element) {
+            scope.publishFen = function () {
+                GameRest.publishFen(
+                    "",
+                    {
+                        id: scope.game.id,
+                        fen: $rootScope.chess.fen()
+                    },
+                    function () {
+                        scope.publishLink = "http://immortalchess.net/forum/showthread.php?t=31003&goto=newpost";
+
+                        $timeout(
+                            function () {
+                                scope.publishLink = null;
+                            },
+                            3000
+                        )
+                    }
+                )
+            };
+
             scope.currentIndex = $rootScope.chess.history().length;
 
             function goToIndex(currentIndex) {
@@ -88,9 +108,9 @@ playzoneControllers.directive('pgnNotation', function ($rootScope) {
                 $rootScope.chessBoard.flip();
             });
         },
-        transclude: true,
+        transclude: false,
         scope: {
-            pgnString: '='
+            game: '='
         },
         templateUrl: 'partials/pgn_notation.html?rand=' + Math.random()
     }

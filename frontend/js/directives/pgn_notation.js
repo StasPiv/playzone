@@ -12,7 +12,7 @@ playzoneControllers.directive('pgnNotation', function ($rootScope, GameRest, $ti
                     "",
                     {
                         id: scope.game.id,
-                        fen: $rootScope.chessBoard.fen()
+                        fen: scope.currentChess.fen()
                     },
                     function () {
                         scope.publishLink = "http://immortalchess.net/forum/showthread.php?t=31003&goto=newpost";
@@ -31,7 +31,7 @@ playzoneControllers.directive('pgnNotation', function ($rootScope, GameRest, $ti
 
             function goToIndex(currentIndex) {
 
-                var chess = new Chess();
+                var chess = scope.currentChess = new Chess();
                 $.each(
                     $rootScope.chess.history({verbose: true}),
 

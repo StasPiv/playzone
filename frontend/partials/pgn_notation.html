@@ -20,5 +20,11 @@
     <a ng-if="!publishLink" ng-click="publishFen()" class="btn btn-primary">
         {{ "Publish position" | translate }}
     </a>
-    <a ng-href="{{publishLink}}" ng-if="publishLink" class="btn btn-primary">{{ "Go" | translate }}</a>
+    <a ng-href="{{publishLink}}"
+       ng-if="publishLink"
+       class="btn btn-primary"
+       target="_blank"
+    >
+        {{ "Go" | translate }}
+    </a>
 </div>

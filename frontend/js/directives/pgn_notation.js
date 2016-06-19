@@ -12,7 +12,7 @@ playzoneControllers.directive('pgnNotation', function ($rootScope, GameRest, $ti
                     "",
                     {
                         id: scope.game.id,
-                        fen: $rootScope.chess.fen()
+                        fen: $rootScope.chessBoard.fen()
                     },
                     function () {
                         scope.publishLink = "http://immortalchess.net/forum/showthread.php?t=31003&goto=newpost";
@@ -21,7 +21,7 @@ playzoneControllers.directive('pgnNotation', function ($rootScope, GameRest, $ti
                             function () {
                                 scope.publishLink = null;
                             },
-                            3000
+                            7000
                         )
                     }
                 )

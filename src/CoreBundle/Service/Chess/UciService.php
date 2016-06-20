@@ -80,7 +80,7 @@ class UciService
 
         if ($moveNumber < 10) { // beginning
             $randomSkill = mt_rand(1, 20);
-            $moveTime = mt_rand(2000, 5000);
+            $moveTime = mt_rand(500, 1500);
             fwrite($this->pipes[0], "setoption name Skill Level value $randomSkill\n");
             fwrite($this->pipes[0], "go movetime $moveTime\n");
         } else { // middle strength

@@ -6,7 +6,7 @@
     <property name="frontenddir" value="${workspace}/frontend" />
 
     <target name="build"
-            depends="vendors_install, vendors_update, migrate, npm, bower, cache-prod, user-stat, killServer, startServer, gulpfileSymbolic, gulp"/>
+            depends="vendors_install, vendors_update, migrate, npm, bower, cache-prod, killServer, startServer, gulpfileSymbolic, gulp"/>
 
     <target name="check-composer-lock">
         <available file="${basedir}/composer.lock" property="composer.lock.present"/>

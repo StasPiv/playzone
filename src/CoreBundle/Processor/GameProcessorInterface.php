@@ -9,15 +9,13 @@
 namespace CoreBundle\Processor;
 
 use CoreBundle\Entity\Game;
-use CoreBundle\Model\Game\GameMove;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
-use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
 use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
-use CoreBundle\Model\Request\Game\GamePostAddmoveRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePostPublishRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
+use CoreBundle\Model\Request\Game\GamePutFixRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Game\GamePutResignRequest;
@@ -36,12 +34,6 @@ interface GameProcessorInterface extends ProcessorInterface
      * @return Game
      */
     public function processGet(GameGetRequest $gameRequest) : Game;
-
-    /**
-     * @param GameGetRobotmoveAction $request
-     * @return GameMove
-     */
-    public function processGetRobotmove(GameGetRobotmoveAction $request) : GameMove;
 
     /**
      * @param GamePostNewrobotRequest $request
@@ -84,4 +76,11 @@ interface GameProcessorInterface extends ProcessorInterface
      * @return Game
      */
     public function processPostAddmessage(GamePostAddmessageRequest $request) : Game;
+
+
+    /**
+     * @param GamePutFixRequest $request
+     * @return Game
+     */
+    public function processPutFix(GamePutFixRequest $request) : Game;
 }

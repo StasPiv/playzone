@@ -568,6 +568,18 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
     {
         $tournament = $tournamentContainer->getTournament();
 
+        if (count($tournament->getPlayers()) < 6) {
+            // TODO: refactor me - move to separate method
+            $robot = $this->container->get("core.handler.user")->getRepository()->findOneByLogin("Robot");
+            
+            /** @var Tournament $tournament */
+            $tournament->addPlayer($robot);
+
+            $this->manager->persist($tournament);
+            $this->manager->flush();
+        }
+        
+        
         $this->removeOfflinePlayers($tournament);
         $this->changeTournamentStatus($tournament, TournamentStatus::CURRENT());
         $this->calculateRounds($tournament);

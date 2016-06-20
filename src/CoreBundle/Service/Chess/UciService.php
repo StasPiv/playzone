@@ -8,12 +8,16 @@
 
 namespace CoreBundle\Service\Chess;
 
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+
 /**
  * Class ChessService
  * @package CoreBundle\Service\Chess
  */
 class UciService
 {
+    use ContainerAwareTrait;
+    
     private $resource;
 
     private $pipes;
@@ -50,10 +54,18 @@ class UciService
 
     /**
      * @param string $fen
+     * @param int $wtime
+     * @param int $btime
      * @return string
+     * @throws \Exception
      */
-    public function getBestMoveFromFen(string $fen) : string 
+    public function getBestMoveFromFen(string $fen, int $wtime, int $btime) : string 
     {
+        $fenPieces = explode(" ", $fen);
+        $moveNumber = $fenPieces[count($fenPieces) - 1];
+
+        $this->container->get("logger")->debug(__METHOD__);
+
         $this->startGame();
 
         fwrite($this->pipes[0], "uci\n");
@@ -66,18 +78,29 @@ class UciService
             fwrite($this->pipes[0], "position fen $fen\n");
         }
 
-        fwrite($this->pipes[0], "go\n");
-
-        $start = microtime(true);
+        if ($moveNumber < 10) { // beginning
+            $randomSkill = mt_rand(1, 20);
+            $moveTime = mt_rand(2000, 5000);
+            fwrite($this->pipes[0], "setoption name Skill Level value $randomSkill\n");
+            fwrite($this->pipes[0], "go movetime $moveTime\n");
+        } else { // middle strength
+            fwrite($this->pipes[0], "setoption name Skill Level value 10\n");
+            fwrite($this->pipes[0], "setoption name Contempt value 100\n");
+            fwrite($this->pipes[0], "go wtime $wtime btime $btime\n");
+        }
 
         while (true) {
-            if (microtime(true) - $start > $this->thinkingTime) {
-                fclose($this->pipes[0]);
-                preg_match(
-                    "/bestmove\s(?P<bestmove>[a-h]\d[a-h]\dq?)/i",
-                    stream_get_contents($this->pipes[1]),
-                    $matches
-                );
+            $content = fread($this->pipes[1], 8192);
+            
+            $this->container->get("logger")->debug("Thinking... " . $content);
+            
+            preg_match(
+                "/bestmove\s(?P<bestmove>[a-h]\d[a-h]\dq?)/i",
+                $content,
+                $matches
+            );
+
+            if (isset($matches["bestmove"])) {
                 $this->shutDown();
                 return $matches["bestmove"];
             }

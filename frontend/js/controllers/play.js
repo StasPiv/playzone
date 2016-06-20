@@ -111,7 +111,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         }
     };
 
-    $scope.savePgnAndSendToObservers = function (withoutSaving, move, moveNumber) {
+    $scope.savePgnAndSendToObservers = function (withoutSaving, move, moveNumber, fen) {
         if (!$scope.game.mine) {
             return;
         }
@@ -124,8 +124,9 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
                     move,
                     $scope.game.time_white,
                     $scope.game.time_black,
-                    $scope.game.color,
-                    moveNumber
+                    $scope.game.move_color,
+                    moveNumber,
+                    fen
                 );
             } else {
                 $scope.sendWithWebsockets();

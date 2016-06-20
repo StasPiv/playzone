@@ -54,89 +54,6 @@
       }
     }
   },
-  "correct_pgn_ruy_lopez": {
-    "method": "PUT",
-    "request": {
-      "login": "Stas",
-      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
-      "reference": {
-        "name": "id",
-        "value": "game-0"
-      },
-      "pgn": "MS5lNCBlNSAyLk5mMyBOYzYgMy5CYjUgYTY="
-    },
-    "response": {
-      "status": 200,
-      "data": {
-        "pgn": "1.e4 e5 2.Nf3 Nc6 3.Bb5 a6",
-        "draw": "",
-        "user_to_move": {
-          "login": "TestLogin"
-        },
-        "status": "play"
-      }
-    }
-  },
-  "not_my_move": {
-    "method": "PUT",
-    "request": {
-      "login": "Stas",
-      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
-      "reference": {
-        "name": "id",
-        "value": "game-0"
-      },
-      "pgn": "MS5lNCBlNSAyLk5mMyBOYzYgMy5CYjUgYTY=",
-      "time_white": 321,
-      "time_black": 321
-    },
-    "response": {
-      "status": 400,
-      "errors": {
-        "pgn": "It is not your turn"
-      }
-    }
-  },
-  "not_my_move_but_send_because_i_play_with_robot": {
-    "method": "PUT",
-    "request": {
-      "login": "Stas",
-      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
-      "reference": {
-        "name": "id",
-        "value": "game-with_robot"
-      },
-      "pgn": "MS5lNCBlNSAyLk5mMyBOYzYgMy5CYjUgYTY=",
-      "time_black": 321
-    },
-    "response": {
-      "status": 200,
-      "data": {
-
-      }
-    }
-  },
-  "correct_pgn_ruy_lopez_and_time": {
-    "method": "PUT",
-    "request": {
-      "login": "TestLogin",
-      "token": "aba37b62d15cc5f8671fd3d1b034c354",
-      "reference": {
-        "name": "id",
-        "value": "game-0"
-      },
-      "pgn": "MS5lNCBlNSAyLk5mMyBOYzYgMy5CYjUgYTY=",
-      "time_black": 321
-    },
-    "response": {
-      "status": 200,
-      "data": {
-        "pgn": "1.e4 e5 2.Nf3 Nc6 3.Bb5 a6",
-        "draw": "",
-        "time_black": 321
-      }
-    }
-  },
   "correct_fix_result_when_time_is_over": {
     "method": "PUT",
     "request": {
@@ -152,9 +69,6 @@
     "response": {
       "status": 200,
       "data": {
-        "pgn": "1.e4 e5 2.Nf3 Nc6 3.Bb5 a6",
-        "draw": "",
-        "time_black": 0,
         "result_white": 1,
         "result_black": 0,
         "status": "end",
@@ -177,8 +91,6 @@
     "response": {
       "status": 200,
       "data": {
-        "pgn": "1. e4 c5 2. Nf3 Nf6 3. Ng5 Nxe4 4. Qh5 Nc3 5. Qxf7#",
-        "draw": "",
         "result_white": 1,
         "result_black": 0,
         "status": "end",
@@ -202,8 +114,6 @@
     "response": {
       "status": 200,
       "data": {
-        "pgn": "1. d4 e5 2. dxe5 f6 3. exf6 Nxf6 4. Nd2 Qe7 5. a3 Qxe2+ 6. Bxe2 Nc6 7. Ndf3 Bc5 8. Nd4 Bxd4 9. Qxd4 Nxd4 10. Bf3 Nxc2+ 11. Kd1 Nxa1 12. b4 d5 13. Bxd5 Nxd5 14. Bf4 Nxf4 15. h4 Nxg2 16. Kc1 Nxh4 17. Kb2 Nb3 18. Kxb3 Nf3 19. Nxf3 Bh3 20. Rxh3 h5 21. Rxh5 Rh7 22. Ng5 g6 23. Rxh7 b6 24. Kc4 Rd8 25. Ne6 Rd7 26. Nxc7+ Rxc7+ 27. Kb5 Rxh7 28. Ka6 b5 29. Kxb5 Rh3 30. f3 Rxf3 31. Ka6 Rxa3+ 32. Kb5 a6+ 33. Kb6 Ra4 34. Kc6 Rxb4 35. Kd6",
-        "time_black": 0,
         "result_white": 0.5,
         "result_black": 0.5,
         "status": "end",

@@ -10,12 +10,11 @@ namespace ApiBundle\Controller;
 
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
-use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
 use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
-use CoreBundle\Model\Request\Game\GamePostAddmoveRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePostPublishRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
+use CoreBundle\Model\Request\Game\GamePutFixRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Game\GamePutResignRequest;
@@ -99,24 +98,6 @@ class GameController extends BaseController
     /**
      * @ApiDoc(
      *  resource=true,
-     *  description="Save pgn",
-     *  filters={
-     *      {"name"="login", "dataType"="string", "description"="Your name"},
-     *      {"name"="token", "dataType"="string", "description"="Your token"}
-     *  }
-     * )
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function getRobotmoveAction(Request $request, $id)
-    {
-        return $this->process($request, new GameGetRobotmoveAction());
-    }
-
-    /**
-     * @ApiDoc(
-     *  resource=true,
      *  description="Resign game",
      *  filters={
      *      {"name"="login", "dataType"="string", "description"="Your name"},
@@ -195,5 +176,25 @@ class GameController extends BaseController
     protected function getProcessor()
     {
         return $this->container->get("core.handler.game");
+    }
+
+    /**
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Fix result",
+     *  filters={
+     *      {"name"="login", "dataType"="string", "description"="Your name"},
+     *      {"name"="token", "dataType"="string", "description"="Your token"},
+     *      {"name"="pgn", "dataType"="string"}
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    public function putFixAction(Request $request, $id)
+    {
+        return $this->process($request, new GamePutFixRequest());
     }
 }

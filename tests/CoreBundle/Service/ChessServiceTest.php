@@ -34,7 +34,9 @@ class ChessServiceTest extends KernelTestCase
     public function testGetBestMoveInInitialPosition()
     {
         $move = $this->service->getBestMoveFromFen(
-            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            300000,
+            300000
         );
         
         $this->assertEquals("e2e4", $move);

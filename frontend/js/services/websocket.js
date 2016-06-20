@@ -173,15 +173,17 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
                 }
             )
         },
-        
+
         /**
          * @param gameId
          * @param move
          * @param timeWhite
          * @param timeBlack
          * @param color
+         * @param moveNumber
+         * @param fen
          */
-        sendMoveToObservers: function (gameId, move, timeWhite, timeBlack, color, moveNumber) {
+        sendMoveToObservers: function (gameId, move, timeWhite, timeBlack, color, moveNumber, fen) {
             this.send(
                 {
                     scope: 'send_to_game_observers',
@@ -192,7 +194,8 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
                         moveNumber: moveNumber,
                         time_white: timeWhite,
                         time_black: timeBlack,
-                        color: color
+                        color: color,
+                        fen: fen
                     }
                 }
             )

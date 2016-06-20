@@ -27,9 +27,12 @@ use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePostPublishRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
+use CoreBundle\Model\Request\Game\GamePutFix;
+use CoreBundle\Model\Request\Game\GamePutFixRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Game\GamePutResignRequest;
+use CoreBundle\Model\Request\Game\GameFixResultInterface;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\Game;
 use CoreBundle\Model\Game\GameColor;
@@ -133,23 +136,6 @@ class GameHandler implements GameProcessorInterface
     }
 
     /**
-     * @param GameGetRobotmoveAction $request
-     * @return GameMove
-     */
-    public function processGetRobotmove(GameGetRobotmoveAction $request) : GameMove
-    {
-        $this->container->get("core.service.security")->getUserIfCredentialsIsOk(
-            $request, $this->getRequestError()
-        );
-
-        $moveString = $this->container->get("core.service.chess")
-                           ->getBestMoveFromFen($request->getFen());
-
-        return (new GameMove())->setFrom(substr($moveString, 0, 2))
-                               ->setTo(substr($moveString, 2, 2));
-    }
-
-    /**
      * @param GamePostNewrobotRequest $request
      * @return Game
      */
@@ -204,8 +190,7 @@ class GameHandler implements GameProcessorInterface
 
         if (
             $me != $game->getUserToMove() &&
-            !in_array(0, [$request->getTimeBlack(), $request->getTimeWhite()]) &&
-            !in_array("Robot", [$game->getUserWhite(), $game->getUserBlack()])
+            !in_array(0, [$request->getTimeBlack(), $request->getTimeWhite()])
         ) {
             $this->getRequestError()->addError("pgn", "It is not your turn")
                                     ->throwException(ResponseStatusCode::BAD_FORMAT);
@@ -213,30 +198,21 @@ class GameHandler implements GameProcessorInterface
 
         $pgn = $this->container->get("core.service.chess")->decodePgn($request->getPgn());
 
-        if (!$this->container->get("core.service.chess")->isValidPgn($pgn)) {
-            $this->getRequestError()->addError("pgn", "Pgn is incorrect");
-            $this->getRequestError()->throwException(ResponseStatusCode::BAD_FORMAT);
+        if ($this->container->get("core.service.chess")->isValidPgn($pgn)) {
+            $game->setPgn($pgn);
         }
 
         $game->setTimeWhite((int)$request->getTimeWhite())
              ->setTimeBlack((int)$request->getTimeBlack());
 
-        if ($pgn !== $game->getPgn()) {
-            $game->setDraw("")
-                 ->setPgn($pgn)
-                 ->setTimeLastMove(new \DateTime());
+        $game->setDraw("")
+             ->setTimeLastMove(new \DateTime());
 
-            if (in_array("Robot", [$game->getUserWhite(), $game->getUserBlack()])) {
-                $game->setUserToMove(
-                    $game->getUserToMove() == $game->getUserWhite() ?
-                        $game->getUserBlack() : $game->getUserWhite()
-                );
-            } else {
-                $game->setUserToMove(
-                    $me == $game->getUserWhite() ? $game->getUserBlack() : $game->getUserWhite()
-                );
-            }
-        }
+        $game->setUserToMove(
+            $me == $game->getUserWhite() ? $game->getUserBlack() : $game->getUserWhite()
+        );
+        
+        $this->container->get("logger")->error("Switch move: " . $game->getUserToMove());
 
         $game->setInsufficientMaterialWhite($request->isInsufficientMaterialWhite())
              ->setInsufficientMaterialBlack($request->isInsufficientMaterialBlack());
@@ -548,6 +524,8 @@ class GameHandler implements GameProcessorInterface
 
         $game->setTimeLastMove(new \DateTime())
             ->setUserToMove($game->getUserWhite());
+
+        $this->container->get("logger")->error("Switch move: " . $game->getUserToMove());
         
         $this->changeGameStatus($game, GameStatus::PLAY);
 
@@ -602,13 +580,13 @@ class GameHandler implements GameProcessorInterface
     }
 
     /**
-     * @param GamePutPgnRequest $pgnRequest
+     * @param GameFixResultInterface $request
      * @param Game $game
      */
-    private function fixResultIfTimeOver(GamePutPgnRequest $pgnRequest, Game $game)
+    private function fixResultIfTimeOver(GameFixResultInterface $request, Game $game)
     {
-        if ($pgnRequest->getTimeWhite() !== null && $game->getTimeWhite() <= 100) {
-            switch ($pgnRequest->isInsufficientMaterialBlack()) {
+        if ($request->getTimeWhite() !== null && $game->getTimeWhite() <= 100) {
+            switch ($request->isInsufficientMaterialBlack()) {
                 case false:
                     $game->setResultWhite(0)
                          ->setResultBlack(1);
@@ -620,8 +598,8 @@ class GameHandler implements GameProcessorInterface
                     $this->changeGameStatus($game, GameStatus::END);
                     break;
             }
-        } elseif ($pgnRequest->getTimeBlack() !== null && $game->getTimeBlack() <= 100) {
-            switch ($pgnRequest->isInsufficientMaterialWhite()) {
+        } elseif ($request->getTimeBlack() !== null && $game->getTimeBlack() <= 100) {
+            switch ($request->isInsufficientMaterialWhite()) {
                 case false:
                     $game->setResultWhite(1)
                          ->setResultBlack(0);
@@ -728,5 +706,48 @@ class GameHandler implements GameProcessorInterface
     {
         $this->manager->persist($game);
         $this->manager->flush();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function processPutFix(GamePutFixRequest $request) : Game
+    {
+        $me = $this->container->get("core.handler.user")->getSecureUser($request);
+
+        try {
+            $game = $this->repository->find($request->getId());
+        } catch (GameNotFoundException $e) {
+            $this->getRequestError()->addError("id", "Game is not found")
+                 ->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        /** @var Game $game */
+        if (!$this->isMyGame($game, $me)) {
+            $this->getRequestError()->addError("id", "Game is not mine");
+            $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        if ($game->getStatus() !== GameStatus::PLAY) {
+            $this->getRequestError()->addError("id", "Game is not played")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        $game->setTimeWhite((int)$request->getTimeWhite())
+             ->setTimeBlack((int)$request->getTimeBlack());
+        
+        $this->fixResultIfTimeOver($request, $game);
+
+        $pgn = $this->container->get("core.service.chess")->decodePgn($request->getPgn());
+
+        if ($this->container->get("core.service.chess")->isValidPgn($pgn)) {
+            $game->setPgn($pgn);
+            if ($this->container->get("core.service.chess")->fixResultIfCheckmate($game)) {
+                $this->changeGameStatus($game, GameStatus::END);
+            }
+        }
+
+        /** @var Game $game */
+        return $this->getUserGame($game, $me);
     }
 }

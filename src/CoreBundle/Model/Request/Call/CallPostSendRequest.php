@@ -79,10 +79,12 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
 
     /**
      * @param string $color
+     * @return $this
      */
     public function setColor($color)
     {
         $this->color = $color;
+        return $this;
     }
 
     /**

@@ -50,46 +50,6 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());
                     scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
 
-                    if (
-                        scope.game.opponent && scope.game.opponent.login === 'Robot' &&
-                        scope.game.move_color !== scope.game.color
-                    ) {
-
-                        GameRest.getRobotmove(
-                            {
-                                fen: element.game.fen(),
-                                id: scope.game.id
-                            },
-                            function (data) {
-                                element.game.move({
-                                    from: data.from,
-                                    to: data.to,
-                                    promotion: "q"
-                                });
-                                scope.game.pgn = element.game.pgn();
-
-                                scope.savePgnAndSendToObservers(true);
-
-                                element.board.position(element.game.fen());
-
-                                element.game.game_over() && !element.game.in_checkmate() && scope.draw();
-
-                                AudioService.move();
-                                element.updateStatus();
-
-                                element.game.game_over() && scope.game.$get();
-                                scope.highlightLastMove(scope, element);
-
-                                $timeout(
-                                    function () {
-                                        makePreMoveIfExists(scope, element);
-                                    },
-                                    1
-                                );
-                            }
-                        );
-                    }
-
                     WebsocketService.removeListeners(null, ["listen_message_container_" + scope.game.id]);
                     WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
 
@@ -146,7 +106,11 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                         AudioService.move();
                         element.board.position(element.game.fen());
                         element.updateStatus();
-                        element.game.game_over() && scope.game.$get();
+
+                        if (element.game.game_over()) {
+                            scope.game.pgn = window.btoa(element.game.pgn());
+                            scope.game.$fix();
+                        }
 
                         scope.highlightLastMove(scope, element);
                         $timeout(
@@ -187,41 +151,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     0
                 );
 
-                scope.savePgnAndSendToObservers(true, move, element.game.history().length);
-
-                if (scope.game.opponent.login === "Robot") { // isRobot
-                    GameRest.getRobotmove(
-                        {
-                            fen: element.game.fen(),
-                            id: scope.game.id
-                        },
-                        function (data) {
-                            var move = {
-                                from: data.from,
-                                to: data.to,
-                                promotion: "q"
-                            };
-                            element.game.move(move);
-                            scope.game.pgn = element.game.pgn();
-
-                            scope.savePgnAndSendToObservers(true, move, element.game.history().length);
-
-                            element.board.position(element.game.fen());
-                            AudioService.move();
-                            element.updateStatus();
-
-                            element.game.game_over() && scope.game.$get();
-                            scope.highlightLastMove(scope, element);
-
-                            $timeout(
-                                function () {
-                                    makePreMoveIfExists(scope, element);
-                                },
-                                0
-                            );
-                        }
-                    );
-                }
+                scope.savePgnAndSendToObservers(true, move, element.game.history().length, element.game.fen());
 
                 (element.game.game_over() && !element.game.in_checkmate() ||
                     element.game.insufficient_material())

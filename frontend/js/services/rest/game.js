@@ -103,6 +103,10 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
                         message: data.message
                     });
                 }
+            },
+            fix: {
+                method: 'PUT',
+                url: ApiService.base_url + 'game/:id/fix'
             }
         }
     );

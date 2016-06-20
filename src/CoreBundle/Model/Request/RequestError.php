@@ -46,6 +46,6 @@ class RequestError implements RequestErrorInterface
      */
     public function throwException($code)
     {
-        throw new ProcessorException($this, $code);
+        throw new ProcessorException($this, $code, json_encode($this->errors));
     }
 }

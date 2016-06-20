@@ -2,9 +2,6 @@
 
 namespace WebsocketBundle\Tests\Service;
 
-use CoreBundle\Entity\Event;
-use CoreBundle\Model\Game\GameParams;
-use CoreBundle\Model\Tournament\Params\TournamentRoundrobinParams;
 use CoreBundle\Tests\KernelAwareTest;
 
 /**

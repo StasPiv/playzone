@@ -64,6 +64,8 @@ services:
         class: CoreBundle\Service\Tournament\TournamentTable\TournamentTableFactory
     core.service.chess.uci:
         class: CoreBundle\Service\Chess\UciService
+        calls:
+          - [setContainer, ['@service_container']]
     core.handler.chat:
         class: CoreBundle\Handler\ChatHandler
         arguments: ['@doctrine.orm.entity_manager']

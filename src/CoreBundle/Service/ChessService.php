@@ -89,11 +89,13 @@ class ChessService
 
     /**
      * @param string $fen
+     * @param int $wtime
+     * @param int $btime
      * @return string
      */
-    public function getBestMoveFromFen(string $fen) : string 
+    public function getBestMoveFromFen(string $fen, int $wtime, int $btime) : string 
     {
-        return $this->container->get("core.service.chess.uci")->getBestMoveFromFen($fen);
+        return $this->container->get("core.service.chess.uci")->getBestMoveFromFen($fen, $wtime, $btime);
     }
 
     /**

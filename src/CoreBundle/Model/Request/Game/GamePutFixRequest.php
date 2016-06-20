@@ -14,10 +14,10 @@ use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class GamePutPgnRequest
+ * Class GamePutFixRequest
  * @package CoreBundle\Model\Request\Game
  */
-class GamePutPgnRequest extends GameRequest implements SecurityRequestInterface, GameFixResultInterface
+class GamePutFixRequest extends GameRequest implements SecurityRequestInterface, GameFixResultInterface
 {
     use SecurityRequestAwareTrait;
     

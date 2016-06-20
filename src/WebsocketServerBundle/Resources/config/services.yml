@@ -26,3 +26,7 @@ services:
         class: WebsocketServerBundle\Service\Client\PlayzoneClientSender
         calls:
             - [setContainer, ['@service_container']]
+    ws.playzone.bot:
+        class: WebsocketServerBundle\Service\Bot\Bot
+        calls:
+            - [setContainer, ['@service_container']]

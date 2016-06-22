@@ -134,7 +134,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         $scope.game.$savePgn().then(
             function () {
                 $scope.game.opponent.offline = !$rootScope.loginsOnline.searchById($scope.game.opponent.id);
-                if (!withoutSaving) {
+                if (!withoutSaving || $scope.game.status == 'end') {
                     $scope.sendWithWebsockets();
                 }
             }

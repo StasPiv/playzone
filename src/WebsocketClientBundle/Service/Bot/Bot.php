@@ -11,16 +11,19 @@ namespace WebsocketClientBundle\Service\Bot;
 use Chess\Game\ChessGame;
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
+use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\Game\GameNotFoundException;
 use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\Game\GameColor;
+use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Request\Call\CallDeleteAcceptRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Call\CallSend\Time;
 use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetCurrentgameRequest;
+use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Service\Chess\ChessGameService;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -57,6 +60,9 @@ class Bot
 
     /** @var int */
     private $skillLevel = 20;
+    
+    /** @var string */
+    private $engine = 'stockfish';
 
     /** @var array hashMap */
     private $gameMoves = [];
@@ -67,13 +73,15 @@ class Bot
      * @param string $login
      * @param string $token
      * @param int $skillLevel
+     * @param string $engine
      */
     public function connect(
         string $apiHost = null,
         string $wsServerUrl = null,
         string $login = null,
         string $token = null,
-        int $skillLevel = 20
+        int $skillLevel = 20,
+        string $engine = 'stockfish'
     )
     {
         if ($apiHost) {
@@ -95,6 +103,10 @@ class Bot
         if ($skillLevel) {
             $this->skillLevel = $skillLevel;
         }
+        
+        if ($engine) {
+            $this->engine = $engine;
+        }
 
         $this->wsClient = new PlayzoneClient(
             $this->wsServerUrl,
@@ -109,7 +121,7 @@ class Bot
                             $token
                         );
 
-        $this->sendChallenge();
+        //$this->sendChallenge();
 
         while (true) {
             $this->resolver();
@@ -119,7 +131,7 @@ class Bot
     private function resolver()
     {
         $rawMessage = $this->wsClient->receive();
-        $this->container->get("logger")->error(json_encode($rawMessage));
+        $this->container->get("logger")->error("Raw message: " . json_encode($rawMessage));
         $message = json_decode($rawMessage, true);
 
         $this->container->get("logger")->addDebug($rawMessage);
@@ -129,7 +141,6 @@ class Bot
                 $data = $message['data'][0];
 
                 if ($data['from_user']['login'] != $this->login) {
-                    sleep(15);
                     $this->receiveChallenge((int)$data['id']);
                 }
 
@@ -138,24 +149,34 @@ class Bot
                 $this->subscribeToGame(@$message['data']['game_id']);
                 break;
             case 'new_tournament_round':
-                $robotUser = $this->getRobotUser();
                 $request = new TournamentGetCurrentgameRequest();
-                $request->setLogin($robotUser->getLogin())
-                        ->setToken($robotUser->getToken())
+                $request->setLogin($this->login)
+                        ->setToken($this->token)
                         ->setTournamentId($message['data']['tournament_id']);
 
                 try {
-                    $game = $this->container->get("core.handler.tournament")
-                        ->processGetCurrentgame($request);
-                } catch (ProcessorException $e) {
+                    $game = $this->getCurrentTournamentGame($request);
+                    $this->subscribeToGame($game->getId());
+                } catch (\Exception $e) {
                     break;
                 }
 
                 $this->subscribeToGame($game->getId());
                 break;
+            case 'new_tournament':
+                $request = new TournamentPostRecordRequest();
+                $request->setLogin($this->login)
+                        ->setToken($this->token)
+                        ->setTournamentId($message['data']['tournament_id']);
+
+                try {
+                    $this->joinTournament($request);
+                } catch (\Exception $e) {
+                    break;
+                }
         }
 
-        $this->container->get("logger")->error(json_encode($this->gameIds));
+        $this->container->get("logger")->error("Game ids: " . json_encode($this->gameIds));
         foreach ($this->gameIds as $id) {
             if (@$message['method'] == 'game_pgn_' . $id) {
                 $this->sendBestMove(@$message['data']);
@@ -173,7 +194,6 @@ class Bot
         $request = new CallPostSendRequest();
         $request->setLogin($robot->getLogin())
                 ->setToken($robot->getToken())
-                ->setPlayer("Robot")
                 ->setColor(GameColor::RANDOM)
                 ->setTime(
                     (new Time())->setBase(180000)
@@ -182,7 +202,7 @@ class Bot
         try {
             $gameCall = $this->postCall($request);
         } catch (ProcessorException $e) {
-            $this->container->get("logger")->warning($e->getMessage());
+            $this->container->get("logger")->error($e->getMessage());
             return $this;
         }
 
@@ -276,6 +296,7 @@ class Bot
             return $this;
         }
 
+        $this->container->get("logger")->error("Go ahead");
         $robotUser = $this->getRobotUser();
 
         $request = new GameGetRequest();
@@ -286,17 +307,19 @@ class Bot
 
         $game = $this->getGame($request);
 
-        if ($game->getUserToMove()->getLogin() != $this->login) {
-            return $this;
-        }
-
         $fen = $data['fen'];
         $this->container->get("logger")->error("Receive " . $fen);
 
         $bestMove = $this->container->get("core.service.chess")
-            ->getBestMoveFromFen($fen, (int)($data['time_white'] / 2), (int)($data['time_black'] / 2), $this->skillLevel);
+            ->getBestMoveFromFen(
+                $fen, 
+                (int)($data['time_white'] / 2), 
+                (int)($data['time_black'] / 2),
+                $this->skillLevel,
+                $this->engine
+            );
 
-        $this->container->get("logger")->error($bestMove);
+        $this->container->get("logger")->error("Best move: " . $bestMove);
 
 
         $request = new GamePutPgnRequest();
@@ -309,9 +332,9 @@ class Bot
         $delay = 1000 * ($endTime - $startTime);
 
         if ($game->getUserWhite()->getLogin() == $robotUser->getLogin()) {
-            $request->setTimeWhite($data['time_white'] - $delay)->setTimeBlack($data['time_black']);
+            $request->setTimeWhite((int)($data['time_white'] - $delay))->setTimeBlack($data['time_black']);
         } else {
-            $request->setTimeBlack($data['time_black'] - $delay)->setTimeWhite($data['time_white']);
+            $request->setTimeBlack((int)($data['time_black'] - $delay))->setTimeWhite($data['time_white']);
         }
 
         $move = [
@@ -326,7 +349,7 @@ class Bot
         $chessGame->resetGame($fen);
         $chessGame->moveSquare($move['from'], $move['to'], $move['promotion']);
 
-        $this->container->get("logger")->error(json_encode($move));
+        $this->container->get("logger")->error("Json move: " . json_encode($move));
 
         $chessGameForSave = new ChessGameService();
         $chessGameForSave->resetGame();
@@ -336,7 +359,7 @@ class Bot
 
         $pgn = $chessGameForSave->getPgn();
 
-        $this->container->get("logger")->error($pgn);
+        $this->container->get("logger")->error("Pgn: " . $pgn);
 
         $request->setPgn($pgn);
 
@@ -360,9 +383,25 @@ class Bot
         );
 
         try {
-            $this->putPgn($request);
+            $game = $this->putPgn($request);
+
+            if ($game->getStatus() == GameStatus::END) {
+                $this->container->get("logger")->error("Send about game finish");
+                $this->wsClient->send(
+                    $this->container->get("serializer")->serialize(
+                        (new PlayzoneMessage())->setScope("send_to_game_observers")
+                            ->setMethod("send_pgn_to_observers")
+                            ->setData(
+                                [
+                                    'game_id' => $game->getId()
+                                ]
+                            ),
+                        "json"
+                    )
+                );
+            }
         } catch (\Exception $e) {
-            $this->container->get("logger")->error($e->getMessage());
+            $this->container->get("logger")->error("Exception: " . $e->getMessage());
         }
 
         return $this;
@@ -426,9 +465,9 @@ class Bot
     }
 
     /**
-     * @return \CoreBundle\Entity\User
+     * @return User
      */
-    private function getRobotUser()
+    private function getRobotUser() : User
     {
         $request = new UserPostAuthRequest();
         $request->setLogin($this->login)->setToken($this->token)->setPassword($this->token);
@@ -468,7 +507,7 @@ class Bot
      * @param UserPostAuthRequest $request
      * @return User
      */
-    private function postAuth(UserPostAuthRequest $request)
+    private function postAuth(UserPostAuthRequest $request) : User
     {
         return $this->container->get("ws.playzone.ajax")->postAuth($request);
     }
@@ -480,6 +519,24 @@ class Bot
     private function acceptCall(CallDeleteAcceptRequest $request) : Game
     {
         return $this->container->get("ws.playzone.ajax")->acceptCall($request);
+    }
+
+    /**
+     * @param TournamentGetCurrentgameRequest $request
+     * @return Game
+     */
+    private function getCurrentTournamentGame(TournamentGetCurrentgameRequest $request) : Game
+    {
+        return $this->container->get("ws.playzone.ajax")->getCurrentTournamentGame($request);
+    }
+
+    /**
+     * @param TournamentPostRecordRequest $request
+     * @return Tournament
+     */
+    private function joinTournament(TournamentPostRecordRequest $request) : Tournament
+    {
+        return $this->container->get("ws.playzone.ajax")->joinTournament($request);
     }
 
 }

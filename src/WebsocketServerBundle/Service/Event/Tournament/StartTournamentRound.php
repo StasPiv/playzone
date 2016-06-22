@@ -98,21 +98,7 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
             $event
         );
 
-        $this->sendMessageToWebsocketServer($tournament);
-    }
-
-    /**
-     * @param Tournament $tournament
-     * @throws \WebSocket\BadOpcodeException
-     */
-    private function sendMessageToWebsocketServer(Tournament $tournament)
-    {
-        $client = $this->container->get("ws.playzone.client");
-        
-        $this->getPlayzoneClientSender()->sendIntroductionFromRobot($client);
-
-        $this->getPlayzoneClientSender()->send(
-            $client,
+        $this->container->get("ws.playzone.client.sender")->sendMessageToWebsocketServer(
             (new PlayzoneMessage())
                 ->setMethod(PlayzoneClientMessageMethod::NEW_TOURNAMENT_ROUND)
                 ->setScope(PlayzoneClientMessageScope::SEND_TO_USERS)
@@ -158,14 +144,6 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
     }
 
     /**
-     * @return PlayzoneClientSender
-     */
-    private function getPlayzoneClientSender()
-    {
-        return $this->container->get("ws.playzone.client.sender");
-    }
-
-    /**
      * Returns an array of event names this subscriber wants to listen to.
      *
      * The array keys are event names and the value can be:
@@ -200,6 +178,7 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
      */
     public function onTournamentNew(TournamentScheduler $tournamentScheduler)
     {
+        $this->container->get("logger")->error(__METHOD__);
         $this->container->get("core.handler.event")->initEventAndSave(
             $tournamentScheduler, self::EVENT_COMMAND_TYPE
         );

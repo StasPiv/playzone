@@ -65,25 +65,19 @@ class ChessService
     {
         $this->chessGameService->setPgn($game->getPgn());
 
-        if ($this->chessGameService->inDraw()) {
-            $game->setResultWhite(0.5)->setResultBlack(0.5);
-            return true;
+        switch ($this->chessGameService->gameOver()) {
+            case 'W':
+                $game->setResultWhite(1)->setResultBlack(0);
+                return true;
+            case 'B':
+                $game->setResultWhite(0)->setResultBlack(1);
+                return true;
+            case 'D':
+                $game->setResultWhite(0.5)->setResultBlack(0.5);
+                return true;
+            default:
+                return false;
         }
-
-        if ($this->chessGameService->inCheckMate()) {
-            switch ($this->defineColorToMoveByPgn($game->getPgn())) {
-                case GameColor::WHITE:
-                    $game->setResultWhite(0)->setResultBlack(1);
-                    return true;
-                case GameColor::BLACK:
-                    $game->setResultWhite(1)->setResultBlack(0);
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -120,11 +114,18 @@ class ChessService
      * @param int $wtime
      * @param int $btime
      * @param int $skillLevel
+     * @param string $engine
      * @return string
      */
-    public function getBestMoveFromFen(string $fen, int $wtime, int $btime, int $skillLevel = 20) : string 
+    public function getBestMoveFromFen(
+        string $fen,
+        int $wtime,
+        int $btime,
+        int $skillLevel = 20,
+        string $engine = 'stockfish'
+    ) : string 
     {
-        return $this->container->get("core.service.chess.uci")->getBestMoveFromFen($fen, $wtime, $btime, $skillLevel);
+        return $this->container->get("core.service.chess.uci")->getBestMoveFromFen($fen, $wtime, $btime, $skillLevel, $engine);
     }
 
     /**

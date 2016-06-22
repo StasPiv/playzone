@@ -14,6 +14,10 @@ services:
         class: WebsocketServerBundle\Service\Event\Tournament\StartTournamentRound
         calls:
             - [setContainer, ['@service_container']]
+    ws.service.event.tournament.new_tournament_listener:
+        class: WebsocketServerBundle\Service\Event\Tournament\NewTournamentListener
+        calls:
+            - [setContainer, ['@service_container']]
     ws.playzone.server:
         class: WebsocketServerBundle\Service\PlayzoneServer
         arguments: ['@logger']

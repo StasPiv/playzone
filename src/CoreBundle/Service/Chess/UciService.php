@@ -25,13 +25,14 @@ class UciService
     private $thinkingTime = 1;
 
     /**
+     * @param string $engine
      * @return bool
      * @throws \Exception
      */
-    private function startGame()
+    private function startGame(string $engine)
     {
         $this->resource = proc_open(
-            '/usr/games/stockfish',
+            '/usr/games/' . $engine,
             [
                 0 => ["pipe", "r"],
                 1 => ["pipe", "w"],
@@ -57,17 +58,24 @@ class UciService
      * @param int $wtime
      * @param int $btime
      * @param int $skillLevel
+     * @param string $engine
      * @return string
      * @throws \Exception
      */
-    public function getBestMoveFromFen(string $fen, int $wtime, int $btime, int $skillLevel = 20) : string 
+    public function getBestMoveFromFen(
+        string $fen,
+        int $wtime,
+        int $btime,
+        int $skillLevel = 20,
+        string $engine = 'stockfish'
+    ) : string 
     {
         $fenPieces = explode(" ", $fen);
         $moveNumber = $fenPieces[count($fenPieces) - 1];
 
         $this->container->get("logger")->debug(__METHOD__);
 
-        $this->startGame();
+        $this->startGame($engine);
 
         fwrite($this->pipes[0], "uci\n");
         fwrite($this->pipes[0], "ucinewgame\n");
@@ -79,13 +87,12 @@ class UciService
             fwrite($this->pipes[0], "position fen $fen\n");
         }
 
-        if ($moveNumber < 10) { // beginning
-            $randomContempt = mt_rand(-100, 100);
-            fwrite($this->pipes[0], "setoption name Contempt value $randomContempt\n");
-        }
-        
+        $randomContempt = mt_rand(-100, 100);
+        fwrite($this->pipes[0], "setoption name Hash value 1024\n");
+        fwrite($this->pipes[0], "setoption name Threads value 4\n");
+        fwrite($this->pipes[0], "setoption name Contempt value $randomContempt\n");
         fwrite($this->pipes[0], "go wtime $wtime btime $btime\n");
-        fwrite($this->pipes[0], "setoption name Skill level $skillLevel\n");
+        fwrite($this->pipes[0], "setoption name Skill Level value $skillLevel\n");
 
         while (true) {
             $content = fread($this->pipes[1], 8192);

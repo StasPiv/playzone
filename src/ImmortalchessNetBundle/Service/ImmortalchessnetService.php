@@ -174,10 +174,15 @@ class ImmortalchessnetService implements EventSubscriberInterface
      */
     public function onTournamentNew(TournamentScheduler $event)
     {
+        $this->container->get("logger")->error(__METHOD__);
         try {
             $tournament = $this->container->get("core.handler.tournament")
                 ->getRepository()->find($event->getTournamentId());
         } catch (TournamentNotFoundException $e) {
+            return;
+        }
+        
+        if (!in_array($tournament->getGameParams()->getTimeBase(), [180000, 300000])) {
             return;
         }
 

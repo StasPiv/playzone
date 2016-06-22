@@ -10,6 +10,7 @@ namespace WebsocketClientBundle\Service;
 
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
+use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\Game\GameNotFoundException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
@@ -18,6 +19,8 @@ use CoreBundle\Model\Request\Call\CallDeleteAcceptRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
+use CoreBundle\Model\Request\Tournament\TournamentGetCurrentgameRequest;
+use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -91,7 +94,9 @@ class AjaxService
         curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response  = curl_exec($ch);
-        $this->container->get("logger")->error($response);
+        $this->container->get("logger")->error("Url: " . $url);
+        $this->container->get("logger")->error("Response: " . $response);
+
         curl_close($ch);
 
         return $response;
@@ -204,6 +209,44 @@ class AjaxService
             ]),
             "DELETE",
             'CoreBundle\Entity\Game'
+        );
+    }
+
+    /**
+     * @param TournamentGetCurrentgameRequest $request
+     * @return Game
+     */
+    public function getCurrentTournamentGame(TournamentGetCurrentgameRequest $request) : Game
+    {
+        return $this->processAjax(
+            $request,
+            $this->container->get("router")
+                ->generate("get_tournament_currentgame", [
+                    "login" => $request->getLogin(),
+                    "token" => $request->getToken(),
+                    "tournament_id" => $request->getTournamentId()
+                ]),
+            'GET',
+            'CoreBundle\Entity\Game'
+        );
+    }
+
+    /**
+     * @param TournamentPostRecordRequest $request
+     * @return Tournament
+     */
+    public function joinTournament(TournamentPostRecordRequest $request) : Tournament
+    {
+        return $this->processAjax(
+            $request,
+            $this->container->get("router")
+                ->generate("post_tournament_record", [
+                    "login" => $request->getLogin(),
+                    "token" => $request->getToken(),
+                    "tournament_id" => $request->getTournamentId()
+                ]),
+            'POST',
+            'CoreBundle\Entity\Tournament'
         );
     }
 }

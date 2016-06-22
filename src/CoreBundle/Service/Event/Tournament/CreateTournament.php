@@ -51,6 +51,7 @@ class CreateTournament implements EventCommandInterface
         $manager->persist($tournament);
         $manager->flush();
 
+        $this->container->get("logger")->error("Dispatch event tournament new");
         $this->container->get("event_dispatcher")
              ->dispatch(
                  TournamentEvents::NEW,

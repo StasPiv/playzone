@@ -51,6 +51,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                     scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
 
                     WebsocketService.removeListeners(null, ["listen_message_container_" + scope.game.id]);
+                    
                     WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
 
                         if (!data.move && scope.game.status === 'play') {

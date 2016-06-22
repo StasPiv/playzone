@@ -34,4 +34,5 @@ class PlayzoneClientMessageMethod extends Enum
     const USER_IN = 'user_in';
     const USER_GONE = 'user_gone';
     const WELCOME_MESSAGE = 'welcome';
+    const NEW_TOURNAMENT = "new_tournament";
 }

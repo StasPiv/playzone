@@ -56,4 +56,16 @@ class PlayzoneClientSender
                 ])
         );
     }
+
+    /**
+     * @param PlayzoneMessage $message
+     */
+    public function sendMessageToWebsocketServer(PlayzoneMessage $message)
+    {
+        $client = $this->container->get("ws.playzone.client");
+
+        $this->sendIntroductionFromRobot($client);
+
+        $this->send($client, $message);
+    }
 }

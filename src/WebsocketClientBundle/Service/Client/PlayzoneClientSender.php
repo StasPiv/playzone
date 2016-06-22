@@ -36,13 +36,23 @@ class PlayzoneClientSender
      */
     public function sendIntroductionFromRobot(PlayzoneClient $client)
     {
+        $this->sendIntroduction($client, "Robot", "407f20f52463392c43bf6a58b783c4f2");
+    }
+
+    /**
+     * @param PlayzoneClient $client
+     * @param string $login
+     * @param string $token
+     */
+    public function sendIntroduction(PlayzoneClient $client, string $login, string $token)
+    {
         $this->send(
             $client,
             (new PlayzoneMessage())->setMethod("introduction")
                 ->setScope("introduction")
                 ->setData([
-                    "login" => "Robot",
-                    "token" => "407f20f52463392c43bf6a58b783c4f2"
+                    "login" => $login,
+                    "token" => $token
                 ])
         );
     }

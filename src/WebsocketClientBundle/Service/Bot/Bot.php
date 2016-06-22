@@ -8,6 +8,7 @@
 
 namespace WebsocketClientBundle\Service\Bot;
 
+use Chess\Game\ChessGame;
 use CoreBundle\Entity\Game;
 use CoreBundle\Entity\GameCall;
 use CoreBundle\Entity\User;
@@ -21,6 +22,7 @@ use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetCurrentgameRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
+use CoreBundle\Service\Chess\ChessGameService;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
 use WebsocketClientBundle\Service\PlayzoneClient;
@@ -47,11 +49,32 @@ class Bot
     /** @var array */
     private $moveNumbersMap = [];
 
+    /** @var string */
+    private $login = 'Robot';
+
+    /** @var string */
+    private $token = '407f20f52463392c43bf6a58b783c4f2';
+
+    /** @var int */
+    private $skillLevel = 20;
+
+    /** @var array hashMap */
+    private $gameMoves = [];
+
     /**
      * @param string $apiHost
      * @param string $wsServerUrl
+     * @param string $login
+     * @param string $token
+     * @param int $skillLevel
      */
-    public function connect(string $apiHost = null, string $wsServerUrl = null)
+    public function connect(
+        string $apiHost = null,
+        string $wsServerUrl = null,
+        string $login = null,
+        string $token = null,
+        int $skillLevel = 20
+    )
     {
         if ($apiHost) {
             $this->container->get("ws.playzone.ajax")->setApiHost($apiHost);
@@ -59,7 +82,19 @@ class Bot
         
         if ($wsServerUrl) {
             $this->wsServerUrl = $wsServerUrl;
-        }        
+        }
+
+        if ($login) {
+            $this->login = $login;
+        }
+
+        if ($token) {
+            $this->token = $token;
+        }
+
+        if ($skillLevel) {
+            $this->skillLevel = $skillLevel;
+        }
 
         $this->wsClient = new PlayzoneClient(
             $this->wsServerUrl,
@@ -67,7 +102,14 @@ class Bot
                 'timeout' => -1
             ]
         );
-        $this->container->get("ws.playzone.client.sender")->sendIntroductionFromRobot($this->wsClient);
+        $this->container->get("ws.playzone.client.sender")
+                        ->sendIntroduction(
+                            $this->wsClient,
+                            $login,
+                            $token
+                        );
+
+        $this->sendChallenge();
 
         while (true) {
             $this->resolver();
@@ -77,6 +119,7 @@ class Bot
     private function resolver()
     {
         $rawMessage = $this->wsClient->receive();
+        $this->container->get("logger")->error(json_encode($rawMessage));
         $message = json_decode($rawMessage, true);
 
         $this->container->get("logger")->addDebug($rawMessage);
@@ -85,7 +128,7 @@ class Bot
             case 'call_send':
                 $data = $message['data'][0];
 
-                if ($data['from_user']['login'] != 'Robot') {
+                if ($data['from_user']['login'] != $this->login) {
                     sleep(15);
                     $this->receiveChallenge((int)$data['id']);
                 }
@@ -112,6 +155,7 @@ class Bot
                 break;
         }
 
+        $this->container->get("logger")->error(json_encode($this->gameIds));
         foreach ($this->gameIds as $id) {
             if (@$message['method'] == 'game_pgn_' . $id) {
                 $this->sendBestMove(@$message['data']);
@@ -129,9 +173,10 @@ class Bot
         $request = new CallPostSendRequest();
         $request->setLogin($robot->getLogin())
                 ->setToken($robot->getToken())
+                ->setPlayer("Robot")
                 ->setColor(GameColor::RANDOM)
                 ->setTime(
-                    (new Time())->setBase(300000)
+                    (new Time())->setBase(180000)
                 );
 
         try {
@@ -178,7 +223,7 @@ class Bot
                 ->setCallId($callId);
 
         try {
-            $game = $this->container->get("core.handler.game.call")->processDeleteAccept($request);
+            $game = $this->acceptCall($request);
         } catch (ProcessorException $e) {
             $this->container->get("logger")->warning($e->getFile() . " " . $e->getLine());
             return $this;
@@ -215,8 +260,13 @@ class Bot
     private function sendBestMove(array $data)
     {
         $startTime = microtime(true);
-        $this->container->get("logger")->debug("Received data " . json_encode($data));
-        $this->container->get("logger")->debug("Moves map " . json_encode($this->moveNumbersMap));
+        $this->container->get("logger")->error("Received data " . json_encode($data));
+        $this->container->get("logger")->error("Moves map " . json_encode($this->moveNumbersMap));
+
+        if (isset($data['move'])) {
+            $this->container->get("logger")->error("Receive move: " . json_encode($data['move']));
+            $this->gameMoves[$data['game_id']][] = $data['move'];
+        }
 
         if (
             !isset($data['fen']) || 
@@ -225,14 +275,6 @@ class Bot
         ) {
             return $this;
         }
-
-        $fen = $data['fen'];
-        $this->container->get("logger")->debug("Receive " . $fen);
-
-        $bestMove = $this->container->get("core.service.chess")
-                         ->getBestMoveFromFen($fen, (int)$data['time_white'], (int)$data['time_black']);
-
-        $this->container->get("logger")->debug($bestMove);
 
         $robotUser = $this->getRobotUser();
 
@@ -244,6 +286,19 @@ class Bot
 
         $game = $this->getGame($request);
 
+        if ($game->getUserToMove()->getLogin() != $this->login) {
+            return $this;
+        }
+
+        $fen = $data['fen'];
+        $this->container->get("logger")->error("Receive " . $fen);
+
+        $bestMove = $this->container->get("core.service.chess")
+            ->getBestMoveFromFen($fen, (int)($data['time_white'] / 2), (int)($data['time_black'] / 2), $this->skillLevel);
+
+        $this->container->get("logger")->error($bestMove);
+
+
         $request = new GamePutPgnRequest();
 
         $request->setId($data['game_id'])
@@ -253,11 +308,37 @@ class Bot
         $endTime = microtime(true);
         $delay = 1000 * ($endTime - $startTime);
 
-        if ($game->getUserWhite() == $robotUser) {
+        if ($game->getUserWhite()->getLogin() == $robotUser->getLogin()) {
             $request->setTimeWhite($data['time_white'] - $delay)->setTimeBlack($data['time_black']);
         } else {
             $request->setTimeBlack($data['time_black'] - $delay)->setTimeWhite($data['time_white']);
         }
+
+        $move = [
+            'from' => substr($bestMove, 0, 2),
+            'to' => substr($bestMove, 2, 2),
+            'promotion' => 'q'
+        ];
+
+        $this->gameMoves[$data['game_id']][] = $move;
+
+        $chessGame = $this->container->get("core.service.chess.game");
+        $chessGame->resetGame($fen);
+        $chessGame->moveSquare($move['from'], $move['to'], $move['promotion']);
+
+        $this->container->get("logger")->error(json_encode($move));
+
+        $chessGameForSave = new ChessGameService();
+        $chessGameForSave->resetGame();
+        foreach ($this->gameMoves[$data['game_id']] as $move) {
+            $chessGameForSave->moveSquare($move['from'], $move['to'], $move['promotion']);
+        }
+
+        $pgn = $chessGameForSave->getPgn();
+
+        $this->container->get("logger")->error($pgn);
+
+        $request->setPgn($pgn);
 
         $this->wsClient->send(
             $this->container->get("serializer")->serialize(
@@ -266,15 +347,12 @@ class Bot
                     ->setData(
                         [
                             'game_id' => $data['game_id'],
-                            'move' => [
-                                'from' => substr($bestMove, 0, 2),
-                                'to' => substr($bestMove, 2, 2),
-                                'promotion' => 'q'
-                            ],
+                            'move' => $move,
                             'moveNumber' => $this->moveNumbersMap[$data['game_id']] = $data['moveNumber'] + 1,
                             'time_white' => (int)$request->getTimeWhite(),
                             'time_black' => (int)$request->getTimeBlack(),
-                            'color' => GameColor::getOppositeColor($data['color'])
+                            'color' => GameColor::getOppositeColor($data['color']),
+                            'fen' => $chessGame->renderFen()
                         ]
                     ),
                 "json"
@@ -331,7 +409,7 @@ class Bot
             return $this;
         }
 
-        if ($game->getUserWhite() == 'Robot') {
+        if ($game->getUserWhite() == $this->login) {
             $this->sendBestMove(
                 [
                     'game_id' => $game->getId(),
@@ -353,7 +431,7 @@ class Bot
     private function getRobotUser()
     {
         $request = new UserPostAuthRequest();
-        $request->setLogin("Robot")->setToken("407f20f52463392c43bf6a58b783c4f2")->setPassword("no matter");
+        $request->setLogin($this->login)->setToken($this->token)->setPassword($this->token);
         
         return $this->postAuth($request);
     }
@@ -393,6 +471,15 @@ class Bot
     private function postAuth(UserPostAuthRequest $request)
     {
         return $this->container->get("ws.playzone.ajax")->postAuth($request);
+    }
+
+    /**
+     * @param CallDeleteAcceptRequest $request
+     * @return Game
+     */
+    private function acceptCall(CallDeleteAcceptRequest $request) : Game
+    {
+        return $this->container->get("ws.playzone.ajax")->acceptCall($request);
     }
 
 }

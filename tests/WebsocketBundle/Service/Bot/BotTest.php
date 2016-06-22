@@ -44,6 +44,6 @@ class BotTest extends KernelTestCase
 
     public function testConnectAndWaitForMessage()
     {
-        $this->bot1->connect();
+        
     }
 }

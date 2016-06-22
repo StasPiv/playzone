@@ -56,10 +56,11 @@ class UciService
      * @param string $fen
      * @param int $wtime
      * @param int $btime
+     * @param int $skillLevel
      * @return string
      * @throws \Exception
      */
-    public function getBestMoveFromFen(string $fen, int $wtime, int $btime) : string 
+    public function getBestMoveFromFen(string $fen, int $wtime, int $btime, int $skillLevel = 20) : string 
     {
         $fenPieces = explode(" ", $fen);
         $moveNumber = $fenPieces[count($fenPieces) - 1];
@@ -84,6 +85,7 @@ class UciService
         }
         
         fwrite($this->pipes[0], "go wtime $wtime btime $btime\n");
+        fwrite($this->pipes[0], "setoption name Skill level $skillLevel\n");
 
         while (true) {
             $content = fread($this->pipes[1], 8192);

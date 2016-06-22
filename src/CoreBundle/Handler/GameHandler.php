@@ -219,7 +219,7 @@ class GameHandler implements GameProcessorInterface
         
         $this->fixResultIfTimeOver($request, $game);
         
-        if ($this->container->get("core.service.chess")->fixResultIfCheckmate($game)) {
+        if ($this->container->get("core.service.chess")->fixResult($game)) {
             $this->changeGameStatus($game, GameStatus::END);
         }
 
@@ -742,7 +742,7 @@ class GameHandler implements GameProcessorInterface
 
         if ($this->container->get("core.service.chess")->isValidPgn($pgn)) {
             $game->setPgn($pgn);
-            if ($this->container->get("core.service.chess")->fixResultIfCheckmate($game)) {
+            if ($this->container->get("core.service.chess")->fixResult($game)) {
                 $this->changeGameStatus($game, GameStatus::END);
             }
         }

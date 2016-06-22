@@ -7,8 +7,6 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
     //$scope.dev = true;
     $scope.chat = ChatRest.query();
 
-    $rootScope.robot = false;
-
     $scope.getBoardConfig = function() {
         return {
             pieceType: SettingService.getSetting('Piece type') ?

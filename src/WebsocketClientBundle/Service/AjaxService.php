@@ -14,6 +14,7 @@ use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\Game\GameNotFoundException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
 use CoreBundle\Model\Game\GameColor;
+use CoreBundle\Model\Request\Call\CallDeleteAcceptRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
@@ -125,13 +126,14 @@ class AjaxService
      */
     public function putPgn(GamePutPgnRequest $request) : Game
     {
+        $this->container->get("logger")->error("Actual pgn: " . $request->getPgn());
         return $this->processAjax(
                 $request,
                 $this->container->get("router")->generate("put_game_pgn", [
                     "id" => $request->getId(),
                     "login" => $request->getLogin(),
                     "token" => $request->getToken(),
-                    "pgn" => $request->getPgn(),
+                    "pgn" => base64_encode($request->getPgn()),
                     "time_white" => $request->getTimeWhite(),
                     "time_black" => $request->getTimeBlack()
                 ]),
@@ -185,5 +187,23 @@ class AjaxService
         } catch (\Exception $e) {
             throw new UserNotFoundException;
         }
+    }
+
+    /**
+     * @param CallDeleteAcceptRequest $request
+     * @return Game
+     */
+    public function acceptCall(CallDeleteAcceptRequest $request) : Game
+    {
+        return $this->processAjax(
+            $request,
+            $this->container->get("router")->generate("delete_call_accept", [
+                "login" => $request->getLogin(),
+                "token" => $request->getToken(),
+                "call_id" => $request->getCallId()
+            ]),
+            "DELETE",
+            'CoreBundle\Entity\Game'
+        );
     }
 }

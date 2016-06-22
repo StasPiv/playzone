@@ -43,10 +43,6 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
                 method: 'POST',
                 url: ApiService.base_url + 'game/:id/publish'
             },
-            createNewrobot: {
-                method: 'POST',
-                url: ApiService.base_url + 'game/newrobot'
-            },
             resign: {
                 method: 'PUT',
                 url: ApiService.base_url + 'game/:id/resign',

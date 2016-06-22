@@ -11,6 +11,7 @@ namespace WebsocketClientBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -26,6 +27,9 @@ class WebsocketBotStartCommand extends ContainerAwareCommand
         $this->setName('websocket:bot:start')
              ->addArgument("apiHost")
              ->addArgument("wsServerUrl")
+             ->addOption("login", "l", InputOption::VALUE_REQUIRED, "Login", "Robot")
+             ->addOption("token", "t", InputOption::VALUE_REQUIRED, "Token", "407f20f52463392c43bf6a58b783c4f2")
+             ->addOption("skillLevel", "s", InputOption::VALUE_REQUIRED, "Skill level", 20)
              ->setDescription('Starting websocket bot');
     }
 
@@ -37,7 +41,13 @@ class WebsocketBotStartCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->getContainer()->get("ws.playzone.bot")
-             ->connect($input->getArgument("apiHost"), $input->getArgument("wsServerUrl"));
+             ->connect(
+                 $input->getArgument("apiHost"), 
+                 $input->getArgument("wsServerUrl"),
+                 $input->getOption("login"),
+                 $input->getOption("token"),
+                 $input->getOption("skillLevel")
+             );
     }
 
 }

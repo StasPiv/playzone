@@ -45,6 +45,8 @@ services:
         class: CoreBundle\Service\ChessService
         calls:
           - [setContainer, ['@service_container']]
+    core.service.chess.game:
+        class: CoreBundle\Service\Chess\ChessGameService
     core.service.swiss:
         class: CoreBundle\Service\Tournament\SwissService
         arguments: ['@doctrine.orm.entity_manager']

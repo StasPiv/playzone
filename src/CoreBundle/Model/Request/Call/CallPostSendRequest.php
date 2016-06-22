@@ -63,10 +63,12 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
 
     /**
      * @param string $player
+     * @return $this
      */
     public function setPlayer($player)
     {
         $this->player = $player;
+        return $this;
     }
 
     /**

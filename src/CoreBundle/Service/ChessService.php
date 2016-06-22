@@ -10,6 +10,7 @@ namespace CoreBundle\Service;
 
 use CoreBundle\Entity\Game;
 use CoreBundle\Model\Game\GameColor;
+use CoreBundle\Service\Chess\ChessGameService;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -26,6 +27,17 @@ class ChessService
      * @var string
      */
     private $pgnDir;
+
+    /** @var ChessGameService */
+    private $chessGameService;
+
+    /**
+     * ChessService constructor.
+     */
+    public function __construct()
+    {
+        $this->chessGameService = new ChessGameService();
+    }
 
     /**
      * @param string $pgn
@@ -49,22 +61,29 @@ class ChessService
      * @param Game $game
      * @return bool
      */
-    public function fixResultIfCheckmate(Game $game) : bool 
+    public function fixResult(Game $game) : bool
     {
-        if (!$this->isGameInCheckmate($game->getPgn())) {
-            return false;
+        $this->chessGameService->setPgn($game->getPgn());
+
+        if ($this->chessGameService->inDraw()) {
+            $game->setResultWhite(0.5)->setResultBlack(0.5);
+            return true;
         }
-        
-        switch ($this->defineColorToMoveByPgn($game->getPgn())) {
-            case GameColor::WHITE:
-                $game->setResultWhite(0)->setResultBlack(1);
-                return true;
-            case GameColor::BLACK:
-                $game->setResultWhite(1)->setResultBlack(0);
-                return true;
-            default:
-                return false;
+
+        if ($this->chessGameService->inCheckMate()) {
+            switch ($this->defineColorToMoveByPgn($game->getPgn())) {
+                case GameColor::WHITE:
+                    $game->setResultWhite(0)->setResultBlack(1);
+                    return true;
+                case GameColor::BLACK:
+                    $game->setResultWhite(1)->setResultBlack(0);
+                    return true;
+                default:
+                    return false;
+            }
         }
+
+        return false;
     }
 
     /**
@@ -82,7 +101,16 @@ class ChessService
      * @param string $pgn
      * @return bool
      */
-    public function isGameInCheckmate(string $pgn) : bool
+    private function isGameOver(string $pgn) : bool
+    {
+        return $this->isGameInCheckmate($pgn);
+    }
+
+    /**
+     * @param string $pgn
+     * @return bool
+     */
+    private function isGameInCheckmate(string $pgn) : bool
     {
         return substr($pgn, -1, 1) === '#';
     }
@@ -91,11 +119,12 @@ class ChessService
      * @param string $fen
      * @param int $wtime
      * @param int $btime
+     * @param int $skillLevel
      * @return string
      */
-    public function getBestMoveFromFen(string $fen, int $wtime, int $btime) : string 
+    public function getBestMoveFromFen(string $fen, int $wtime, int $btime, int $skillLevel = 20) : string 
     {
-        return $this->container->get("core.service.chess.uci")->getBestMoveFromFen($fen, $wtime, $btime);
+        return $this->container->get("core.service.chess.uci")->getBestMoveFromFen($fen, $wtime, $btime, $skillLevel);
     }
 
     /**

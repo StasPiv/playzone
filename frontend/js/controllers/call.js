@@ -19,11 +19,6 @@ playzoneControllers.controller('CallCtrl', function ($scope, $rootScope, $locati
     $scope.sendCall = function(call) {
         $('.footer .overlay').hide();
 
-        if ($('#login_enemy').val() === "Robot") {
-            $scope.playAgainstRobot(call);
-            return;
-        }
-
         CallRest.send(
             {},
             call,
@@ -45,31 +40,6 @@ playzoneControllers.controller('CallCtrl', function ($scope, $rootScope, $locati
             },
             function(response) {
                 $scope.errors = response.data;
-            }
-        );
-    };
-
-    $scope.playAgainstRobot = function(call) {
-        $('.footer .overlay').hide();
-
-        call.time.base = call.time.base_minutes * 60000;
-        GameRest.createNewrobot(
-            {
-                time: call.time,
-                color: !call.color ? ["w", "b"][parseInt(Math.random() * 2)] : call.color.id
-            },
-            function (newGame) {
-                WebsocketService.sendDataToLogins(
-                    'call_accept',
-                    {
-                        game_id: newGame.id
-                    },
-                    []
-                );
-                $scope.current.push(newGame);
-                AudioService.newGame();
-                $location.path( '/play/' + newGame.id );
-
             }
         );
     };

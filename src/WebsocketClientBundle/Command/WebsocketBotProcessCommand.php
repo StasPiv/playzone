@@ -6,7 +6,7 @@
  * Time: 19:58
  */
 
-namespace WebsocketServerBundle\Command;
+namespace WebsocketClientBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;

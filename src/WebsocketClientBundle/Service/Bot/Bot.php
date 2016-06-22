@@ -6,22 +6,24 @@
  * Time: 17:18
  */
 
-namespace WebsocketServerBundle\Service\Bot;
+namespace WebsocketClientBundle\Service\Bot;
 
+use CoreBundle\Entity\Game;
+use CoreBundle\Entity\GameCall;
+use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\Game\GameNotFoundException;
 use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Model\Request\Call\CallDeleteAcceptRequest;
 use CoreBundle\Model\Request\Call\CallPostSendRequest;
 use CoreBundle\Model\Request\Call\CallSend\Time;
+use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
 use CoreBundle\Model\Request\Tournament\TournamentGetCurrentgameRequest;
-use Symfony\Bundle\FrameworkBundle\Client;
+use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\DateTime;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
-use WebsocketServerBundle\Service\PlayzoneClient;
+use WebsocketClientBundle\Service\PlayzoneClient;
 
 /**
  * Class Bot
@@ -32,11 +34,12 @@ use WebsocketServerBundle\Service\PlayzoneClient;
 class Bot
 {
     use ContainerAwareTrait;
-
-    private $host = 'http://api.playzone-angular.lc/app_dev.php';
+    
+    /** @var string */
+    private $wsServerUrl = "ws://ws.playzone.immortalchess.net:8081/";
 
     /** @var PlayzoneClient */
-    private $client;
+    private $wsClient;
 
     /** @var array */
     private $gameIds = [];
@@ -45,21 +48,26 @@ class Bot
     private $moveNumbersMap = [];
 
     /**
-     * @param string|null $host
+     * @param string $apiHost
+     * @param string $wsServerUrl
      */
-    public function connect(string $host = null)
+    public function connect(string $apiHost = null, string $wsServerUrl = null)
     {
-        if ($host) {
-            $this->host = $host;
+        if ($apiHost) {
+            $this->container->get("ws.playzone.ajax")->setApiHost($apiHost);
         }
+        
+        if ($wsServerUrl) {
+            $this->wsServerUrl = $wsServerUrl;
+        }        
 
-        $this->client = new PlayzoneClient(
-            $this->container->getParameter("app_core_websocket_server"),
+        $this->wsClient = new PlayzoneClient(
+            $this->wsServerUrl,
             [
                 'timeout' => -1
             ]
         );
-        $this->container->get("ws.playzone.client.sender")->sendIntroductionFromRobot($this->client);
+        $this->container->get("ws.playzone.client.sender")->sendIntroductionFromRobot($this->wsClient);
 
         while (true) {
             $this->resolver();
@@ -68,7 +76,7 @@ class Bot
 
     private function resolver()
     {
-        $rawMessage = $this->client->receive();
+        $rawMessage = $this->wsClient->receive();
         $message = json_decode($rawMessage, true);
 
         $this->container->get("logger")->addDebug($rawMessage);
@@ -116,16 +124,18 @@ class Bot
      */
     private function sendChallenge()
     {
+        $robot = $this->getRobotUser();
+
         $request = new CallPostSendRequest();
-        $request->setLogin("Robot")
-                ->setToken("407f20f52463392c43bf6a58b783c4f2")
+        $request->setLogin($robot->getLogin())
+                ->setToken($robot->getToken())
                 ->setColor(GameColor::RANDOM)
                 ->setTime(
                     (new Time())->setBase(300000)
                 );
 
         try {
-            $gameCall = $this->container->get("core.handler.game.call")->processPostSend($request);
+            $gameCall = $this->postCall($request);
         } catch (ProcessorException $e) {
             $this->container->get("logger")->warning($e->getMessage());
             return $this;
@@ -135,7 +145,7 @@ class Bot
             $this->container->get("serializer")->serialize($gameCall, "json")
         );
 
-        $this->client->send(
+        $this->wsClient->send(
             $this->container->get("serializer")->serialize(
                 (new PlayzoneMessage())->setScope("send_to_users")
                     ->setMethod("call_send")
@@ -160,9 +170,11 @@ class Bot
     {
         $this->container->get("logger")->debug("Call Id $callId");
 
+        $robot = $this->getRobotUser();
+
         $request = new CallDeleteAcceptRequest();
-        $request->setLogin("Robot")
-                ->setToken("407f20f52463392c43bf6a58b783c4f2")
+        $request->setLogin($robot->getLogin())
+                ->setToken($robot->getToken())
                 ->setCallId($callId);
 
         try {
@@ -176,7 +188,7 @@ class Bot
             $this->container->get("serializer")->serialize($game, "json")
         );
 
-        $this->client->send(
+        $this->wsClient->send(
             $this->container->get("serializer")->serialize(
                 (new PlayzoneMessage())->setScope("send_to_users")
                     ->setMethod("call_accept")
@@ -223,9 +235,14 @@ class Bot
         $this->container->get("logger")->debug($bestMove);
 
         $robotUser = $this->getRobotUser();
-        $game = $this->container->get("core.handler.game")->getUserGameById(
-            $data['game_id'], $robotUser
-        );
+
+        $request = new GameGetRequest();
+
+        $request->setId($data['game_id'])
+            ->setLogin($robotUser->getLogin())
+            ->setToken($robotUser->getToken());
+
+        $game = $this->getGame($request);
 
         $request = new GamePutPgnRequest();
 
@@ -242,7 +259,7 @@ class Bot
             $request->setTimeBlack($data['time_black'] - $delay)->setTimeWhite($data['time_white']);
         }
 
-        $this->client->send(
+        $this->wsClient->send(
             $this->container->get("serializer")->serialize(
                 (new PlayzoneMessage())->setScope("send_to_game_observers")
                     ->setMethod("send_pgn_to_observers")
@@ -266,7 +283,7 @@ class Bot
 
         try {
             $this->putPgn($request);
-        } catch (ProcessorException $e) {
+        } catch (\Exception $e) {
             $this->container->get("logger")->error($e->getMessage());
         }
 
@@ -284,7 +301,7 @@ class Bot
             $this->container->get("serializer")->serialize("Subscribe $gameId", "json")
         );
 
-        $this->client->send(
+        $this->wsClient->send(
             $this->container->get("serializer")->serialize(
                 (new PlayzoneMessage())->setScope("subscribe_to_game")
                     ->setMethod("subscribe_to_game")
@@ -301,7 +318,14 @@ class Bot
 
         try {
             $user = $this->getRobotUser();
-            $game = $this->container->get("core.handler.game")->getUserGameById($gameId, $user);
+
+            $request = new GameGetRequest();
+
+            $request->setId($gameId)
+                    ->setLogin($user->getLogin())
+                    ->setToken($user->getToken());
+
+            $game = $this->getGame($request);
         } catch (GameNotFoundException $e) {
             $this->container->get("logger")->error("Game #$gameId is not found");
             return $this;
@@ -315,7 +339,7 @@ class Bot
                     'fen' => '',
                     'time_white' => $game->getTimeWhite(),
                     'time_black' => $game->getTimeBlack(),
-                    'color' => GameColor::getOppositeColor($game->getColor())
+                    'color' => GameColor::BLACK
                 ]
             );
         }
@@ -328,34 +352,47 @@ class Bot
      */
     private function getRobotUser()
     {
-        return $this->container->get("core.handler.user")->getUserByLoginAndToken(
-            "Robot", "407f20f52463392c43bf6a58b783c4f2"
-        );
+        $request = new UserPostAuthRequest();
+        $request->setLogin("Robot")->setToken("407f20f52463392c43bf6a58b783c4f2")->setPassword("no matter");
+        
+        return $this->postAuth($request);
+    }
+
+    /**
+     * @param GameGetRequest $request
+     * @return Game
+     * @throws GameNotFoundException
+     */
+    private function getGame(GameGetRequest $request) : Game
+    {
+        return $this->container->get("ws.playzone.ajax")->getGame($request);
     }
 
     /**
      * @param GamePutPgnRequest $request
-     * @return \CoreBundle\Entity\Game
+     * @return Game
      */
-    private function putPgn(GamePutPgnRequest $request)
+    private function putPgn(GamePutPgnRequest $request) : Game
     {
-        $robotUser = $this->getRobotUser();
-        
-        $data_json = $this->container->get("serializer")->serialize($request, 'json');
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->host . '/game/' . $request->getId() . '/pgn?login=' . $robotUser->getLogin() . '&token=' . $robotUser->getToken());
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Content-Length: ' . strlen($data_json)));
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-        curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response  = curl_exec($ch);
-        curl_close($ch);
-        
-        return $this->container->get("serializer")->deserialize(
-            $response,
-            'CoreBundle\Entity\Game',
-            'json'
-        );
+        return $this->container->get("ws.playzone.ajax")->putPgn($request);
     }
+
+    /**
+     * @param CallPostSendRequest $request
+     * @return GameCall
+     */
+    private function postCall(CallPostSendRequest $request) : GameCall
+    {
+        return $this->container->get("ws.playzone.ajax")->postCall($request);
+    }
+
+    /**
+     * @param UserPostAuthRequest $request
+     * @return User
+     */
+    private function postAuth(UserPostAuthRequest $request)
+    {
+        return $this->container->get("ws.playzone.ajax")->postAuth($request);
+    }
+
 }

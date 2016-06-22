@@ -69,8 +69,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
 
     $scope.draw = function () {
         $scope.opponentOfferDraw =
-            ($scope.game.draw && $scope.game.draw !== $scope.game.color) ||
-            $scope.game.opponent.login === "Robot";
+            $scope.game.draw && $scope.game.draw !== $scope.game.color;
 
         if ($scope.opponentOfferDraw) {
             GameRest.acceptDraw(

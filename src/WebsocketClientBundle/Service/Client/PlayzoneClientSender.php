@@ -7,11 +7,11 @@
  * Time: 22:41
  */
 
-namespace WebsocketServerBundle\Service\Client;
+namespace WebsocketClientBundle\Service\Client;
 
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
-use WebsocketServerBundle\Service\PlayzoneClient;
+use WebsocketClientBundle\Service\PlayzoneClient;
 
 /**
  * Class PlayzoneClientSender

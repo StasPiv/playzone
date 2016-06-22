@@ -216,25 +216,6 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
                     }
                 }
             )
-        },
-        
-        /**
-         * Pass only first param (gameId) to fix result on observers' side
-         *
-         * @param gameId
-         * @param encodedFen
-         */
-        sendFenToRobot: function (gameId, encodedFen) {
-            this.send(
-                {
-                    scope: 'send_to_robot',
-                    method: 'send_fen_to_robot',
-                    data: {
-                        game_id: gameId,
-                        encoded_fen: encodedFen
-                    }
-                }
-            )
         }
     };
 });

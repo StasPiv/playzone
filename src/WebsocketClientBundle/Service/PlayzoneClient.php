@@ -6,7 +6,7 @@
  * Time: 0:28
  */
 
-namespace WebsocketServerBundle\Service;
+namespace WebsocketClientBundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use WebSocket\BadUriException;

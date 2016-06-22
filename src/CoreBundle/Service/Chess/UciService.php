@@ -79,15 +79,11 @@ class UciService
         }
 
         if ($moveNumber < 10) { // beginning
-            $randomSkill = mt_rand(1, 20);
-            $moveTime = mt_rand(500, 1500);
-            fwrite($this->pipes[0], "setoption name Skill Level value $randomSkill\n");
-            fwrite($this->pipes[0], "go movetime $moveTime\n");
-        } else { // middle strength
-            fwrite($this->pipes[0], "setoption name Skill Level value 10\n");
-            fwrite($this->pipes[0], "setoption name Contempt value 100\n");
-            fwrite($this->pipes[0], "go wtime $wtime btime $btime\n");
+            $randomContempt = mt_rand(-100, 100);
+            fwrite($this->pipes[0], "setoption name Contempt value $randomContempt\n");
         }
+        
+        fwrite($this->pipes[0], "go wtime $wtime btime $btime\n");
 
         while (true) {
             $content = fread($this->pipes[1], 8192);

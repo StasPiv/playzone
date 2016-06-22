@@ -10,7 +10,7 @@ namespace WebsocketBundle\Tests\Service\Bot;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Container;
-use WebsocketServerBundle\Service\Bot\Bot;
+use WebsocketClientBundle\Service\Bot\Bot;
 
 /**
  * Class BotTest

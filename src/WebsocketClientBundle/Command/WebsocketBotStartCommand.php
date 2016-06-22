@@ -6,7 +6,7 @@
  * Time: 19:58
  */
 
-namespace WebsocketServerBundle\Command;
+namespace WebsocketClientBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -24,7 +24,8 @@ class WebsocketBotStartCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('websocket:bot:start')
-             ->addArgument("host")
+             ->addArgument("apiHost")
+             ->addArgument("wsServerUrl")
              ->setDescription('Starting websocket bot');
     }
 
@@ -35,7 +36,8 @@ class WebsocketBotStartCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get("ws.playzone.bot")->connect($input->getArgument("host"));
+        $this->getContainer()->get("ws.playzone.bot")
+             ->connect($input->getArgument("apiHost"), $input->getArgument("wsServerUrl"));
     }
 
 }

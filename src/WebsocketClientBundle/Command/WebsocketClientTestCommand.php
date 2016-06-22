@@ -6,7 +6,7 @@
  * Time: 21:22
  */
 
-namespace WebsocketServerBundle\Command;
+namespace WebsocketClientBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,7 +15,7 @@ use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageMethod;
 use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageScope;
 use WebsocketServerBundle\Model\Message\Client\Tournament\TournamentMesssageNewRound;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
-use WebsocketServerBundle\Service\Client\PlayzoneClientSender;
+use WebsocketClientBundle\Service\Client\PlayzoneClientSender;
 
 /**
  * Class WebsocketClientTestCommand

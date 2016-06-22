@@ -32,7 +32,7 @@ use WebsocketServerBundle\Model\Message\Client\PlayzoneClientMessageScope;
 use WebsocketServerBundle\Model\Message\Client\Tournament\TournamentMesssageNewRound;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
 use JMS\Serializer\Annotation as JMS;
-use WebsocketServerBundle\Service\Client\PlayzoneClientSender;
+use WebsocketClientBundle\Service\Client\PlayzoneClientSender;
 
 /**
  * @JMS\ExclusionPolicy("all")

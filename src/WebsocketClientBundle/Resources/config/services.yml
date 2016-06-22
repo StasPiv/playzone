@@ -1,0 +1,16 @@
+services:
+  ws.playzone.client:
+      class: WebsocketClientBundle\Service\PlayzoneClient
+      arguments: ['%app_core_websocket_server%']
+  ws.playzone.client.sender:
+      class: WebsocketClientBundle\Service\Client\PlayzoneClientSender
+      calls:
+          - [setContainer, ['@service_container']]
+  ws.playzone.bot:
+      class: WebsocketClientBundle\Service\Bot\Bot
+      calls:
+          - [setContainer, ['@service_container']]
+  ws.playzone.ajax:
+      class: WebsocketClientBundle\Service\AjaxService
+      calls:
+          - [setContainer, ['@service_container']]

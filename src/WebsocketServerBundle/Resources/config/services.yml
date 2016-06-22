@@ -19,14 +19,3 @@ services:
         arguments: ['@logger']
         tags:
             - { name: monolog.logger, channel: ws }
-    ws.playzone.client:
-        class: WebsocketServerBundle\Service\PlayzoneClient
-        arguments: ['%app_core_websocket_server%']
-    ws.playzone.client.sender:
-        class: WebsocketServerBundle\Service\Client\PlayzoneClientSender
-        calls:
-            - [setContainer, ['@service_container']]
-    ws.playzone.bot:
-        class: WebsocketServerBundle\Service\Bot\Bot
-        calls:
-            - [setContainer, ['@service_container']]

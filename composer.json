@@ -23,7 +23,7 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "cboden/ratchet": "dev-master",
-        "friendsofsymfony/rest-bundle": "1.7.7",
+        "friendsofsymfony/rest-bundle": "dev-master",
         "jms/serializer-bundle": "dev-master",
         "nelmio/cors-bundle": "^1.4",
         "nelmio/api-doc-bundle": "^2.11",

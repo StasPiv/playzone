@@ -34,7 +34,8 @@
         "luxifer/doctrine-functions": "dev-master",
         "beberlei/DoctrineExtensions": "^1.0",
         "chesscom/chess-game": "dev-develop",
-        "jtreminio/test-extensions": "dev-master"
+        "jtreminio/test-extensions": "dev-master",
+        "ocramius/proxy-manager": "~1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

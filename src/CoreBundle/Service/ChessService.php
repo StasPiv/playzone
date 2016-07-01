@@ -64,7 +64,7 @@ class ChessService
     public function fixResult(Game $game) : bool
     {
         $this->chessGameService->setPgn($game->getPgn());
-
+        
         switch ($this->chessGameService->gameOver()) {
             case 'W':
                 $game->setResultWhite(1)->setResultBlack(0);

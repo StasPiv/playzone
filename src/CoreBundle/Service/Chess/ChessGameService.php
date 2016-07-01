@@ -24,7 +24,7 @@ class ChessGameService extends ChessGame
         $moves = explode(" ", $pgn);
         foreach ($moves as $move) {
             $finalMove = preg_replace('/^\d+\./', '', $move);
-            $finalMove = preg_replace('/#/', '', $finalMove);
+            $finalMove = preg_replace('/[#+]/', '', $finalMove);
             $this->moveSAN($finalMove);
         }
     }
@@ -35,5 +35,17 @@ class ChessGameService extends ChessGame
     public function getPgn()
     {
         return $this->getMoveListString();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function gameOver()
+    {
+        if ($this->inClaimableDraw()) {
+            return 'D';
+        }
+        
+        return parent::gameOver();
     }
 }

@@ -30,50 +30,6 @@ function getBlitzTimeObject(timeMs) {
     };
 }
 
-var insufficient_material_white = function (fen) {
-    // "k7/8/n7/8/8/8/8/7K b - - 0 1"
-    /**
-     * small letters are black
-     * big letters are white
-     */
-    var lastPieces = fen.split(" ")[0].match(/[RNBQP]/g);
-
-    if (!lastPieces) {
-        return true;
-    }
-
-    if (lastPieces.length > 1) {
-        return false;
-    }
-
-    var lastPiece = lastPieces[0];
-
-    return !!(lastPiece === "N" || lastPiece === "B");
-};
-
-var insufficient_material_black = function (fen) {
-    // "k7/8/n7/8/8/8/8/7K b - - 0 1"
-    /**
-     * small letters are black
-     * big letters are white
-     */
-    var lastPieces = fen.split(" ")[0].match(/[rnbqp]/g);
-
-    if (!lastPieces) {
-        return true;
-    }
-
-    if (lastPieces.length > 1) {
-        return false;
-    }
-
-    var lastPiece = lastPieces[0];
-
-    return !!(lastPiece === "n" || lastPiece === "b");
-};
-
-
-
 var highlightLastMove = function (scope, element, lastMove, game) {
     window.setTimeout(
         function () {

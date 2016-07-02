@@ -47,5 +47,54 @@ class ChessGameServiceTest extends KernelAwareTest
         $this->assertEquals("D", $game->gameOver());
     }
 
+    public function testBasicDraw()
+    {
+        $pgn = "1. e4 d5 2. exd5 Qxd5 3. Nc3 Qd6 4. d4 Nf6 5. Nf3 a6 6. g3 g6 7. Bg2 Bg7 8. O-O O-O 9. Bf4 Qd8 10. Qd2 c6 11. Rad1 Nd5 12. Bh6 Nxc3 13. Bxg7 Kxg7 14. Qxc3 Kg8 15. Rfe1 Bg4 16. Qb3 Qc7 17. Rd3 Bxf3 18. Bxf3 e6 19. h4 Nd7 20. h5 Nf6 21. Kg2 Rad8 22. Qc3 Nxh5 23. Bxh5 gxh5 24. Re5 Rd5 25. Qe1 Rfd8 26. Rde3 Rxe5 27. Rxe5 Rd5 28. Qe3 Qd8 29. c4 Rxe5 30. dxe5 h4 31. g4 Kg7 32. Kh3 h6 33. a3 Qd1 34. Kxh4 Qh1+ 35. Kg3 Qg1+ 36. Kf3 Qh1+ 37. Ke2 Qb1 38. Qd4 Qg1 39. Qf4 Qh1 40. Qf6+ Kg8 41. Qd8+ Kg7 42. Qd7 Qe4+ 43. Kd2 Qxg4 44. Qxb7 Qxc4 45. Qd7 Qd5+ 46. Qxd5 exd5 47. Ke3 Kg6 48. Kf4 h5 49. b4 h4 50. Kg4 d4 51. f4 d3 52. f5+ Kg7 53. Kf3 d2 54. Ke2 h3 55. f6+ Kg6 56. Kxd2 h2 57. Ke3 h1=Q 58. Kf4 Qd5 59. e6 Qxe6 60. b5";
 
+        $game = $this->container->get("core.service.chess.game");
+        $game->setPgn($pgn);
+
+        $this->assertFalse($game->isInsufficientMaterialWhite());
+    }
+
+    public function testInSufficientWhite()
+    {
+        $fens = [
+            '8/8/8/3k4/8/8/K7/8 w - - 0 1' => true,
+            '8/8/8/3k4/8/8/K1P5/8 b - - 0 1' => false, // one pawn
+            '8/8/8/3k4/8/8/K1N5/8 w - - 0 1' => true, // one knight
+            '8/8/8/3k4/8/8/K1B5/8 b - - 0 1' => true, // one bishop
+            '8/8/8/3k4/8/8/K1BN4/8 w - - 0 1' => false, // bishop and knight
+            '8/8/8/3k4/8/8/K1R5/8 b - - 0 1' => false, // one rook
+            '8/8/8/3k4/8/8/K1Q5/8 w - - 0 1' => false // one queen
+        ];
+
+        foreach ($fens as $fen => $expectedResult) {
+            $game = $this->container->get("core.service.chess.game");
+            $game->_parseFen($fen);
+            $this->assertEquals($expectedResult, $game->isInsufficientMaterialWhite());
+        }
+
+    }
+
+    public function testInSufficientBlack()
+    {
+        $fens = [
+            '8/8/8/3k4/8/8/K7/8 w - - 0 1' => true,
+            '8/8/8/3k1p2/8/8/K7/8 b - - 0 1' => false, // one pawn
+            '8/8/8/3k1n2/8/8/K7/8 w - - 0 1' => true, // one knight
+            '8/8/8/3k2b1/8/8/K7/8 w - - 0 1' => true, // one bishop
+            '8/8/8/3k1nb1/8/8/K7/8 b - - 0 1' => false, // bishop and knight
+            '8/8/8/3k2r1/8/8/K7/8 b - - 0 1' => false, // one rook
+            '8/8/8/3k2q1/8/8/K7/8 w - - 0 1' => false, // one queen
+            '8/8/8/3k4/6Q1/8/K7/8 b - - 0 1' => true // one white queen
+        ];
+
+        foreach ($fens as $fen => $expectedResult) {
+            $game = $this->container->get("core.service.chess.game");
+            $game->_parseFen($fen);
+            $this->assertEquals($expectedResult, $game->isInsufficientMaterialBlack());
+        }
+
+    }
 }

@@ -47,9 +47,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                     element.loadBoard(scope.boardConfig);
                     element.loadPgn(scope.game.pgn);
-                    scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());
-                    scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
-
+                    
                     WebsocketService.removeListeners(null, ["listen_message_container_" + scope.game.id]);
                     
                     WebsocketService.addListener("listen_game_" + scope.game.id, "game_pgn_" + scope.game.id, function(data) {
@@ -58,11 +56,6 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                             // it means that game is finished or drawn and we have to fix result
                             scope.game.$get().then( // get game from server
                                 function () {
-                                    scope.game.mine &&
-                                    (element.game.game_over() && !element.game.in_checkmate() ||
-                                    element.game.insufficient_material()) &&
-                                    scope.draw(); // fix draw
-
                                     if (scope.game.mine && scope.game.status === 'end') {
                                         // it means that opponent has resigned or draw
                                         scope.game.my_result == '1' ?
@@ -87,12 +80,7 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                                     element.game.game_over() && scope.game.$get();
 
                                     scope.highlightLastMove(scope, element);
-                                    $timeout(
-                                        function () {
-                                            makePreMoveIfExists(scope, element);
-                                        },
-                                        1
-                                    );
+                                    makePreMoveIfExists(scope, element);
                                 }
                             );
                             return;
@@ -100,26 +88,16 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                         element.game.move(move);
                         scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
-                        scope.game.time_black = data.time_black;
 
+                        scope.game.time_black = data.time_black;
                         scope.game.time_white = data.time_white;
 
                         AudioService.move();
                         element.board.position(element.game.fen());
                         element.updateStatus();
 
-                        if (element.game.game_over()) {
-                            scope.game.pgn = window.btoa(element.game.pgn());
-                            scope.game.$fix();
-                        }
-
                         scope.highlightLastMove(scope, element);
-                        $timeout(
-                            function () {
-                                makePreMoveIfExists(scope, element);
-                            },
-                            1
-                        );
+                        makePreMoveIfExists(scope, element);
                     });
                 }
             );
@@ -143,20 +121,9 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
 
                 scope.game.pgn = element.game.pgn();
                 console.log('fen after move', element.game.fen());
-                
-                $timeout(
-                    function () {
-                        scope.game.insufficient_material_white = insufficient_material_white(element.game.fen());
-                        scope.game.insufficient_material_black = insufficient_material_black(element.game.fen());
-                    },
-                    0
-                );
 
                 scope.savePgnAndSendToObservers(true, move, element.game.history().length, element.game.fen());
 
-                (element.game.game_over() && !element.game.in_checkmate() ||
-                    element.game.insufficient_material())
-                && scope.draw();
                 element.game.in_checkmate() && AudioService.win();
                 scope.highlightLastMove(scope, element);
 

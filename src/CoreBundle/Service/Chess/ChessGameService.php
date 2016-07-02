@@ -48,4 +48,54 @@ class ChessGameService extends ChessGame
         
         return parent::gameOver();
     }
+
+    /**
+     * @return bool
+     */
+    public function isInsufficientMaterialWhite() : bool
+    {
+        $pieces = $this->toArray();
+        
+        $countLightPieces = 0;
+
+        foreach ($pieces as $square => $piece) {
+            switch ($piece) {
+                case 'P':
+                case 'R':
+                case 'Q':
+                    return false;
+                case 'B':
+                case 'N':
+                    $countLightPieces++;
+                    break;
+            }
+        }
+
+        return $countLightPieces < 2;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInsufficientMaterialBlack() : bool
+    {
+        $pieces = $this->toArray();
+        
+        $countLightPieces = 0;
+
+        foreach ($pieces as $square => $piece) {
+            switch ($piece) {
+                case 'p':
+                case 'r':
+                case 'q':
+                    return false;
+                case 'b':
+                case 'n':
+                    $countLightPieces++;
+                    break;
+            }
+        }
+
+        return $countLightPieces < 2;
+    }
 }

@@ -585,8 +585,11 @@ class GameHandler implements GameProcessorInterface
      */
     private function fixResultIfTimeOver(GameFixResultInterface $request, Game $game)
     {
+        $gameService = $this->container->get("core.service.chess.game");
+        $gameService->setPgn($game->getPgn());
+
         if ($request->getTimeWhite() !== null && $game->getTimeWhite() <= 100) {
-            switch ($request->isInsufficientMaterialBlack()) {
+            switch ($gameService->isInsufficientMaterialBlack()) {
                 case false:
                     $game->setResultWhite(0)
                          ->setResultBlack(1);
@@ -599,7 +602,7 @@ class GameHandler implements GameProcessorInterface
                     break;
             }
         } elseif ($request->getTimeBlack() !== null && $game->getTimeBlack() <= 100) {
-            switch ($request->isInsufficientMaterialWhite()) {
+            switch ($gameService->isInsufficientMaterialWhite()) {
                 case false:
                     $game->setResultWhite(1)
                          ->setResultBlack(0);

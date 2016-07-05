@@ -8,8 +8,10 @@
 
 namespace ImmortalchessNetBundle\Service\Event;
 
+use CoreBundle\Model\Chess\PgnGame;
 use CoreBundle\Model\Event\EventCommandInterface;
 use CoreBundle\Model\Event\EventInterface;
+use CoreBundle\Service\Chess\ChessGameService;
 use ImmortalchessNetBundle\Model\Post;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -39,8 +41,7 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
                 null,
                 $this->container->getParameter("app_immortalchess.post_username_for_calls"),
                 $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
-                $pgnGame->getResult() == "1-0" ? $publishService->convertText("Белые выигрывают") :
-                    $publishService->convertText("Черные выигрывают"),
+                $this->getTitle($pgnGame),
                 $this->container->get("templating")->render(
                     ":Post:fenproblem.html.twig",
                     [
@@ -57,6 +58,38 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
     public function setEventModel(EventInterface $eventModel)
     {
         // TODO: Implement setEventModel() method.
+    }
+
+    /**
+     * @param PgnGame $pgnGame
+     * @return string
+     */
+    private function getTitle(PgnGame $pgnGame) : string
+    {
+        $chessGameService = new ChessGameService();
+        $chessGameService->_parseFen($pgnGame->getFen());
+
+        switch ($chessGameService->toMove()) {
+            case 'B':
+                $text = 'Ход черных. ';
+                break;
+            default:
+                $text = 'Ход белых. ';
+        }
+
+        switch ($pgnGame->getResult()) {
+            case '1-0':
+                $text .= "Белые выигрывают";
+                break;
+            case '1/2-1/2':
+                $text .= "Ничья";
+                break;
+            case '0-1':
+                $text .= "Черные выигрывают";
+                break;
+        }
+
+        return $this->container->get("immortalchessnet.service.publish")->convertText($text);
     }
 
 }

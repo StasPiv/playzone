@@ -87,6 +87,74 @@ class PublishService
     }
 
     /**
+     * @param PostModel $postModel
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function publishNewThread(PostModel $postModel)
+    {
+        $thread = (new Thread())->setForumid($postModel->getForumId())
+                                ->setTitle($postModel->getTitle());
+
+        $this->getManager()->persist($thread);
+        $this->getManager()->flush();
+        
+        $post = (new Post())->setThreadid($thread->getThreadid())
+            ->setParentid(0)
+            ->setUsername($postModel->getLastPosterName())
+            ->setUserid($postModel->getLastPosterId())
+            ->setTitle($this->convertText($postModel->getTitle()))
+            ->setPagetext($this->convertText($postModel->getPageText()))
+            ->setVisible(1)
+            ->setDateline(time());
+
+        $this->getManager()->persist($post);
+
+        try {
+            $this->getManager()->flush();
+        } catch (\Exception $e) {
+            $this->container->get("logger")->error(__METHOD__ . " " . $e->getMessage());
+        }
+
+        try {
+            $thread = $this->getManager()->getRepository("ImmortalchessNetBundle:Thread")
+                ->find($post->getThreadid());
+        } catch (ThreadNotFoundException $e) {
+            $this->container->get("logger")->error("Thread #" . $post->getThreadid() . " is not found");
+            return;
+        }
+
+        $thread->setLastpostid($post->getPostid())
+               ->setLastpost($post->getDateline())
+               ->setLastposter($post->getUsername())
+               ->setThreadid($post->getThreadid())
+               ->setReplycount($thread->getReplycount() + 1);
+        
+        $this->getManager()->persist($thread);
+
+        try {
+            $forum = $this->getManager()->getRepository("ImmortalchessNetBundle:Forum")
+                ->find($thread->getForumid());
+        } catch (ForumNotFoundException $e) {
+            $this->container->get("logger")->error("Forum #" . $thread->getForumid() . " is not found");
+            return;
+        }
+
+        $forum->setLastpostid($post->getPostid())
+              ->setLastpost($post->getDateline())
+              ->setLastposter($post->getUsername())
+              ->setLastthreadid($post->getThreadid())
+              ->setLastthread($thread->getTitle());
+        
+        $this->getManager()->persist($forum);
+        
+        try {
+            $this->getManager()->flush();
+        } catch (\Exception $e) {
+            $this->container->get("logger")->error(__METHOD__ . " " . $e->getMessage());
+        }
+    }
+
+    /**
      * @return ObjectManager
      */
     private function getManager() : ObjectManager
@@ -98,7 +166,7 @@ class PublishService
      * @param string $text
      * @return string
      */
-    private function convertText(string $text)
+    public function convertText(string $text)
     {
         return str_replace(
             ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', 'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я'],

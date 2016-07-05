@@ -11,3 +11,7 @@ services:
     class: ImmortalchessNetBundle\Service\ImmortalUserService
     calls:
       - [setContainer, ['@service_container']]
+  immortalchessnet.service.event.post_problem:
+    class: ImmortalchessNetBundle\Service\Event\PostProblemService
+    calls:
+      - [setContainer, ['@service_container']]

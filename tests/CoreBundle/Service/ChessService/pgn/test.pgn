@@ -1,0 +1,53 @@
+[Event "1/4.hm wt01"]
+[Site "?"]
+[Date "1975.??.??"]
+[Round "?"]
+[White "Korolkov, V."]
+[Black "[+3011.83h1h8]"]
+[Result "1-0"]
+[SetUp "1"]
+[FEN "4N2k/1B2p2P/1P2P1PP/4q3/6P1/3P3p/1P5p/7K w - - 0 1"]
+[PlyCount "19"]
+[EventDate "1975.??.??"]
+[Source "ChessBase"]
+[SourceDate "2000.10.30"]
+
+1. g7+ Kxh7 2. Be4+ Kxh6 3. g8=R Qg3 4. Rg6+ Kh7 5. Rg5+ Kh8 6. Rh5+ Kg8 7.
+Bh7+ Kh8 8. Bg6+ Kg8 9. Bf7+ Kf8 10. Rh8# 1-0
+
+[Event "sp.p t001#32"]
+[Site "?"]
+[Date "1975.??.??"]
+[Round "?"]
+[White "Korolkov, V."]
+[Black "[=0153.34g4c1]"]
+[Result "1/2-1/2"]
+[SetUp "1"]
+[FEN "8/3p4/1b6/8/3B2K1/n1RP4/P1Bp1Ppp/2k5 w - - 0 1"]
+[PlyCount "57"]
+[EventDate "1975.??.??"]
+[Source "ChessBase"]
+[SourceDate "2000.10.30"]
+
+1. Ba4+ Kb1 2. Rb3+ Kc2 3. Rc3+ Kb2 4. Rb3+ Kc1 5. Rc3+ Nc2 6. Rxc2+ Kd1 7. Kf3
+$1 7... h1=Q 8. Rb2+ Kc1 9. Rc2+ Kb1 10. Rb2+ Ka1 11. Rxb6+ Kxa2 12. Bb3+ Kb1
+13. Ba4+ $1 13... Kc1 14. Bb2+ Kb1 15. Bd4+ $1 15... Ka2 16. Bb3+ Ka3 17. Bc5+
+Kb2 18. Ba4+ Ka2 19. Bb3+ Kb1 20. Ba4+ Ka1 21. Bd4+ Ka2 22. Bb3+ Ka3 23. Bc5+
+Kb2 24. Ba4+ Kc3 25. Rb3+ Kc2 26. Ra3+ $1 26... Kb2 27. Rb3+ Ka1 28. Ra3+ Kb1
+29. Rb3+ 1/2-1/2
+
+[Event "tk24"]
+[Site "?"]
+[Date "1976.??.??"]
+[Round "?"]
+[White "Korolkov, V."]
+[Black "[+0110.02d5g5]"]
+[Result "1-0"]
+[SetUp "1"]
+[FEN "8/8/8/3K2k1/6p1/1B3R2/6p1/8 w - - 0 1"]
+[PlyCount "13"]
+[EventDate "1976.??.??"]
+[Source "ChessBase"]
+[SourceDate "2000.10.30"]
+
+1. Rg3 Kh4 2. Rxg2 Kh3 3. Rf2 g3 4. Rf3 Kh2 5. Bc4 g2 6. Bf1 g1=Q 7. Rh3# 1-0

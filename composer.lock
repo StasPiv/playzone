@@ -4,9 +4,39 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "529d8ef6ef6d93a6980d3e4f37bda2db",
-    "content-hash": "12e640ac58bfc2307993ecdacac98ca3",
+    "hash": "9ee68b32c8ada4ec3c75b624083c650a",
+    "content-hash": "6e2fce5c4bf9f176692a72e8c76e1574",
     "packages": [
+        {
+            "name": "amyboyd/pgn-parser",
+            "version": "0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/amyboyd/pgn-parser.git",
+                "reference": "bd718d2e2e51f39f6b826c772e47786ae70ae764"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/amyboyd/pgn-parser/zipball/bd718d2e2e51f39f6b826c772e47786ae70ae764",
+                "reference": "bd718d2e2e51f39f6b826c772e47786ae70ae764",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "AmyBoyd\\PgnParser\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Amy Boyd",
+                    "email": "amy@amyboyd.co.uk"
+                }
+            ],
+            "description": "A PHP parser for the chess game notation format, PGN. There are no external dependencies. It's simple to use, namespaced and testable.",
+            "time": "2014-12-19 21:17:47"
+        },
         {
             "name": "beberlei/DoctrineExtensions",
             "version": "v1.0.9",

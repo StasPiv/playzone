@@ -35,17 +35,19 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
             $this->container->get("kernel")->getRootDir() . DIRECTORY_SEPARATOR . '../web/uploads/korol.pgn'         );
 
         $publishService = $this->container->get("immortalchessnet.service.publish");
+        $title = $this->getTitle($pgnGame);
         $publishService->publishNewThread(
             new Post(
                 self::FORUM_FOR_PROBLEMS,
                 null,
                 $this->container->getParameter("app_immortalchess.post_username_for_calls"),
                 $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
-                $this->getTitle($pgnGame),
+                $title,
                 $this->container->get("templating")->render(
                     ":Post:fenproblem.html.twig",
                     [
-                        "pgnGame" => $pgnGame
+                        "pgnGame" => $pgnGame,
+                        "title" => $title
                     ]
                 )
             )

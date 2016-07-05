@@ -93,7 +93,9 @@ class PublishService
     public function publishNewThread(PostModel $postModel)
     {
         $thread = (new Thread())->setForumid($postModel->getForumId())
-                                ->setTitle($postModel->getTitle());
+                                ->setTitle($postModel->getTitle())
+                                ->setOpen(1)
+                                ->setVisible(1);
 
         $this->getManager()->persist($thread);
         $this->getManager()->flush();

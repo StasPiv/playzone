@@ -132,30 +132,31 @@ class CallHandler implements CallProcessorInterface
     }
 
     /**
-     * @param CallPostSendRequest $sendRequest
+     * @param CallPostSendRequest $request
      * @return GameCall
      */
-    public function processPostSend(CallPostSendRequest $sendRequest) : GameCall
+    public function processPostSend(CallPostSendRequest $request) : GameCall
     {
-        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($sendRequest, $this->getRequestError());
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request, $this->getRequestError());
 
         if ($me->isBanned()) {
             $this->getRequestError()->addError("user", "You are banned")
                                     ->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
-        if (!$sendRequest->getColor() || $sendRequest->getColor() == GameColor::RANDOM) {
-            $sendRequest->setColor(
+        if (!$request->getColor() || $request->getColor() == GameColor::RANDOM) {
+            $request->setColor(
                 !$me->getLastColor() ? [GameColor::WHITE, GameColor::BLACK][mt_rand(0, 1)] :
                     GameColor::getOppositeColor($me->getLastColor())
             );
         }
 
         $gameParams = new GameParams();
-        $gameParams->setColor( GameColor::getOppositeColor($sendRequest->getColor()) )
-                   ->setTimeBase($sendRequest->getTime()->getBase());
+        $gameParams->setColor( GameColor::getOppositeColor($request->getColor()) )
+                   ->setTimeBase($request->getTime()->getBase())
+                   ->setTimeIncrement($request->getTime()->getIncrement());
 
-        if (!$sendRequest->getPlayer()) {
+        if (!$request->getPlayer()) {
             $gameCall = $this->createCommonGameCall($me, $gameParams);
 
             $this->manager->flush();
@@ -166,7 +167,7 @@ class CallHandler implements CallProcessorInterface
         try {
             $opponent = $this->container->get("core.handler.user")
                                         ->getRepository()
-                                        ->findOneByLogin($sendRequest->getPlayer());
+                                        ->findOneByLogin($request->getPlayer());
         } catch (UserNotFoundException $e) {
             $this->getRequestError()
                  ->addError("player", "Opponent with this login is not found")
@@ -238,6 +239,8 @@ class CallHandler implements CallProcessorInterface
         
         $game->setTimeWhite($call->getGameParams()->getTimeBase())
              ->setTimeBlack($call->getGameParams()->getTimeBase());
+
+        $game->setGameParams($call->getGameParams());
 
         $this->manager->persist($game);
 

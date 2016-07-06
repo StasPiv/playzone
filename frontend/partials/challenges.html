@@ -23,9 +23,11 @@
                 </td>
             </tr>
             <tr ng-class="{ error: errors.time }">
-                <td><label for="time_base">{{ 'Time control (minutes)' | translate }}:</label></td>
-                <td>
+                <td colspan="2">
+                    <label for="time_base">{{ 'Time control (minutes)' | translate }}:</label>
                     <input type="number" min="1" max="60" id="time_base" data-ng-model="call.time.base_minutes" />
+                    <label for="time_increment">{{ 'Time control (increment)' | translate }}:</label>
+                    <input type="number" min="1" max="5" id="time_increment" data-ng-model="call.time.increment_seconds" />
                 </td>
             </tr>
             <tr>
@@ -53,7 +55,7 @@
         <tr>
             <th>№</th>
             <th>{{ "To user" | translate }}</th>
-            <th>{{ "Time control (minutes)" | translate }}</th>
+            <th>{{ "Time control" | translate }}</th>
             <th>&nbsp;</th>
         </tr>
         <tr ng-repeat="call in calls_from_me" ng-if="call.id">
@@ -65,6 +67,9 @@
             </td>
             <td>
                 {{ call.game_params.time_base / 60000 }}
+                <span ng-if="call.game_params.time_increment">
+                    + {{ call.game_params.time_increment / 1000 }}
+                </span>
             </td>
             <td>
                 <a href="" class="btn btn-danger glyphicon glyphicon-remove" ng-click="deleteCall(call);" title="{{ 'Remove' | translate }}"></a>
@@ -81,7 +86,7 @@
         <tr>
             <th>№</th>
             <th>{{ "From user" | translate }}</th>
-            <th>{{ "Time control (minutes)" | translate }}</th>
+            <th>{{ "Time control" | translate }}</th>
             <th width="20%">&nbsp;</th>
         </tr>
         <tr ng-repeat="call in calls_to_me">
@@ -95,6 +100,9 @@
             </td>
             <td>
                 {{ call.game_params.time_base / 60000 }}
+                <span ng-if="call.game_params.time_increment">
+                    + {{ call.game_params.time_increment / 1000 }}
+                </span>
             </td>
             <td>
                 <div class="btn btn-group" ng-if="call.id && call.from_user.id != $root.user.id">

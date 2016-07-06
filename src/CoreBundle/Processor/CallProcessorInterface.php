@@ -27,10 +27,10 @@ interface CallProcessorInterface
     public function processGet(CallGetRequest $getRequest) : array;
 
     /**
-     * @param CallPostSendRequest $sendRequest
+     * @param CallPostSendRequest $request
      * @return GameCall
      */
-    public function processPostSend(CallPostSendRequest $sendRequest) : GameCall;
+    public function processPostSend(CallPostSendRequest $request) : GameCall;
 
     /**
      * @param CallDeleteRemoveRequest $removeRequest

@@ -21,6 +21,14 @@ class Time
      * @JMS\Type("integer")
      */
     private $base;
+    
+    /**
+     * @var integer
+     *
+     * @JMS\Expose()
+     * @JMS\Type("integer")
+     */
+    private $increment;
 
     /**
      * @return int
@@ -37,6 +45,25 @@ class Time
     public function setBase($base) : Time
     {
         $this->base = $base;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIncrement() : int 
+    {
+        return (int)$this->increment;
+    }
+
+    /**
+     * @param int $increment
+     * @return Time
+     */
+    public function setIncrement($increment) : self 
+    {
+        $this->increment = $increment;
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace CoreBundle\Entity;
 
 use CoreBundle\Model\ChatMessage\ChatMessageContainerInterface;
 use CoreBundle\Model\Game\GameColor;
+use CoreBundle\Model\Game\GameParams;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
@@ -265,6 +266,17 @@ class Game implements ChatMessageContainerInterface
      * @JMS\Groups({"get_game", "put_game_pgn", "put_game_resign", "put_game_acceptdraw", "put_game_offerdraw"})
      */
     private $tournamentGame;
+
+    /**
+     * @var GameParams
+     *
+     * @JMS\Expose
+     * @JMS\Type("CoreBundle\Model\Game\GameParams")
+     * @JMS\SerializedName("game_params")
+     *
+     * @ORM\Column(name="game_params", type="object")
+     */
+    private $gameParams;
 
     /**
      * Get id
@@ -813,6 +825,25 @@ class Game implements ChatMessageContainerInterface
     public function setTournamentGame($tournamentGame)
     {
         $this->tournamentGame = $tournamentGame;
+
+        return $this;
+    }
+
+    /**
+     * @return GameParams
+     */
+    public function getGameParams() : GameParams
+    {
+        return $this->gameParams;
+    }
+
+    /**
+     * @param GameParams $gameParams
+     * @return Game
+     */
+    public function setGameParams($gameParams) : self 
+    {
+        $this->gameParams = $gameParams;
 
         return $this;
     }

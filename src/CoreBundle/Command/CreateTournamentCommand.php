@@ -25,7 +25,8 @@ class CreateTournamentCommand extends ContainerAwareCommand
              ->addArgument('frequency')
              ->addArgument('timeBegin')
              ->addArgument('tournamentName')
-             ->addArgument('timeBase');
+             ->addArgument('timeBase')
+             ->addArgument('timeIncrement');
     }
 
     /**
@@ -37,10 +38,11 @@ class CreateTournamentCommand extends ContainerAwareCommand
     {
         $this->getContainer()->get("core.handler.tournament")
              ->createTournamentEvent(
-                 $input->getArgument('frequency'), 
-                 $input->getArgument('timeBegin'), 
-                 $input->getArgument('tournamentName'), 
-                 $input->getArgument('timeBase')
+                 $input->getArgument('frequency'),
+                 $input->getArgument('timeBegin'),
+                 $input->getArgument('tournamentName'),
+                 $input->getArgument('timeBase'),
+                 $input->getArgument('timeIncrement')
              );
     }
 }

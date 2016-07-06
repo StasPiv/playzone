@@ -200,5 +200,33 @@
         "player": "You already created call with the same params"
       }
     }
+  },
+  "correct_call_with_increment": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "color": {
+        "id": "w"
+      },
+      "time": {
+        "base": 300000,
+        "increment": 2000
+      },
+      "games_count": 1
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "from_user": {
+          "login": "TestLogin"
+        },
+        "game_params": {
+          "color": "b",
+          "time_base": 300000,
+          "time_increment": 2000
+        }
+      }
+    }
   }
 }

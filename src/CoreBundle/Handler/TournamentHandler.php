@@ -375,6 +375,9 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         $game->setUserToMove($game->getUserWhite());
         $game->setTimeWhite($tournament->getGameParams()->getTimeBase())
              ->setTimeBlack($tournament->getGameParams()->getTimeBase());
+
+        $game->setGameParams($tournament->getGameParams());
+        
         $this->container->get("core.handler.game")->changeGameStatus($game, GameStatus::PLAY);
 
         $tournamentGame = new TournamentGame();
@@ -645,15 +648,22 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
      * @param string $timeBegin
      * @param string $tournamentName
      * @param int $timeBase
+     * @param int $timeIncrement
      */
-    public function createTournamentEvent(string $frequency, string $timeBegin, string $tournamentName, int $timeBase)
+    public function createTournamentEvent(
+        string $frequency,
+        string $timeBegin,
+        string $tournamentName,
+        int $timeBase,
+        int $timeIncrement = 0
+    )
     {
         $this->container->get("core.handler.event")->initEventAndSave(
             (new TournamentInitializator())
                 ->setFrequency($frequency)
                 ->setTournamentName($tournamentName)
                 ->setGameParams(
-                    (new GameParams())->setTimeBase($timeBase)
+                    (new GameParams())->setTimeBase($timeBase)->setTimeIncrement($timeIncrement)
                 )
                 ->setTimeBegin($timeBegin)
                 ->setTournamentParams(

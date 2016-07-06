@@ -25,7 +25,7 @@ class GameParams
     private $color;
 
     /**
-     * @var GameColor
+     * @var int
      *
      * @JMS\Expose
      * @JMS\Type("integer")
@@ -33,12 +33,12 @@ class GameParams
     private $timeBase;
 
     /**
-     * @var GameColor
+     * @var int
      *
      * @JMS\Expose
      * @JMS\Type("integer")
      */
-    private $timeIncrement;
+    private $timeIncrement = 0;
 
     /**
      * @var GameColor
@@ -87,18 +87,18 @@ class GameParams
     }
 
     /**
-     * @return GameColor
+     * @return int
      */
-    public function getTimeIncrement()
+    public function getTimeIncrement() : int 
     {
         return $this->timeIncrement;
     }
 
     /**
-     * @param GameColor $timeIncrement
+     * @param int $timeIncrement
      * @return GameParams
      */
-    public function setTimeIncrement($timeIncrement)
+    public function setTimeIncrement(int $timeIncrement) : self 
     {
         $this->timeIncrement = $timeIncrement;
 
@@ -106,18 +106,18 @@ class GameParams
     }
 
     /**
-     * @return GameColor
+     * @return int
      */
-    public function getTimeLimit()
+    public function getTimeLimit() : int 
     {
         return $this->timeLimit;
     }
 
     /**
-     * @param GameColor $timeLimit
+     * @param int $timeLimit
      * @return GameParams
      */
-    public function setTimeLimit($timeLimit)
+    public function setTimeLimit(int $timeLimit) : self 
     {
         $this->timeLimit = $timeLimit;
 

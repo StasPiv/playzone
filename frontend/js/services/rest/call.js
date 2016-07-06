@@ -36,6 +36,9 @@ playzoneServices.factory('CallRest', function($resource, ApiService) {
                     if (data.time.base_minutes) {
                         data.time.base = data.time.base_minutes * 1000 * 60;
                     }
+                    if (data.time.increment_seconds) {
+                        data.time.increment = data.time.increment_seconds * 1000;
+                    }
                     return angular.toJson(data);
                 }
             }

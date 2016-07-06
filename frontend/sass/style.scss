@@ -336,6 +336,9 @@ h2 {
 }
 .call-form {
   display: none;
+  #time_base, #time_increment {
+    width: 55px;
+  }
 }
 .filter {
   position: fixed;

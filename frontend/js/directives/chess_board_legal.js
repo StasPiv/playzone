@@ -254,13 +254,16 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
             var rtime;
             var timeout = false;
             var delta = 200;
-            $(window).resize(function() {
-                rtime = new Date();
-                if (timeout === false) {
-                    timeout = true;
-                    setTimeout(resizeend, delta);
-                }
-            });
+
+            if (!$rootScope.isMobile) {
+                $(window).resize(function() {
+                    rtime = new Date();
+                    if (timeout === false) {
+                        timeout = true;
+                        setTimeout(resizeend, delta);
+                    }
+                });
+            }
 
             function resizeend() {
                 if (new Date() - rtime < delta) {

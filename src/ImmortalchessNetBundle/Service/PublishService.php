@@ -95,7 +95,8 @@ class PublishService
         $thread = (new Thread())->setForumid($postModel->getForumId())
                                 ->setTitle($postModel->getTitle())
                                 ->setOpen(1)
-                                ->setVisible(1);
+                                ->setVisible(1)
+                                ->setTaglist($postModel->getTaglist());
 
         $this->getManager()->persist($thread);
         $this->getManager()->flush();

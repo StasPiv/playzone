@@ -19,7 +19,7 @@ class PgnServiceTest extends KernelAwareTest
 
     public function testGetRandomPgnGame()
     {
-        $pgnGame = $this->container->get("core.service.chess.pgn")->getRandomPgn(
+        $pgnGame = $this->container->get("core.service.chess.pgn")->getRandomPgnGame(
             __DIR__ . DIRECTORY_SEPARATOR . 'pgn' . DIRECTORY_SEPARATOR . 'test.pgn'
         );
 

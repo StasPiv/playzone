@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 /**
  * Class PgnService
@@ -28,34 +29,25 @@ class PgnService implements ContainerAwareInterface
 
     /**
      * @param string $pgnPath
+     * @param array $excludedFens
      * @return PgnGame
+     * @throws NotFoundResourceException
      */
-    public function getRandomPgn(string $pgnPath) : PgnGame
+    public function getRandomPgnGame(string $pgnPath, array $excludedFens = []) : PgnGame
     {
         $this->parser = new PgnParser($pgnPath);
-        return $this->getPgnGameByIndex(
-            $pgnPath, mt_rand(0, count($this->parser->getGames()) - 1)
-        );
-    }
-
-    /**
-     * @param string $pgnPath
-     * @param int $index
-     * @return PgnGame
-     */
-    public function getPgnGameByIndex(string $pgnPath, int $index)
-    {
-        if (!file_exists($pgnPath)) {
-            throw new FileNotFoundException;
+        $availableGames = [];
+        
+        foreach ($this->parser->getGames() as $index => $pgnGame) {
+            if (!in_array($pgnGame->getFen(), $excludedFens)) {
+                $availableGames[] = $pgnGame;
+            }
         }
-
-        $content = file_get_contents($pgnPath);
-
-        if (empty($content)) {
-            throw new FileNotFoundException;
+        
+        if (empty($availableGames)) {
+            throw new NotFoundResourceException;
         }
-
-
-        return $this->parser->getGame($index);
+        
+        return $availableGames[mt_rand(0, count($availableGames) - 1)];
     }
 }

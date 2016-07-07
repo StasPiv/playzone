@@ -46,6 +46,11 @@ class Post
     private $pageText;
 
     /**
+     * @var string
+     */
+    private $taglist;
+
+    /**
      * Post constructor.
      * @param int $forumId
      * @param int $threadId
@@ -53,6 +58,7 @@ class Post
      * @param int $lastPosterId
      * @param string $title
      * @param string $pageText
+     * @param $taglist
      */
     public function __construct(
         $forumId,
@@ -60,7 +66,8 @@ class Post
         $lastPosterName,
         $lastPosterId,
         $title,
-        $pageText
+        $pageText,
+        $taglist = null
     ) {
         $this->forumId = $forumId;
         $this->threadId = $threadId;
@@ -68,6 +75,7 @@ class Post
         $this->lastPosterId = $lastPosterId;
         $this->title = $title;
         $this->pageText = $pageText;
+        $this->taglist = $taglist;
     }
 
     /**
@@ -199,6 +207,25 @@ class Post
     public function setPageText($pageText)
     {
         $this->pageText = $pageText;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTaglist()
+    {
+        return $this->taglist;
+    }
+
+    /**
+     * @param string $taglist
+     * @return Post
+     */
+    public function setTaglist($taglist)
+    {
+        $this->taglist = $taglist;
 
         return $this;
     }

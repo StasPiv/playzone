@@ -12,9 +12,11 @@ use CoreBundle\Model\Chess\PgnGame;
 use CoreBundle\Model\Event\EventCommandInterface;
 use CoreBundle\Model\Event\EventInterface;
 use CoreBundle\Service\Chess\ChessGameService;
+use Doctrine\Common\Persistence\ObjectManager;
 use ImmortalchessNetBundle\Model\Post;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 /**
  * Class PostProblem
@@ -31,27 +33,60 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
      */
     public function run()
     {
-        $pgnGame = $this->container->get("core.service.chess.pgn")->getRandomPgn(
-            $this->container->get("kernel")->getRootDir() . DIRECTORY_SEPARATOR . '../web/uploads/korol.pgn'         );
+        try {
+            $pgnGame = $this->container->get("core.service.chess.pgn")->getRandomPgnGame(
+                $this->container->get("kernel")->getRootDir() .
+                DIRECTORY_SEPARATOR . '../web/uploads/korol.pgn',
+                $this->getAlreadyPostedFens()
+            );
+        } catch (NotFoundResourceException $e) {
+            $this->container->get("logger")->err("There are no available fens for posting problem");
+            return;
+        }
 
         $publishService = $this->container->get("immortalchessnet.service.publish");
         $title = $this->getTitle($pgnGame);
         $publishService->publishNewThread(
             new Post(
-                self::FORUM_FOR_PROBLEMS,
-                null,
+                self::FORUM_FOR_PROBLEMS, null,
                 $this->container->getParameter("app_immortalchess.post_username_for_calls"),
-                $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
-                $title,
+                $this->container->getParameter("app_immortalchess.post_userid_for_calls"), $title,
                 $this->container->get("templating")->render(
                     ":Post:fenproblem.html.twig",
                     [
                         "pgnGame" => $pgnGame,
                         "title" => $title
                     ]
-                )
+                ),
+                $pgnGame->getFen()
             )
         );
+    }
+
+    /**
+     * @return array
+     */
+    private function getAlreadyPostedFens() : array
+    {
+        $fens = [];
+
+        $threads = $this->getManager()->getRepository("ImmortalchessNetBundle:Thread")->findBy([
+            "forumid" => self::FORUM_FOR_PROBLEMS
+        ]);
+
+        foreach ($threads as $thread) {
+            $fens[] = $thread->getTaglist();
+        }
+
+        return $fens;
+    }
+
+    /**
+     * @return ObjectManager
+     */
+    private function getManager() : ObjectManager
+    {
+        return $this->container->get('doctrine')->getManager('immortalchess');
     }
 
     /**

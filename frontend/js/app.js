@@ -14,6 +14,8 @@ var playzoneApp = angular.module('playzoneApp', [
     'LocalStorageModule'
 ]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'ChatRest', 'WebsocketService', 'EnvService', '$interval', '$location', '$templateCache', 'TournamentRest', function ($http, $rootScope, $cookies, UserRest, ChatRest, WebsocketService, EnvService, $interval, $location, $templateCache, TournamentRest) {
 
+    $rootScope.location = $location;
+
     $rootScope.$on('$viewContentLoaded', function() {
         $templateCache.removeAll();
     });

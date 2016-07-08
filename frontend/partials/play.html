@@ -80,6 +80,7 @@
                 <pgn-notation
                            data-pgn-string="game.pgn"
                            data-game="game"
+                           ng-if="!$root.isMobile || game.status != 'play'"
                 ></pgn-notation>
             </div>
         </div>

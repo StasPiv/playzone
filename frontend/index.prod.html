@@ -12,9 +12,9 @@
     <!-- end bootstrap -->
 
     <script src="dist/lib.js"></script>
-    <script src="dist/app.js?v=1.6"></script>
+    <script src="dist/app.js?v=1.7"></script>
 
-    <link rel="stylesheet" href="css/style.css?v=1.5.2" />
+    <link rel="stylesheet" href="css/style.css?v=1.6" />
     <link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker.css" />
     <link href="css/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
     <link rel="icon" type="image/x-icon" href="favicons/Black Q.ico" />
@@ -22,7 +22,7 @@
 </head>
 <body ng-class="{'mobile': $root.isMobile}">
 <div class="content" ng-cloak>
-    <div class="header">
+    <div class="header" ng-if="!$root.isMobile || $root.location.path().indexOf('/play/') !== 0">
         <a class="logo" href="#/"><img src="images/logo.png" /></a>
 
         <div class="menu" ng-controller="TopMenuCtrl">

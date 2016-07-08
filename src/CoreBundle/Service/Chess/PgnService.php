@@ -12,8 +12,6 @@ use CoreBundle\Service\Chess\Pgn\PgnParser;
 use CoreBundle\Model\Chess\PgnGame;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 /**

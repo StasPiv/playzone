@@ -739,6 +739,7 @@ th.header {
         margin-top: 10px;
         .mobile & {
           width: auto;
+          margin-top: 20px;
         }
         .button {
           font-size: 26px;
@@ -781,7 +782,7 @@ th.header {
         float: none;
       }
       pgn-notation {
-        margin: -2px 0 0 5px;
+        margin: -2px 0 0 -16px;
         display: block;
         .move {
           cursor: pointer;
@@ -796,7 +797,8 @@ th.header {
             cursor: pointer;
             border: 1px solid black;
             .mobile & {
-              width: 45px;
+              width: 50px;
+              padding: 10px 0;
             }
           }
         }
@@ -806,6 +808,10 @@ th.header {
           .mobile & {
             display: none;
           }
+        }
+        .publish {
+          text-align: center;
+          padding-top: 25px;
         }
       }
     }

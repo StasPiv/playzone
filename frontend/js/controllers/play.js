@@ -25,7 +25,7 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
                       28000
     };
 
-    $scope.game = GameRest.get(
+    $rootScope.game = $scope.game = GameRest.get(
         {
             id: $routeParams.gameId
         }

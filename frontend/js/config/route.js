@@ -67,6 +67,10 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 templateUrl: 'partials/profile.html',
                 controller: 'ProfileCtrl'
             }).
+            when('/webrtc-share', {
+                templateUrl: 'partials/webrtc-share.html',
+                controller: 'WebrtcShareCtrl'
+            }).
             otherwise({
                 redirectTo: '/'
             });

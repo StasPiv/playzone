@@ -817,3 +817,13 @@ th.header {
     }
   }
 }
+.pointer {
+  width: 10px;
+  height: 10px;
+  border: 1px solid red;
+  border-radius: 4px;
+  position: fixed;
+  &.clicked {
+    border-color: green;
+  }
+}

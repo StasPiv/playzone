@@ -36,7 +36,9 @@
         "chesscom/chess-game": "dev-develop",
         "jtreminio/test-extensions": "dev-master",
         "ocramius/proxy-manager": "~1.0",
-        "amyboyd/pgn-parser": "^0.2.0"
+        "amyboyd/pgn-parser": "^0.2.0",
+        "knplabs/knp-time-bundle": "1.6.1",
+        "twig/extensions": "v1.3.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

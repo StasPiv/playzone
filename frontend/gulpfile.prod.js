@@ -76,6 +76,7 @@ gulp.task('compressJs', function() {
         "js/directives/tournament_table.js",
         "js/directives/tournament_record.js",
         "js/directives/challenges.js",
+        "js/directives/game_params.js",
         "js/services/environment.js",
         "js/services/cookie.js",
         "js/services/api.js",

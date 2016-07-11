@@ -27,7 +27,7 @@
                     <label for="time_base">{{ 'Time control (minutes)' | translate }}:</label>
                     <input type="number" min="1" max="60" id="time_base" data-ng-model="call.time.base_minutes" />
                     <label for="time_increment">{{ 'Time control (increment)' | translate }}:</label>
-                    <input type="number" min="1" max="5" id="time_increment" data-ng-model="call.time.increment_seconds" />
+                    <input type="number" min="0" max="5" id="time_increment" data-ng-model="call.time.increment_seconds" />
                 </td>
             </tr>
             <tr>
@@ -66,10 +66,7 @@
                 {{ call.to_user.login ? call.to_user.login : "To all" | translate }}
             </td>
             <td>
-                {{ call.game_params.time_base / 60000 }}
-                <span ng-if="call.game_params.time_increment">
-                    + {{ call.game_params.time_increment / 1000 }}
-                </span>
+                <game-params data-params="call.game_params"></game-params>
             </td>
             <td>
                 <a href="" class="btn btn-danger glyphicon glyphicon-remove" ng-click="deleteCall(call);" title="{{ 'Remove' | translate }}"></a>
@@ -99,10 +96,7 @@
                 ></user-link>
             </td>
             <td>
-                {{ call.game_params.time_base / 60000 }}
-                <span ng-if="call.game_params.time_increment">
-                    + {{ call.game_params.time_increment / 1000 }}
-                </span>
+                <game-params data-params="call.game_params"></game-params>
             </td>
             <td>
                 <div class="btn btn-group" ng-if="call.id && call.from_user.id != $root.user.id">

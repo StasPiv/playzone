@@ -1,0 +1,4 @@
+{{ params.time_base / 60000 }}{{ 'm' | translate}}
+<span ng-if="params.time_increment">
+    + {{ params.time_increment / 1000 }}{{'s' | translate}}
+</span>

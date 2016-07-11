@@ -7,7 +7,7 @@
             <tr>
                 <th>№</th>
                 <th>{{ "Tournament" | translate }}</th>
-                <th>{{ "Parameters" | translate }}</th>
+                <th>{{ "Time control" | translate }}</th>
                 <th>{{ "Type" | translate }}</th>
                 <th>{{ "Time begin" | translate }}</th>
                 <th ng-if="record">{{ "Action" | translate }}</th>
@@ -24,7 +24,7 @@
                 <a href="/#/tournament/{{ tournament.id }}">{{ tournament.name }}</a>
             </td>
             <td>
-                <a href="">{{ tournament.game_params.time_base / 60000 }}{{ "m" | translate }}</a>
+                <game-params data-params="tournament.game_params"></game-params>
             </td>
             <td>
                 <a href="">{{ tournament.tournament_params.type | translate }}</a>

@@ -32,8 +32,6 @@ class ImmortalchessnetService implements EventSubscriberInterface
 {
     use ContainerAwareTrait;
 
-    const USERNAME_FOR_POST = "PozitiFF_Chess";
-    const COMMON_USERID = 87;
     const THREAD_FOR_CALLS = 30629;
     const THREAD_WITH_INTERESTING_GAMES = 31003;
     const THREAD_FOR_3_MINUTES = 30991;
@@ -76,7 +74,7 @@ class ImmortalchessnetService implements EventSubscriberInterface
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
                 self::THREAD_WITH_INTERESTING_GAMES,
                 $event->getUser()->getLogin(),
-                self::COMMON_USERID,
+                $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
                 "Позиция из партии " . $event->getGame()->getUserWhite() . "-" . $event->getGame()->getUserBlack(),
                 $this->container->get("templating")->render(
                     'Post/gamefen.html.twig',
@@ -99,7 +97,7 @@ class ImmortalchessnetService implements EventSubscriberInterface
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
                 self::THREAD_WITH_INTERESTING_GAMES,
                 $event->getUser()->getLogin(),
-                self::COMMON_USERID,
+                $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
                 "Партия " . $event->getGame()->getUserWhite() . "-" . $event->getGame()->getUserBlack(),
                 $this->container->get("templating")->render(
                     'Post/gamepgn.html.twig',
@@ -122,7 +120,7 @@ class ImmortalchessnetService implements EventSubscriberInterface
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
                 self::THREAD_FOR_CALLS,
                 $event->getCall()->getFromUser()->getLogin(),
-                self::COMMON_USERID,
+                $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
                 'Новый вызов от ' . $event->getCall()->getFromUser()->getLogin(),
                 $this->container->get("templating")->render(
                     'Post/newcall.html.twig',
@@ -156,8 +154,8 @@ class ImmortalchessnetService implements EventSubscriberInterface
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
                 $tournament->getGameParams()->getTimeBase() === 180000 ?
                     self::THREAD_FOR_3_MINUTES : self::THREAD_FOR_5_MINUTES,
-                self::USERNAME_FOR_POST,
-                self::COMMON_USERID,
+                $this->container->getParameter("app_immortalchess.post_username_for_calls"),
+                $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
                 "Турнир #{$tournament->getName()} завершен",
                 $this->container->get("templating")->render(
                     "Post/tournamenttable_round_robin.html.twig",
@@ -191,8 +189,8 @@ class ImmortalchessnetService implements EventSubscriberInterface
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
                 $tournament->getGameParams()->getTimeBase() === 180000 ?
                     self::THREAD_FOR_3_MINUTES : self::THREAD_FOR_5_MINUTES,
-                self::USERNAME_FOR_POST,
-                self::COMMON_USERID,
+                $this->container->getParameter("app_immortalchess.post_username_for_calls"),
+                $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
                 "Запись в турнир открыта",
                 $this->container->get("templating")->render(
                     'Post/newtournament.html.twig',

@@ -79,7 +79,11 @@
         "symfony-tests-dir": "tests",
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
+            "file": "app/config/parameters.yml",
+            "env-map": {
+                "app_immortalchess.post_username_for_calls": "APP_IMMORTALCHESS_NET_POST_USER_NAME",
+                "app_immortalchess.post_userid_for_calls": "APP_IMMORTALCHESS_NET_POST_USER_ID"
+            }
         },
         "branch-alias": {
             "dev-master": "3.0-dev"

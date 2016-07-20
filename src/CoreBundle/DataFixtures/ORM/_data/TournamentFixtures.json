@@ -202,5 +202,47 @@
       "time_begin": "-1minute"
     },
     "status": "current"
+  },
+  {
+    "referenceName": "tournament-round-robin-2-laps",
+    "name": "Round robin test 2 laps",
+    "players": [
+      "user-a",
+      "user-b",
+      "user-c"
+    ],
+    "games": [
+
+    ],
+    "game_params": {
+      "time_base": 600000
+    },
+    "tournament_params": {
+      "type": "round_robin",
+      "time_begin": "+1minute",
+      "games_vs_opponent": 2
+    },
+    "status": "new",
+    "current_round": 3
+  },
+  {
+    "referenceName": "tournament-round-robin-stas-petro-match",
+    "name": "Round robin test Stas-Petro match",
+    "players": [
+      "user-stas",
+      "user-petro"
+    ],
+    "games": [
+
+    ],
+    "game_params": {
+      "time_base": 600000
+    },
+    "tournament_params": {
+      "type": "round_robin",
+      "time_begin": "+1minute",
+      "games_vs_opponent": 4
+    },
+    "status": "new"
   }
 ]

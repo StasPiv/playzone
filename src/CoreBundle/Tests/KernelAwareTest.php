@@ -7,8 +7,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Component\DependencyInjection\Container;
 
-//use Symfony\Component\HttpKernel\AppKernel;
-
 require_once dirname(__DIR__).'/../../app/AppKernel.php';
 
 /**

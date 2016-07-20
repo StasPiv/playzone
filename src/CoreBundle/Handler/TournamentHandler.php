@@ -589,7 +589,8 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         $countPlayers = count($tournament->getPlayers());
 
         $tournament->setRounds(
-            $countPlayers % 2 === 0 ? $countPlayers - 1 : $countPlayers
+            $tournament->getTournamentParams()->getGamesVsOpponent() *
+            ($countPlayers % 2 === 0 ? $countPlayers - 1 : $countPlayers)
         );
     }
 

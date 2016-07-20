@@ -89,6 +89,10 @@ class TournamentFixtures extends AbstractPlayzoneFixtures
                     $this->container->get("core.service.date")
                          ->getDateTime($data["tournament_params"]["time_begin"])
                 );
+                
+                if (isset($data["tournament_params"]["games_vs_opponent"])) {
+                    $tournamentParams->setGamesVsOpponent($data["tournament_params"]["games_vs_opponent"]);
+                }
             }
 
             $tournament->setTournamentParams($tournamentParams);

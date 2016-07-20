@@ -466,14 +466,16 @@ input[type="password"] {
     border: 1px solid $color_blumine_approx;
     padding: 2px;
     text-align: center;
-    &.win * {
-      color: $red;
-    }
-    &.draw * {
-      color: #338e33;
-    }
-    &.lost * {
-      color: $black;
+    a {
+      &.win {
+        color: $red!important;
+      }
+      &.draw {
+        color: #338e33!important;
+      }
+      &.lost {
+        color: $black!important;
+      }
     }
     &.self {
       background-color: #9d9d9d;
@@ -484,9 +486,6 @@ input[type="password"] {
     &.player {
       text-align: left;
     }
-  }
-  th {
-    width: 5px;
   }
   tr {
     margin: 0;

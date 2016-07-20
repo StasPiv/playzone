@@ -51,49 +51,10 @@ class RoundrobinService implements TournamentDrawInterface
         if (count($this->getTournamentHandler()->getRoundGames($tournament, $round))) {
             $this->getTournamentHandler()->clearRound($tournament, $round);
         }
-        
-        $sortedPlayers = $this->getPlayerNumbersMap($tournament);
-        $countPlayers = count($sortedPlayers);
 
-        foreach ($sortedPlayers as $numberFirst => $tournamentPlayerFirst) {
-            foreach ($sortedPlayers as $numberSecond => $tournamentPlayerOpponent) {
-                if ($numberFirst >= $numberSecond) {
-                    continue;
-                }
-
-                if ($round == $this->getRoundForPair($numberFirst, $numberSecond, $countPlayers)) {
-                    if ($this->checkWhiteColor($numberFirst, $numberSecond, $countPlayers)) {
-                        try {
-                            $this->manager->persist(
-                                $this->getTournamentHandler()
-                                     ->createTournamentGame(
-                                         $tournament,
-                                         $round,
-                                         $tournamentPlayerFirst,
-                                         $tournamentPlayerOpponent
-                                     )
-                            );
-                        } catch (TournamentGameShouldBeSkippedException $e) {
-
-                        }
-                    } else {
-                        try {
-                            $this->manager->persist(
-                                $this->getTournamentHandler()
-                                     ->createTournamentGame(
-                                         $tournament,
-                                         $round,
-                                         $tournamentPlayerOpponent,
-                                         $tournamentPlayerFirst
-                                     )
-                            );
-                        } catch (TournamentGameShouldBeSkippedException $e) {
-
-                        }
-                    }
-                }
-            }
-        }
+        $this->createGamesAsForFirstLap(
+            $tournament, $round
+        );
 
         $this->manager->flush();
     }
@@ -238,5 +199,62 @@ class RoundrobinService implements TournamentDrawInterface
     private function checkWhiteColorWithoutLast(int $numberWhite, int $numberBlack) : bool
     {
         return ($numberWhite + $numberBlack) % 2 != 0 && $numberWhite < $numberBlack;
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param int $round
+     */
+    private function createGamesAsForFirstLap(Tournament $tournament, int $round)
+    {
+        $sortedPlayers = $this->getPlayerNumbersMap($tournament);
+        $countSortedPlayers = count($sortedPlayers);
+        $gamesInLap = $countSortedPlayers - 1;
+        $currentLap = ceil($round / $gamesInLap);
+
+        $roundInFirstLap = $round - ($currentLap - 1) * $gamesInLap;
+
+
+        foreach ($sortedPlayers as $numberFirst => $tournamentPlayerFirst) {
+            foreach ($sortedPlayers as $numberSecond => $tournamentPlayerOpponent) {
+                if ($numberFirst >= $numberSecond) {
+                    continue;
+                }
+
+                if ($roundInFirstLap == $this->getRoundForPair(
+                        $numberFirst, $numberSecond, $countSortedPlayers
+                    )
+                ) {
+                    $firstPlayerPlayWhite =
+                        $this->checkWhiteColor($numberFirst, $numberSecond, $countSortedPlayers);
+                    
+                    if ($currentLap % 2 == 0) {
+                        $firstPlayerPlayWhite = !$firstPlayerPlayWhite;
+                    }
+
+                    if ($firstPlayerPlayWhite) {
+                        $tournamentPlayerFirst->setRequiredColor(GameColor::WHITE);
+                        $tournamentPlayerOpponent->setRequiredColor(GameColor::BLACK);
+                    } else {
+                        $tournamentPlayerFirst->setRequiredColor(GameColor::BLACK);
+                        $tournamentPlayerOpponent->setRequiredColor(GameColor::WHITE);
+                    }
+
+                    try {
+                        $this->manager->persist(
+                            $this->getTournamentHandler()
+                                ->createTournamentGame(
+                                    $tournament,
+                                    $round,
+                                    $tournamentPlayerFirst,
+                                    $tournamentPlayerOpponent
+                                )
+                        );
+                    } catch (TournamentGameShouldBeSkippedException $e) {
+
+                    }
+                }
+            }
+        }
     }
 }

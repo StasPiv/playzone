@@ -2,24 +2,24 @@
 /**
  * Created by PhpStorm.
  * User: stas
- * Date: 09.05.16
- * Time: 15:50
+ * Date: 19.07.16
+ * Time: 20:48
  */
 
-namespace CoreBundle\Tests\Service\Tournament;
+namespace CoreBundle\Tests\Service\Tournament\RoundRobin;
 
 use CoreBundle\Entity\Tournament;
-use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
-use CoreBundle\Handler\TournamentHandler;
 use CoreBundle\Service\Tournament\RoundrobinService;
 use CoreBundle\Tests\KernelAwareTest;
 
 /**
- * Class RoundRobinServiceTest
- * @package CoreBundle\Tests\Service\Tournament
+ * Class RoundRobin2LapsTest
+ * @package CoreBundle\Tests\Service\Tournament\RoundRobin
  */
-class RoundRobinServiceTest extends KernelAwareTest
+class RoundRobin2LapsTest extends KernelAwareTest
 {
+    use RoundRobinTestTrait;
+
     /**
      * @var RoundrobinService
      */
@@ -38,27 +38,14 @@ class RoundRobinServiceTest extends KernelAwareTest
     public function testDraw()
     {
         /** @var Tournament $tournament */
-        $tournament = $this->getTournament();
+        $tournament = $this->getTournament("Round robin test 2 laps");
 
-        $countPlayers = count(
-            $this->getTournamentHandler()->getPlayers($tournament)
-        );
-
-        for ($round=1; $round <= $countPlayers; $round++) {
+        for ($round = 1; $round <= 6; $round++) {
             $this->service->makeDraw($tournament, $round);
 
             $this->assertGames($tournament, $round);
         }
 
-    }
-
-    /**
-     * @return TournamentHandler
-     * @throws \Exception
-     */
-    private function getTournamentHandler()
-    {
-        return $this->container->get("core.handler.tournament");
     }
 
     /**
@@ -74,37 +61,40 @@ class RoundRobinServiceTest extends KernelAwareTest
         foreach ($roundGames as $tournamentGame) {
             $pairs[] = $tournamentGame->getGame()->getUserWhite() . " " . $tournamentGame->getGame()->getUserBlack();
         }
-        
+
         switch ($round) {
             case 1:
                 $this->assertEquals([
-                    'User-B User-G',
-                    'User-C User-F',
-                    'User-D User-E'
+                    'User-B User-C'
                 ], $pairs);
                 break;
-            case 7:
+            case 2:
                 $this->assertEquals([
-                    "User-G User-A",
-                    "User-F User-B",
-                    "User-E User-C"
+                    'User-A User-B'
+                ], $pairs);
+                break;
+            case 3:
+                $this->assertEquals([
+                    'User-C User-A'
+                ], $pairs);
+                break;
+            case 4:
+                $this->assertEquals([
+                    'User-C User-B'
+                ], $pairs);
+                break;
+            case 5:
+                $this->assertEquals([
+                    'User-B User-A'
+                ], $pairs);
+                break;
+            case 6:
+                $this->assertEquals([
+                    'User-A User-C'
                 ], $pairs);
                 break;
         }
 
         return $roundGames;
-    }
-
-    /**
-     * @return Tournament
-     */
-    private function getTournament() : Tournament
-    {
-        $name = "Round robin test";
-        try {
-            return $this->getTournamentHandler()->getRepository()->findOneByName($name);
-        } catch (TournamentNotFoundException $e) {
-            throw $e;
-        }
     }
 }

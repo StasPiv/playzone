@@ -69,13 +69,13 @@ class TournamentTableRoundRobin implements TournamentTableInterface
             $playerWhite = $tournamentGame->getPlayerWhite();
             $playerBlack = $tournamentGame->getPlayerBlack();
 
-            $gamesMap[$playerWhite->getId()][$playerBlack->getId()] =
+            $gamesMap[$playerWhite->getId()][$playerBlack->getId()][] =
                 new TournamentGameRoundRobin(
                     $tournamentGame->getGame()->getId(),
                     $tournamentGame->getGame()->getResultWhite()
                 );
 
-            $gamesMap[$playerBlack->getId()][$playerWhite->getId()] =
+            $gamesMap[$playerBlack->getId()][$playerWhite->getId()][] =
                 new TournamentGameRoundRobin(
                     $tournamentGame->getGame()->getId(),
                     $tournamentGame->getGame()->getResultBlack()

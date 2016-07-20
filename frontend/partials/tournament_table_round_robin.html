@@ -12,14 +12,17 @@
             <td class="player"><user-link data-user="firstPlayer.player"></user-link></td>
             <td
                     ng-repeat="secondPlayer in tournament.players"
-                    ng-class="{
-                    draw: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]['result'] == 0.5,
-                    win: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]['result'] == 1,
-                    lost: tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]['result'] == 0,
-                    self: firstPlayer.id == secondPlayer.id}"
+                    ng-class="{self: firstPlayer.id == secondPlayer.id}"
             >
-                <a href="/#/play/{{ tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]['game_id'] }}">
-                    {{ beautyResult(tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]["result"]) }}
+                <a ng-repeat="game in tournament.results_for_round_robin[firstPlayer.id][secondPlayer.id]"
+                   ng-class="{
+                    draw: game['result'] == 0.5,
+                    win: game['result'] == 1,
+                    lost: game['result'] == 0
+                    }"
+                   href="/#/play/{{ game['game_id'] }}"
+                >
+                    {{ beautyResult(game["result"]) }}
                 </a>
             </td>
             <td class="result">{{ firstPlayer.points }}</td>

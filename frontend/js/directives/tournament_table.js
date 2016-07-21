@@ -13,7 +13,7 @@ playzoneControllers.directive('tournamentTable', function () {
 
             scope.tournament.$promise.then(
                 function () {
-                    scope.contentUrl = 'partials/tournament_table_' + scope.tournament.tournament_params.type + '.html';
+                    scope.contentUrl = 'partials/tournament_table_' + scope.tournament.tournament_params.type + '.html?v0.2';
                 }
             )
         },

@@ -23,7 +23,9 @@ playzoneControllers.directive('playzoneChat', function ($rootScope, WebsocketSer
                         value: value
                     },
                     function () {
-                        $rootScope.user.settings['Show chat'].value = value;
+                        $rootScope.user.settings['Show chat'] = {
+                            value: value
+                        };
                     }
                 );
             };

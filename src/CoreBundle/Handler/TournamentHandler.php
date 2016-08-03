@@ -173,6 +173,11 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
      */
     public function processPostRecord(TournamentPostRecordRequest $request) : Tournament
     {
+        if ($request->getTournamentId() == 1200) {
+            $this->getRequestError()->addError("login", "This is private tournament")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
         $user = $this->container->get("core.handler.user")->getSecureUser($request);
 
         try {

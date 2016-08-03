@@ -84,7 +84,7 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
                     return;
                     break;
                 case 2:
-                    $tournament->getTournamentParams()->setGamesVsOpponent(4);
+                    $tournament->getTournamentParams()->setGamesVsOpponent(12);
                     break;
                 case 3:
                 case 4:

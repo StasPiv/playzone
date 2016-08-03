@@ -13,7 +13,7 @@ playzoneControllers.controller('MyProfileCtrl', function ($scope, $rootScope, Us
             password: $rootScope.user ? $rootScope.user.token : $cookies.get("user_token")
         }).then(
         function () {
-            $scope.user_setting['Piece type'] = $rootScope.user.settings['Piece type'].value;
+            $scope.user_setting['Piece type'] = 'merida';
             $scope.lag = $rootScope.user.lag;
 
             $scope.changeSetting = function (settingId, type, settingName) {

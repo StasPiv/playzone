@@ -6,6 +6,10 @@
 playzoneServices.factory('SettingService', function($rootScope) {
     return {
         getSetting: function (settingName) {
+            if (settingName === 'Piece type') {
+                return 'merida';
+            }
+
             if (!$rootScope.user.settings || !$rootScope.user.settings[settingName]) {
                 return null;
             }

@@ -37,6 +37,6 @@ playzoneControllers.directive('tournamentRecord', function (WebsocketService) {
         scope: {
             tournament: '='
         },
-        templateUrl: 'partials/tournament_record.html'
+        templateUrl: 'partials/tournament_record.html?v=0.1'
     }
 });

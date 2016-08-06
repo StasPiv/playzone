@@ -8,7 +8,8 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
 
     $scope.getBoardConfig = function() {
         return {
-            pieceType: SettingService.getSetting('Piece type'),
+            pieceType: SettingService.getSetting('Piece type') ?
+                SettingService.getSetting('Piece type') : 'merida',
             highlightClass: 'highlight1-32417',
             draggable: !$rootScope.isMobile && SettingService.getSetting('Draggable disabled') != 1,
             showNotation: !!SettingService.getSetting('Show notation')

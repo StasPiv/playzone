@@ -4,13 +4,11 @@
 'use strict';
 
 playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService, SettingService, ChatRest, $timeout) {
-    //$scope.dev = true;
     $scope.chat = ChatRest.query();
 
     $scope.getBoardConfig = function() {
         return {
-            pieceType: SettingService.getSetting('Piece type') ?
-                SettingService.getSetting('Piece type') : 'merida',
+            pieceType: SettingService.getSetting('Piece type'),
             highlightClass: 'highlight1-32417',
             draggable: !$rootScope.isMobile && SettingService.getSetting('Draggable disabled') != 1,
             showNotation: !!SettingService.getSetting('Show notation')

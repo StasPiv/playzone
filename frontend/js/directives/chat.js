@@ -7,10 +7,8 @@ playzoneControllers.directive('playzoneChat', function ($rootScope, WebsocketSer
     return {
         restrict: 'E',
         link: function(scope, element) {
-            var messageInput = $(element).find(".message");
-
-            console.log($rootScope.user.settings, !!SettingService.getSetting('Show chat'));
-            scope.isChatDisplayed = !!parseInt(SettingService.getSetting('Show chat'));
+            
+            scope.isChatDisplayed = SettingService.getSetting('Show chat');
 
             scope.toggleChatMessages = function () {
                 $(element).find('.chat').slideToggle();

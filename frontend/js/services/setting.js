@@ -10,7 +10,13 @@ playzoneServices.factory('SettingService', function($rootScope) {
                 return null;
             }
 
-            return $rootScope.user.settings[settingName].value;
+            var setting = $rootScope.user.settings[settingName];
+
+            if (setting.type === 'checkbox') {
+                return !!parseInt(setting.value);
+            }
+
+            return setting.value;
         }
     };
 });

@@ -333,6 +333,9 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
                 return $a->getSort() <=> $b->getSort();
             }
         );
+        $this->container->get('logger')->info(
+            'Settings: ' . json_encode(array_keys($settings))
+        );
         $user->setSettings($settings);
     }
 

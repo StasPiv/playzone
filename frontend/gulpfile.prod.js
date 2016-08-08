@@ -63,6 +63,7 @@ gulp.task('compressJs', function() {
         "js/controllers/tournament.js",
         "js/controllers/tournaments.js",
         "js/controllers/webrtc_share.js",
+        "js/controllers/problems.js",
         "js/directives/drop_down_menu.js",
         "js/directives/open_popup.js",
         "js/directives/chess_board_legal.js",
@@ -77,6 +78,7 @@ gulp.task('compressJs', function() {
         "js/directives/tournament_record.js",
         "js/directives/challenges.js",
         "js/directives/game_params.js",
+        "js/directives/problem_board.js",
         "js/services/environment.js",
         "js/services/cookie.js",
         "js/services/api.js",
@@ -92,6 +94,7 @@ gulp.task('compressJs', function() {
         "js/services/rest/pgn.js",
         "js/services/rest/tournament.js",
         "js/services/rest/log.js",
+        "js/services/rest/problem.js",
         "js/utils.js"
     ])
         .pipe(concat('app.js'))

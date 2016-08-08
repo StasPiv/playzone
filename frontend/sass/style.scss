@@ -826,3 +826,39 @@ th.header {
     border-color: green;
   }
 }
+
+.problem-board {
+  text-align: center;
+  #board {
+    width: 50%;
+    float: left;
+  }
+  .answer {
+    width: 50%;
+    float: left;
+  }
+  chess-timer {
+    &.white {
+      * {
+        background-color: $white;
+        color: $black;
+      }
+      .timer {
+        border-color: $white;
+      }
+    }
+    .timer {
+      text-align: center;
+      border: 2px solid;
+      &.zeitnot {
+        color: $red
+      }
+      &.active {
+        border-color: $red;
+      }
+      span {
+        font-size: 26px;
+      }
+    }
+  }
+}

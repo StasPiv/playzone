@@ -71,6 +71,10 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 templateUrl: 'partials/webrtc-share.html',
                 controller: 'WebrtcShareCtrl'
             }).
+            when('/problems', {
+                templateUrl: 'partials/problems.html',
+                controller: 'ProblemsCtrl'
+            }).
             otherwise({
                 redirectTo: '/'
             });

@@ -1,0 +1,19 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\ProblemFixtures"
+  ],
+  "get_random": {
+    "method": "GET",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354"
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "fen":"r6r/1b2kppp/p3p3/4P3/1p1N2P1/3Q4/qPP4P/1NK1R3 w - - 0 0",
+        "pgn": "1.Nc6+ Bxc6 2.Qd6"
+      }
+    }
+  }
+}

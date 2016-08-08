@@ -1,0 +1,20 @@
+<div id="board"></div>
+<div class="answer">
+    <chess-timer
+            class="white"
+            data-time="60000"
+            data-user="$root.user"
+            data-zeitnot="10000"
+            data-current="'b' === 'b'"
+            data-game="game"
+            data-fix-time="showHint()"
+            data-refresh-time="100"
+    ></chess-timer>
+    <div>
+        {{ "Answer will display below" | translate }}
+    </div>
+    <div class="hit" ng-if="!!isDisplayHint">
+        <b>{{ "Answer" | translate }}: </b>
+        {{ problem.pgn }}
+    </div>
+</div>

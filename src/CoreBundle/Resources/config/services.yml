@@ -31,6 +31,17 @@ services:
         calls:
           - [setContainer, ['@service_container']]
           - [setRequestError, ['@core.request.error']]
+    core.handler.problem:
+        class: CoreBundle\Handler\ProblemHandler
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+          - [setContainer, ['@service_container']]
+          - [setRequestError, ['@core.request.error']]
+    core.service.import_problems:
+        class: CoreBundle\Service\Chess\ImportProblemsService
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+          - [setContainer, ['@service_container']]
     core.service.error:
         class: CoreBundle\Service\ErrorService
         arguments: ['@service_container']

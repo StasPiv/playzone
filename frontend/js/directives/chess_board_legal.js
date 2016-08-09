@@ -8,6 +8,10 @@
  */
 playzoneControllers.directive('chessBoardLegal', function (SettingService, $timeout, $rootScope) {
     function isMyTurn(scope, element) {
+        if (!scope.game) {
+            return true;
+        }
+
         return element.game.turn() === scope.game.color;
     }
 
@@ -105,6 +109,10 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
             // do not pick up pieces if the game is over
             // only pick up pieces for the side to move
             var onDragStart = function(source, piece, position, orientation) {
+                if (!scope.game) {
+                    return true;
+                }
+
                 if (scope.game.status !== 'play' || !scope.game.mine || !element.isMyPiece(piece)) {
                     return false;
                 }
@@ -139,6 +147,11 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
                     to: target,
                     promotion: 'q' // NOTE: always promote to a queen for example simplicity
                 };
+
+                if (!scope.game) {
+                    return element.onMove(moveObject);
+                }
+
                 var move = element.game.move(moveObject);
 
                 // illegal move
@@ -195,7 +208,7 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
             // update the board position after the piece snap
             // for castling, en passant, pawn promotion
             var onSnapEnd = function() {
-                element.board.position(element.game.fen());
+                element.game && element.board.position(element.game.fen());
             };
 
             element.updateStatus = function() {
@@ -236,16 +249,16 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
                 }
 
                 $rootScope.chessBoard = element.board = ChessBoard(element.data('board'), {
-                    draggable: scope.boardConfig.draggable,
+                    draggable: userConfig.draggable,
                     moveSpeed: 1,
                     position: 'start',
                     onDragStart: onDragStart,
                     onDrop: onDrop,
                     onSnapEnd: onSnapEnd,
                     pieceTheme: 'img/chesspieces/' + userConfig.pieceType + '/{piece}.png',
-                    showNotation: scope.boardConfig.showNotation
+                    showNotation: userConfig.showNotation
                 });
-                if (scope.game.color === 'b') {
+                if (scope.game && scope.game.color === 'b') {
                     element.board.flip();
                 }
                 element.updateStatus();
@@ -266,6 +279,9 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
             }
 
             function resizeend() {
+                if (!scope.game) {
+                    return;
+                }
                 if (new Date() - rtime < delta) {
                     setTimeout(resizeend, delta);
                 } else {

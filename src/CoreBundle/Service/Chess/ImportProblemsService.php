@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 /**
  * Class ImportProblemsService
@@ -51,21 +52,24 @@ class ImportProblemsService implements ContainerAwareInterface
     public function import(string $fileName) : int
     {
         if (!file_exists($fileName)) {
-            die('error');
+            throw new FileNotFoundException;
         }
 
         $parser = new PgnParser($fileName);
-
+        
         $count = 0;
         
         foreach ($parser->getGames() as $pgnGame) {
-            if ($pgnGame->getBlack() != '#2') {
+            if ($pgnGame->getBlack() != '#2' || empty($pgnGame->getMoves())) {
                 continue;
             }
 
             $count++;
 
-            $problem = (new Problem())->setFen($pgnGame->getFen())->setPgn($pgnGame->getMoves());
+            $problem = (new Problem())
+                ->setFen($pgnGame->getFen())
+                ->setPgn($pgnGame->getMoves());
+            
             $this->manager->persist($problem);
         }
 

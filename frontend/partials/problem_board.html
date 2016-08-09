@@ -5,7 +5,7 @@
             data-time="60000"
             data-user="$root.user"
             data-zeitnot="10000"
-            data-current="'b' === 'b'"
+            data-current="!isDisplayHint"
             data-game="game"
             data-fix-time="showHint()"
             data-refresh-time="100"
@@ -13,7 +13,7 @@
     <div>
         {{ "Answer will display below" | translate }}
     </div>
-    <div class="hit" ng-if="!!isDisplayHint">
+    <div class="hint" ng-if="!!isDisplayHint" ng-class="{'correct': !!correct, 'incorrect': !!incorrect}">
         <b>{{ "Answer" | translate }}: </b>
         {{ problem.pgn }}
     </div>

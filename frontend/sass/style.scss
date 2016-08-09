@@ -861,4 +861,13 @@ th.header {
       }
     }
   }
+  .hint {
+    border: 2px solid black;
+    &.correct {
+      border-color: green;
+    }
+    &.incorrect {
+      border-color: red;
+    }
+  }
 }

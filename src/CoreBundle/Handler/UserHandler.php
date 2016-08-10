@@ -325,7 +325,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
             }
         }
 
-        $settings = $user->getSettings();
+        $settings = (array)$user->getSettings();
         uasort(
             $settings,
             function(UserSetting $a, UserSetting $b)

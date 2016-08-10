@@ -2,7 +2,7 @@
 <div class="answer">
     <chess-timer
             class="white"
-            data-time="60000"
+            data-time="time"
             data-user="$root.user"
             data-zeitnot="10000"
             data-current="!isDisplayHint"
@@ -15,6 +15,15 @@
     </div>
     <div class="hint" ng-if="!!isDisplayHint" ng-class="{'correct': !!correct, 'incorrect': !!incorrect}">
         <b>{{ "Answer" | translate }}: </b>
-        {{ problem.pgn }}
+        {{ userProblem.problem.pgn }}
+    </div>
+    <div class="result">
+        <b>{{ "Your result" | translate }}</b>
+        {{ userProblem.solved }} {{ "from" | translate }} {{ userProblem.total }}
+    </div>
+    <div>
+        <a class="btn btn-info" ng-click="getRandomProblem()">
+            {{ "Next problem" | translate }}
+        </a>
     </div>
 </div>

@@ -4,5 +4,5 @@
 'use strict';
 
 playzoneControllers.controller('ProblemsCtrl', function ($scope, ProblemRest) {
-    $scope.problem = ProblemRest.get_random();
+
 });

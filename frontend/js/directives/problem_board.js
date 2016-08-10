@@ -3,31 +3,38 @@
  */
 'use strict';
 
-playzoneControllers.directive('problemBoard', function ($rootScope, GameRest, $timeout) {
+playzoneControllers.directive('problemBoard', function (ProblemRest) {
     return {
         restrict: 'E',
         link: function (scope, element) {
-            scope.correct = scope.incorrect = false;
-            scope.problem.$promise.then(
-                function () {
-                    element.loadBoard({
-                        position: scope.problem.fen,
-                        pieceType: 'merida',
-                        draggable: true
-                    });
-                    scope.game = new Chess(scope.problem.fen + ' w - - 0 1');
-                    element.board.position(scope.game.fen());
-                }
-            );
+            scope.getRandomProblem = function () {
+                scope.userProblem = ProblemRest.get_random(
+                    function () {
+                        scope.time = 60000;
+                        scope.isDisplayHint = scope.correct = scope.incorrect = false;
+                        element.loadBoard({
+                            position: scope.userProblem.problem.fen,
+                            pieceType: 'merida',
+                            draggable: true
+                        });
+                        scope.game = new Chess(scope.userProblem.problem.fen + ' w - - 0 1');
+                        element.board.position(scope.game.fen());
+                    }
+                );
+            };
+            scope.getRandomProblem();
 
             element.onMove = function (moveObject) {
-                if (scope.game.move(moveObject)) {
+                if (!scope.isDisplayHint && scope.game.move(moveObject)) {
                     element.board.move(moveObject.from + '-' + moveObject.to);
                     scope.isDisplayHint = true;
 
                     var myMove = scope.game.history()[scope.game.history.length - 1];
 
-                    if (scope.problem.pgn.indexOf(myMove) !== -1) {
+                    if (scope.userProblem.problem.pgn.indexOf(myMove) !== -1) {
+                        scope.userProblem = ProblemRest.solve({
+                            id: scope.userProblem.problem.id
+                        });
                         scope.correct = true;
                     } else {
                         scope.incorrect = true;
@@ -44,8 +51,8 @@ playzoneControllers.directive('problemBoard', function ($rootScope, GameRest, $t
         },
         transclude: false,
         scope: {
-            problem: '='
+            userProblem: '='
         },
-        templateUrl: 'partials/problem_board.html?v=0.0.4'
+        templateUrl: 'partials/problem_board.html?v=0.0.5'
     }
 });

@@ -10,6 +10,7 @@ namespace ApiBundle\Controller;
 
 use CoreBundle\Model\Request\Problem\ProblemGetRandomRequest;
 use CoreBundle\Model\Request\Problem\ProblemGetRequest;
+use CoreBundle\Model\Request\Problem\ProblemPostSolutionRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -39,6 +40,16 @@ class ProblemController extends BaseController
     public function getAction(Request $request, int $id) : Response
     {
         return $this->process($request, new ProblemGetRequest());
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    public function postSolutionAction(Request $request, int $id) : Response
+    {
+        return $this->process($request, new ProblemPostSolutionRequest());
     }
 
     /**

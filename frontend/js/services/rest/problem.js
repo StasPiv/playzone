@@ -8,12 +8,19 @@ playzoneServices.factory('ProblemRest', function($resource, $rootScope, ApiServi
     return $resource(
         '',
         $.extend(
-
+            {
+                id:'@id'
+            },
+            ApiService.getSecurityParams()
         ),
         {
             get_random: {
                 method: 'GET',
                 url: ApiService.base_url + 'problem/random'
+            },
+            solve: {
+                method: 'POST',
+                url: ApiService.base_url + 'problems/:id/solutions'
             }
         }
     );

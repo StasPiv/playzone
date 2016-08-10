@@ -23,4 +23,9 @@ class ProblemControllerTest extends BaseControllerTest
     {
         $this->assertFromJson('problem/random');
     }
+
+    public function testPostSolutionProblem()
+    {
+        $this->assertFromJson('problems/{id}/solutions');
+    }
 }

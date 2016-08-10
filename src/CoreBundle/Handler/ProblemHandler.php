@@ -9,13 +9,18 @@
 namespace CoreBundle\Handler;
 
 use CoreBundle\Entity\Problem;
+use CoreBundle\Entity\User;
+use CoreBundle\Entity\UserProblem;
+use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Problem\ProblemGetRandomRequest;
 use CoreBundle\Model\Request\Problem\ProblemGetRequest;
+use CoreBundle\Model\Request\Problem\ProblemPostSolutionRequest;
 use CoreBundle\Processor\ProblemProcessorInterface;
 use CoreBundle\Repository\LogRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
@@ -57,10 +62,99 @@ class ProblemHandler implements ProblemProcessorInterface
     /**
      * @inheritDoc
      */
-    public function processGetRandom(ProblemGetRandomRequest $request) : Problem
+    public function processPostSolution(ProblemPostSolutionRequest $request) : UserProblem
     {
-        $problems = $this->repository->findAll();
+        $secureUser = $this->container->get('core.handler.user')->getSecureUser($request);
 
-        return $problems[mt_rand(0, count($problems) - 1)];
+        $problem = $this->repository->find($request->getId());
+
+        $userProblem = $this->getUserProblem($secureUser, $problem);
+
+        $userProblem->setSolved($userProblem->getSolved() + 1);
+
+        $this->manager->persist($userProblem);
+        $this->manager->flush();
+
+        $this->mixTotals($secureUser, $userProblem);
+
+        return $userProblem;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function processGetRandom(ProblemGetRandomRequest $request) : UserProblem
+    {
+        $countRows = $this->repository->createQueryBuilder('p')
+            ->select('COUNT(p)')
+            ->getQuery()
+            ->getResult();
+
+        $problems = $this->repository->findBy([], [], 1, mt_rand(0, $countRows[0][1] - 1));
+
+        $problem = $problems[0];
+
+        try {
+            $secureUser = $this->container->get('core.handler.user')->getSecureUser($request);
+        } catch (ProcessorException $e) {
+            return (new UserProblem())->setProblem($problem);
+        }
+
+        $userProblem = $this->getUserProblem($secureUser, $problem);
+
+        $userProblem->setTotal($userProblem->getTotal() + 1);
+
+        $this->manager->persist($userProblem);
+        $this->manager->flush();
+
+        $this->mixTotals($secureUser, $userProblem);
+
+        return $userProblem;
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    private function getUserProblemRepository()
+    {
+        return $this->container->get('doctrine')->getRepository('CoreBundle:UserProblem');
+    }
+
+    /**
+     * @param User $user
+     * @param Problem $problem
+     * @return UserProblem
+     */
+    private function getUserProblem(User $user, Problem $problem) : UserProblem
+    {
+        $userProblem = $this->getUserProblemRepository()
+            ->findOneBy(['user' => $user, 'problem' => $problem]);
+
+        if (!$userProblem) {
+            $userProblem = new UserProblem();
+            $userProblem->setUser($user)
+                ->setProblem($problem);
+        }
+
+        return $userProblem;
+    }
+
+    /**
+     * @param User $user
+     * @param UserProblem $userProblem
+     */
+    private function mixTotals(User $user, UserProblem $userProblem)
+    {
+        $myProblems = $this->getUserProblemRepository()->createQueryBuilder('up')
+            ->select('SUM(up.total) as total, SUM(up.solved) as solved')
+            ->where('up.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+
+        $myProblem = $myProblems[0];
+
+        $userProblem->setSolved((int)$myProblem['solved'])
+            ->setTotal((int)$myProblem['total']);
     }
 }

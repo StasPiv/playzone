@@ -25,4 +25,14 @@ interface TournamentInitializatorInterface
      * @return string
      */
     public function getTimeBegin() : string;
+
+    /**
+     * @return boolean
+     */
+    public function isPrivate() : bool;
+
+    /**
+     * @return array
+     */
+    public function getPlayerIds() : array;
 }

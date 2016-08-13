@@ -173,11 +173,6 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
      */
     public function processPostRecord(TournamentPostRecordRequest $request) : Tournament
     {
-        if ($request->getTournamentId() == 1200) {
-            $this->getRequestError()->addError("login", "This is private tournament")
-                ->throwException(ResponseStatusCode::FORBIDDEN);
-        }
-
         $user = $this->container->get("core.handler.user")->getSecureUser($request);
 
         try {
@@ -188,6 +183,11 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
 
         /** @var Tournament $tournament */
+        if ($tournament->isPrivate()) {
+            $this->getRequestError()->addError("login", "This is private tournament")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
         if ($tournament->getStatus() != TournamentStatus::NEW()) {
             $this->getRequestError()->addError("login", "Tournament has already been started")
                  ->throwException(ResponseStatusCode::FORBIDDEN);
@@ -655,25 +655,34 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
      * @param string $tournamentName
      * @param int $timeBase
      * @param int $timeIncrement
+     * @param bool $private
+     * @param array $playerIds
+     * @param int $gamesVsOpponent
      */
     public function createTournamentEvent(
         string $frequency,
         string $timeBegin,
         string $tournamentName,
         int $timeBase,
-        int $timeIncrement = 0
+        int $timeIncrement = 0,
+        bool $private = false,
+        array $playerIds = [],
+        int $gamesVsOpponent = 2
     )
     {
         $this->container->get("core.handler.event")->initEventAndSave(
             (new TournamentInitializator())
                 ->setFrequency($frequency)
+                ->setPlayerIds($playerIds)
                 ->setTournamentName($tournamentName)
+                ->setPrivate($private)
                 ->setGameParams(
                     (new GameParams())->setTimeBase($timeBase)->setTimeIncrement($timeIncrement)
                 )
                 ->setTimeBegin($timeBegin)
                 ->setTournamentParams(
                     TournamentParamsFactory::create(TournamentType::ROUND_ROBIN())
+                        ->setGamesVsOpponent($gamesVsOpponent)
                 )
             , "core.service.event.tournament.create"
         );

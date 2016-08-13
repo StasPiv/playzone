@@ -75,8 +75,11 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
         }
 
         $event = (new TournamentContainer())->setTournament($tournament);
-        if ($tournament->getCurrentRound() == 0) {
-            switch (count($tournament->getPlayers())) {
+        if ($tournament->getCurrentRound() == 0 &&
+            $tournament->getTournamentParams()->getGamesVsOpponent() == 1) {
+            switch (
+                count($tournament->getPlayers())
+            ) {
                 case 0:
                 case 1:
                     $this->getManager()->remove($tournament);
@@ -256,6 +259,7 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
                 ->setFrequency(
                     $this->container->get("core.service.date")
                         ->getDateTime("+1minute")->format("i H d n N Y")
+                        // "00 12 05 8 6 2016" (5th Aug 2016 12:00 Saturday)
                 )
                 ->setTournamentId($tournament->getId()),
             self::EVENT_COMMAND_TYPE

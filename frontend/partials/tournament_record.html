@@ -3,7 +3,7 @@
         {{ "Checking lag" | translate }}...
     </div>
 </div>
-<div ng-if="!tournament.forbidden && !tournament.checkingLag && tournament.id != 1200">
+<div ng-if="!tournament.forbidden && !tournament.checkingLag && !tournament.private">
     <a ng-if="!tournament.mine" class="btn btn-success" ng-click="record()">
         {{ 'Record' | translate }}
     </a>

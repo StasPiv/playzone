@@ -69,5 +69,22 @@
         "login": "Your lag is too big"
       }
     }
+  },
+  "deny_record_into_private": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "tournament_id",
+        "value": "tournament-round-robin-stas-petro-match"
+      }
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "login": "This is private tournament"
+      }
+    }
   }
 }

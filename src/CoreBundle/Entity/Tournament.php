@@ -147,6 +147,18 @@ class Tournament
     private $resultsForSwiss;
 
     /**
+     * @var bool
+     *
+     * @JMS\Expose()
+     * @JMS\Type("boolean")
+     *
+     * @ORM\Column(type="boolean", nullable=true)
+     *
+     * @JMS\Groups({"get_tournament", "get_tournament_list"})
+     */
+    private $private;
+
+    /**
      * Tournament constructor.
      */
     public function __construct()
@@ -411,6 +423,25 @@ class Tournament
     public function setResultsForSwiss(array $resultsForSwiss)
     {
         $this->resultsForSwiss = $resultsForSwiss;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPrivate(): bool
+    {
+        return (bool)$this->private;
+    }
+
+    /**
+     * @param boolean $private
+     * @return Tournament
+     */
+    public function setPrivate(bool $private): Tournament
+    {
+        $this->private = $private;
 
         return $this;
     }

@@ -48,6 +48,13 @@ class CreateTournament implements EventCommandInterface
             $this->container->get("core.service.date")->getDateTime($this->tournamentInitializator->getTimeBegin())
         );
         $manager = $this->container->get("doctrine")->getManager();
+
+        foreach ($this->tournamentInitializator->getPlayerIds() as $playerId) {
+            $tournament->addPlayer(
+                $this->container->get('core.handler.user')->getRepository()->find($playerId)
+            );
+        }
+
         $manager->persist($tournament);
         $manager->flush();
 

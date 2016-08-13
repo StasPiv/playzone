@@ -26,7 +26,10 @@ class CreateTournamentCommand extends ContainerAwareCommand
              ->addArgument('timeBegin')
              ->addArgument('tournamentName')
              ->addArgument('timeBase')
-             ->addArgument('timeIncrement');
+             ->addArgument('timeIncrement')
+             ->addArgument('private', null, '', 0)
+             ->addArgument('players')
+             ->addArgument('gamesVsOpponent', null, '', 1);
     }
 
     /**
@@ -42,7 +45,10 @@ class CreateTournamentCommand extends ContainerAwareCommand
                  $input->getArgument('timeBegin'),
                  $input->getArgument('tournamentName'),
                  $input->getArgument('timeBase'),
-                 $input->getArgument('timeIncrement')
+                 $input->getArgument('timeIncrement'),
+                 $input->getArgument('private'),
+                 explode(',', $input->getArgument('players')),
+                 $input->getArgument('gamesVsOpponent')
              );
     }
 }

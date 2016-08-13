@@ -56,9 +56,14 @@ class TournamentInitializator extends Event implements TournamentInitializatorIn
     private $timeBegin;
 
     /**
-     * @var TournamentType
+     * @var bool
      */
-    private $tournamentType;
+    private $private;
+
+    /**
+     * @var array
+     */
+    private $playerIds = [];
 
     /**
      * @return string
@@ -66,6 +71,44 @@ class TournamentInitializator extends Event implements TournamentInitializatorIn
     public function getName() : string
     {
         return $this->getTournamentName();
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPrivate(): bool
+    {
+        return $this->private;
+    }
+
+    /**
+     * @param boolean $private
+     * @return TournamentInitializator
+     */
+    public function setPrivate(bool $private): TournamentInitializator
+    {
+        $this->private = $private;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPlayerIds(): array
+    {
+        return $this->playerIds;
+    }
+
+    /**
+     * @param array $playerIds
+     * @return TournamentInitializator
+     */
+    public function setPlayerIds(array $playerIds): TournamentInitializator
+    {
+        $this->playerIds = $playerIds;
+
+        return $this;
     }
 
     /**
@@ -131,6 +174,7 @@ class TournamentInitializator extends Event implements TournamentInitializatorIn
     public function initTournament() : Tournament
     {
         return (new Tournament())->setName($this->getTournamentName())
+            ->setPrivate($this->isPrivate())
             ->setTournamentParams($this->getTournamentParams())
             ->setGameParams($this->getGameParams());
     }

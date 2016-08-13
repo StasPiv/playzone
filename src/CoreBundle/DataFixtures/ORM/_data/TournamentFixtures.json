@@ -243,6 +243,7 @@
       "time_begin": "+1minute",
       "games_vs_opponent": 4
     },
-    "status": "new"
+    "status": "new",
+    "private": true
   }
 ]

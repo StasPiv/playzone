@@ -50,9 +50,13 @@ class CreateTournament implements EventCommandInterface
         $manager = $this->container->get("doctrine")->getManager();
 
         foreach ($this->tournamentInitializator->getPlayerIds() as $playerId) {
-            $tournament->addPlayer(
-                $this->container->get('core.handler.user')->getRepository()->find($playerId)
-            );
+            try {
+                $tournament->addPlayer(
+                    $this->container->get('core.handler.user')->getRepository()->find($playerId)
+                );
+            } catch (\Exception $e) {
+                $this->container->get('logger')->error($e->getMessage());
+            }
         }
 
         $manager->persist($tournament);

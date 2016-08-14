@@ -656,7 +656,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
      * @param int $timeBase
      * @param int $timeIncrement
      * @param bool $private
-     * @param array $playerIds
+     * @param array|string $players
      * @param int $gamesVsOpponent
      */
     public function createTournamentEvent(
@@ -666,14 +666,14 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         int $timeBase,
         int $timeIncrement = 0,
         bool $private = false,
-        array $playerIds = [],
+        string $players = '',
         int $gamesVsOpponent = 2
     )
     {
         $this->container->get("core.handler.event")->initEventAndSave(
             (new TournamentInitializator())
                 ->setFrequency($frequency)
-                ->setPlayerIds($playerIds)
+                ->setPlayerIds(empty($players) ? [] : explode(',', $players))
                 ->setTournamentName($tournamentName)
                 ->setPrivate($private)
                 ->setGameParams(

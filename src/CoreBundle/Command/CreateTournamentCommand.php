@@ -47,7 +47,7 @@ class CreateTournamentCommand extends ContainerAwareCommand
                  $input->getArgument('timeBase'),
                  $input->getArgument('timeIncrement'),
                  $input->getArgument('private'),
-                 explode(',', $input->getArgument('players')),
+                 $input->getArgument('players'),
                  $input->getArgument('gamesVsOpponent')
              );
     }

@@ -188,31 +188,30 @@ class GameHandler implements GameProcessorInterface
                                     ->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
+        $game->setTimeWhite((int)$request->getTimeWhite())
+             ->setTimeBlack((int)$request->getTimeBlack());
+
         if (
             $me != $game->getUserToMove() &&
             !in_array(0, [$request->getTimeBlack(), $request->getTimeWhite()])
         ) {
-            $this->getRequestError()->addError("pgn", "It is not your turn")
-                                    ->throwException(ResponseStatusCode::BAD_FORMAT);
+            $this->manager->flush($game);
+            return $this->getUserGame($game, $me);
         }
 
         $pgn = $this->container->get("core.service.chess")->decodePgn($request->getPgn());
 
-        if ($this->container->get("core.service.chess")->isValidPgn($pgn)) {
-            $game->setPgn($pgn);
-        }
+        if ($this->container->get("core.service.chess")->isValidPgn($pgn) && $pgn != $game->getPgn()) {
+            $game->setPgn($pgn)
+                 ->setUserToMove(
+                     $me == $game->getUserWhite() ? $game->getUserBlack() : $game->getUserWhite()
+            );
 
-        $game->setTimeWhite((int)$request->getTimeWhite())
-             ->setTimeBlack((int)$request->getTimeBlack());
+            $this->container->get("logger")->error("Switch move: " . $game->getUserToMove());
+        }
 
         $game->setDraw("")
              ->setTimeLastMove(new \DateTime());
-
-        $game->setUserToMove(
-            $me == $game->getUserWhite() ? $game->getUserBlack() : $game->getUserWhite()
-        );
-        
-        $this->container->get("logger")->error("Switch move: " . $game->getUserToMove());
 
         $game->setInsufficientMaterialWhite($request->isInsufficientMaterialWhite())
              ->setInsufficientMaterialBlack($request->isInsufficientMaterialBlack());

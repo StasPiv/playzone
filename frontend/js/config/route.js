@@ -36,7 +36,7 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 }
             }).
             when('/play/:gameId', {
-                templateUrl: 'partials/play.html',
+                templateUrl: 'partials/play.html?v=1',
                 controller: 'PlayCtrl'
             }).
             when('/show/:gameId', {

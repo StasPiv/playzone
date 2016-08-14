@@ -78,7 +78,7 @@ class TournamentInitializator extends Event implements TournamentInitializatorIn
      */
     public function isPrivate(): bool
     {
-        return $this->private;
+        return (bool)$this->private;
     }
 
     /**

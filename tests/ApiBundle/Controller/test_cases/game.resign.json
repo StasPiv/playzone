@@ -66,6 +66,7 @@
     "response": {
       "status": 200,
       "data": {
+        "mine": true,
         "user_white": {
           "login": "Stas"
         },

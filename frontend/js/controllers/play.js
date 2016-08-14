@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService, SettingService, ChatRest, $timeout) {
+playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeParams, GameRest, WebRTCService, WebsocketService, EnvService, AudioService, SettingService, ChatRest, $timeout, CallRest, $location) {
     $scope.chat = ChatRest.query();
 
     $scope.getBoardConfig = function() {
@@ -160,6 +160,42 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         );
     };
 
+    $scope.offerRevenge = function () {
+        CallRest.send(
+            {},
+            {
+                player: $scope.game.opponent.login,
+                time: {
+                    base_minutes: $scope.game.game_params.time_base / 60000,
+                    increment_seconds: $scope.game.game_params.time_increment / 1000
+                }
+            },
+            function(responseCall) {
+                WebsocketService.sendDataToLogins(
+                    'offer_revenge', responseCall, [$scope.game.opponent.login]
+                );
+            },
+            function(response) {
+                $scope.errors = response.data;
+            }
+        );
+    };
+
+    $scope.acceptRevenge = function() {
+        CallRest.accept({},$scope.revengeCall, function(responseGame) {
+            WebsocketService.sendDataToLogins(
+                'accept_revenge',
+                {
+                    game_id: responseGame.id,
+                    call_id: $scope.revengeCall.id
+                },
+                []
+            );
+            AudioService.newGame();
+            $location.path( '/play/' + responseGame.id );
+        });
+    };
+
     $scope.highlightLastMove = highlightLastMove;
 
     WebsocketService.addListener('listen_opponent_gone', 'user_gone', function (user) {
@@ -175,5 +211,16 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
             console.log('opponent has reconnected');
             $scope.game.opponent.offline = false;
         }
+    });
+
+    $scope.revengeOffered = false;
+    WebsocketService.addListener('offer_revenge', 'offer_revenge', function (call) {
+        $scope.revengeCall = call;
+        $scope.revengeOffered = true;
+    });
+
+    WebsocketService.addListener('accept_revenge', 'accept_revenge', function (data) {
+        AudioService.newGame();
+        $location.path( '/play/' + data.game_id );
     });
 });

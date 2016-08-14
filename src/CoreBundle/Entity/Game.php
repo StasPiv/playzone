@@ -182,7 +182,7 @@ class Game implements ChatMessageContainerInterface
      * @JMS\Expose
      * @JMS\Type("boolean")
      *
-     * @JMS\Groups({"get_game", "put_game_pgn"})
+     * @JMS\Groups({"get_game", "put_game_pgn", "put_game_resign"})
      */
     private $mine = false;
 

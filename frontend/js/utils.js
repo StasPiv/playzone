@@ -19,13 +19,10 @@ function getBlitzTimeObject(timeMs) {
     var minutes = parseInt(ms / 60000);
     ms -= minutes * 60000;
     var seconds = parseInt(ms / 1000);
-    ms -= seconds * 1000;
-    var deciSeconds = ms / 100;
 
     return {
         minutes: minutes < 10 ? "0" + minutes : minutes,
         seconds: seconds < 10 ? "0" + seconds : seconds,
-        deciSeconds: deciSeconds,
         ms: timeMs
     };
 }

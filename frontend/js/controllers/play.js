@@ -137,13 +137,18 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
             
         }
 
-        $scope.game.$savePgn().then(
+        $timeout(
             function () {
-                $scope.game.opponent.offline = !$rootScope.loginsOnline.searchById($scope.game.opponent.id);
-                if (!withoutSaving || $scope.game.status == 'end') {
-                    $scope.sendWithWebsockets();
-                }
-            }
+                $scope.game.$savePgn().then(
+                    function () {
+                        $scope.game.opponent.offline = !$rootScope.loginsOnline.searchById($scope.game.opponent.id);
+                        if (!withoutSaving || $scope.game.status == 'end') {
+                            $scope.sendWithWebsockets();
+                        }
+                    }
+                );
+            },
+            0
         );
     };
 

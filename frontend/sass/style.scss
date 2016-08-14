@@ -698,7 +698,7 @@ th.header {
           visibility: hidden;
         }
       }
-      chess-timer {
+      .chess-timer {
         &.white {
           * {
             background-color: $white;
@@ -837,7 +837,7 @@ th.header {
     width: 50%;
     float: left;
   }
-  chess-timer {
+  .chess-timer {
     &.white {
       * {
         background-color: $white;
@@ -856,7 +856,7 @@ th.header {
       &.active {
         border-color: $red;
       }
-      span {
+      * {
         font-size: 26px;
       }
     }

@@ -19,25 +19,25 @@
         <div class="middle-column">
             <chess-timer
                     ng-if="game.status == 'play'"
-                    class="white"
+                    class="chess-timer white"
                     data-time="game.time_white"
                     data-user="game.user_white"
                     data-zeitnot="gameConfig.zeitnotLimit"
-                    data-current="game.move_color === 'w'"
+                    data-current="$root.chess.turn() === 'w'"
                     data-game="game"
                     data-fix-time="savePgnAndSendToObservers()"
-                    data-refresh-time="100"
+                    data-refresh-time="1000"
             ></chess-timer>
             <chess-timer
                     ng-if="game.status == 'play'"
-                    class="black"
+                    class="chess-timer black"
                     data-time="game.time_black"
                     data-user="game.user_black"
                     data-zeitnot="gameConfig.zeitnotLimit"
-                    data-current="game.move_color === 'b'"
+                    data-current="$root.chess.turn() === 'b'"
                     data-game="game"
                     data-fix-time="savePgnAndSendToObservers()"
-                    data-refresh-time="100"
+                    data-refresh-time="1000"
             ></chess-timer>
             <div ng-if="game.status == 'end'"
                  ng-class="{

@@ -12,9 +12,9 @@
     <!-- end bootstrap -->
 
     <script src="dist/lib.js?v=1.0"></script>
-    <script src="dist/app.js?v=12"></script>
+    <script src="dist/app.js?v=20"></script>
 
-    <link rel="stylesheet" href="css/style.css?v=1.6" />
+    <link rel="stylesheet" href="css/style.css?v=20" />
     <link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker.css" />
     <link href="css/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
     <link rel="icon" type="image/x-icon" href="favicons/Black Q.ico" />
@@ -60,10 +60,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="alert alert-danger" ng-if="!$root.browserSupported">
-        {{ 'Your browser is not supported for play. Try' | translate }}
-        <a href='https://www.google.com/chrome/browser/desktop/'>Google Chrome</a>.
     </div>
     <div class="alert alert-danger" ng-if="!$root.connected">
         {{ 'Can not connect' | translate }}

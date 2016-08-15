@@ -141,10 +141,11 @@ class ProblemHandler implements ProblemProcessorInterface
             ->findOneBy(['user' => $user, 'problem' => $problem]);
 
         if (!$userProblem) {
+            $myProblem = $this->getUserTotals($user);
             $userProblem = new UserProblem();
             $userProblem->setUser($user)
                         ->setProblem($problem)
-                        ->setTotal($defaultTotal);
+                        ->setTotal($defaultTotal)->setTime($myProblem['time']);
         }
 
         return $userProblem;
@@ -156,6 +157,19 @@ class ProblemHandler implements ProblemProcessorInterface
      */
     private function mixTotals(User $user, UserProblem $userProblem)
     {
+        $myProblem = $this->getUserTotals($user);
+
+        $userProblem->setSolved((int)$myProblem['solved'])
+            ->setTotal((int)$myProblem['total'])
+            ->setTime($myProblem['time']);
+    }
+
+    /**
+     * @param User $user
+     * @return mixed
+     */
+    private function getUserTotals(User $user)
+    {
         $myProblems = $this->getUserProblemRepository()->createQueryBuilder('up')
             ->select('SUM(up.total) as total, SUM(up.solved) as solved, AVG(up.time) as time')
             ->where('up.user = :user')
@@ -165,8 +179,6 @@ class ProblemHandler implements ProblemProcessorInterface
 
         $myProblem = $myProblems[0];
 
-        $userProblem->setSolved((int)$myProblem['solved'])
-            ->setTotal((int)$myProblem['total'])
-            ->setTime($myProblem['time']);
+        return $myProblem;
     }
 }

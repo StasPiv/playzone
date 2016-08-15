@@ -26,7 +26,8 @@ playzoneControllers.directive('chessTimer', function (dateFilter, $interval) {
             var startTimer = function () {
                 scope.timer = $interval(
                     function () {
-                        scope.timeFormat = getBlitzTimeObject(scope.time-=scope.refreshTime);
+                        scope.time-=scope.refreshTime;
+                        scope.timeFormat = getBlitzTimeObject(scope.time);
                     },
                     scope.refreshTime
                 );

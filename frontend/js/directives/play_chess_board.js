@@ -87,6 +87,8 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                         }
 
                         element.game.move(move);
+                        scope.game.pgn = element.game.pgn();
+
                         scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
 
                         scope.game.time_black = data.time_black;

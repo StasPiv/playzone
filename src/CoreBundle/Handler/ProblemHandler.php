@@ -145,7 +145,7 @@ class ProblemHandler implements ProblemProcessorInterface
             $userProblem = new UserProblem();
             $userProblem->setUser($user)
                         ->setProblem($problem)
-                        ->setTotal($defaultTotal)->setTime($myProblem['time']);
+                        ->setTotal($defaultTotal)->setTime((float)$myProblem['time']);
         }
 
         return $userProblem;

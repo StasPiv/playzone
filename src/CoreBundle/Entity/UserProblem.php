@@ -91,6 +91,21 @@ class UserProblem
     private $time = 180;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $created;
+
+    /**
+     * UserProblem constructor.
+     */
+    public function __construct()
+    {
+        $this->created = new \DateTime();
+    }
+
+    /**
      * @return int
      */
     public function getId(): int

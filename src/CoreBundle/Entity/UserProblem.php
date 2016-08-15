@@ -77,6 +77,20 @@ class UserProblem
     private $percent = 0;
 
     /**
+     * @var bool
+     *
+     * @JMS\Type("boolean")
+     */
+    private $correct = false;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $time = 180;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -175,6 +189,44 @@ class UserProblem
     public function setPercent(int $percent): UserProblem
     {
         $this->percent = $percent;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCorrect(): bool
+    {
+        return $this->correct;
+    }
+
+    /**
+     * @param boolean $correct
+     * @return UserProblem
+     */
+    public function setCorrect(bool $correct): UserProblem
+    {
+        $this->correct = $correct;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTime(): float
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param float $time
+     * @return UserProblem
+     */
+    public function setTime(float $time): UserProblem
+    {
+        $this->time = $time;
 
         return $this;
     }

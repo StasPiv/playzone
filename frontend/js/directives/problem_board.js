@@ -10,7 +10,8 @@ playzoneControllers.directive('problemBoard', function (ProblemRest) {
             scope.getRandomProblem = function () {
                 scope.userProblem = ProblemRest.get_random(
                     function () {
-                        scope.time = 60000;
+                        scope.beginTime = 1000 * (scope.userProblem.time ? scope.userProblem.time : 300);
+                        scope.time = scope.beginTime;
                         scope.isDisplayHint = scope.correct = scope.incorrect = false;
                         element.loadBoard({
                             position: scope.userProblem.problem.fen,
@@ -29,16 +30,15 @@ playzoneControllers.directive('problemBoard', function (ProblemRest) {
                     element.board.move(moveObject.from + '-' + moveObject.to);
                     scope.isDisplayHint = true;
 
-                    var myMove = scope.game.history()[scope.game.history.length - 1];
-
-                    if (scope.userProblem.problem.pgn.indexOf(myMove) !== -1) {
-                        scope.userProblem = ProblemRest.solve({
-                            id: scope.userProblem.problem.id
-                        });
-                        scope.correct = true;
-                    } else {
-                        scope.incorrect = true;
-                    }
+                    scope.userProblem.id = scope.userProblem.problem.id;
+                    scope.userProblem.solution = scope.game.history()[scope.game.history.length - 1];
+                    scope.userProblem.time = scope.beginTime - scope.time;
+                    scope.userProblem.$solve().then(
+                        function (data) {
+                            scope.correct = data.correct;
+                            scope.incorrect = !data.correct;
+                        }
+                    );
                 }
                 return 'snapback';
             };
@@ -46,7 +46,16 @@ playzoneControllers.directive('problemBoard', function (ProblemRest) {
             scope.isDisplayHint = false;
             
             scope.showHint = function () {
-                scope.isDisplayHint = true;
+                scope.userProblem.id = scope.userProblem.problem.id;
+                scope.userProblem.solution = 'error';
+                scope.userProblem.time = scope.beginTime + 30000;
+                scope.userProblem.$solve().then(
+                    function (data) {
+                        scope.correct = false;
+                        scope.incorrect = true;
+                        scope.isDisplayHint = true;
+                    }
+                );
             }
         },
         transclude: false,

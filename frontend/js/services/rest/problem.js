@@ -20,7 +20,15 @@ playzoneServices.factory('ProblemRest', function($resource, $rootScope, ApiServi
             },
             solve: {
                 method: 'POST',
-                url: ApiService.base_url + 'problems/:id/solutions'
+                url: ApiService.base_url + 'problems/:id/solutions',
+                transformRequest: function (data) {
+                    return angular.toJson(
+                        {
+                            solution: data.solution,
+                            time: data.time / 1000
+                        }
+                    );
+                }
             }
         }
     );

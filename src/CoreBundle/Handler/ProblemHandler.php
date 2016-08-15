@@ -68,9 +68,18 @@ class ProblemHandler implements ProblemProcessorInterface
 
         $problem = $this->repository->find($request->getId());
 
-        $userProblem = $this->getUserProblem($secureUser, $problem);
+        $userProblem = $this->getUserProblem($secureUser, $problem, 1);
 
-        $userProblem->setSolved($userProblem->getSolved() + 1);
+        if (strpos($userProblem->getProblem()->getPgn(), $request->getSolution()) !== false) {
+            $userProblem->setSolved($userProblem->getSolved() + 1);
+            $userProblem->setCorrect(true);
+        } else {
+            $request->setTime($userProblem->getTime() * 2);
+        }
+
+        $userProblem->setTime(
+            ($request->getTime() + $userProblem->getTime()) / 2
+        );
 
         $this->manager->persist($userProblem);
         $this->manager->flush();
@@ -123,9 +132,10 @@ class ProblemHandler implements ProblemProcessorInterface
     /**
      * @param User $user
      * @param Problem $problem
+     * @param int $defaultTotal
      * @return UserProblem
      */
-    private function getUserProblem(User $user, Problem $problem) : UserProblem
+    private function getUserProblem(User $user, Problem $problem, $defaultTotal = 0) : UserProblem
     {
         $userProblem = $this->getUserProblemRepository()
             ->findOneBy(['user' => $user, 'problem' => $problem]);
@@ -133,7 +143,8 @@ class ProblemHandler implements ProblemProcessorInterface
         if (!$userProblem) {
             $userProblem = new UserProblem();
             $userProblem->setUser($user)
-                ->setProblem($problem);
+                        ->setProblem($problem)
+                        ->setTotal($defaultTotal);
         }
 
         return $userProblem;
@@ -146,7 +157,7 @@ class ProblemHandler implements ProblemProcessorInterface
     private function mixTotals(User $user, UserProblem $userProblem)
     {
         $myProblems = $this->getUserProblemRepository()->createQueryBuilder('up')
-            ->select('SUM(up.total) as total, SUM(up.solved) as solved')
+            ->select('SUM(up.total) as total, SUM(up.solved) as solved, AVG(up.time) as time')
             ->where('up.user = :user')
             ->setParameter('user', $user)
             ->getQuery()
@@ -155,6 +166,7 @@ class ProblemHandler implements ProblemProcessorInterface
         $myProblem = $myProblems[0];
 
         $userProblem->setSolved((int)$myProblem['solved'])
-            ->setTotal((int)$myProblem['total']);
+            ->setTotal((int)$myProblem['total'])
+            ->setTime($myProblem['time']);
     }
 }

@@ -39,6 +39,8 @@ class Problem
      * @var string
      *
      * @ORM\Column(type="text")
+     *
+     * @JMS\Groups("post_problem_solution")
      */
     private $pgn;
 

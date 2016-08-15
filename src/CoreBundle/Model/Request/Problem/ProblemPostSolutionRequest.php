@@ -29,6 +29,20 @@ class ProblemPostSolutionRequest implements SecurityRequestInterface
     private $id;
 
     /**
+     * @var string
+     *
+     * @JMS\Type("string")
+     */
+    private $solution;
+
+    /**
+     * @var int
+     *
+     * @JMS\Type("integer")
+     */
+    private $time;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -43,6 +57,44 @@ class ProblemPostSolutionRequest implements SecurityRequestInterface
     public function setId(int $id): ProblemPostSolutionRequest
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSolution(): string
+    {
+        return $this->solution;
+    }
+
+    /**
+     * @param string $solution
+     * @return ProblemPostSolutionRequest
+     */
+    public function setSolution(string $solution): ProblemPostSolutionRequest
+    {
+        $this->solution = $solution;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTime(): int
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param int $time
+     * @return ProblemPostSolutionRequest
+     */
+    public function setTime(int $time): ProblemPostSolutionRequest
+    {
+        $this->time = $time;
 
         return $this;
     }

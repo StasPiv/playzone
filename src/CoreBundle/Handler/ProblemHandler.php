@@ -77,9 +77,7 @@ class ProblemHandler implements ProblemProcessorInterface
             $request->setTime($userProblem->getTime() * 2);
         }
 
-        $userProblem->setTime(
-            ($request->getTime() + $userProblem->getTime()) / 2
-        );
+        $userProblem->setTime($request->getTime());
 
         $this->manager->persist($userProblem);
         $this->manager->flush();

@@ -196,6 +196,14 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         });
     };
 
+    $scope.abort = function () {
+        $scope.game.$abort().then(
+            function () {
+                $scope.sendWithWebsockets();
+            }
+        );
+    };
+
     $scope.highlightLastMove = highlightLastMove;
 
     WebsocketService.addListener('listen_opponent_gone', 'user_gone', function (user) {

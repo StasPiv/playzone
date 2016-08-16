@@ -64,6 +64,11 @@
                     {{ "Go" | translate }}
                 </a>
             </div>
+            <div ng-if="game.status == 'aborted'"
+                 class="alert alert-warning"
+            >
+                <user-link data-user="game.user_white"></user-link> - <user-link data-user="game.user_black"></user-link>. {{ "Aborted" | translate }}
+            </div>
             <div class="clear">&nbsp;</div>
             <div id="board" ng-class="{'dev': dev}"></div><div class="clear">&nbsp;</div>
             <div class="action" ng-if="game.status == 'play' && game.mine">
@@ -73,6 +78,13 @@
                       ng-if="game.opponent.login !== 'Robot'"
                 >{{ "Draw" | translate }}</span>
                 <span class="btn btn-danger resign" ng-click="resign()">{{ "Resign" | translate }}</span>
+                <span
+                        class="btn btn-default abort"
+                        ng-click="abort()"
+                        ng-if="game.can_abort"
+                >
+                    {{ "Abort" | translate }}
+                </span>
             </div>
             <div class="post-action" ng-if="game.status != 'play' && game.mine && !game.tournament_game">
                 <span class="btn btn-info" ng-click="offerRevenge()" ng-if="!revengeOffered">

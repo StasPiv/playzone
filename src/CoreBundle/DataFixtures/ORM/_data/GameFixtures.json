@@ -333,5 +333,18 @@
     "time_white": 180000,
     "time_black": 180000,
     "time_last_move": "yesterday"
+  },
+  {
+    "referenceName": "game-short-pgn",
+    "user_white": "user-stas",
+    "user_black": "user-test-login",
+    "user_to_move": "user-stas",
+    "pgn": "1. d4 d5 2. c4 c6",
+    "pgn_alt": "",
+    "status": "play",
+    "rate": false,
+    "time_white": 180000,
+    "time_black": 180000,
+    "time_last_move": "yesterday"
   }
 ]

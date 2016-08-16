@@ -14,4 +14,5 @@ class GameStatus
     const PLAY = 'play';
     const CALL = 'call';
     const END = 'end';
+    const ABORTED = 'aborted';
 }

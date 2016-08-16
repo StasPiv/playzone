@@ -60,4 +60,9 @@ class GameControllerTest extends BaseControllerTest
     {
         $this->assertFromJson('game/{id}/fix');
     }
+
+    public function testAbortGame()
+    {
+        $this->assertFromJson('game/{id}/abort');
+    }
 }

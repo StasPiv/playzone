@@ -81,6 +81,17 @@ class ChessService
     }
 
     /**
+     * @param Game $game
+     * @return bool
+     */
+    public function canAbort(Game $game): bool
+    {
+        $this->chessGameService->setPgn($game->getPgn());
+
+        return count($this->chessGameService->getMoveList()) < 3;
+    }
+
+    /**
      * @param string $pgn for example 1. f4 d5 2. g4 e5 3. b4 Qh4#
      * @return string GameColor constant
      */

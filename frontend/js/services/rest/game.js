@@ -97,6 +97,10 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
             fix: {
                 method: 'PUT',
                 url: ApiService.base_url + 'game/:id/fix'
+            },
+            abort: {
+                method: 'PUT',
+                url: ApiService.base_url + 'game/:id/abort'
             }
         }
     );

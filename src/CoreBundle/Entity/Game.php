@@ -182,7 +182,7 @@ class Game implements ChatMessageContainerInterface
      * @JMS\Expose
      * @JMS\Type("boolean")
      *
-     * @JMS\Groups({"get_game", "put_game_pgn", "put_game_resign"})
+     * @JMS\Groups({"get_game", "put_game_pgn", "put_game_resign", "put_game_abort"})
      */
     private $mine = false;
 
@@ -277,6 +277,16 @@ class Game implements ChatMessageContainerInterface
      * @ORM\Column(name="game_params", type="object")
      */
     private $gameParams;
+
+    /**
+     * @var bool
+     *
+     * @JMS\Expose
+     * @JMS\Type("boolean")
+     *
+     * @JMS\Groups({"get_game", "put_game_pgn", "put_game_resign", "put_game_abort"})
+     */
+    private $canAbort = false;
 
     /**
      * Get id
@@ -680,10 +690,13 @@ class Game implements ChatMessageContainerInterface
 
     /**
      * @param boolean $userMove
+     * @return $this
      */
     public function setUserMove($userMove)
     {
         $this->userMove = $userMove;
+
+        return $this;
     }
 
     /**
@@ -844,6 +857,25 @@ class Game implements ChatMessageContainerInterface
     public function setGameParams($gameParams) : self 
     {
         $this->gameParams = $gameParams;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCanAbort(): bool
+    {
+        return $this->canAbort;
+    }
+
+    /**
+     * @param boolean $canAbort
+     * @return Game
+     */
+    public function setCanAbort(bool $canAbort): Game
+    {
+        $this->canAbort = $canAbort;
 
         return $this;
     }

@@ -13,6 +13,7 @@ use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePostPublishRequest;
+use CoreBundle\Model\Request\Game\GamePutAbortRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutFixRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
@@ -196,5 +197,25 @@ class GameController extends BaseController
     public function putFixAction(Request $request, $id)
     {
         return $this->process($request, new GamePutFixRequest());
+    }
+
+    /**
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Abort game",
+     *  filters={
+     *      {"name"="login", "dataType"="string", "description"="Your name"},
+     *      {"name"="token", "dataType"="string", "description"="Your token"},
+     *      {"name"="pgn", "dataType"="string"}
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    public function putAbortAction(Request $request, $id)
+    {
+        return $this->process($request, new GamePutAbortRequest());
     }
 }

@@ -1,0 +1,117 @@
+{
+  "fixtures": [
+    "CoreBundle\\DataFixtures\\ORM\\UserSettingFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\UserFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\GameFixtures",
+    "CoreBundle\\DataFixtures\\ORM\\TournamentFixtures"
+  ],
+  "incorrect_token": {
+    "method": "PUT",
+    "request": {
+      "login": "TestLogin",
+      "token": "bba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "id",
+        "value": "game-0"
+      }
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "token":"Forbidden for user with this credentials"
+      }
+    }
+  },
+  "game_is_not_found": {
+    "method": "PUT",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "id": 6666
+    },
+    "response": {
+      "status": 404,
+      "errors": {
+        "id":"Game is not found"
+      }
+    }
+  },
+  "game_is_not_mine": {
+    "method": "PUT",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "id",
+        "value": "game-1"
+      },
+      "pgn": "abrakadabra"
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "id":"Game is not mine"
+      }
+    }
+  },
+  "moves_more_than_2": {
+    "method": "PUT",
+    "request": {
+      "login": "Stas",
+      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
+      "reference": {
+        "name": "id",
+        "value": "game-with_robot"
+      }
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "id": "Game is too long"
+      }
+    }
+  },
+  "tournament_game": {
+    "method": "PUT",
+    "request": {
+      "login": "Stas",
+      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
+      "reference": {
+        "name": "id",
+        "value": "game-1"
+      }
+    },
+    "response": {
+      "status": 403,
+      "errors": {
+        "id": "This is tournament game"
+      }
+    }
+  },
+  "correct_abort": {
+    "method": "PUT",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "reference": {
+        "name": "id",
+        "value": "game-short-pgn"
+      }
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "mine": true,
+        "user_white": {
+          "login": "Stas"
+        },
+        "user_black": {
+          "login": "TestLogin"
+        },
+        "status": "aborted",
+        "result_white": 0,
+        "result_black": 0
+      }
+    }
+  }
+}

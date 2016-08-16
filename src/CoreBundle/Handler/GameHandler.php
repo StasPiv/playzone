@@ -11,6 +11,7 @@ namespace CoreBundle\Handler;
 use CoreBundle\Entity\ChatMessage;
 use CoreBundle\Exception\Handler\Game\GameNotFoundException;
 use CoreBundle\Exception\Handler\GameHandlerException;
+use CoreBundle\Exception\Handler\Tournament\TournamentGameNotFoundException;
 use CoreBundle\Exception\Handler\User\UserHandlerException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
 use CoreBundle\Exception\Processor\ProcessorException;
@@ -26,6 +27,7 @@ use CoreBundle\Model\Request\Game\GameGetRobotmoveAction;
 use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePostPublishRequest;
+use CoreBundle\Model\Request\Game\GamePutAbortRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutFix;
 use CoreBundle\Model\Request\Game\GamePutFixRequest;
@@ -544,7 +546,8 @@ class GameHandler implements GameProcessorInterface
     public function getUserGame(Game $game, User $user = null)
     {
         $game->setMine(false)
-             ->setUserMove(false);
+             ->setUserMove(false)
+             ->setCanAbort($this->container->get('core.service.chess')->canAbort($game));
 
         if (!$user instanceof User || !$this->isMyGame($game, $user)) {
             return $game;
@@ -750,6 +753,52 @@ class GameHandler implements GameProcessorInterface
         }
 
         /** @var Game $game */
+        return $this->getUserGame($game, $me);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function processPutAbort(GamePutAbortRequest $request) : Game
+    {
+        $me = $this->container->get("core.handler.user")->getSecureUser($request);
+
+        try {
+            $game = $this->repository->find($request->getId());
+        } catch (GameNotFoundException $e) {
+            $this->getRequestError()->addError("id", "Game is not found")
+                ->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        /** @var Game $game */
+        if (!$this->isMyGame($game, $me)) {
+            $this->getRequestError()->addError("id", "Game is not mine");
+            $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        if ($game->getStatus() !== GameStatus::PLAY) {
+            $this->getRequestError()->addError("id", "Game is not played")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        try {
+            $this->container->get("core.handler.tournament")->getTournamentForGame($game);
+            $this->getRequestError()->addError("id", "This is tournament game")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
+        } catch (TournamentGameNotFoundException $e) {
+            // it's ok
+        }
+
+        /** @var Game $game */
+        if (!$this->container->get("core.service.chess")->canAbort($game)) {
+            $this->getRequestError()->addError("id", "Game is too long")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        $game->setResultWhite(0)->setResultBlack(0)->setStatus(GameStatus::ABORTED);
+
+        $this->saveEntity($game);
+
         return $this->getUserGame($game, $me);
     }
 }

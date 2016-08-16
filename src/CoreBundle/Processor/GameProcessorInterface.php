@@ -14,6 +14,7 @@ use CoreBundle\Model\Request\Game\GameGetRequest;
 use CoreBundle\Model\Request\Game\GamePostAddmessageRequest;
 use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePostPublishRequest;
+use CoreBundle\Model\Request\Game\GamePutAbortRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutFixRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
@@ -83,4 +84,11 @@ interface GameProcessorInterface extends ProcessorInterface
      * @return Game
      */
     public function processPutFix(GamePutFixRequest $request) : Game;
+
+
+    /**
+     * @param GamePutAbortRequest $request
+     * @return Game
+     */
+    public function processPutAbort(GamePutAbortRequest $request) : Game;
 }

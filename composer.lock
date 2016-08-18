@@ -3972,12 +3972,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/StasPiv/KnpTimeBundle.git",
-                "reference": "72256b06181be9875618bcb9d8c404af1c405225"
+                "reference": "d758d8987310ac84ebe6112804c993472e301841"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/StasPiv/KnpTimeBundle/zipball/72256b06181be9875618bcb9d8c404af1c405225",
-                "reference": "72256b06181be9875618bcb9d8c404af1c405225",
+                "url": "https://api.github.com/repos/StasPiv/KnpTimeBundle/zipball/d758d8987310ac84ebe6112804c993472e301841",
+                "reference": "d758d8987310ac84ebe6112804c993472e301841",
                 "shasum": ""
             },
             "require": {
@@ -4028,7 +4028,7 @@
                 "knplabs",
                 "time"
             ],
-            "time": "2016-08-18 19:05:27"
+            "time": "2016-08-18 20:48:15"
         },
         {
             "name": "swiftmailer/swiftmailer",

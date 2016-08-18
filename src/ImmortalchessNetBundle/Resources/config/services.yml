@@ -15,3 +15,7 @@ services:
     class: ImmortalchessNetBundle\Service\Event\PostProblemService
     calls:
       - [setContainer, ['@service_container']]
+  immortalchessnet.service.event.new_tournament_notifier:
+    class: ImmortalchessNetBundle\Service\Event\NewTournamentNotifierService
+    calls:
+      - [setContainer, ['@service_container']]

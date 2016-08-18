@@ -184,22 +184,7 @@ class ImmortalchessnetService implements EventSubscriberInterface
             return;
         }
 
-        $this->container->get("immortalchessnet.service.publish")->publishNewPost(
-            new Post(
-                $this->container->getParameter("app_immortalchess.forum_playzone"),
-                $tournament->getGameParams()->getTimeBase() === 180000 ?
-                    self::THREAD_FOR_3_MINUTES : self::THREAD_FOR_5_MINUTES,
-                $this->container->getParameter("app_immortalchess.post_username_for_calls"),
-                $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
-                "Запись в турнир открыта",
-                $this->container->get("templating")->render(
-                    'Post/newtournament.html.twig',
-                    [
-                        'tournament' => $tournament
-                    ]
-                )
-            )
-        );
+        $this->container->get('immortalchessnet.service.event.new_tournament_notifier')->notifyAboutNewTournament($tournament);
     }
 
     /**

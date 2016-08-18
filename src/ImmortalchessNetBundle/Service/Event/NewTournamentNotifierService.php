@@ -43,7 +43,7 @@ class NewTournamentNotifierService implements EventCommandInterface, ContainerAw
         foreach ($newTournaments as $tournament) {
             $timeLeft = $tournament->getTournamentParams()->getTimeBegin()->diff(new \DateTime());
 
-            if ($timeLeft['h'] <= 1) {
+            if ($timeLeft->h <= 1) {
                 $this->notifyAboutNewTournament($tournament);
             }
         }

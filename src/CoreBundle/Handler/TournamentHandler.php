@@ -194,8 +194,8 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
 
         if ($user->getLag() > $this->container->getParameter("max_lag_for_record")) {
-            $this->getRequestError()->addError("login", "Your lag is too big")
-                ->throwException(ResponseStatusCode::FORBIDDEN);
+//            $this->getRequestError()->addError("login", "Your lag is too big")
+//                ->throwException(ResponseStatusCode::FORBIDDEN);
         }
         
         /** @var Tournament $tournament */

@@ -19,3 +19,17 @@ services:
     class: ImmortalchessNetBundle\Service\Event\NewTournamentNotifierService
     calls:
       - [setContainer, ['@service_container']]
+  immortalchessnet.service.text.converter:
+    class: ImmortalchessNetBundle\Service\TextConverter
+    calls:
+      - [setContainer, ['@service_container']]
+  immortalchess.service.database_converter:
+    class: ImmortalchessNetBundle\Service\DatabaseConverter
+    arguments:
+      - '@immortalchessnet.service.text.converter'
+      - '%app_immortalchess.database_host%'
+      - '%app_immortalchess.database_user%'
+      - '%app_immortalchess.database_password%'
+      - '%app_immortalchess.database_name%'
+      - '@doctrine'
+      - '@filesystem'

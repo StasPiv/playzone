@@ -121,9 +121,10 @@ class DatabaseConverter
     {
         $command = 'mysqldump --replace -h'.$this->mysqlHost.' -u'.$this->mysqlUsername.' -p'.$this->mysqlPassword.' '.$this->mysqlDbname.' '.$tableName.' > '.self::DUMP_IN_FILE_NAME;
 
-        $process = new Process($command, null, null, 60000);
-
-        $process->run();
+        exec($command);
+//        $process = new Process($command, null, null, 60000);
+//
+//        $process->run();
 
         return $this;
     }
@@ -163,13 +164,15 @@ class DatabaseConverter
     {
         $command = 'mysql -h'.$this->mysqlHost.' -u'.$this->mysqlUsername.' -p'.$this->mysqlPassword.' '.$this->mysqlDbname.' < '.$fileName;
 
-        $process = new Process($command, null, null, 60000);
+        exec($command);
 
-        $process->run();
-
-        if (strpos($process->getErrorOutput(), 'ERROR') !== false) {
-            throw new \RuntimeException($process->getErrorOutput());
-        }
+//        $process = new Process($command, null, null, 60000);
+//
+//        $process->run();
+//
+//        if (strpos($process->getErrorOutput(), 'ERROR') !== false) {
+//            throw new \RuntimeException($process->getErrorOutput());
+//        }
 
         return $this;
     }

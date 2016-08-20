@@ -98,11 +98,11 @@ class DatabaseConverter
      */
     public function run(array $onlyTables = [])
     {
-        $this->fs->remove([self::DUMP_IN_FILE_NAME, self::DUMP_OUT_FILE_NAME]);
-
         $tables = $this->showTables();
 
         foreach ($tables as $tableName) {
+            $this->fs->remove([self::DUMP_IN_FILE_NAME, self::DUMP_OUT_FILE_NAME]);
+
             if (!empty($onlyTables) && !in_array($tableName, $onlyTables)) {
                 continue;
             }

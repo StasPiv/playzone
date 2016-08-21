@@ -51,8 +51,9 @@
                     &nbsp;
                 </div>
                 <div class="user-action btn-group">
+                    <user-link data-user="$root.user"></user-link>
                     <a class="btn btn-primary glyphicon glyphicon-user" title="{{ 'My profile' | translate }}" href="/#/profile">
-                        <span class="full-label">{{ 'My profile' | translate }} ({{ $root.user.login }})</span>
+                        <span class="full-label">{{ 'My profile' | translate }}</span>
                     </a>
                     <a class="btn btn-primary glyphicon glyphicon-log-out" href="/#/logout" ng-click="logout()" title="{{ 'Logout' | translate }}">
                         <span class="full-label">{{ 'Logout' | translate }}</span>

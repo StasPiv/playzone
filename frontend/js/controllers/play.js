@@ -168,7 +168,8 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
                 time: {
                     base_minutes: $scope.game.game_params.time_base / 60000,
                     increment_seconds: $scope.game.game_params.time_increment / 1000
-                }
+                },
+                rate: !!$scope.game.game_params.rate
             },
             function(responseCall) {
                 WebsocketService.sendDataToLogins(

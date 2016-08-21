@@ -10,7 +10,6 @@ namespace ImmortalchessNetBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
@@ -83,21 +82,35 @@ class DatabaseConverter
     )
     {
         $this->textConverter = $textConverter;
-        $this->mysqlUsername = $mysqlUsername;
-        $this->mysqlPassword = $mysqlPassword;
-        $this->mysqlDbname = $mysqlDbname;
+        $this->initMysqlSettings($mysqlHost, $mysqlUsername, $mysqlPassword, $mysqlDbname);
         $this->processBuilder = new ProcessBuilder();
-        $this->connection = $doctrine->getConnection('immortalchess');
         $this->doctrine = $doctrine;
-        $this->mysqlHost = $mysqlHost;
         $this->fs = $fs;
     }
 
     /**
+     * @param string $connectionName
+     * @param string $mysqlHost
+     * @param string $mysqlUsername
+     * @param string $mysqlPassword
+     * @param string $mysqlDbname
      * @param array $onlyTables
      */
-    public function run(array $onlyTables = [])
+    public function run(
+        string $connectionName = 'default',
+        string $mysqlHost = 'localhost',
+        string $mysqlUsername = null,
+        string $mysqlPassword = null,
+        string $mysqlDbname = null,
+        array $onlyTables = []
+    )
     {
+        $this->connection = $this->doctrine->getConnection($connectionName);
+
+        if ($mysqlHost) {
+            $this->initMysqlSettings($mysqlHost, $mysqlUsername, $mysqlPassword, $mysqlDbname);
+        }
+
         $tables = $this->showTables();
 
         foreach ($tables as $tableName) {
@@ -122,9 +135,6 @@ class DatabaseConverter
         $command = 'mysqldump --replace -h'.$this->mysqlHost.' -u'.$this->mysqlUsername.' -p'.$this->mysqlPassword.' '.$this->mysqlDbname.' '.$tableName.' > '.self::DUMP_IN_FILE_NAME;
 
         exec($command);
-//        $process = new Process($command, null, null, 60000);
-//
-//        $process->run();
 
         return $this;
     }
@@ -166,14 +176,24 @@ class DatabaseConverter
 
         exec($command);
 
-//        $process = new Process($command, null, null, 60000);
-//
-//        $process->run();
-//
-//        if (strpos($process->getErrorOutput(), 'ERROR') !== false) {
-//            throw new \RuntimeException($process->getErrorOutput());
-//        }
-
         return $this;
+    }
+
+    /**
+     * @param string $mysqlHost
+     * @param string $mysqlUsername
+     * @param string $mysqlPassword
+     * @param string $mysqlDbname
+     */
+    private function initMysqlSettings(
+        string $mysqlHost,
+        string $mysqlUsername,
+        string $mysqlPassword,
+        string $mysqlDbname
+    ) {
+        $this->mysqlHost = $mysqlHost;
+        $this->mysqlUsername = $mysqlUsername;
+        $this->mysqlPassword = $mysqlPassword;
+        $this->mysqlDbname = $mysqlDbname;
     }
 }

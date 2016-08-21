@@ -21,7 +21,12 @@ class DatabaseConverterCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('immortalchessnet:db_converter')
-             ->setDescription('Convert db to utf-8');
+             ->setDescription('Convert db to utf-8')
+             ->addArgument('connectionName', null, '', 'default')
+             ->addArgument('mysqlHost')
+             ->addArgument('mysqlUsername')
+             ->addArgument('mysqlPassword')
+             ->addArgument('mysqlDbname');
     }
 
     /**
@@ -31,6 +36,12 @@ class DatabaseConverterCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('immortalchess.service.database_converter')->run();
+        $this->getContainer()->get('immortalchess.service.database_converter')->run(
+            $input->getArgument('connectionName'),
+            $input->getArgument('mysqlHost'),
+            $input->getArgument('mysqlUsername'),
+            $input->getArgument('mysqlPassword'),
+            $input->getArgument('mysqlDbname')
+        );
     }
 }

@@ -204,6 +204,9 @@ h2 {
       display: block;
       float: left;
       margin: 7px 6px 0 0;
+      .mobile & {
+        display: none;
+      }
     }
   }
   .language {

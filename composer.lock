@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "83d86a5a3812328999258fe66d84437a",
-    "content-hash": "6efed178046a4ff430318fee7249b4e0",
+    "hash": "8b7d732e4a66bce387b54260546e20de",
+    "content-hash": "d17a4644061b4171411b6b44f2060463",
     "packages": [
         {
             "name": "amyboyd/pgn-parser",
@@ -3966,16 +3966,16 @@
         },
         {
             "name": "staspiv/elo-calculator",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/StasPiv/elo-calculator.git",
-                "reference": "c3f5923bbb9be9594ba8d28a335ed38a2fe53160"
+                "reference": "e443ac0507c6e1787307d4887ae3d7f2b0c12215"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/StasPiv/elo-calculator/zipball/c3f5923bbb9be9594ba8d28a335ed38a2fe53160",
-                "reference": "c3f5923bbb9be9594ba8d28a335ed38a2fe53160",
+                "url": "https://api.github.com/repos/StasPiv/elo-calculator/zipball/e443ac0507c6e1787307d4887ae3d7f2b0c12215",
+                "reference": "e443ac0507c6e1787307d4887ae3d7f2b0c12215",
                 "shasum": ""
             },
             "require-dev": {
@@ -4000,7 +4000,7 @@
                 }
             ],
             "description": "This is elo calculator for chess games",
-            "time": "2016-08-21 10:11:14"
+            "time": "2016-08-21 20:19:14"
         },
         {
             "name": "staspiv/knp-time-bundle",

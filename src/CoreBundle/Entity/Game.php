@@ -289,6 +289,14 @@ class Game implements ChatMessageContainerInterface
     private $canAbort = false;
 
     /**
+     * Game constructor.
+     */
+    public function __construct()
+    {
+        $this->setTimeLastMove(new \DateTime());
+    }
+
+    /**
      * Get id
      *
      * @return int
@@ -446,7 +454,7 @@ class Game implements ChatMessageContainerInterface
      *
      * @return bool
      */
-    public function getRate()
+    public function isRate()
     {
         return $this->rate;
     }

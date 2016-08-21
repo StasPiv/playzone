@@ -39,7 +39,8 @@
         "ocramius/proxy-manager": "~1.0",
         "amyboyd/pgn-parser": "^0.2.0",
         "staspiv/knp-time-bundle": "dev-master",
-        "twig/extensions": "v1.3.0"
+        "twig/extensions": "v1.3.0",
+        "staspiv/elo-calculator": "1.0.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

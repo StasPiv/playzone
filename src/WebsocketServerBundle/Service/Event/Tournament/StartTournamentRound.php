@@ -180,7 +180,7 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
             TournamentEvents::NEW => [
                 ['onTournamentNew', 10]
             ],
-            GameEvents::CHANGE_STATUS => [
+            GameEvents::CHANGE_STATUS_AFTER => [
                 ['onGameChangeStatus', 10]
             ]
         ];

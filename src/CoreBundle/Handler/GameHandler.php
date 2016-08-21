@@ -643,11 +643,17 @@ class GameHandler implements GameProcessorInterface
     public function changeGameStatus(Game $game, $status)
     {
         $this->container->get("logger")->debug(__METHOD__ . ' ' . $game->getId() . ' ' . $status);
+
+        $this->container->get("event_dispatcher")->dispatch(
+            GameEvents::CHANGE_STATUS_BEFORE,
+            (new GameEvent())->setGame($game)
+        );
+
         $game->setStatus($status);
         $this->saveEntity($game);
 
         $this->container->get("event_dispatcher")->dispatch(
-            GameEvents::CHANGE_STATUS,
+            GameEvents::CHANGE_STATUS_AFTER,
             (new GameEvent())->setGame($game)
         );
     }

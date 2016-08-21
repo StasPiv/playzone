@@ -111,3 +111,7 @@ services:
         class: CoreBundle\Service\Chess\PgnService
         calls:
           - [setContainer, ['@service_container']]
+    core.service.rating:
+        class: CoreBundle\Service\RatingService
+        tags:
+          - { name: kernel.event_subscriber }

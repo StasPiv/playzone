@@ -140,7 +140,7 @@ class User
      *
      * @JMS\Exclude()
      */
-    private $rating = 2200;
+    private $rating = 1800;
 
     /**
      * @var int

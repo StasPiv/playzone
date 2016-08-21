@@ -514,7 +514,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
             TournamentEvents::ROUND_START => [
                 ['onTournamentRoundStart', 20]
             ],
-            GameEvents::CHANGE_STATUS => [
+            GameEvents::CHANGE_STATUS_AFTER => [
                 ['onGameChangeStatus', 20]
             ]
         ];

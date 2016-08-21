@@ -24,5 +24,14 @@
       "color": "w",
       "time_base": 300000
     }
+  },
+  {
+    "referenceName": "game-call-3",
+    "fromUser": "user-stas",
+    "game_params": {
+      "color": "w",
+      "time_base": 300000,
+      "rate": false
+    }
   }
 ]

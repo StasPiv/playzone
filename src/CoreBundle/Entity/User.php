@@ -137,8 +137,6 @@ class User
      * @JMS\Expose
      * @JMS\SerializedName("rating")
      * @JMS\Type("integer")
-     *
-     * @JMS\Exclude()
      */
     private $rating = 1800;
 
@@ -1028,6 +1026,17 @@ class User
         $this->goodQuality = $goodQuality;
 
         return $this;
+    }
+
+    /**
+     * @JMS\VirtualProperty()
+     * @JMS\SerializedName("games_count")
+     *
+     * @return int
+     */
+    public function getGamesCount(): int
+    {
+        return $this->getWin() + $this->getDraw() + $this->getLose();
     }
 }
 

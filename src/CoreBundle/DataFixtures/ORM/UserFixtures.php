@@ -49,7 +49,8 @@ class UserFixtures extends AbstractPlayzoneFixtures
             ->setAnotherLogin($data['another_login'])
             ->setLastMove($this->container->get("core.service.date")->getDateTime($data['last_move']))
             ->setBalance($data['balance'])
-            ->setLag((float)@$data["lag"]);
+            ->setLag((float)@$data["lag"])
+            ->setOnline((bool)@$data['online']);
 
         if (isset($data["settings"])) {
             foreach ($data["settings"] as $settingArray) {

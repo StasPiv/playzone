@@ -154,7 +154,8 @@ class CallHandler implements CallProcessorInterface
         $gameParams = new GameParams();
         $gameParams->setColor( GameColor::getOppositeColor($request->getColor()) )
                    ->setTimeBase($request->getTime()->getBase())
-                   ->setTimeIncrement($request->getTime()->getIncrement());
+                   ->setTimeIncrement($request->getTime()->getIncrement())
+                   ->setRate($request->isRate());
 
         if (!$request->getPlayer()) {
             $gameCall = $this->createCommonGameCall($me, $gameParams);
@@ -232,7 +233,8 @@ class CallHandler implements CallProcessorInterface
         $game = $this->container->get("core.handler.game")->createMyGame(
             $call->getFromUser(),
             $me,
-            GameColor::getOppositeColor($call->getGameParams()->getColor())
+            GameColor::getOppositeColor($call->getGameParams()->getColor()),
+            $call->getGameParams()->isRate()
         );
         
         $this->container->get("core.handler.game")->changeGameStatus($game, GameStatus::PLAY);
@@ -295,7 +297,7 @@ class CallHandler implements CallProcessorInterface
         if (!$login) {
             return $this->getQueryBuilderForLastCalls()
                         ->andWhere('game_call.toUser IS NULL')
-                        ->getQuery()->getResult();
+                        ->getQuery()->useQueryCache(false)->execute();
         }
 
         $user = $this->container->get("core.handler.user")->getRepository()
@@ -325,7 +327,7 @@ class CallHandler implements CallProcessorInterface
 
         $queryBuilder->setParameter('user', $user);
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(false)->execute();
     }
 
     /**

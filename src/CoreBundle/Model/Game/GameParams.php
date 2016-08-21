@@ -41,12 +41,20 @@ class GameParams
     private $timeIncrement = 0;
 
     /**
-     * @var GameColor
+     * @var int
      *
      * @JMS\Expose
      * @JMS\Type("integer")
      */
     private $timeLimit;
+
+    /**
+     * @var bool
+     *
+     * @JMS\Expose
+     * @JMS\Type("boolean")
+     */
+    private $rate = true;
 
     /**
      * @return string
@@ -120,6 +128,25 @@ class GameParams
     public function setTimeLimit(int $timeLimit) : self 
     {
         $this->timeLimit = $timeLimit;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isRate(): bool
+    {
+        return $this->rate;
+    }
+
+    /**
+     * @param boolean $rate
+     * @return GameParams
+     */
+    public function setRate(bool $rate): self
+    {
+        $this->rate = $rate;
 
         return $this;
     }

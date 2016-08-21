@@ -12,7 +12,7 @@
         <available file="${basedir}/composer.lock" property="composer.lock.present"/>
     </target>
 
-    <target name="vendors_install" description="Install vendors" depends="check-composer-lock" unless="composer.lock.present">
+    <target name="vendors_install" description="Install vendors">
         <exec executable="composer" failonerror="true">
             <arg value="install"/>
             <arg value="-o"/>

@@ -200,6 +200,11 @@ h2 {
     .enter {
       font-weight: bold;
     }
+    user-link {
+      display: block;
+      float: left;
+      margin: 7px 6px 0 0;
+    }
   }
   .language {
     position: absolute;
@@ -870,4 +875,8 @@ th.header {
       border-color: red;
     }
   }
+}
+
+.beginner-rating {
+  color: #d4d4d4;
 }

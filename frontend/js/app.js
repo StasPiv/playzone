@@ -42,6 +42,12 @@ var playzoneApp = angular.module('playzoneApp', [
             $interval(
                 function () {
                     WebsocketService.ping();
+                    $rootScope.user.$profile().then(
+                        function () {
+                            $rootScope.user.login = $cookies.get("user_login");
+                            $rootScope.user.token = $cookies.get("user_token");
+                        }
+                    );
                 },
                 5000
             );
@@ -70,14 +76,29 @@ var playzoneApp = angular.module('playzoneApp', [
             }
         );
 
+        $rootScope.fetchOnline();
+
         $rootScope.connected = true;
     });
+
+    $rootScope.fetchOnline = function () {
+        $rootScope.loginsOnline = UserRest.query(
+            {
+                order_by: "u.rating",
+                filter: {
+                    online: true
+                }
+            }
+        );
+    };
 
     WebsocketService.addListener('listen_user_in', 'user_in', function (newUser) {
         var existingUser = $rootScope.loginsOnline.searchById(newUser['id']);
 
         if (!existingUser) {
-            $rootScope.loginsOnline.push(newUser)
+            $rootScope.loginsOnline.push(
+                UserRest.profile(newUser)
+            )
         } else if (!existingUser.count) {
             existingUser.count = 1;
         } else {

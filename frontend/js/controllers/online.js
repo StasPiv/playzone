@@ -3,10 +3,12 @@
  */
 'use strict';
 
-playzoneControllers.controller('OnlineCtrl', function ($scope, $rootScope, CallRest, UserRest) {
+playzoneControllers.controller('OnlineCtrl', function ($scope, $rootScope, CallRest, UserRest, $interval) {
     $scope.openSendCallToPlayer = function (player) {
         $('#login_enemy').val(player.login).trigger('change');
     };
 
-    $scope.top_5 = UserRest.query({order_by: "u.win", limit: 5});
+    $rootScope.fetchOnline();
+
+    $scope.top_5 = UserRest.query({order_by: "u.rating", limit: 5});
 });

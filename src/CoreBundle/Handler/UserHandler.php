@@ -176,6 +176,14 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
                     ->orderBy($listRequest->getOrderBy(), 'DESC')
                     ->setMaxResults($listRequest->getLimit());
 
+        if (!empty($listRequest->getFilter())) {
+            $filter = json_decode($listRequest->getFilter(), true);
+            foreach ($filter as $property => $value) {
+                $users->andWhere('u.'.$property.' = :'.$property)
+                    ->setParameter($property, $value);
+            }
+        }
+
         return $users->getQuery()->getResult();
     }
 

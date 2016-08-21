@@ -34,6 +34,14 @@ class UserGetListRequest extends UserRequest
     private $limit = 20;
 
     /**
+     * @var string
+     *
+     * @JMS\Expose()
+     * @JMS\Type("string")
+     */
+    private $filter = '';
+
+    /**
      * @return string
      */
     public function getOrderBy()
@@ -67,6 +75,25 @@ class UserGetListRequest extends UserRequest
     public function setLimit($limit)
     {
         $this->limit = $limit;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilter(): string
+    {
+        return $this->filter;
+    }
+
+    /**
+     * @param string $filter
+     * @return UserGetListRequest
+     */
+    public function setFilter(string $filter): self
+    {
+        $this->filter = $filter;
 
         return $this;
     }

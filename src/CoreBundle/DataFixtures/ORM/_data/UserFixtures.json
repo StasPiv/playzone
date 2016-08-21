@@ -84,7 +84,8 @@
     "immortal_id": 88,
     "another_login": "",
     "last_move": "yesterday",
-    "lag": 0.45
+    "lag": 0.45,
+    "online": 1
   },
   {
     "referenceName": "user-a",
@@ -106,7 +107,8 @@
     "balance": 0,
     "immortal_id": 88,
     "another_login": "",
-    "last_move": "yesterday"
+    "last_move": "yesterday",
+    "online": 1
   },
   {
     "referenceName": "user-b",

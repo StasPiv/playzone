@@ -504,9 +504,10 @@ class GameHandler implements GameProcessorInterface
      * @param User $me
      * @param User $opponent can be null - in this case common call will be created
      * @param $myColor
+     * @param bool $rate
      * @return Game
      */
-    public function createMyGame(User $me, User $opponent, $myColor)
+    public function createMyGame(User $me, User $opponent, $myColor, bool $rate = true)
     {
         $game = $this->createEntity();
 
@@ -524,7 +525,8 @@ class GameHandler implements GameProcessorInterface
         }
 
         $game->setTimeLastMove(new \DateTime())
-            ->setUserToMove($game->getUserWhite());
+            ->setUserToMove($game->getUserWhite())
+            ->setRate($rate);
 
         $this->container->get("logger")->error("Switch move: " . $game->getUserToMove());
         
@@ -643,13 +645,13 @@ class GameHandler implements GameProcessorInterface
     public function changeGameStatus(Game $game, $status)
     {
         $this->container->get("logger")->debug(__METHOD__ . ' ' . $game->getId() . ' ' . $status);
+        $game->setStatus($status);
 
         $this->container->get("event_dispatcher")->dispatch(
             GameEvents::CHANGE_STATUS_BEFORE,
             (new GameEvent())->setGame($game)
         );
 
-        $game->setStatus($status);
         $this->saveEntity($game);
 
         $this->container->get("event_dispatcher")->dispatch(

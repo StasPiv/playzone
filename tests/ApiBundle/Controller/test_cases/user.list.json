@@ -31,5 +31,24 @@
         }
       ]
     }
+  },
+  "users_list_online" : {
+    "method" : "GET",
+    "request": {
+      "order_by": "u.win",
+      "limit": 5,
+      "filter": "{\"online\": true}"
+    },
+    "response" : {
+      "status" : 200,
+      "data" : [
+        {
+          "login" : "Petro"
+        },
+        {
+          "login" : "User-A"
+        }
+      ]
+    }
   }
 }

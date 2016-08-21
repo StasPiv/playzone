@@ -228,5 +228,35 @@
         }
       }
     }
+  },
+  "correct_call_unrate": {
+    "method": "POST",
+    "request": {
+      "login": "TestLogin",
+      "token": "aba37b62d15cc5f8671fd3d1b034c354",
+      "color": {
+        "id": "w"
+      },
+      "time": {
+        "base": 600000,
+        "increment": 2000
+      },
+      "games_count": 1,
+      "rate": false
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "from_user": {
+          "login": "TestLogin"
+        },
+        "game_params": {
+          "color": "b",
+          "time_base": 600000,
+          "time_increment": 2000,
+          "rate": false
+        }
+      }
+    }
   }
 }

@@ -54,6 +54,14 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
     private $time;
 
     /**
+     * @var bool
+     *
+     * @JMS\Expose()
+     * @JMS\Type("boolean")
+     */
+    private $rate = true;
+
+    /**
      * @return string
      */
     public function getPlayer()
@@ -104,6 +112,25 @@ class CallPostSendRequest extends CallRequest implements SecurityRequestInterfac
     public function setTime(Time $time) : CallPostSendRequest
     {
         $this->time = $time;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isRate(): bool
+    {
+        return $this->rate;
+    }
+
+    /**
+     * @param boolean $rate
+     * @return CallPostSendRequest
+     */
+    public function setRate(bool $rate): self
+    {
+        $this->rate = $rate;
 
         return $this;
     }

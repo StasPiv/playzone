@@ -65,13 +65,7 @@ playzoneControllers.directive('challenges', function (CallRest, WebsocketService
             WebsocketService.addListener("listen_sent_calls", "call_send", function(data) {
                 console.log('data: ', data);
 
-                angular.forEach(data, function(value) {
-                    if (!scope.calls_to_me.searchById(value.id)) {
-                        scope.calls_to_me.push(new CallRest(value));
-                    }
-                });
-
-                AudioService.newCall();
+                scope.calls_to_me = CallRest.query({type: "to"});
             });
 
             WebsocketService.addListener("listen_accepted_calls", "call_accept", function(data) {

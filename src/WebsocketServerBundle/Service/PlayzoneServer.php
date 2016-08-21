@@ -212,10 +212,15 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                     (new PlayzoneMessage())
                         ->setScope(PlayzoneServerMessageScope::USER_IN)
                         ->setMethod(PlayzoneClientMessageMethod::USER_IN)
-                        ->setData([
-                            'id' => $wsUser->getPlayzoneUser()->getId(),
-                            'login' => $wsUser->getPlayzoneUser()->getLogin()
-                        ])
+                        ->setData(
+                            json_decode(
+                                $this->container->get('serializer')->serialize(
+                                    $wsUser->getPlayzoneUser(),
+                                    'json'
+                                ),
+                                true
+                            )
+                        )
                 );
             }
 

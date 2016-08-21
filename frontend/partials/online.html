@@ -22,6 +22,12 @@
                     </select>
                 </td>
             </tr>
+            <tr ng-class="{ error: errors.color }">
+                <td><label for="rate">{{ 'Rate' | translate }}:</label></td>
+                <td>
+                    <input type="checkbox" id="rate" data-ng-model="call.rate" value="1" checked="checked" />
+                </td>
+            </tr>
             <tr ng-class="{ error: errors.time }">
                 <td colspan="2">
                     <label for="time_base">{{ 'Time control (minutes)' | translate }}:</label>
@@ -46,6 +52,8 @@
         <tr>
             <th>№</th>
             <th>{{ "Player" | translate }}</th>
+            <th>{{ "Rating" | translate }}</th>
+            <th>{{ "W-D-L" | translate }}</th>
             <th>{{ "Action" | translate }}</th>
         </tr>
         <tr ng-repeat="player in $root.loginsOnline">
@@ -55,7 +63,14 @@
             <td>
                 <user-link
                         data-user="player"
+                        data-withoutrating="true"
                 ></user-link>
+            </td>
+            <td>
+                {{ player.rating }}
+            </td>
+            <td>
+                {{ player.win }}-{{ player.draw }}-{{ player.lose }}
             </td>
             <td>
                 <a ng-if="player.login !== $root.user.login" class="btn btn-success open-popup" data-open-popup=".call-form"
@@ -72,7 +87,8 @@
         <tr>
             <th>№</th>
             <th>{{ "Player" | translate }}</th>
-            <th>{{ "Win count" | translate }}</th>
+            <th>{{ "Rating" | translate }}</th>
+            <th>{{ "W-D-L" | translate }}</th>
         </tr>
         <tr ng-repeat="player in top_5 track by $index">
             <td>
@@ -81,10 +97,14 @@
             <td>
                 <user-link
                         data-user="player"
+                        data-withoutrating="true"
                 ></user-link>
             </td>
             <td>
-                {{ player.win }}
+                {{ player.rating }}
+            </td>
+            <td>
+                {{ player.win }}-{{ player.draw }}-{{ player.lose }}
             </td>
         </tr>
     </table>

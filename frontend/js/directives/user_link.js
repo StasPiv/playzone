@@ -7,12 +7,13 @@ playzoneControllers.directive('userLink', function () {
     return {
         restrict: 'E',
         link: function(scope, element) {
-            
+
         },
         transclude: true,
         scope: {
-            user: '='
+            user: '=',
+            withoutrating: '='
         },
-        templateUrl: 'partials/user_link.html'
+        templateUrl: 'partials/user_link.html?v=2'
     }
 });

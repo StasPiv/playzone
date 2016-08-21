@@ -1,1 +1,6 @@
-<a href="/#/user/{{ user.id }}/profile">{{ user.login }}</a>
+<a href="/#/user/{{ user.id }}/profile">
+    {{ user.login }}
+    <span ng-if="user.rating && !withoutrating" ng-class="{'beginner-rating': user.games_count <= 10}">
+        ({{ user.rating }})
+    </span>
+</a>

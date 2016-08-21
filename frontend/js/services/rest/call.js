@@ -33,6 +33,9 @@ playzoneServices.factory('CallRest', function($resource, ApiService) {
                 method: 'POST',
                 url: ApiService.base_url + 'call/send',
                 transformRequest: function (data) {
+                    if (!data.rate) {
+                        data.rate = false;
+                    }
                     if (data.time.base_minutes) {
                         data.time.base = data.time.base_minutes * 1000 * 60;
                     }

@@ -19,6 +19,7 @@ playzoneControllers.controller('CallCtrl', function ($scope, $rootScope, $locati
     $scope.sendCall = function(call) {
         $('.footer .overlay').hide();
 
+        console.log('send call', call);
         CallRest.send(
             {},
             call,

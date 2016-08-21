@@ -40,7 +40,7 @@ class Game implements ChatMessageContainerInterface
      * @JMS\Type("CoreBundle\Entity\User")
      * @JMS\SerializedName("user_white")
      *
-     * @ORM\ManyToOne(targetEntity="User", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="User", fetch="EAGER", cascade={"persist"})
      * @ORM\JoinColumn(name="id_white", referencedColumnName="id", nullable=false)
      */
     private $userWhite;
@@ -52,7 +52,7 @@ class Game implements ChatMessageContainerInterface
      * @JMS\Type("CoreBundle\Entity\User")
      * @JMS\SerializedName("user_black")
      *
-     * @ORM\ManyToOne(targetEntity="User", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="User", fetch="EAGER", cascade={"persist"})
      * @ORM\JoinColumn(name="id_black", referencedColumnName="id", nullable=false)
      */
     private $userBlack;
@@ -99,9 +99,9 @@ class Game implements ChatMessageContainerInterface
      *
      * @ORM\Column(name="rate", type="boolean")
      *
-     * @JMS\Groups({"get_game"})
+     * @JMS\Groups({"get_game", "delete_call_accept"})
      */
-    private $rate = false;
+    private $rate = true;
 
     /**
      * @var float

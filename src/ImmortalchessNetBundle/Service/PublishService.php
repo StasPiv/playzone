@@ -34,8 +34,8 @@ class PublishService
             ->setParentid(0)
             ->setUsername($postModel->getLastPosterName())
             ->setUserid($postModel->getLastPosterId())
-            ->setTitle($this->convertText($postModel->getTitle()))
-            ->setPagetext($this->convertText($postModel->getPageText()))
+            ->setTitle($postModel->getTitle())
+            ->setPagetext($postModel->getPageText())
             ->setVisible(1)
             ->setDateline(time());
 
@@ -105,8 +105,8 @@ class PublishService
             ->setParentid(0)
             ->setUsername($postModel->getLastPosterName())
             ->setUserid($postModel->getLastPosterId())
-            ->setTitle($this->convertText($postModel->getTitle()))
-            ->setPagetext($this->convertText($postModel->getPageText()))
+            ->setTitle($postModel->getTitle())
+            ->setPagetext($postModel->getPageText())
             ->setVisible(1)
             ->setDateline(time());
 

@@ -126,7 +126,7 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
                 break;
         }
 
-        return $this->container->get("immortalchessnet.service.publish")->convertText($text);
+        return $text;
     }
 
 }

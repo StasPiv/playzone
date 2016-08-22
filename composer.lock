@@ -3293,16 +3293,16 @@
         },
         {
             "name": "react/stream",
-            "version": "v0.4.3",
+            "version": "v0.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/stream.git",
-                "reference": "305b2328d2a2e157bc13b61a0f5c6e41b666b188"
+                "reference": "fcc9e7cea126962cff303c90c05e2efdcec09a27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/stream/zipball/305b2328d2a2e157bc13b61a0f5c6e41b666b188",
-                "reference": "305b2328d2a2e157bc13b61a0f5c6e41b666b188",
+                "url": "https://api.github.com/repos/reactphp/stream/zipball/fcc9e7cea126962cff303c90c05e2efdcec09a27",
+                "reference": "fcc9e7cea126962cff303c90c05e2efdcec09a27",
                 "shasum": ""
             },
             "require": {
@@ -3310,6 +3310,7 @@
                 "php": ">=5.3.8"
             },
             "require-dev": {
+                "clue/stream-filter": "~1.2",
                 "react/event-loop": "^0.4|^0.3",
                 "react/promise": "^2.0|^1.0"
             },
@@ -3318,11 +3319,6 @@
                 "react/promise": "^2.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.5-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "React\\Stream\\": "src"
@@ -3337,7 +3333,7 @@
                 "pipe",
                 "stream"
             ],
-            "time": "2015-10-07 18:32:58"
+            "time": "2016-08-22 09:51:07"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -3966,16 +3962,16 @@
         },
         {
             "name": "staspiv/elo-calculator",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/StasPiv/elo-calculator.git",
-                "reference": "e443ac0507c6e1787307d4887ae3d7f2b0c12215"
+                "reference": "e765d7b7d2c2aa8c03de0d2f1d9cde8304b50977"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/StasPiv/elo-calculator/zipball/e443ac0507c6e1787307d4887ae3d7f2b0c12215",
-                "reference": "e443ac0507c6e1787307d4887ae3d7f2b0c12215",
+                "url": "https://api.github.com/repos/StasPiv/elo-calculator/zipball/e765d7b7d2c2aa8c03de0d2f1d9cde8304b50977",
+                "reference": "e765d7b7d2c2aa8c03de0d2f1d9cde8304b50977",
                 "shasum": ""
             },
             "require-dev": {
@@ -4000,7 +3996,7 @@
                 }
             ],
             "description": "This is elo calculator for chess games",
-            "time": "2016-08-21 20:19:14"
+            "time": "2016-08-22 21:09:54"
         },
         {
             "name": "staspiv/knp-time-bundle",

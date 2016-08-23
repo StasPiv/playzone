@@ -3962,16 +3962,16 @@
         },
         {
             "name": "staspiv/elo-calculator",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/StasPiv/elo-calculator.git",
-                "reference": "e765d7b7d2c2aa8c03de0d2f1d9cde8304b50977"
+                "reference": "66691f5329b770e5f447679a36d7d71be35b6537"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/StasPiv/elo-calculator/zipball/e765d7b7d2c2aa8c03de0d2f1d9cde8304b50977",
-                "reference": "e765d7b7d2c2aa8c03de0d2f1d9cde8304b50977",
+                "url": "https://api.github.com/repos/StasPiv/elo-calculator/zipball/66691f5329b770e5f447679a36d7d71be35b6537",
+                "reference": "66691f5329b770e5f447679a36d7d71be35b6537",
                 "shasum": ""
             },
             "require-dev": {
@@ -3996,7 +3996,7 @@
                 }
             ],
             "description": "This is elo calculator for chess games",
-            "time": "2016-08-22 21:09:54"
+            "time": "2016-08-23 11:44:54"
         },
         {
             "name": "staspiv/knp-time-bundle",

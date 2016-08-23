@@ -95,6 +95,6 @@ playzoneControllers.directive('challenges', function (CallRest, WebsocketService
                 scope.calls_to_me.pullById(data.call_id);
             });
         },
-        templateUrl: 'partials/challenges.html?v=0.0.1'
+        templateUrl: 'partials/challenges.html?v=2'
     }
 });

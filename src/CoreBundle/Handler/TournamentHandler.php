@@ -379,7 +379,9 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
 
         $game->setUserToMove($game->getUserWhite());
         $game->setTimeWhite($tournament->getGameParams()->getTimeBase())
-             ->setTimeBlack($tournament->getGameParams()->getTimeBase());
+             ->setTimeBlack($tournament->getGameParams()->getTimeBase())
+             ->setRatingWhite($whiteTournamentPlayer->getPlayer()->getRating())
+             ->setRatingBlack($blackTournamentPlayer->getPlayer()->getRating());
 
         $game->setGameParams($tournament->getGameParams());
         

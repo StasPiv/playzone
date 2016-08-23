@@ -232,7 +232,8 @@ class Tournament
     {
         $tournamentPlayer = new TournamentPlayer();
         $tournamentPlayer->setTournament($this)
-                         ->setPlayer($player);
+                         ->setPlayer($player)
+                         ->setRating($player->getRating());
         $this->players->add($tournamentPlayer);
         return $this;
     }

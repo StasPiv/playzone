@@ -136,6 +136,13 @@ class TournamentPlayer
     private $coefficient = 0;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $rating;
+
+    /**
      * @return int
      */
     public function getId() : int
@@ -399,6 +406,25 @@ class TournamentPlayer
     public function setCoefficient($coefficient)
     {
         $this->coefficient = $coefficient;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRating(): int
+    {
+        return $this->rating;
+    }
+
+    /**
+     * @param int $rating
+     * @return TournamentPlayer
+     */
+    public function setRating(int $rating): self
+    {
+        $this->rating = $rating;
 
         return $this;
     }

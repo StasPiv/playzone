@@ -526,7 +526,9 @@ class GameHandler implements GameProcessorInterface
 
         $game->setTimeLastMove(new \DateTime())
             ->setUserToMove($game->getUserWhite())
-            ->setRate($rate);
+            ->setRate($rate)
+            ->setRatingWhite($game->getUserWhite()->getRating())
+            ->setRatingBlack($game->getUserBlack()->getRating());
 
         $this->container->get("logger")->error("Switch move: " . $game->getUserToMove());
         
@@ -550,6 +552,9 @@ class GameHandler implements GameProcessorInterface
         $game->setMine(false)
              ->setUserMove(false)
              ->setCanAbort($this->container->get('core.service.chess')->canAbort($game));
+
+        $game->getUserWhite()->setRating($game->getRatingWhite());
+        $game->getUserBlack()->setRating($game->getRatingBlack());
 
         if (!$user instanceof User || !$this->isMyGame($game, $user)) {
             return $game;

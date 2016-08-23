@@ -12,8 +12,9 @@ playzoneControllers.directive('userLink', function () {
         transclude: true,
         scope: {
             user: '=',
-            withoutrating: '='
+            withoutrating: '=',
+            rating: '='
         },
-        templateUrl: 'partials/user_link.html?v=2'
+        templateUrl: 'partials/user_link.html?v=3'
     }
 });

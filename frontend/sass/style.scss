@@ -738,6 +738,9 @@ th.header {
           }
           span {
             font-size: 26px;
+            &.rating {
+              font-size: 16px;
+            }
           }
         }
       }

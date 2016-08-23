@@ -9,7 +9,7 @@
         </tr>
         <tr ng-repeat="firstPlayer in tournament.players">
             <td class="player">{{ $index+1 }}</td>
-            <td class="player"><user-link data-user="firstPlayer.player"></user-link></td>
+            <td class="player"><user-link data-user="firstPlayer.player" data-rating="firstPlayer.rating"></user-link></td>
             <td
                     ng-repeat="secondPlayer in tournament.players"
                     ng-class="{self: firstPlayer.id == secondPlayer.id}"

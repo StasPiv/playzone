@@ -289,6 +289,26 @@ class Game implements ChatMessageContainerInterface
     private $canAbort = false;
 
     /**
+     * @var int
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $ratingWhite;
+
+    /**
+     * @var int
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $ratingBlack;
+
+    /**
      * Game constructor.
      */
     public function __construct()
@@ -316,7 +336,7 @@ class Game implements ChatMessageContainerInterface
 
     /**
      * @param User $userWhite
-     * @return $this
+     * @return Game
      */
     public function setUserWhite($userWhite)
     {
@@ -884,6 +904,44 @@ class Game implements ChatMessageContainerInterface
     public function setCanAbort(bool $canAbort): Game
     {
         $this->canAbort = $canAbort;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRatingWhite(): int
+    {
+        return $this->ratingWhite;
+    }
+
+    /**
+     * @param int $ratingWhite
+     * @return Game
+     */
+    public function setRatingWhite(int $ratingWhite): self
+    {
+        $this->ratingWhite = $ratingWhite;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRatingBlack(): int
+    {
+        return $this->ratingBlack;
+    }
+
+    /**
+     * @param int $ratingBlack
+     * @return Game
+     */
+    public function setRatingBlack(int $ratingBlack): self
+    {
+        $this->ratingBlack = $ratingBlack;
 
         return $this;
     }

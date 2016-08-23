@@ -10,5 +10,13 @@ playzoneControllers.controller('OnlineCtrl', function ($scope, $rootScope, CallR
 
     $rootScope.fetchOnline();
 
-    $scope.top_5 = UserRest.query({order_by: "u.rating", limit: 5});
+    $scope.top = UserRest.query(
+        {
+            order_by: "u.rating",
+            limit: 100,
+            filter: {
+                games_count: true
+            }
+        }
+    );
 });

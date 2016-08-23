@@ -179,6 +179,11 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
         if (!empty($listRequest->getFilter())) {
             $filter = json_decode($listRequest->getFilter(), true);
             foreach ($filter as $property => $value) {
+                if ($property == 'games_count') {
+                    $users->andWhere('u.win + u.draw + u.lose > 0');
+                    continue;
+                }
+
                 $users->andWhere('u.'.$property.' = :'.$property)
                     ->setParameter($property, $value);
             }

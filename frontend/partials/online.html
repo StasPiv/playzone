@@ -81,7 +81,7 @@
         </tr>
     </table>
 </div>
-<h1>{{ "Top 5" | translate }}</h1>
+<h1>{{ "Top 100" | translate }}</h1>
 <div class="table-responsive">
     <table class="table">
         <tr>
@@ -90,7 +90,7 @@
             <th>{{ "Rating" | translate }}</th>
             <th>{{ "W-D-L" | translate }}</th>
         </tr>
-        <tr ng-repeat="player in top_5 track by $index">
+        <tr ng-repeat="player in top track by $index">
             <td>
                 <a href="">{{ $index + 1 }}</a>
             </td>

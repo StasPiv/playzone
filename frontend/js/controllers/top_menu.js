@@ -11,7 +11,7 @@ playzoneControllers.controller('TopMenuCtrl', function ($scope) {
         },
         {
             "label": "Players",
-            "url": "/#/online/"
+            "url": "/#/players/"
         },
         {
             "label": "Tournaments",

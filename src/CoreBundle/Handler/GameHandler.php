@@ -553,8 +553,12 @@ class GameHandler implements GameProcessorInterface
              ->setUserMove(false)
              ->setCanAbort($this->container->get('core.service.chess')->canAbort($game));
 
-        $game->getUserWhite()->setRating($game->getRatingWhite());
-        $game->getUserBlack()->setRating($game->getRatingBlack());
+        try {
+            $game->getUserWhite()->setRating($game->getRatingWhite());
+            $game->getUserBlack()->setRating($game->getRatingBlack());
+        } catch (\Throwable $e) {
+            $this->container->get('logger')->warning($e->getMessage());
+        }
 
         if (!$user instanceof User || !$this->isMyGame($game, $user)) {
             return $game;

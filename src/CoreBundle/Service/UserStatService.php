@@ -31,8 +31,8 @@ class UserStatService
 
         foreach ($users as $user) {
             $win = $draw = $lose = 0;
-            $games = $this->container->get("core.handler.game")
-                          ->getGamesForUser($user, GameStatus::END);
+            $games = array_reverse($this->container->get("core.handler.game")
+                          ->getGamesForUser($user, GameStatus::END));
 
             foreach ($games as $game) {
                 if (strlen($game->getPgn()) < 0) {

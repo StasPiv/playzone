@@ -436,4 +436,17 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
 
         return $this->playzoneUsersMap[$playzoneUser->getId()] += $count;
     }
+
+    /**
+     * @inheritDoc
+     */
+    function __destruct()
+    {
+        foreach ($this->users as $websocketUser) {
+            $this->container->get('event_dispatcher')->dispatch(
+                UserEvents::USER_OUT,
+                (new UserEvent())->setUser($websocketUser->getPlayzoneUser())
+            );
+        }
+    }
 }

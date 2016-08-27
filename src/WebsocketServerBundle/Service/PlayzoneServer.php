@@ -442,6 +442,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
      */
     function __destruct()
     {
+        $this->container->get('logger')->debug('WEBSOCKET STOP');
         foreach ($this->users as $websocketUser) {
             $this->container->get('event_dispatcher')->dispatch(
                 UserEvents::USER_OUT,

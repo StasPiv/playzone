@@ -8,10 +8,9 @@
 
 namespace CoreBundle\Service;
 
+use CoreBundle\Entity\User;
 use CoreBundle\Model\Game\GameStatus;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class UserStatService
@@ -28,14 +27,10 @@ class UserStatService
     {
         $this->container->get("core.service.chess")->createPgnDir();
         
-        $fs = new Filesystem();
-
         $users = $this->container->get("doctrine")->getRepository("CoreBundle:User")->findAll();
 
         foreach ($users as $user) {
             $win = $draw = $lose = 0;
-            $pgnFormatted = [];
-
             $games = $this->container->get("core.handler.game")
                           ->getGamesForUser($user, GameStatus::END);
 
@@ -69,13 +64,8 @@ class UserStatService
                             break;
                     }
                 }
-                
-                if ($game->getResultWhite() == 0.5) {
-                    //$game->setResultWhite("1/2")->setResultBlack("1/2");
-                }
 
-                $pgnFormatted[] = $this->container->get("templating")
-                                       ->render(":Chess:pgn.html.twig", ["game" => $game]);
+                $this->getPgnService()->appendUserGameToHisPgn($user, $game);
             }
 
             $user->setWin($win)->setDraw($draw)->setLose($lose);
@@ -83,22 +73,20 @@ class UserStatService
             $this->container->get("doctrine")->getManager()->persist($user);
 
             try {
-                $userPgnFilePath = $this->container->get("core.handler.user")->getPgnFilePath($user);
-
-                if (empty($pgnFormatted)) {
-                    $fs->remove($userPgnFilePath);
-                } else {
-                    $fs->dumpFile(
-                        $userPgnFilePath,
-                        implode(PHP_EOL, $pgnFormatted)
-                    );
-                }
-
-            } catch (IOException $e) {
+//                $this->getPgnService()->appendUserGamesToHisPgn($user, $pgnArray);
+            } catch (\Throwable $e) {
                 $this->container->get("logger")->err($e->getMessage());
             }
         }
 
         $this->container->get("doctrine")->getManager()->flush();
+    }
+
+    /**
+     * @return Chess\PgnService|object
+     */
+    private function getPgnService()
+    {
+        return $this->container->get('core.service.chess.pgn');
     }
 }

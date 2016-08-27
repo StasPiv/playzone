@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8b7d732e4a66bce387b54260546e20de",
-    "content-hash": "d17a4644061b4171411b6b44f2060463",
+    "hash": "c76a64dbee502f3b858ae55cb87fe7b0",
+    "content-hash": "6f1e7c0c0128b86204c58006d9f93c4b",
     "packages": [
         {
             "name": "amyboyd/pgn-parser",
@@ -4062,6 +4062,46 @@
                 "time"
             ],
             "time": "2016-08-18 20:48:15"
+        },
+        {
+            "name": "staspiv/pgn-saver",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/StasPiv/pgn-saver.git",
+                "reference": "4437f3aa99b89307076f902bfc733d294db59c16"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/StasPiv/pgn-saver/zipball/4437f3aa99b89307076f902bfc733d294db59c16",
+                "reference": "4437f3aa99b89307076f902bfc733d294db59c16",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "StasPiv\\PgnSaver\\": "src",
+                    "StasPiv\\PgnSaver\\Tests\\": "Tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stanislav Pivovartsev",
+                    "email": "stanislav_pivovartsev@mail.ru"
+                }
+            ],
+            "description": "This is utility for saving pgn",
+            "time": "2016-08-27 16:29:22"
         },
         {
             "name": "swiftmailer/swiftmailer",

@@ -109,6 +109,8 @@ services:
           - [setContainer, ['@service_container']]
     core.service.chess.pgn:
         class: CoreBundle\Service\Chess\PgnService
+        tags:
+          - { name: kernel.event_subscriber }
         calls:
           - [setContainer, ['@service_container']]
     core.service.rating:

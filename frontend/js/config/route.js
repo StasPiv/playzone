@@ -44,7 +44,7 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 controller: 'ShowCtrl'
             }).
             when('/players', {
-                templateUrl: 'partials/online.html?v=0.0.1',
+                templateUrl: 'partials/online.html?v=22',
                 controller: 'OnlineCtrl'
             }).
             when('/tournaments', {

@@ -406,6 +406,24 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
     }
 
     /**
+     * @return void
+     */
+    public function markAllUsersOffline()
+    {
+        /** @var User[] $users */
+        $users = $this->repository->createQueryBuilder("u")
+                      ->where("u.online = 1")
+                      ->getQuery()
+                      ->getResult();
+
+        foreach ($users as $user) {
+            $this->manager->persist($user->setOnline(false));
+        }
+
+        $this->manager->flush();
+    }
+
+    /**
      * @return array
      */
     public static function getSubscribedEvents()

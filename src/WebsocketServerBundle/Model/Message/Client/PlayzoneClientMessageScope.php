@@ -26,4 +26,5 @@ class PlayzoneClientMessageScope extends Enum
     const SEND_TO_GAME_OBSERVERS = 'send_to_game_observers';
     const SEND_TO_ROBOT = 'send_to_robot';
     const SUBSCRIBE_TO_GAME = 'subscribe_to_game';
+    const STOP_SERVER = 'stop_server';
 }

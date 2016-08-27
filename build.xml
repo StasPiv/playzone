@@ -65,8 +65,8 @@
     </target>
 
     <target name="killServer">
-        <exec executable="pkill">
-            <arg line=" -x php -n -u jenkins"/>
+        <exec executable="php">
+            <arg line="app/console websocket:shutdown_server --env=prod"/>
         </exec>
     </target>
 

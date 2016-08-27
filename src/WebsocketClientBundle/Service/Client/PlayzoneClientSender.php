@@ -58,6 +58,24 @@ class PlayzoneClientSender
     }
 
     /**
+     * @param PlayzoneClient $client
+     * @param string $login
+     * @param string $token
+     */
+    public function sendShutdown(PlayzoneClient $client, string $login, string $token)
+    {
+        $this->send(
+            $client,
+            (new PlayzoneMessage())->setMethod("stop_server")
+                ->setScope("stop_server")
+                ->setData([
+                    "login" => $login,
+                    "token" => $token
+                ])
+        );
+    }
+
+    /**
      * @param PlayzoneMessage $message
      */
     public function sendMessageToWebsocketServer(PlayzoneMessage $message)

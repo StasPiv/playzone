@@ -164,6 +164,8 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                 case PlayzoneClientMessageScope::SUBSCRIBE_TO_GAME:
                     $this->addGameForListen($messageObject, $from);
                     break;
+                case PlayzoneClientMessageScope::STOP_SERVER:
+                    die('SERVER STOPPED');
             }
         } catch (\Exception $exception) {
             $this->logger->err("Error on message: " . $exception->getCode() . " " . $exception->getMessage() . ' ' . $exception->getFile() . ' ' . $exception->getLine());
@@ -443,11 +445,6 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
     function __destruct()
     {
         $this->container->get('logger')->debug('WEBSOCKET STOP');
-        foreach ($this->users as $websocketUser) {
-            $this->container->get('event_dispatcher')->dispatch(
-                UserEvents::USER_OUT,
-                (new UserEvent())->setUser($websocketUser->getPlayzoneUser())
-            );
-        }
+        $this->container->get('core.handler.user')->markAllUsersOffline();
     }
 }

@@ -14,3 +14,7 @@ services:
       class: WebsocketClientBundle\Service\AjaxService
       calls:
           - [setContainer, ['@service_container']]
+  ws.playzone.shutdown_server:
+      class: WebsocketClientBundle\Service\ShutdownServerService
+      arguments:
+        - '@ws.playzone.client.sender'

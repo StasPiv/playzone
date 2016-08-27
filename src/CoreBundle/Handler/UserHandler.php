@@ -179,13 +179,22 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
         if (!empty($listRequest->getFilter())) {
             $filter = json_decode($listRequest->getFilter(), true);
             foreach ($filter as $property => $value) {
-                if ($property == 'games_count') {
-                    $users->andWhere('u.win + u.draw + u.lose > 0');
-                    continue;
+                switch ($property) {
+                    case 'games_count':
+                        $users->andWhere('u.win + u.draw + u.lose > 0');
+                        break;
+                    case 'only_active':
+                        $firstRatingDay = (new \DateTime())->setDate(2016, 8, 22);
+                        $users->andWhere('u.lastPing > :minDateForActive')
+                              ->andWhere('u.lastMove >= :firstRatingDay')
+                              ->setParameter('minDateForActive', new \DateTime('-30day'))
+                              ->setParameter('firstRatingDay', $firstRatingDay);
+                        break;
+                    default:
+                        $users->andWhere('u.'.$property.' = :'.$property)
+                              ->setParameter($property, $value);
                 }
 
-                $users->andWhere('u.'.$property.' = :'.$property)
-                    ->setParameter($property, $value);
             }
         }
 

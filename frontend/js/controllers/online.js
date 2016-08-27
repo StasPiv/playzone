@@ -15,7 +15,8 @@ playzoneControllers.controller('OnlineCtrl', function ($scope, $rootScope, CallR
             order_by: "u.rating",
             limit: 100,
             filter: {
-                games_count: true
+                games_count: true,
+                only_active: true
             }
         }
     );

@@ -47,6 +47,8 @@ services:
         arguments: ['@service_container']
     core.user.stat:
         class: CoreBundle\Service\UserStatService
+        tags:
+          - { name: kernel.event_subscriber }
         calls:
           - [setContainer, ['@service_container']]
     core.service.security:

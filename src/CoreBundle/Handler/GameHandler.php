@@ -425,9 +425,9 @@ class GameHandler implements GameProcessorInterface
      * @param User $user
      * @param null $status
      * @param int $limit
-     * @return \CoreBundle\Entity\Game[]
+     * @return Game[]
      */
-    public function getGamesForUser(User $user, $status, $limit = null)
+    public function getGamesForUser(User $user, $status, $limit = null): array
     {
         $gamesQuery = $this->manager
             ->createQuery(

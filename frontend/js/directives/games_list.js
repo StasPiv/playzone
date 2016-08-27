@@ -13,6 +13,6 @@ playzoneControllers.directive('gamesList', function () {
         scope: {
             games: '='
         },
-        templateUrl: 'partials/games_list.html?v=1.0.1'
+        templateUrl: 'partials/games_list.html?v=22'
     }
 });

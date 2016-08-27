@@ -96,6 +96,6 @@ playzoneControllers.directive('playzoneChat', function ($rootScope, WebsocketSer
             chatRoom: '=',
             restContainerId: '='
         },
-        templateUrl: 'partials/chat.html?rand=' + Math.random()
+        templateUrl: 'partials/chat.html?v=55'
     }
 });

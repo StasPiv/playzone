@@ -325,6 +325,16 @@ class User
     private $goodQuality = true;
 
     /**
+     * @var integer
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $rateGamesCount = 0;
+
+    /**
      * Get id
      *
      * @return int
@@ -1037,6 +1047,25 @@ class User
     public function getGamesCount(): int
     {
         return $this->getWin() + $this->getDraw() + $this->getLose();
+    }
+
+    /**
+     * @return int
+     */
+    public function getRateGamesCount(): int
+    {
+        return $this->rateGamesCount;
+    }
+
+    /**
+     * @param int $rateGamesCount
+     * @return User
+     */
+    public function setRateGamesCount(int $rateGamesCount): self
+    {
+        $this->rateGamesCount = $rateGamesCount;
+
+        return $this;
     }
 }
 

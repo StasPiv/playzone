@@ -44,7 +44,7 @@ class UserStatService implements EventSubscriberInterface
                     continue;
                 }
 
-                $this->countWinDrawLose($game, $user, $win, $draw, $lose);
+                $this->updateTotals($game, $user, $win, $draw, $lose);
                 $this->getPgnService()->appendUserGameToHisPgn($user, $game);
                 $this->changeUserLastMove($user, $game);
             }
@@ -72,8 +72,10 @@ class UserStatService implements EventSubscriberInterface
      * @param int $draw
      * @param int $lose
      */
-    private function countWinDrawLose(Game $game, User $user, int &$win, int &$draw, int &$lose)
+    private function updateTotals(Game $game, User $user, int &$win, int &$draw, int &$lose)
     {
+        $this->updateRateTotals($game, $user);
+
         if ($game->getUserWhite() == $user) {
             switch ($game->getResultWhite()) {
                 case 1:
@@ -133,7 +135,23 @@ class UserStatService implements EventSubscriberInterface
             return;
         }
 
+        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserWhite());
+        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserBlack());
+
         $this->changeUserLastMove($event->getGame()->getUserWhite(), $event->getGame());
         $this->changeUserLastMove($event->getGame()->getUserBlack(), $event->getGame());
+    }
+
+    /**
+     * @param Game $game
+     * @param User $user
+     */
+    private function updateRateTotals(Game $game, User $user)
+    {
+        if (!$game->isRate()) {
+            return;
+        }
+
+        $user->setRateGamesCount($user->getRateGamesCount() + 1);
     }
 }

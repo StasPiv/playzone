@@ -84,8 +84,8 @@ class RatingService implements EventSubscriberInterface
 
         $eloGame->setWhiteElo($whiteUser->getRating())
             ->setBlackElo($blackUser->getRating())
-            ->setWhiteGames($whiteUser->getWin() + $whiteUser->getDraw() + $whiteUser->getLose())
-            ->setBlackGames($whiteUser->getWin() + $whiteUser->getDraw() + $whiteUser->getLose())
+            ->setWhiteGames($whiteUser->getRateGamesCount())
+            ->setBlackGames($blackUser->getRateGamesCount())
             ->setWhiteResult($game->getResultWhite())
             ->setBlackResult($game->getResultBlack());
 

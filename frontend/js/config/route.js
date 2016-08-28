@@ -64,7 +64,7 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 controller: 'UserArchiveCtrl'
             }).
             when('/user/:userId/profile', {
-                templateUrl: 'partials/profile.html',
+                templateUrl: 'partials/profile.html?v=22',
                 controller: 'ProfileCtrl'
             }).
             when('/webrtc-share', {

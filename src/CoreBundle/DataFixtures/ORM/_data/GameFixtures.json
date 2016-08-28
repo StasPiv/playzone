@@ -126,7 +126,7 @@
     "pgn": "1.e4 e5 2.Nf3 Nc6 3.Bb5",
     "pgn_alt": "1",
     "status": "end",
-    "rate": false,
+    "rate": true,
     "time_white": 180000,
     "time_black": 180000,
     "time_last_move": "yesterday",
@@ -342,7 +342,7 @@
     "pgn": "1. d4 d5 2. c4 c6",
     "pgn_alt": "",
     "status": "play",
-    "rate": false,
+    "rate": true,
     "time_white": 180000,
     "time_black": 180000,
     "time_last_move": "yesterday"

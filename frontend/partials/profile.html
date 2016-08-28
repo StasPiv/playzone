@@ -5,6 +5,26 @@
         <tr>
             <td>
                 <span>
+                    {{ "Rating" | translate }}
+                </span>
+            </td>
+            <td>
+                {{ user.rating }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span>
+                    {{ "Count games" | translate }} ({{ "Count rate games" | translate }})
+                </span>
+            </td>
+            <td>
+                {{ user.games_count }} ({{ user.rate_games_count }})
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span>
                     {{ "Win count" | translate }}:
                 </span>
             </td>

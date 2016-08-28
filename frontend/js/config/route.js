@@ -52,7 +52,7 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 controller: 'TournamentsCtrl'
             }).
             when('/tournament/:tournamentId', {
-                templateUrl: 'partials/tournament.html',
+                templateUrl: 'partials/tournament.html?v=23',
                 controller: 'TournamentCtrl'
             }).
             when('/profile', {

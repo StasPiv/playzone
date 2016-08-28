@@ -178,5 +178,7 @@
   "Game params": "Параметры",
   "W-D-L": "В-Н-П",
   "Count games": "Число партий",
-  "Count rate games": "Число рейтинговых партий"
+  "Count rate games": "Число рейтинговых партий",
+  "Players play": "Игроки играют по",
+  "games against each other": "партии друг с другом"
 }

@@ -134,8 +134,8 @@ class UserStatService implements EventSubscriberInterface
             return;
         }
 
-        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserWhite(),);
-        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserBlack(),);
+        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserWhite(), $event->getGame()->getUserWhite()->getRateGamesCount());
+        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserBlack(), $event->getGame()->getUserBlack()->getRateGamesCount());
 
         $this->changeUserLastMove($event->getGame()->getUserWhite(), $event->getGame());
         $this->changeUserLastMove($event->getGame()->getUserBlack(), $event->getGame());

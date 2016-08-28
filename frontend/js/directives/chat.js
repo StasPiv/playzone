@@ -7,7 +7,11 @@ playzoneControllers.directive('playzoneChat', function ($rootScope, WebsocketSer
     return {
         restrict: 'E',
         link: function(scope, element) {
-            
+
+            scope.$on('$routeChangeStart', function(next, current) {
+                $rootScope.chat = ChatRest.query();
+            });
+
             scope.isChatDisplayed = SettingService.getSetting('Show chat');
 
             scope.toggleChatMessages = function () {

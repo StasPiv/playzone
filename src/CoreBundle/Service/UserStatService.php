@@ -34,7 +34,7 @@ class UserStatService implements EventSubscriberInterface
         $users = $this->container->get("doctrine")->getRepository("CoreBundle:User")->findAll();
 
         foreach ($users as $user) {
-            $win = $draw = $lose = 0;
+            $win = $draw = $lose = $rateGamesCount = 0;
             $games = array_reverse($this->container->get("core.handler.game")
                           ->getGamesForUser($user, GameStatus::END));
 
@@ -44,7 +44,8 @@ class UserStatService implements EventSubscriberInterface
                     continue;
                 }
 
-                $this->updateTotals($game, $user, $win, $draw, $lose);
+                $this->updateRateTotals($game, $user, $rateGamesCount);
+                $this->updateWinDrawLose($game, $user, $win, $draw, $lose);
                 $this->getPgnService()->appendUserGameToHisPgn($user, $game);
                 $this->changeUserLastMove($user, $game);
             }
@@ -72,10 +73,8 @@ class UserStatService implements EventSubscriberInterface
      * @param int $draw
      * @param int $lose
      */
-    private function updateTotals(Game $game, User $user, int &$win, int &$draw, int &$lose)
+    private function updateWinDrawLose(Game $game, User $user, int &$win, int &$draw, int &$lose)
     {
-        $this->updateRateTotals($game, $user);
-
         if ($game->getUserWhite() == $user) {
             switch ($game->getResultWhite()) {
                 case 1:
@@ -135,8 +134,8 @@ class UserStatService implements EventSubscriberInterface
             return;
         }
 
-        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserWhite());
-        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserBlack());
+        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserWhite(),);
+        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserBlack(),);
 
         $this->changeUserLastMove($event->getGame()->getUserWhite(), $event->getGame());
         $this->changeUserLastMove($event->getGame()->getUserBlack(), $event->getGame());
@@ -145,13 +144,14 @@ class UserStatService implements EventSubscriberInterface
     /**
      * @param Game $game
      * @param User $user
+     * @param $rateGamesCount
      */
-    private function updateRateTotals(Game $game, User $user)
+    private function updateRateTotals(Game $game, User $user, &$rateGamesCount)
     {
         if (!$game->isRate()) {
             return;
         }
 
-        $user->setRateGamesCount($user->getRateGamesCount() + 1);
+        $user->setRateGamesCount(++$rateGamesCount);
     }
 }

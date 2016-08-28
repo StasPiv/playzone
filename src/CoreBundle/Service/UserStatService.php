@@ -134,8 +134,8 @@ class UserStatService implements EventSubscriberInterface
             return;
         }
 
-        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserWhite(), $event->getGame()->getUserWhite()->getRateGamesCount());
-        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserBlack(), $event->getGame()->getUserBlack()->getRateGamesCount());
+        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserWhite());
+        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserBlack());
 
         $this->changeUserLastMove($event->getGame()->getUserWhite(), $event->getGame());
         $this->changeUserLastMove($event->getGame()->getUserBlack(), $event->getGame());
@@ -146,12 +146,14 @@ class UserStatService implements EventSubscriberInterface
      * @param User $user
      * @param $rateGamesCount
      */
-    private function updateRateTotals(Game $game, User $user, &$rateGamesCount)
+    private function updateRateTotals(Game $game, User $user, &$rateGamesCount = null)
     {
         if (!$game->isRate()) {
             return;
         }
 
-        $user->setRateGamesCount(++$rateGamesCount);
+        $user->setRateGamesCount(
+            is_null($rateGamesCount) ? $user->getRateGamesCount() + 1 : ++$rateGamesCount
+        );
     }
 }

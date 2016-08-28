@@ -1,5 +1,5 @@
-<div ng-if="tournament.tournament_params.games_vs_opponent > 1" class="alert alert-info">
-    {{ 'Players play' | translate }} {{ tournament.tournament_params.games_vs_opponent }} {{ 'games against each other' | translate }}
+<div class="alert alert-info">
+    {{ 'Round' | translate }} {{ tournament.current_round }} {{ 'from' | translate }} {{ tournament.rounds }}
 </div>
 <div class="table-responsive">
     <table class="table tournament_table">

@@ -1,4 +1,4 @@
-<div class="alert alert-info">
+<div ng-if="tournament.status == 'current'" class="alert alert-info">
     {{ 'Round' | translate }} {{ tournament.current_round }} {{ 'from' | translate }} {{ tournament.rounds }}
 </div>
 <div class="table-responsive">

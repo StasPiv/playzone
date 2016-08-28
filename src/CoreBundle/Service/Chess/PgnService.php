@@ -71,7 +71,7 @@ class PgnService implements ContainerAwareInterface, EventSubscriberInterface
             'White' => $game->getUserWhite(),
             'Black' => $game->getUserBlack(),
             'Result' => $game->getResultWhite() == 0.5 ? '1/2-1/2' : $game->getResultWhite().'-'.$game->getResultBlack(),
-            'Date' => $game->getTimeLastMove()->format('Y-m-d')
+            'Date' => $game->getTimeLastMove()->format('Y.m.d')
         ];
 
         if ($game->getTournamentGame()) {

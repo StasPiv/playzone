@@ -1054,7 +1054,7 @@ class User
      */
     public function getRateGamesCount(): int
     {
-        return $this->rateGamesCount;
+        return (int)$this->rateGamesCount;
     }
 
     /**

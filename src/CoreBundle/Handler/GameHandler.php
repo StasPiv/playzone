@@ -708,6 +708,13 @@ class GameHandler implements GameProcessorInterface
         );
 
         foreach ($games as $game) {
+            try {
+                $this->container->get('core.handler.tournament')->getTournamentGameByGame($game);
+                continue;
+            } catch (TournamentGameNotFoundException $e) {
+                // that's ok
+            }
+
             switch ($color) {
                 case "White":
                     $game->setResultWhite(0)->setResultBlack(1);

@@ -368,7 +368,7 @@ class Bot
         $chessGameForSave = new ChessGameService();
         $chessGameForSave->resetGame();
         foreach ($this->gameMoves[$data['game_id']] as $move) {
-            $chessGameForSave->moveSquare($move['from'], $move['to'], $move['promotion']);
+            $chessGameForSave->moveSquare($move['from'], $move['to'], @$move['promotion']);
         }
 
         $pgn = $chessGameForSave->getPgn();

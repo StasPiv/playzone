@@ -179,19 +179,15 @@ class AjaxService
      */
     public function postAuth(UserPostAuthRequest $request) : User
     {
-        try {
-            return $this->processAjax(
-                $request,
-                $this->container->get("router")->generate("post_user_auth", [
-                    "login" => $request->getLogin(),
-                    "token" => $request->getToken()
-                ]),
-                "POST",
-                'CoreBundle\Entity\User'
-            );
-        } catch (\Exception $e) {
-            throw new UserNotFoundException;
-        }
+        return $this->processAjax(
+            $request,
+            $this->container->get("router")->generate("post_user_auth", [
+                "login" => $request->getLogin(),
+                "token" => $request->getToken()
+            ]),
+            "POST",
+            'CoreBundle\Entity\User'
+        );
     }
 
     /**

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c76a64dbee502f3b858ae55cb87fe7b0",
-    "content-hash": "6f1e7c0c0128b86204c58006d9f93c4b",
+    "hash": "c5ad4b2f477bacce4fc218511e8bb8e6",
+    "content-hash": "8a1e9dd803d77ce70249d620c006eefc",
     "packages": [
         {
             "name": "amyboyd/pgn-parser",
@@ -1599,6 +1599,56 @@
                 "parameters management"
             ],
             "time": "2015-11-10 17:04:01"
+        },
+        {
+            "name": "indigophp/doctrine-annotation-autoload",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/indigophp/doctrine-annotation-autoload.git",
+                "reference": "5c2018e7b1277f691600e69b4d3177b706e8aa80"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/indigophp/doctrine-annotation-autoload/zipball/5c2018e7b1277f691600e69b4d3177b706e8aa80",
+                "reference": "5c2018e7b1277f691600e69b4d3177b706e8aa80",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0",
+                "doctrine/annotations": "*",
+                "php": ">=5.4"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Indigo\\Composer\\DoctrineAnnotationAutoloadPlugin",
+                "branch-alias": {
+                    "dev-master": "0.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Indigo\\Composer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com"
+                }
+            ],
+            "description": "Hooks into Composer autoload generation and adds Doctrine annotation autoloading",
+            "homepage": "https://indigophp.com",
+            "keywords": [
+                "annotation",
+                "autoload",
+                "doctrine"
+            ],
+            "time": "2015-11-12 12:29:47"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -3959,6 +4009,49 @@
             ],
             "description": "A security checker for your composer.lock",
             "time": "2015-11-07 08:07:40"
+        },
+        {
+            "name": "staspiv/chess-bestmove",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/StasPiv/chess-bestmove.git",
+                "reference": "beddc06ebdf3d04d8c8ccea99b64d71d1c5894f0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/StasPiv/chess-bestmove/zipball/beddc06ebdf3d04d8c8ccea99b64d71d1c5894f0",
+                "reference": "beddc06ebdf3d04d8c8ccea99b64d71d1c5894f0",
+                "shasum": ""
+            },
+            "require": {
+                "indigophp/doctrine-annotation-autoload": "^0.1.0",
+                "jms/serializer": "1.1.0",
+                "php": ">=7",
+                "psr/log": "1.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "StasPiv\\ChessBestMove\\": "src/",
+                    "StasPiv\\ChessBestMove\\Tests\\": "Tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stanislav Pivovartsev",
+                    "email": "stanislav_pivovartsev@mail.ru"
+                }
+            ],
+            "description": "This is library for getting chess bestmove",
+            "time": "2016-08-29 22:42:04"
         },
         {
             "name": "staspiv/elo-calculator",

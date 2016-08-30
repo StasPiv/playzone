@@ -51,6 +51,11 @@ class Post
     private $taglist;
 
     /**
+     * @var string
+     */
+    private $threadTitle = '';
+
+    /**
      * Post constructor.
      * @param int $forumId
      * @param int $threadId
@@ -226,6 +231,25 @@ class Post
     public function setTaglist($taglist)
     {
         $this->taglist = $taglist;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getThreadTitle(): string
+    {
+        return $this->threadTitle;
+    }
+
+    /**
+     * @param string $threadTitle
+     * @return Post
+     */
+    public function setThreadTitle(string $threadTitle): self
+    {
+        $this->threadTitle = $threadTitle;
 
         return $this;
     }

@@ -41,7 +41,8 @@
         "staspiv/knp-time-bundle": "dev-master",
         "twig/extensions": "v1.3.0",
         "staspiv/elo-calculator": "^1.0",
-        "staspiv/pgn-saver": "^1.0"
+        "staspiv/pgn-saver": "^1.0",
+        "staspiv/chess-bestmove": "~1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

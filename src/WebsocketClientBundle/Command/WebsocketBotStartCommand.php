@@ -27,8 +27,8 @@ class WebsocketBotStartCommand extends ContainerAwareCommand
         $this->setName('websocket:bot:start')
              ->addArgument("apiHost")
              ->addArgument("wsServerUrl")
-             ->addOption("login", "l", InputOption::VALUE_REQUIRED, "Login", "Robot")
-             ->addOption("token", "t", InputOption::VALUE_REQUIRED, "Token", "407f20f52463392c43bf6a58b783c4f2")
+             ->addOption("login", "l", InputOption::VALUE_REQUIRED, "Login", "Glaurung")
+             ->addOption("token", "t", InputOption::VALUE_REQUIRED, "Token", "994b884e706a9bb26a19906364a3b2b3")
              ->addOption("skillLevel", "s", InputOption::VALUE_REQUIRED, "Skill level", 20)
              ->addOption("engine", "en", InputOption::VALUE_REQUIRED, "Engine", "stockfish")
              ->setDescription('Starting websocket bot');

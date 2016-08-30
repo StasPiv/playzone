@@ -26,6 +26,8 @@ use CoreBundle\Model\Request\Tournament\TournamentGetCurrentgameRequest;
 use CoreBundle\Model\Request\Tournament\TournamentPostRecordRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Service\Chess\ChessGameService;
+use StasPiv\ChessBestMove\Model\EngineConfiguration;
+use StasPiv\ChessBestMove\Service\ChessBestMove;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use WebsocketServerBundle\Model\Message\PlayzoneMessage;
 use WebsocketClientBundle\Service\PlayzoneClient;
@@ -140,10 +142,15 @@ class Bot
             case 'call_send':
                 $data = $message['data'][0];
 
-                if ($data['from_user']['login'] != $this->login) {
+                if ($data['from_user']['login'] !=
+                    $this->login && in_array($this->login, $message['logins'])
+                ) {
                     $this->receiveChallenge((int)$data['id']);
                 }
 
+                break;
+            case 'offer_revenge':
+                $this->receiveChallenge((int)$message['data']['id']);
                 break;
             case 'call_accept':
                 $this->subscribeToGame(@$message['data']['game_id']);
@@ -174,6 +181,10 @@ class Bot
                 } catch (\Exception $e) {
                     break;
                 }
+                break;
+            case 'user_in':
+                $this->sendChallenge([$message['data']['login']]);
+                break;
         }
 
         $this->container->get("logger")->error("Game ids: " . json_encode($this->gameIds));
@@ -185,9 +196,10 @@ class Bot
     }
 
     /**
+     * @param array $logins
      * @return $this
      */
-    private function sendChallenge()
+    private function sendChallenge(array $logins = [])
     {
         $robot = $this->getRobotUser();
 
@@ -219,7 +231,8 @@ class Bot
                             $this->container->get("serializer")->serialize($gameCall, "json"),
                             true
                         )
-                    ),
+                    )
+                    ->setLogins($logins),
                 "json"
             )
         );
@@ -310,17 +323,18 @@ class Bot
         $fen = $data['fen'];
         $this->container->get("logger")->error("Receive " . $fen);
 
-        $bestMove = $this->container->get("core.service.chess")
-            ->getBestMoveFromFen(
-                $fen, 
-                (int)($data['time_white'] / 2), 
-                (int)($data['time_black'] / 2),
-                $this->skillLevel,
-                $this->engine
-            );
+        $engineConfiguration = new EngineConfiguration($this->engine);
 
-        $this->container->get("logger")->error("Best move: " . $bestMove);
+        $engineConfiguration->setWtime((int)$data['time_white'])
+                            ->setBtime((int)$data['time_black']);
 
+        $engineConfiguration->addOption('Skill Level', $this->skillLevel);
+
+        $bestMove = (new ChessBestMove($engineConfiguration, $this->container->get('logger')))->getBestMoveFromFen($fen);
+
+        $this->container->get("logger")->error(
+            "Best move: " . $bestMove->getFrom().$bestMove->getTo()
+        );
 
         $request = new GamePutPgnRequest();
 
@@ -338,9 +352,9 @@ class Bot
         }
 
         $move = [
-            'from' => substr($bestMove, 0, 2),
-            'to' => substr($bestMove, 2, 2),
-            'promotion' => 'q'
+            'from' => $bestMove->getFrom(),
+            'to' => $bestMove->getTo(),
+            'promotion' => $bestMove->getPromotion()
         ];
 
         $this->gameMoves[$data['game_id']][] = $move;

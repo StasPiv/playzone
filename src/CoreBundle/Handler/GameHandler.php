@@ -710,8 +710,6 @@ class GameHandler implements GameProcessorInterface
         foreach ($games as $game) {
             try {
                 $this->container->get('core.handler.tournament')->getTournamentGameByGame($game);
-                $this->changeGameStatus($game, GameStatus::ABORTED);
-                $this->manager->persist($game);
                 continue;
             } catch (TournamentGameNotFoundException $e) {
                 // that's ok

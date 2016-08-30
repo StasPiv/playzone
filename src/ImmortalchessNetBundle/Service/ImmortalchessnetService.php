@@ -36,6 +36,7 @@ class ImmortalchessnetService implements EventSubscriberInterface
     const THREAD_WITH_INTERESTING_GAMES = 31003;
     const THREAD_FOR_3_MINUTES = 30991;
     const THREAD_FOR_5_MINUTES = 30984;
+    const THREAD_FOR_TOURNAMENT_RESULTS = 31759;
 
     /**
      * @return array
@@ -152,8 +153,7 @@ class ImmortalchessnetService implements EventSubscriberInterface
         $this->container->get("immortalchessnet.service.publish")->publishNewPost(
             new Post(
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
-                $tournament->getGameParams()->getTimeBase() === 180000 ?
-                    self::THREAD_FOR_3_MINUTES : self::THREAD_FOR_5_MINUTES,
+                self::THREAD_FOR_TOURNAMENT_RESULTS,
                 $this->container->getParameter("app_immortalchess.post_username_for_calls"),
                 $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
                 "Турнир #{$tournament->getName()} завершен",

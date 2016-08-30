@@ -60,6 +60,10 @@ class PublishService
                ->setLastposter($post->getUsername())
                ->setThreadid($post->getThreadid())
                ->setReplycount($thread->getReplycount() + 1);
+
+        if (!empty($postModel->getThreadTitle())) {
+            $thread->setTitle($postModel->getThreadTitle());
+        }
         
         $this->getManager()->persist($thread);
 

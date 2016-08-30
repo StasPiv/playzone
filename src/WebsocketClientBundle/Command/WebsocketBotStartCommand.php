@@ -30,7 +30,7 @@ class WebsocketBotStartCommand extends ContainerAwareCommand
              ->addOption("login", "l", InputOption::VALUE_REQUIRED, "Login", "Glaurung")
              ->addOption("token", "t", InputOption::VALUE_REQUIRED, "Token", "994b884e706a9bb26a19906364a3b2b3")
              ->addOption("skillLevel", "s", InputOption::VALUE_REQUIRED, "Skill level", 20)
-             ->addOption("engine", "en", InputOption::VALUE_REQUIRED, "Engine", "stockfish")
+             ->addOption("engine", "en", InputOption::VALUE_REQUIRED, "Engine", "glaurung")
              ->setDescription('Starting websocket bot');
     }
 

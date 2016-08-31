@@ -133,9 +133,9 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
                 $user->getLag() < $this->container->getParameter("max_lag_for_record")
             )->addIp($request->getIp());
 
-            if (in_array($request->getIp(), $this->container->getParameter('app_playzone_banned_ips'))) {
-                $user->setBanned(true);
-            }
+//            if (in_array($request->getIp(), $this->container->getParameter('app_playzone_banned_ips'))) {
+//                $user->setBanned(true);
+//            }
 
             $this->saveUser($user);
 

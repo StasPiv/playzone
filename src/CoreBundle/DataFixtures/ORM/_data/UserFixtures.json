@@ -703,5 +703,27 @@
     "immortal_id": 88,
     "another_login": "",
     "last_move": "yesterday"
+  },
+  {
+    "referenceName": "user-glaurung",
+    "login": "Glaurung",
+    "email": "glaurung@yandex.ru",
+    "password": "123456",
+    "hash": "test",
+    "confirm": 0,
+    "in_rest": 0,
+    "left_rest": 23,
+    "gone_in_rest": "yesterday",
+    "last_ping": "yesterday",
+    "class": "D",
+    "rating": 2443,
+    "win": 20,
+    "draw": 10,
+    "lose": 0,
+    "lose_time": 0,
+    "balance": 0,
+    "immortal_id": 88,
+    "another_login": "",
+    "last_move": "yesterday"
   }
 ]

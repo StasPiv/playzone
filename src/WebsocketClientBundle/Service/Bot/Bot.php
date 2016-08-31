@@ -163,6 +163,11 @@ class Bot
 
                 try {
                     $game = $this->getCurrentTournamentGame($request);
+
+                    if (!$game->getId()) {
+                        break;
+                    }
+
                     $this->subscribeToGame($game->getId());
                 } catch (\Exception $e) {
                     break;

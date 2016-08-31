@@ -8,6 +8,7 @@
 
 namespace CoreBundle\Model\Request\Problem;
 
+use CoreBundle\Model\Request\RequestTrait;
 use CoreBundle\Model\Request\SecurityRequestAwareTrait;
 use CoreBundle\Model\Request\SecurityRequestInterface;
 use JMS\Serializer\Annotation as JMS;
@@ -19,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ProblemPostSolutionRequest implements SecurityRequestInterface
 {
-    use SecurityRequestAwareTrait;
+    use SecurityRequestAwareTrait, RequestTrait;
 
     /**
      * @var int

@@ -335,6 +335,17 @@ class User
     private $rateGamesCount = 0;
 
     /**
+     * @var string[]
+     *
+     * @ORM\Column(type="array")
+     * @JMS\Expose
+     * @JMS\Type("array<string>")
+     *
+     * @JMS\Exclude()
+     */
+    private $ips = [];
+
+    /**
      * Get id
      *
      * @return int
@@ -1064,6 +1075,38 @@ class User
     public function setRateGamesCount(int $rateGamesCount): self
     {
         $this->rateGamesCount = $rateGamesCount;
+
+        return $this;
+    }
+
+    /**
+     * @return \string[]
+     */
+    public function getIps(): array
+    {
+        return (array)$this->ips;
+    }
+
+    /**
+     * @param \string[] $ips
+     * @return User
+     */
+    public function setIps(array $ips): self
+    {
+        $this->ips = $ips;
+
+        return $this;
+    }
+
+    /**
+     * @param string $ip
+     * @return User
+     */
+    public function addIp(string $ip): self
+    {
+        if (!empty($ip) && !in_array($ip, $this->getIps())) {
+            $this->ips[] = $ip;
+        }
 
         return $this;
     }

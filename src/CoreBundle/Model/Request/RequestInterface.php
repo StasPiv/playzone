@@ -8,7 +8,20 @@
 
 namespace CoreBundle\Model\Request;
 
+/**
+ * Interface RequestInterface
+ * @package CoreBundle\Model\Request
+ */
 interface RequestInterface
 {
+    /**
+     * @param string $ip
+     * @return RequestInterface
+     */
+    public function setIp(string $ip);
 
+    /**
+     * @return string
+     */
+    public function getIp(): string ;
 }

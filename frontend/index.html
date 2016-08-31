@@ -133,6 +133,9 @@
     <div class="alert alert-danger" ng-if="!$root.connected">
         {{ 'Can not connect' | translate }}
     </div>
+    <div class="alert alert-danger" ng-if="$root.user.banned">
+        {{ "You are banned" | translate }}
+    </div>
     <div class="middle" ng-view>
 
     </div>

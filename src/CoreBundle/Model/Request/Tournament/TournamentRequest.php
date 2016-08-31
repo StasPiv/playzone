@@ -9,6 +9,7 @@
 namespace CoreBundle\Model\Request\Tournament;
 
 use CoreBundle\Model\Request\RequestInterface;
+use CoreBundle\Model\Request\RequestTrait;
 
 /**
  * Class TournamentRequest
@@ -16,5 +17,5 @@ use CoreBundle\Model\Request\RequestInterface;
  */
 abstract class TournamentRequest implements RequestInterface
 {
-
+    use RequestTrait;
 }

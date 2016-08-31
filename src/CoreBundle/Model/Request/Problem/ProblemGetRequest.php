@@ -3,6 +3,7 @@
 namespace CoreBundle\Model\Request\Problem;
 
 use CoreBundle\Model\Request\RequestInterface;
+use CoreBundle\Model\Request\RequestTrait;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,6 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ProblemGetRequest implements RequestInterface
 {
+
+    use RequestTrait;
 
     /**
      * @var int

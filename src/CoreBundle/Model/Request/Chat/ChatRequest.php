@@ -10,6 +10,7 @@
 namespace CoreBundle\Model\Request\Chat;
 
 use CoreBundle\Model\Request\RequestInterface;
+use CoreBundle\Model\Request\RequestTrait;
 
 /**
  * Class ChatRequest
@@ -17,5 +18,5 @@ use CoreBundle\Model\Request\RequestInterface;
  */
 abstract class ChatRequest implements RequestInterface
 {
-
+    use RequestTrait;
 }

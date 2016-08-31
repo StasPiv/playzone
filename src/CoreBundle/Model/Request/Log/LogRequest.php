@@ -10,6 +10,7 @@
 namespace CoreBundle\Model\Request\Log;
 
 use CoreBundle\Model\Request\RequestInterface;
+use CoreBundle\Model\Request\RequestTrait;
 
 /**
  * Class LogRequest
@@ -17,5 +18,5 @@ use CoreBundle\Model\Request\RequestInterface;
  */
 abstract class LogRequest implements RequestInterface 
 {
-
+    use RequestTrait;
 }

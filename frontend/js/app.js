@@ -38,6 +38,7 @@ var playzoneApp = angular.module('playzoneApp', [
             password: $rootScope.user ? $rootScope.user.token : $cookies.get("user_token")
         },
         function(user) {
+            $rootScope.authError = false;
             WebsocketService.introduction(user);
             $interval(
                 function () {
@@ -51,6 +52,11 @@ var playzoneApp = angular.module('playzoneApp', [
                 },
                 5000
             );
+        },
+        function (errorData) {
+            if (errorData.status === 403 && errorData.data.login) {
+                $rootScope.authError = errorData.data.login;
+            }
         }
     );
 

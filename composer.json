@@ -87,7 +87,8 @@
             "file": "app/config/parameters.yml",
             "env-map": {
                 "app_immortalchess.post_username_for_calls": "APP_IMMORTALCHESS_NET_POST_USER_NAME",
-                "app_immortalchess.post_userid_for_calls": "APP_IMMORTALCHESS_NET_POST_USER_ID"
+                "app_immortalchess.post_userid_for_calls": "APP_IMMORTALCHESS_NET_POST_USER_ID",
+                "app_playzone_banned_ips": "APP_PLAYZONE_BANNED_IPS"
             }
         },
         "branch-alias": {

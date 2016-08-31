@@ -11,8 +11,9 @@ namespace CoreBundle\Model\Request\Game;
 use CoreBundle\Model\Request\RequestInterface;
 use CoreBundle\Exception\Processor\GameProcessorException;
 use CoreBundle\Exception\Processor\ProcessorException;
+use CoreBundle\Model\Request\RequestTrait;
 
 abstract class GameRequest implements RequestInterface
 {
-    
+    use RequestTrait;
 }

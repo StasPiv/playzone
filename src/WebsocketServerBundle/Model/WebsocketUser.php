@@ -9,6 +9,7 @@
 namespace WebsocketServerBundle\Model;
 
 use CoreBundle\Entity\User;
+use CoreBundle\Model\Request\RequestTrait;
 use CoreBundle\Model\Request\SecurityRequestAwareTrait;
 use CoreBundle\Model\Request\SecurityRequestInterface;
 use Ratchet\ConnectionInterface;
@@ -22,7 +23,7 @@ use WebsocketServerBundle\Exception\PlayzoneServerException;
  */
 class WebsocketUser implements SecurityRequestInterface
 {
-    use SecurityRequestAwareTrait;
+    use SecurityRequestAwareTrait, RequestTrait;
     
     /**
      * @var ConnectionInterface

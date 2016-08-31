@@ -127,7 +127,9 @@ abstract class BaseController extends FOSRestController
 
         $serializer = $this->container->get('jms_serializer');
         $requestObject = $serializer->deserialize(json_encode($requestParams), get_class($requestObject), 'json');
-        
+
+        $requestObject->setIp($request->getClientIp());
+
         return $requestObject;
     }
 }

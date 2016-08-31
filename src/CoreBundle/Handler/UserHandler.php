@@ -11,6 +11,7 @@ namespace CoreBundle\Handler;
 use CoreBundle\Entity\UserSetting;
 use CoreBundle\Exception\Handler\User\PasswordNotCorrectException;
 use CoreBundle\Exception\Handler\User\TokenNotCorrectException;
+use CoreBundle\Exception\Handler\User\UserBannedException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
 use CoreBundle\Exception\Handler\User\UserSettingNotFoundException;
 use CoreBundle\Exception\Processor\ProcessorException;
@@ -106,7 +107,8 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
 
         $user->setLogin($registerRequest->getLogin())
              ->setEmail($registerRequest->getEmail())
-             ->setPassword($this->generatePasswordHash($registerRequest->getPassword()));
+             ->setPassword($this->generatePasswordHash($registerRequest->getPassword()))
+             ->addIp($this->container->get('request')->getClientIp());
 
         $this->initUserSettings($user);
 
@@ -129,7 +131,14 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
             $this->initUserSettings($user);
             $user->setGoodQuality(
                 $user->getLag() < $this->container->getParameter("max_lag_for_record")
-            );
+            )->addIp($request->getIp());
+
+            if (in_array($request->getIp(), $this->container->getParameter('app_playzone_banned_ips'))) {
+                $user->setBanned(true);
+            }
+
+            $this->saveUser($user);
+
             return $user;
         }
 

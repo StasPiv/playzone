@@ -335,7 +335,7 @@ class Bot
 
         $engineConfiguration->addOption('Skill Level', $this->skillLevel);
 
-        $engineConfiguration->setPathToPolyglotRunDir('/home/stas/work/playzone/ctg-reader/ctgexporter/examples');
+        $engineConfiguration->setPathToPolyglotRunDir($this->container->getParameter('app_path_to_polyglot'));
 
         $bestMove = (new ChessBestMove($engineConfiguration, $this->container->get('logger')))->getBestMoveFromFen($fen);
 

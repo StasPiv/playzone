@@ -45,3 +45,4 @@ parameters:
     max_lag_for_record: 0.4
     rounds_for_swiss: 7
     app_playzone_banned_ips: []
+    app_path_to_polyglot: '/home/stas/work/playzone/ctg-reader/ctgexporter/examples'

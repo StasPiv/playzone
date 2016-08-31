@@ -197,6 +197,11 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
 //            $this->getRequestError()->addError("login", "Your lag is too big")
 //                ->throwException(ResponseStatusCode::FORBIDDEN);
         }
+
+        if ($user->isBanned()) {
+            $this->getRequestError()->addError("login", "You are banned")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
         
         /** @var Tournament $tournament */
         $tournament->addPlayer($user);

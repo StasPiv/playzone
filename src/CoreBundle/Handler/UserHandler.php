@@ -197,6 +197,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
                         $users->andWhere('u.lastPing > :minDateForActive')
                               ->andWhere('u.lastMove >= :firstRatingDay')
                               ->andWhere('u.rateGamesCount >= 5')
+                              ->andWhere('u.banned <> 1')
                               ->setParameter('minDateForActive', new \DateTime('-30day'))
                               ->setParameter('firstRatingDay', $firstRatingDay);
                         break;

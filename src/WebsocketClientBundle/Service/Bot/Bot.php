@@ -14,7 +14,6 @@ use CoreBundle\Entity\GameCall;
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\Game\GameNotFoundException;
-use CoreBundle\Exception\Processor\ProcessorException;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Request\Call\CallDeleteAcceptRequest;
@@ -218,7 +217,7 @@ class Bot
 
         try {
             $gameCall = $this->postCall($request);
-        } catch (ProcessorException $e) {
+        } catch (\Throwable $e) {
             $this->container->get("logger")->error($e->getMessage());
             return $this;
         }
@@ -262,7 +261,7 @@ class Bot
 
         try {
             $game = $this->acceptCall($request);
-        } catch (ProcessorException $e) {
+        } catch (\Throwable $e) {
             $this->container->get("logger")->warning($e->getFile() . " " . $e->getLine());
             return $this;
         }

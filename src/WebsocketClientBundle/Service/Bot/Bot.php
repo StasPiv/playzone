@@ -470,6 +470,7 @@ class Bot
         }
 
         if ($game->getUserWhite() == $this->login) {
+            sleep(1);
             $this->sendBestMove(
                 [
                     'game_id' => $game->getId(),

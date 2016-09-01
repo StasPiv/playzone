@@ -346,6 +346,18 @@ class User
     private $ips = [];
 
     /**
+     * @var boolean
+     *
+     * @JMS\Expose
+     * @JMS\Type("boolean")
+     *
+     * @ORM\Column(type="boolean")
+     *
+     * @JMS\Groups({"get_user_profile"})
+     */
+    private $engine = false;
+
+    /**
      * Get id
      *
      * @return int
@@ -1107,6 +1119,25 @@ class User
         if (!empty($ip) && !in_array($ip, $this->getIps())) {
             $this->ips[] = $ip;
         }
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isEngine(): bool
+    {
+        return $this->engine;
+    }
+
+    /**
+     * @param boolean $engine
+     * @return User
+     */
+    public function setEngine(bool $engine): self
+    {
+        $this->engine = $engine;
 
         return $this;
     }

@@ -202,6 +202,11 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
             $this->getRequestError()->addError("login", "You are banned")
                 ->throwException(ResponseStatusCode::FORBIDDEN);
         }
+
+        if ($this->isUserInTournament($tournament, $user)) {
+            $this->getRequestError()->addError("login", "You are already in tournament")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
         
         /** @var Tournament $tournament */
         $tournament->addPlayer($user);
@@ -833,5 +838,21 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
             TournamentEvents::CHANGE_STATUS,
             (new TournamentContainer())->setTournament($tournament)
         );
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param User $user
+     * @return bool
+     */
+    private function isUserInTournament(Tournament $tournament, User $user): bool
+    {
+        foreach ($tournament->getPlayers() as $tournamentPlayer) {
+            if ($tournamentPlayer->getPlayer() == $user) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

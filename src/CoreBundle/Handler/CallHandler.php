@@ -230,6 +230,11 @@ class CallHandler implements CallProcessorInterface
             $this->getRequestError()->throwException(ResponseStatusCode::NOT_FOUND);
         }
 
+        if ($call->getFromUser() == $me) {
+            $this->getRequestError()->addError("call_id", "This challenge is mine");
+            $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
         $game = $this->container->get("core.handler.game")->createMyGame(
             $call->getFromUser(),
             $me,

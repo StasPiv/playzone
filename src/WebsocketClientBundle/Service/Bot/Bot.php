@@ -267,7 +267,7 @@ class Bot
         }
 
         $this->container->get("logger")->debug(
-            $this->container->get("serializer")->serialize($game, "json")
+            'Trying to subscribe on game '.$this->container->get("serializer")->serialize($game, "json")
         );
 
         $this->wsClient->send(
@@ -284,7 +284,9 @@ class Bot
             )
         );
 
-        $this->subscribeToGame($game->getId());
+        if ($game->getId()) {
+            $this->subscribeToGame($game->getId());
+        }
 
         return $this;
     }
@@ -332,7 +334,8 @@ class Bot
         $engineConfiguration->setWtime((int)$data['time_white'])
                             ->setBtime((int)$data['time_black']);
 
-        $engineConfiguration->addOption('Skill Level', $this->skillLevel);
+        $engineConfiguration->addOption('Hash', 1024)
+                            ->addOption('Threads', 4);
 
         $engineConfiguration->setPathToPolyglotRunDir($this->container->getParameter('app_path_to_polyglot'));
 

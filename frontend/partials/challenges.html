@@ -105,7 +105,7 @@
                 <game-params data-params="call.game_params"></game-params>
             </td>
             <td>
-                <div class="btn btn-group" ng-if="call.id && call.from_user.id != $root.user.id">
+                <div class="btn btn-group" ng-if="call.id && call.from_user.login != $root.user.login">
                     <a href="" class="btn btn-success glyphicon glyphicon-ok" ng-click="acceptCall(call)">
 
                     </a>

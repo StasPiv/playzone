@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7847a8d600bab28dadf73a7a5457511c",
-    "content-hash": "b1d0c9a3fa4dcfb772d44b53a86bbdf3",
+    "hash": "84e3fa4ac2bf682223e33fcab024004d",
+    "content-hash": "8ebb055aea9df5baf841ea65456a2838",
     "packages": [
         {
             "name": "amyboyd/pgn-parser",
@@ -4016,16 +4016,16 @@
         },
         {
             "name": "staspiv/chess-bestmove",
-            "version": "1.1",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/StasPiv/chess-bestmove.git",
-                "reference": "9356dd315fd7cdda66a859c015793c4fc15e77aa"
+                "reference": "c346538b78e9c097caa2840d03e944e087947c0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/StasPiv/chess-bestmove/zipball/9356dd315fd7cdda66a859c015793c4fc15e77aa",
-                "reference": "9356dd315fd7cdda66a859c015793c4fc15e77aa",
+                "url": "https://api.github.com/repos/StasPiv/chess-bestmove/zipball/c346538b78e9c097caa2840d03e944e087947c0e",
+                "reference": "c346538b78e9c097caa2840d03e944e087947c0e",
                 "shasum": ""
             },
             "require": {
@@ -4055,7 +4055,7 @@
                 }
             ],
             "description": "This is library for getting chess bestmove",
-            "time": "2016-08-31 22:15:22"
+            "time": "2016-09-01 21:31:06"
         },
         {
             "name": "staspiv/elo-calculator",
@@ -4876,16 +4876,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.24.1",
+            "version": "v1.24.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "3566d311a92aae4deec6e48682dc5a4528c4a512"
+                "reference": "33093f6e310e6976baeac7b14f3a6ec02f2d79b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3566d311a92aae4deec6e48682dc5a4528c4a512",
-                "reference": "3566d311a92aae4deec6e48682dc5a4528c4a512",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/33093f6e310e6976baeac7b14f3a6ec02f2d79b7",
+                "reference": "33093f6e310e6976baeac7b14f3a6ec02f2d79b7",
                 "shasum": ""
             },
             "require": {
@@ -4933,7 +4933,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-05-30 09:11:59"
+            "time": "2016-09-01 17:50:53"
         },
         {
             "name": "webmozart/assert",

@@ -75,10 +75,6 @@
             <env key="BUILD_ID" value="dontKillMe"/>
             <arg line="app/console websocket:server:process"/>
         </exec>
-        <exec executable="php" dir="${basedir}" failonerror="true">
-            <env key="BUILD_ID" value="dontKillMe"/>
-            <arg line="app/console websocket:bot:process"/>
-        </exec>
     </target>
 
     <target name="gulpfileSymbolic">

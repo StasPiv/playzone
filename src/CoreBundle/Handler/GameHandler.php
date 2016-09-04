@@ -193,23 +193,22 @@ class GameHandler implements GameProcessorInterface
         $game->setTimeWhite((int)$request->getTimeWhite())
              ->setTimeBlack((int)$request->getTimeBlack());
 
-        if (
-            $me != $game->getUserToMove() &&
-            !in_array(0, [$request->getTimeBlack(), $request->getTimeWhite()])
-        ) {
+        if ($request->getCurrentMove() < $game->getCurrentMove()) {
             $this->manager->flush($game);
             return $this->getUserGame($game, $me);
         }
 
+        if ($request->getCurrentMove() > $game->getCurrentMove() + 1) {
+            sleep(1);
+        }
+
         $pgn = $this->container->get("core.service.chess")->decodePgn($request->getPgn());
 
-        if ($this->container->get("core.service.chess")->isValidPgn($pgn) && $pgn != $game->getPgn()) {
+        if ($this->container->get("core.service.chess")->isValidPgn($pgn)) {
             $game->setPgn($pgn)
                  ->setUserToMove(
                      $me == $game->getUserWhite() ? $game->getUserBlack() : $game->getUserWhite()
-            );
-
-            $this->container->get("logger")->error("Switch move: " . $game->getUserToMove());
+            )->setCurrentMove($request->getCurrentMove());
         }
 
         $game->setDraw("")

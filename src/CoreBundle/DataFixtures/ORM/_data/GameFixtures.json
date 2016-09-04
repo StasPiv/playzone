@@ -346,5 +346,18 @@
     "time_white": 180000,
     "time_black": 180000,
     "time_last_move": "yesterday"
+  },
+  {
+    "referenceName": "game-checkmate-bug1",
+    "user_white": "user-test-login",
+    "user_black": "user-stas",
+    "user_to_move": "user-stas",
+    "pgn": "1. b4 e5 2. d4 exd4 3. c3 dxc3 4. Bb2 cxb2 5. Qd2 bxa1=Q 6. Nf3 Qxb1+ 7. Qc1",
+    "pgn_alt": "",
+    "status": "play",
+    "rate": true,
+    "time_white": 180000,
+    "time_black": 180000,
+    "time_last_move": "yesterday"
   }
 ]

@@ -69,6 +69,14 @@ class GamePutPgnRequest extends GameRequest implements SecurityRequestInterface,
     private $insufficientMaterialBlack = false;
 
     /**
+     * @var int
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     */
+    private $currentMove = 0;
+
+    /**
      * @return int
      */
     public function getId()
@@ -178,6 +186,25 @@ class GamePutPgnRequest extends GameRequest implements SecurityRequestInterface,
     public function setInsufficientMaterialBlack(bool $insufficientMaterialBlack)
     {
         $this->insufficientMaterialBlack = $insufficientMaterialBlack;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentMove(): int
+    {
+        return $this->currentMove;
+    }
+
+    /**
+     * @param int $currentMove
+     * @return GamePutPgnRequest
+     */
+    public function setCurrentMove(int $currentMove): self
+    {
+        $this->currentMove = $currentMove;
 
         return $this;
     }

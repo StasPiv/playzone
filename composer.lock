@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "84e3fa4ac2bf682223e33fcab024004d",
-    "content-hash": "8ebb055aea9df5baf841ea65456a2838",
+    "hash": "548e5e7c371952a2773cb67c65f1759e",
+    "content-hash": "6c4cd7ce55f54c14a68fcd871e245671",
     "packages": [
         {
             "name": "amyboyd/pgn-parser",
@@ -4016,16 +4016,16 @@
         },
         {
             "name": "staspiv/chess-bestmove",
-            "version": "1.1.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/StasPiv/chess-bestmove.git",
-                "reference": "c346538b78e9c097caa2840d03e944e087947c0e"
+                "reference": "c26b4d1b42ec6d43ad7c418f2000620232fd64c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/StasPiv/chess-bestmove/zipball/c346538b78e9c097caa2840d03e944e087947c0e",
-                "reference": "c346538b78e9c097caa2840d03e944e087947c0e",
+                "url": "https://api.github.com/repos/StasPiv/chess-bestmove/zipball/c26b4d1b42ec6d43ad7c418f2000620232fd64c8",
+                "reference": "c26b4d1b42ec6d43ad7c418f2000620232fd64c8",
                 "shasum": ""
             },
             "require": {
@@ -4044,7 +4044,6 @@
                     "StasPiv\\ChessBestMove\\Tests\\": "Tests/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -4055,7 +4054,11 @@
                 }
             ],
             "description": "This is library for getting chess bestmove",
-            "time": "2016-09-01 21:31:06"
+            "support": {
+                "source": "https://github.com/StasPiv/chess-bestmove/tree/1.2.2",
+                "issues": "https://github.com/StasPiv/chess-bestmove/issues"
+            },
+            "time": "2016-09-02 19:07:59"
         },
         {
             "name": "staspiv/elo-calculator",
@@ -5737,16 +5740,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v2.8.9",
+            "version": "v2.8.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "bc61b781fa7f07f9a2ed4e69b15d5c2238695fc0"
+                "reference": "fc69aad7dba2ab3eed5cf90c8e3ede4fb961effd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/bc61b781fa7f07f9a2ed4e69b15d5c2238695fc0",
-                "reference": "bc61b781fa7f07f9a2ed4e69b15d5c2238695fc0",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/fc69aad7dba2ab3eed5cf90c8e3ede4fb961effd",
+                "reference": "fc69aad7dba2ab3eed5cf90c8e3ede4fb961effd",
                 "shasum": ""
             },
             "require": {
@@ -5788,7 +5791,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:31:50"
+            "time": "2016-08-19 06:48:01"
         }
     ],
     "aliases": [],

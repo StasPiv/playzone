@@ -3,6 +3,12 @@
     "license": "MIT",
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/StasPiv/chess-bestmove"
+        }
+    ],
     "autoload": {
         "psr-4": { "": "src/" },
         "files": [ "app/AppKernel.php" ]
@@ -42,7 +48,7 @@
         "twig/extensions": "v1.3.0",
         "staspiv/elo-calculator": "^1.0",
         "staspiv/pgn-saver": "~1.0",
-        "staspiv/chess-bestmove": "~1.1"
+        "staspiv/chess-bestmove": "~1.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

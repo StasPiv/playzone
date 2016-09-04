@@ -121,8 +121,6 @@ class Game implements ChatMessageContainerInterface
      * @var int
      *
      * @ORM\Column(name="time_white", type="integer")
-     *
-     * @JMS\Groups({"get_game", "put_game_pgn"})
      */
     private $timeWhite = 180000;
 
@@ -130,8 +128,6 @@ class Game implements ChatMessageContainerInterface
      * @var int
      *
      * @ORM\Column(name="time_black", type="integer")
-     *
-     * @JMS\Groups({"get_game", "put_game_pgn"})
      */
     private $timeBlack = 180000;
 
@@ -307,6 +303,16 @@ class Game implements ChatMessageContainerInterface
      * @ORM\Column(type="integer", nullable=true)
      */
     private $ratingBlack;
+
+    /**
+     * @var int
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $currentMove = 0;
 
     /**
      * Game constructor.
@@ -942,6 +948,25 @@ class Game implements ChatMessageContainerInterface
     public function setRatingBlack(int $ratingBlack): self
     {
         $this->ratingBlack = $ratingBlack;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentMove(): int
+    {
+        return $this->currentMove;
+    }
+
+    /**
+     * @param int $currentMove
+     * @return Game
+     */
+    public function setCurrentMove(int $currentMove): self
+    {
+        $this->currentMove = $currentMove;
 
         return $this;
     }

@@ -65,8 +65,6 @@ class RatingService implements EventSubscriberInterface
 
         $game = $event->getGame();
 
-        $this->updateTotals($game);
-
         $eloGame = $this->getEloGame($game);
 
         $this->eloCalculator->calculate($eloGame);
@@ -94,29 +92,5 @@ class RatingService implements EventSubscriberInterface
             ->setBlackResult($game->getResultBlack());
 
         return $eloGame;
-    }
-
-    /**
-     * @param Game $game
-     */
-    private function updateTotals(Game $game)
-    {
-        $white = $game->getUserWhite();
-        $black = $game->getUserBlack();
-
-        switch ($game->getResultWhite()) {
-            case 1:
-                $white->setWin($white->getWin() + 1);
-                $black->setLose($black->getLose() + 1);
-                break;
-            case 0.5:
-                $white->setDraw($white->getDraw() + 1);
-                $black->setDraw($black->getDraw() + 1);
-                break;
-            case 0:
-                $white->setLose($white->getLose() + 1);
-                $black->setWin($black->getWin() + 1);
-                break;
-        }
     }
 }

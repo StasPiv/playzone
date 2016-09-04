@@ -130,15 +130,23 @@ class UserStatService implements EventSubscriberInterface
      */
     public function onGameChangeStatus(GameEvent $event)
     {
-        if ($event->getGame()->getStatus() != GameStatus::END) {
+        $game = $event->getGame();
+
+        if ($game->getStatus() != GameStatus::END) {
             return;
         }
 
-        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserWhite());
-        $this->updateRateTotals($event->getGame(), $event->getGame()->getUserBlack());
+        $userWhite = $game->getUserWhite();
+        $userBlack = $game->getUserBlack();
 
-        $this->changeUserLastMove($event->getGame()->getUserWhite(), $event->getGame());
-        $this->changeUserLastMove($event->getGame()->getUserBlack(), $event->getGame());
+        $this->updateWinDrawLoseForOneGame($userWhite, $game);
+        $this->updateWinDrawLoseForOneGame($userBlack, $game);
+
+        $this->updateRateTotals($game, $userWhite);
+        $this->updateRateTotals($game, $userBlack);
+
+        $this->changeUserLastMove($userWhite, $game);
+        $this->changeUserLastMove($userBlack, $game);
     }
 
     /**
@@ -155,5 +163,20 @@ class UserStatService implements EventSubscriberInterface
         $user->setRateGamesCount(
             is_null($rateGamesCount) ? $user->getRateGamesCount() + 1 : ++$rateGamesCount
         );
+    }
+
+    /**
+     * @param User $user
+     * @param Game $game
+     */
+    private function updateWinDrawLoseForOneGame(User $user, Game $game)
+    {
+        $win = $user->getWin();
+        $draw = $user->getDraw();
+        $lose = $user->getLose();
+
+        $this->updateWinDrawLose($game, $user, $win, $draw, $lose);
+
+        $user->setWin($win)->setDraw($draw)->setLose($lose);
     }
 }

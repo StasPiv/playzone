@@ -4016,16 +4016,16 @@
         },
         {
             "name": "staspiv/chess-bestmove",
-            "version": "1.2.2",
+            "version": "1.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/StasPiv/chess-bestmove.git",
-                "reference": "c26b4d1b42ec6d43ad7c418f2000620232fd64c8"
+                "reference": "e7c9c9effaaef6fca8964f7ecec9e3ace1eafe72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/StasPiv/chess-bestmove/zipball/c26b4d1b42ec6d43ad7c418f2000620232fd64c8",
-                "reference": "c26b4d1b42ec6d43ad7c418f2000620232fd64c8",
+                "url": "https://api.github.com/repos/StasPiv/chess-bestmove/zipball/e7c9c9effaaef6fca8964f7ecec9e3ace1eafe72",
+                "reference": "e7c9c9effaaef6fca8964f7ecec9e3ace1eafe72",
                 "shasum": ""
             },
             "require": {
@@ -4055,10 +4055,10 @@
             ],
             "description": "This is library for getting chess bestmove",
             "support": {
-                "source": "https://github.com/StasPiv/chess-bestmove/tree/1.2.2",
+                "source": "https://github.com/StasPiv/chess-bestmove/tree/1.2.5",
                 "issues": "https://github.com/StasPiv/chess-bestmove/issues"
             },
-            "time": "2016-09-02 19:07:59"
+            "time": "2016-09-04 13:58:19"
         },
         {
             "name": "staspiv/elo-calculator",

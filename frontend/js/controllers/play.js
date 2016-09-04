@@ -233,4 +233,12 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         AudioService.newGame();
         $location.path( '/play/' + data.game_id );
     });
+
+    WebsocketService.addListener("listen_accepted_calls", "call_accept", function(data) {
+        if (data.game.mine) {
+            console.log(data.game);
+            $location.path( '/play/' + data.game.id );
+            AudioService.newGame();
+        }
+    });
 });

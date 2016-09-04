@@ -6,14 +6,6 @@ services:
       class: WebsocketClientBundle\Service\Client\PlayzoneClientSender
       calls:
           - [setContainer, ['@service_container']]
-  ws.playzone.bot:
-      class: WebsocketClientBundle\Service\Bot\Bot
-      calls:
-          - [setContainer, ['@service_container']]
-  ws.playzone.ajax:
-      class: WebsocketClientBundle\Service\AjaxService
-      calls:
-          - [setContainer, ['@service_container']]
   ws.playzone.shutdown_server:
       class: WebsocketClientBundle\Service\ShutdownServerService
       arguments:

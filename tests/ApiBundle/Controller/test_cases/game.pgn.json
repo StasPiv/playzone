@@ -77,45 +77,6 @@
       }
     }
   },
-  "not_my_move": {
-    "method": "PUT",
-    "request": {
-      "login": "Stas",
-      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
-      "reference": {
-        "name": "id",
-        "value": "game-0"
-      },
-      "pgn": "MS5lNCBlNSAyLk5mMyBOYzYgMy5CYjUgYTY=",
-      "time_white": 321,
-      "time_black": 321
-    },
-    "response": {
-      "status": 400,
-      "errors": {
-        "pgn": "It is not your turn"
-      }
-    }
-  },
-  "not_my_move_but_send_because_i_play_with_robot": {
-    "method": "PUT",
-    "request": {
-      "login": "Stas",
-      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
-      "reference": {
-        "name": "id",
-        "value": "game-with_robot"
-      },
-      "pgn": "MS5lNCBlNSAyLk5mMyBOYzYgMy5CYjUgYTY=",
-      "time_black": 321
-    },
-    "response": {
-      "status": 200,
-      "data": {
-
-      }
-    }
-  },
   "correct_pgn_ruy_lopez_and_time": {
     "method": "PUT",
     "request": {
@@ -231,6 +192,30 @@
         "result_black": 0.5,
         "status": "end",
         "my_result": 0.5
+      }
+    }
+  },
+  "correct_fix_checkmate": {
+    "method": "PUT",
+    "request": {
+      "login": "Stas",
+      "token": "6645d7a4ab0a2456f4fa87fb2d63453e",
+      "reference": {
+        "name": "id",
+        "value": "game-checkmate-bug1"
+      },
+      "pgn": "MS5iNCBlNSAyLmQ0IGV4ZDQgMy5jMyBkeGMzIDQuQmIyIGN4YjIgNS5RZDIgYnhhMT1RIDYuTmYzIFF4YjEgNy5RYzEgUXhjMQ==",
+      "time_white": 180000,
+      "time_black": 180000
+    },
+    "response": {
+      "status": 200,
+      "data": {
+        "pgn": "1.b4 e5 2.d4 exd4 3.c3 dxc3 4.Bb2 cxb2 5.Qd2 bxa1=Q 6.Nf3 Qxb1 7.Qc1 Qxc1",
+        "result_white": 0,
+        "result_black": 1,
+        "status": "end",
+        "my_result": 1
       }
     }
   }

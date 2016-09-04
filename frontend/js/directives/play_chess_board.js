@@ -67,9 +67,10 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                         }
 
                         var move = data.move;
-                        var moveNumber = data.moveNumber;
+                        var moveNumber = data.move_number;
 
                         if (element.game.history().length != moveNumber - 1) {
+                            scope.game.current_move = moveNumber;
                             scope.game.$get().then(
                                 function () {
                                     element.game.pgn(scope.game.pgn);

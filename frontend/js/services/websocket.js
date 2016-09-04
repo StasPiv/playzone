@@ -191,7 +191,7 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
                     data: {
                         game_id: gameId,
                         move: move,
-                        moveNumber: moveNumber,
+                        move_number: moveNumber,
                         time_white: timeWhite,
                         time_black: timeBlack,
                         color: color,

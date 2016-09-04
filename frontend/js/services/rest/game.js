@@ -28,7 +28,8 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
                         {
                             pgn: window.btoa(data.pgn),
                             time_white: data.time_white,
-                            time_black: data.time_black
+                            time_black: data.time_black,
+                            current_move: data.current_move
                         }
                     );
                 }

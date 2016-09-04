@@ -352,8 +352,6 @@ class User
      * @JMS\Type("boolean")
      *
      * @ORM\Column(type="boolean")
-     *
-     * @JMS\Groups({"get_user_profile"})
      */
     private $engine = false;
 

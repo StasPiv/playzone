@@ -59,7 +59,10 @@ class RatingService implements EventSubscriberInterface
             return;
         }
 
-        if ($event->getGame()->getUserWhite()->isEngine() || $event->getGame()->getUserBlack()->isEngine()) {
+        if (
+            $event->getGame()->getUserWhite()->isEngine() && !$event->getGame()->getUserBlack()->isEngine() ||
+            !$event->getGame()->getUserWhite()->isEngine() && $event->getGame()->getUserBlack()->isEngine()
+        ) {
             return;
         }
 

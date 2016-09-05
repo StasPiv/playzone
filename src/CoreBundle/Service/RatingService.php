@@ -63,7 +63,7 @@ class RatingService implements EventSubscriberInterface
             $event->getGame()->getUserWhite()->isEngine() && !$event->getGame()->getUserBlack()->isEngine() ||
             !$event->getGame()->getUserWhite()->isEngine() && $event->getGame()->getUserBlack()->isEngine()
         ) {
-            return;
+//            return; // uncomment this line to deny rate play against robots
         }
 
         $game = $event->getGame();

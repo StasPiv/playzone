@@ -70,12 +70,15 @@ playzoneControllers.directive('playChessBoard', function (WebRTCService, Websock
                         var moveNumber = data.move_number;
 
                         if (element.game.history().length != moveNumber - 1) {
+                            element.game.load(data.fen);
                             scope.game.current_move = moveNumber;
                             scope.game.$get().then(
                                 function () {
+                                    window.chess.pgn(scope.game.pgn);
                                     element.game.pgn(scope.game.pgn);
                                     scope.game.move_color = scope.game.move_color === 'w' ? 'b' : 'w';
                                     AudioService.move();
+                                    window.board.position(element.game.fen());
                                     element.board.position(element.game.fen());
                                     element.updateStatus();
                                     element.game.game_over() && scope.game.$get();

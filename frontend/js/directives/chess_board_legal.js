@@ -90,7 +90,7 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
     return {
         restrict: 'C',
         link: function(scope, element) {
-            $rootScope.chess = element.game = new Chess();
+            window.chess = $rootScope.chess = element.game = new Chess();
 
             var statusEl = $(element).find('.status'),
                 fenEl = $(element).find('.fen'),
@@ -248,7 +248,7 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
                     return;
                 }
 
-                $rootScope.chessBoard = element.board = ChessBoard(element.data('board'), {
+                window.board = $rootScope.chessBoard = element.board = ChessBoard(element.data('board'), {
                     draggable: userConfig.draggable,
                     moveSpeed: 1,
                     position: 'start',

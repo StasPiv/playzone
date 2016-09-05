@@ -164,7 +164,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
 
         /** @var Game $game */
-        return $game;
+        return $this->container->get('core.handler.game')->getUserGame($game, $me);
     }
 
     /**

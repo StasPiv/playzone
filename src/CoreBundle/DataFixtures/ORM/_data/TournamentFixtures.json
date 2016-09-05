@@ -236,12 +236,12 @@
 
     ],
     "game_params": {
-      "time_base": 600000
+      "time_base": 180000
     },
     "tournament_params": {
       "type": "round_robin",
       "time_begin": "+1minute",
-      "games_vs_opponent": 4
+      "games_vs_opponent": 8
     },
     "status": "new",
     "private": true

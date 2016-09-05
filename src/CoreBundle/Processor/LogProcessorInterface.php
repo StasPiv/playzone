@@ -15,7 +15,7 @@ use CoreBundle\Model\Request\Log\LogPostRequest;
  * Interface LogProcessorInterface
  * @package CoreBundle\Processor
  */
-interface LogProcessorInterface
+interface LogProcessorInterface extends ProcessorInterface
 {
     /**
      * @param LogPostRequest $request

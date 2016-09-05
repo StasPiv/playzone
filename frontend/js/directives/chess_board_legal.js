@@ -6,7 +6,7 @@
  * Also drag and drop functions will be defined.
  * This small library is useful for separating drag&drop logic and application logic
  */
-playzoneControllers.directive('chessBoardLegal', function (SettingService, $timeout, $rootScope) {
+playzoneControllers.directive('chessBoardLegal', function (SettingService, $timeout, $rootScope, LogRest) {
     function isMyTurn(scope, element) {
         if (!scope.game) {
             return true;
@@ -77,15 +77,40 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
         );
 
         if (isSingleOptionToMoveHere) {
+            rememberTimeBegin(scope, 'One click');
+            sendLogAboutDelay(scope, 'One click');
             doMoveOnTheBoard(scope, element, square);
             return true;
         } else if (isSingleOptionFromMoveHere) {
+            rememberTimeBegin(scope, 'One click');
+            sendLogAboutDelay(scope, 'One click');
             doMoveOnTheBoard(scope, element, scope.current_move.to);
             return true;
         } else {
             return false;
         }
     }
+
+    var rememberTimeBegin = function (scope, type) {
+        var d = new Date();
+        scope.timeBegin = d.getTime();
+        console.log(type + ' start. Time begin = '+scope.timeBegin);
+    };
+
+    var sendLogAboutDelay = function (scope, type) {
+        if (scope.timeBegin) {
+            var d = new Date();
+            var delay = d.getTime() - scope.timeBegin;
+            scope.timeBegin = 0;
+        }
+
+        if (delay) {
+            LogRest.log({
+                message: 'ANTIKILLER. '+type+'. '+$rootScope.user.login+
+                '. Game #'+scope.game.id+'. Time in ms' +' ='+delay
+            });
+        }
+    };
 
     return {
         restrict: 'C',
@@ -109,6 +134,7 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
             // do not pick up pieces if the game is over
             // only pick up pieces for the side to move
             var onDragStart = function(source, piece, position, orientation) {
+                rememberTimeBegin(scope, 'Drag&Drop');
                 if (!scope.game) {
                     return true;
                 }
@@ -128,6 +154,8 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
             };
 
             var onDrop = function(source, target) {
+                sendLogAboutDelay(scope, 'Drag&Drop');
+
                 if (!isMyTurn(scope, element)) {
                     // pre-move functionality for draggable
                     scope.pre_move = {from: source, to: target};
@@ -165,6 +193,8 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
             };
 
             $(element).on('click', '[class*="square"]', function () {
+                sendLogAboutDelay(scope, 'Double click');
+
                 if (!scope.game.mine) {
                     return false;
                 }
@@ -188,6 +218,7 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
                             from: square
                         };
                         highlightSquare(square);
+                        rememberTimeBegin(scope, 'Double click');
                     } else {
                         doMoveOnTheBoard(scope, element, square);
                     }

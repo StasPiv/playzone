@@ -64,8 +64,14 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
      */
     public function run()
     {
+        $tournamentId = $this->tournamentContainer->getTournamentId();
+
+        $this->container->get('core.handler.tournament')->addPlayersIntoTournament(
+            $tournamentId, '347,348,349'
+        );
+
         $tournament = $this->getTournamentHandler()
-                           ->getRepository()->find($this->tournamentContainer->getTournamentId());
+                           ->getRepository()->find($tournamentId);
 
         if (
             $tournament->getCurrentRound() == 0 && 

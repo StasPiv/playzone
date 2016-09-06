@@ -706,8 +706,13 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
      */
     public function addPlayersIntoTournament(int $tournamentId, string $playersIdsString)
     {
-        $playerIds = explode(',', $playersIdsString);
         $tournament = $this->getRepository()->find($tournamentId);
+
+        if ($tournament->getCurrentRound() != 0) {
+            return;
+        }
+
+        $playerIds = explode(',', $playersIdsString);
 
         foreach ($playerIds as $playerId) {
             try {

@@ -67,7 +67,7 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
         $tournamentId = $this->tournamentContainer->getTournamentId();
 
         $this->container->get('core.handler.tournament')->addPlayersIntoTournament(
-            $tournamentId, '347,348,349'
+            $tournamentId, $this->container->getParameter('app_bots_to_previous_record')
         );
 
         $tournament = $this->getTournamentHandler()

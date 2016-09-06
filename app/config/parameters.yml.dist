@@ -46,3 +46,4 @@ parameters:
     rounds_for_swiss: 7
     app_playzone_banned_ips: []
     app_path_to_polyglot: '/home/stas/work/playzone/ctg-reader/ctgexporter/examples'
+    app_bots_to_previous_record: '347,348,349'

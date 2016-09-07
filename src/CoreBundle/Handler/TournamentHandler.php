@@ -708,7 +708,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
     {
         $tournament = $this->getRepository()->find($tournamentId);
 
-        if ($tournament->getCurrentRound() != 0 && !$tournament->isPrivate()) {
+        if ($tournament->getCurrentRound() != 0 && $tournament->isPrivate()) {
             return;
         }
 

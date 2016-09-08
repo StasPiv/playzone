@@ -665,7 +665,7 @@ class GameHandler implements GameProcessorInterface
         $this->container->get("event_dispatcher")->dispatch(
             GameEvents::CHANGE_STATUS_AFTER,
             (new GameEvent())->setGame($game)
-        );
+        )
     }
 
     /**
@@ -678,8 +678,8 @@ class GameHandler implements GameProcessorInterface
 
     public function fixResultGames()
     {
-        $this->fixResultGamesByColor("White");
-        $this->fixResultGamesByColor("Black");
+//        $this->fixResultGamesByColor("White");
+//        $this->fixResultGamesByColor("Black");
 
         $this->manager->flush();
     }

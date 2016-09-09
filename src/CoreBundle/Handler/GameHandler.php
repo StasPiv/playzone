@@ -678,8 +678,8 @@ class GameHandler implements GameProcessorInterface
 
     public function fixResultGames()
     {
-//        $this->fixResultGamesByColor("White");
-//        $this->fixResultGamesByColor("Black");
+        $this->fixResultGamesByColor("White");
+        $this->fixResultGamesByColor("Black");
 
         $this->manager->flush();
     }
@@ -695,7 +695,7 @@ class GameHandler implements GameProcessorInterface
             ->where("g.status = :status")
             ->andWhere("g.userToMove = g.user{$color}")
             ->andWhere(
-                "TIMESTAMPDIFF(SECOND, g.timeLastMove, CURRENT_TIMESTAMP()) > g.time{$color} / 1000"
+                "TIMESTAMPDIFF(SECOND, g.timeLastMove, CURRENT_TIMESTAMP()) > 60 + g.time{$color} / 1000"
             )
             ->setParameter("status", GameStatus::PLAY)
             ->innerJoin("CoreBundle:User", "u", "WITH", "u.id = g.user{$color}")

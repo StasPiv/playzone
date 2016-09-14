@@ -55,7 +55,9 @@ class ChatHandler implements ChatProcessorInterface
     public function processPostMessage(ChatPostMessageRequest $request) : ChatMessage
     {
         $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request, $this->getRequestError());
-        
+
+        $this->container->get('core.handler.user')->banUserIfIpIsBanned($me, true);
+
         if ($me->isBanned()) {
             $this->getRequestError()->addError("user", "You are banned")
                                     ->throwException(ResponseStatusCode::FORBIDDEN);
@@ -83,6 +85,7 @@ class ChatHandler implements ChatProcessorInterface
         return $this->repository->createQueryBuilder("cm")
                     ->select(["u.id", "u.login", "cm.time", "cm.message"])
                     ->where("cm.type = :type")
+                    ->andWhere("u.banned <> 1")
                     ->setParameter("type", ChatMessageType::COMMON)
                     ->innerJoin("cm.user", "u")
                     ->orderBy("cm.id", "DESC")

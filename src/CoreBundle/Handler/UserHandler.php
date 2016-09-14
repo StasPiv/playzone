@@ -132,6 +132,8 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
                 $user->getLag() < $this->container->getParameter("max_lag_for_record")
             )->addIp($request->getIp());
 
+            $this->banUserIfIpIsBanned($user);
+
             $this->saveUser($user);
 
             return $user;
@@ -472,5 +474,24 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
         $this->saveUser(
             $event->getUser()->setOnline(false)
         );
+    }
+
+    /**
+     * @param User $user
+     * @param bool $save
+     */
+    public function banUserIfIpIsBanned(User $user, $save = false)
+    {
+        foreach ($user->getIps() as $userIp) {
+            foreach ($this->container->getParameter('app_playzone_banned_ips') as $bannedIp) {
+                if (strpos($userIp, $bannedIp) === 0) {
+                    $user->setBanned(true);
+                }
+            }
+        }
+
+        if ($save) {
+            $this->saveUser($user);
+        }
     }
 }

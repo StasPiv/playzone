@@ -178,7 +178,8 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
         $users = $qb->select(array('u')) // string 'u' is converted to array internally
                     ->from('CoreBundle:User', 'u')
                     ->orderBy($listRequest->getOrderBy(), 'DESC')
-                    ->setMaxResults($listRequest->getLimit());
+                    ->setMaxResults($listRequest->getLimit())
+                    ->andWhere('u.banned <> 1');
 
         if (!empty($listRequest->getFilter())) {
             $filter = json_decode($listRequest->getFilter(), true);
@@ -192,7 +193,6 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
                         $users->andWhere('u.lastPing > :minDateForActive')
                               ->andWhere('u.lastMove >= :firstRatingDay')
                               ->andWhere('u.rateGamesCount >= 5')
-                              ->andWhere('u.banned <> 1')
                               ->andWhere('u.engine <> 1')
                               ->setParameter('minDateForActive', new \DateTime('-30day'))
                               ->setParameter('firstRatingDay', $firstRatingDay);

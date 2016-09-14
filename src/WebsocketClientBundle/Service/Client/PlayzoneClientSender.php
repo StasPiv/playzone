@@ -76,6 +76,23 @@ class PlayzoneClientSender
     }
 
     /**
+     * @param PlayzoneClient $client
+     * @param int $gameId
+     */
+    public function sendGameFinish(PlayzoneClient $client, int $gameId)
+    {
+        $this->send(
+            $client,
+            (new PlayzoneMessage())->setMethod("game_finish")
+                ->setScope("send_to_users")
+                ->setData([
+                    "game_id" => $gameId
+                ])
+        );
+        $client->close();
+    }
+
+    /**
      * @param PlayzoneMessage $message
      */
     public function sendMessageToWebsocketServer(PlayzoneMessage $message)

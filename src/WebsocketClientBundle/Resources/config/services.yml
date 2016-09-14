@@ -10,3 +10,5 @@ services:
       class: WebsocketClientBundle\Service\ShutdownServerService
       arguments:
         - '@ws.playzone.client.sender'
+      tags:
+        - { name: kernel.event_subscriber }

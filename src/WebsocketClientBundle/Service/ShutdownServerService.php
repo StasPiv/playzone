@@ -8,13 +8,17 @@
 
 namespace WebsocketClientBundle\Service;
 
+use CoreBundle\Model\Event\Game\GameEvent;
+use CoreBundle\Model\Event\Game\GameEvents;
+use CoreBundle\Model\Game\GameStatus;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use WebsocketClientBundle\Service\Client\PlayzoneClientSender;
 
 /**
  * Class ShutdownServerService
  * @package WebsocketClientBundle\Service
  */
-class ShutdownServerService
+class ShutdownServerService implements EventSubscriberInterface
 {
     /** @var PlayzoneClientSender */
     private $clientSender;
@@ -24,6 +28,8 @@ class ShutdownServerService
 
     /** @var string */
     const TOKEN = '407f20f52463392c43bf6a58b783c4f2';
+
+    private $defaultWsServerUrl = 'ws://ws.playzone.immortalchess.net:8081/';
 
     /**
      * ShutdownServerService constructor.
@@ -58,5 +64,49 @@ class ShutdownServerService
                 $login,
                 $token
             );
+    }
+
+    /**
+     * @param string $wsServerUrl
+     * @param int $gameId
+     */
+    public function sendGameFinish(
+        string $wsServerUrl,
+        int $gameId
+    )
+    {
+        $wsClient = new PlayzoneClient(
+            $wsServerUrl,
+            [
+                'timeout' => -1
+            ]
+        );
+
+        $this->clientSender->sendGameFinish($wsClient, $gameId);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getSubscribedEvents()
+    {
+        // return the subscribed events, their methods and priorities
+        return [
+            GameEvents::CHANGE_STATUS_BEFORE => [
+                ['onGameChangeStatusBefore', 10],
+            ],
+        ];
+    }
+
+    /**
+     * @param GameEvent $event
+     */
+    public function onGameChangeStatusBefore(GameEvent $event)
+    {
+        if (!in_array($event->getGame()->getStatus(), [GameStatus::END, GameStatus::ABORTED])) {
+            return;
+        }
+
+        $this->sendGameFinish($this->defaultWsServerUrl, $event->getGame()->getId());
     }
 }

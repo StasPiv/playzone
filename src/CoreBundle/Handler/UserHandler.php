@@ -134,7 +134,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
 
             foreach ($user->getIps() as $userIp) {
                 foreach ($this->container->getParameter('app_playzone_banned_ips') as $bannedIp) {
-                    if (strpos($userIp, $bannedIp) == 0) {
+                    if (strpos($userIp, $bannedIp) === 0) {
                         $user->setBanned(true);
                     }
                 }

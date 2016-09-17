@@ -22,10 +22,10 @@ use CoreBundle\Entity\User;
 interface UserProcessorInterface extends ProcessorInterface
 {
     /**
-     * @param UserPostRegisterRequest $registerRequest
+     * @param UserPostRegisterRequest $request
      * @return User
      */
-    public function processPostRegister(UserPostRegisterRequest $registerRequest) : User;
+    public function processPostRegister(UserPostRegisterRequest $request) : User;
 
     /**
      * @param UserPostAuthRequest $request

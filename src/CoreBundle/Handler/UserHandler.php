@@ -76,13 +76,13 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
     }
 
     /**
-     * @param UserPostRegisterRequest $registerRequest
+     * @param UserPostRegisterRequest $request
      * @return User
      */
-    public function processPostRegister(UserPostRegisterRequest $registerRequest) : User
+    public function processPostRegister(UserPostRegisterRequest $request) : User
     {
         try {
-            if ($this->repository->findOneByEmail($registerRequest->getEmail())) {
+            if ($this->repository->findOneByEmail($request->getEmail())) {
                 $this->getRequestError()->addError("email", 'This email was already registered');
             }
         } catch (UserNotFoundException $e) {
@@ -90,24 +90,28 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
         }
 
         try {
-            if ($this->repository->findOneByLogin($registerRequest->getLogin())) {
+            if ($this->repository->findOneByLogin($request->getLogin())) {
                 $this->getRequestError()->addError("login", 'This login was already registered');
             }
         } catch (UserNotFoundException $e) {
             // that's alright
         }
 
-        if ($registerRequest->getPassword() !== $registerRequest->getPasswordRepeat()) {
+        if ($request->getPassword() !== $request->getPasswordRepeat()) {
             $this->getRequestError()->addError("password_repeat", 'The password repeat should be the same');
+        }
+
+        if ($this->isIpBanned($request->getIp())) {
+            $this->getRequestError()->addError("login", 'You are banned');
         }
 
         $this->container->get("core.service.error")->throwExceptionIfHasErrors($this->getRequestError(), ResponseStatusCode::FORBIDDEN);
 
         $user = new User();
 
-        $user->setLogin($registerRequest->getLogin())
-             ->setEmail($registerRequest->getEmail())
-             ->setPassword($this->generatePasswordHash($registerRequest->getPassword()));
+        $user->setLogin($request->getLogin())
+             ->setEmail($request->getEmail())
+             ->setPassword($this->generatePasswordHash($request->getPassword()));
 
         $this->initUserSettings($user);
 
@@ -479,19 +483,35 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
     /**
      * @param User $user
      * @param bool $save
+     * @return bool
      */
-    public function banUserIfIpIsBanned(User $user, $save = false)
+    public function banUserIfIpIsBanned(User $user, $save = false): bool
     {
         foreach ($user->getIps() as $userIp) {
-            foreach ($this->container->getParameter('app_playzone_banned_ips') as $bannedIp) {
-                if (strpos($userIp, $bannedIp) === 0) {
-                    $user->setBanned(true);
+            if ($this->isIpBanned($userIp)) {
+                $user->setBanned(true);
+                if ($save) {
+                    $this->saveUser($user);
                 }
+                return true;
             }
         }
 
-        if ($save) {
-            $this->saveUser($user);
+        return false;
+    }
+
+    /**
+     * @param string $userIp
+     * @return bool
+     */
+    private function isIpBanned(string $userIp): bool
+    {
+        foreach ($this->container->getParameter('app_playzone_banned_ips') as $bannedIpMask) {
+            if (strpos($userIp, $bannedIpMask) === 0) {
+                return true;
+            }
         }
+
+        return false;
     }
 }

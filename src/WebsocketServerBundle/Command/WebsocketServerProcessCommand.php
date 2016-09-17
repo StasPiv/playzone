@@ -31,7 +31,7 @@ class WebsocketServerProcessCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $commandLine = 'php ' .
+        $commandLine = 'sudo php ' .
             $this->getContainer()->get('kernel')->getRootDir() .
             '/console websocket:server:start ' . $input->getArgument('host');
         

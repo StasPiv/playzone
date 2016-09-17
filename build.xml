@@ -71,9 +71,9 @@
     </target>
 
     <target name="startServer" description="Run ws server">
-        <exec executable="sudo" dir="${basedir}" failonerror="true">
+        <exec executable="php" dir="${basedir}" failonerror="true">
             <env key="BUILD_ID" value="dontKillMe"/>
-            <arg line="php app/console websocket:server:process"/>
+            <arg line="app/console websocket:server:process"/>
         </exec>
     </target>
 

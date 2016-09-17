@@ -444,7 +444,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
      */
     function __destruct()
     {
-        $this->container->get('logger')->debug('WEBSOCKET STOP');
+        $this->logger->debug('WEBSOCKET STOP');
         $this->container->get('core.handler.user')->markAllUsersOffline();
     }
 }

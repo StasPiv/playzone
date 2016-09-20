@@ -8,6 +8,7 @@
 
 namespace ApiBundle\Controller;
 
+use CoreBundle\Exception\Processor\ProcessorExceptionInterface;
 use CoreBundle\Model\Request\RequestError;
 use CoreBundle\Model\Request\RequestInterface;
 use CoreBundle\Model\Response\ResponseStatusCode;
@@ -90,8 +91,12 @@ abstract class BaseController extends FOSRestController
             $data = $this->getProcessor()->$actionName($requestObject);
 
             $statusCode = $successStatusCode;
-        } catch (ProcessorException $exception) {
-            $data = $exception->getRequestErrorInterface()->getErrors();
+        } catch (ProcessorExceptionInterface $exception) {
+            if ($exception instanceof ProcessorException) {
+                $data = $exception->getRequestErrorInterface()->getErrors();
+            } else {
+                $data = $exception->getMessage();
+            }
             $statusCode = $exception->getCode();
         } catch (\Exception $exception) {
             $data['errorMessage'] = $exception->getMessage();

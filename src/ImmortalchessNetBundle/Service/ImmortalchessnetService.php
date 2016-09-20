@@ -8,6 +8,7 @@
 
 namespace ImmortalchessNetBundle\Service;
 
+use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
 use CoreBundle\Model\Event\Call\CallEvent;
 use CoreBundle\Model\Event\Call\CallEvents;
@@ -192,15 +193,12 @@ class ImmortalchessnetService implements EventSubscriberInterface
      */
     public function onUserAuth(UserAuthEvent $event)
     {
-        $user = $this->container->get("immortalchessnet.service.user")
-                     ->getUser(
-                        $event->getLogin(), $event->getPassword()
-                     )
-                     ->setPassword(
-                        $this->container->get("core.handler.user")
-                             ->generatePasswordHash($event->getPassword())
-                     );
+        $immortalUser = $this->container->get("immortalchessnet.service.user")
+            ->getUser(
+                $event->getLogin(),
+                $event->getPassword()
+            );
 
-        $event->setUser($user);
+        $event->setExternalUser($immortalUser);
     }
 }

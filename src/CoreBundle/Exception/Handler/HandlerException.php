@@ -8,7 +8,9 @@
 
 namespace CoreBundle\Exception\Handler;
 
-class HandlerException extends \RuntimeException
+use CoreBundle\Exception\Processor\ProcessorExceptionInterface;
+
+class HandlerException extends \RuntimeException implements ProcessorExceptionInterface
 {
 
 }

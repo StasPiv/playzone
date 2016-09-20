@@ -8,7 +8,7 @@
 
 namespace CoreBundle\Model\Event\User;
 
-use CoreBundle\Model\User\UserContainerAwareTrait;
+use CoreBundle\Model\User\UserInterface;
 
 /**
  * Class UserAuthEvent
@@ -21,6 +21,11 @@ class UserAuthEvent extends UserEvent
     
     /** @var string */
     private $password;
+
+    /**
+     * @var UserInterface
+     */
+    private $externalUser;
 
     /**
      * @return string
@@ -56,6 +61,25 @@ class UserAuthEvent extends UserEvent
     public function setPassword($password)
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @return UserInterface
+     */
+    public function getExternalUser(): UserInterface
+    {
+        return $this->externalUser;
+    }
+
+    /**
+     * @param UserInterface $externalUser
+     * @return UserAuthEvent
+     */
+    public function setExternalUser(UserInterface $externalUser): self
+    {
+        $this->externalUser = $externalUser;
 
         return $this;
     }

@@ -50,6 +50,39 @@
                 </select>
             </td>
         </tr>
+        <tr>
+            <td>
+                {{ 'Immortalchess login' | translate }}
+            </td>
+            <td>
+                <input title="{{ 'Immortalchess login' | translate }}" type="text" ng-model="immortalchessUser['external_login']" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ 'Immortalchess password' | translate }}
+            </td>
+            <td>
+                <input title="{{ 'Immortalchess password' | translate }}" type="text" ng-model="immortalchessUser['password']" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                <a ng-click="immortalAuth()"
+                   class="btn btn-default"
+                >{{ 'Synchronize' | translate }}
+                </a>
+                <br/>
+                <span
+                        ng-if="immortalSuccess || $root.user.immortal_id"
+                        class="alert-success">
+                    {{ 'Successfully synchronized with' | translate }} {{ $root.user.another_login }}
+                </span>
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>

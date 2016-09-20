@@ -182,5 +182,9 @@
   "Players play": "Игроки играют по",
   "games against each other": "партии друг с другом",
   "Round": "Тур",
-  "You are banned": "Вы забанены"
+  "You are banned": "Вы забанены",
+  "Immortalchess login": "Immortalchess логин",
+  "Immortalchess password": "Immortalchess пароль",
+  "Synchronize": "Синхронизировать",
+  "Successfully synchronized with": "Успешно синхронизировано с"
 }

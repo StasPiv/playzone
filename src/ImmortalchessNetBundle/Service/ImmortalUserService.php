@@ -11,6 +11,7 @@ namespace ImmortalchessNetBundle\Service;
 use CoreBundle\Entity\User;
 use CoreBundle\Exception\Handler\User\PasswordNotCorrectException;
 use CoreBundle\Exception\Handler\User\UserNotFoundException;
+use CoreBundle\Model\User\UserInterface;
 use ImmortalchessNetBundle\Entity\ImmortalUser;
 use ImmortalchessNetBundle\Repository\ImmortalUserRepository;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -26,11 +27,11 @@ class ImmortalUserService
     /**
      * @param string $loginOrEmail
      * @param string $password
-     * @return User
+     * @return UserInterface
      * @throws UserNotFoundException
      * @throws PasswordNotCorrectException
      */
-    public function getUser(string $loginOrEmail, string $password) : User
+    public function getUser(string $loginOrEmail, string $password) : UserInterface
     {
         try {
             $immortalUser = $this->getRepository()->findOneByUsername($loginOrEmail);
@@ -42,8 +43,7 @@ class ImmortalUserService
             throw new PasswordNotCorrectException;
         }
 
-        return (new User())->setLogin($immortalUser->getUsername())
-            ->setEmail($immortalUser->getEmail());
+        return $immortalUser;
     }
 
     /**

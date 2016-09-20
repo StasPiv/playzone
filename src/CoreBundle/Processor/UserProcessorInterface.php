@@ -16,6 +16,7 @@ use CoreBundle\Model\Request\User\UserGetProfileRequest;
 use CoreBundle\Model\Request\User\UserPatchLagRequest;
 use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
+use CoreBundle\Model\Request\User\UserPostExternalAuthRequest;
 use CoreBundle\Model\Request\User\UserPostRegisterRequest;
 use CoreBundle\Entity\User;
 
@@ -32,6 +33,12 @@ interface UserProcessorInterface extends ProcessorInterface
      * @return User
      */
     public function processPostAuth(UserPostAuthRequest $request) : User;
+
+    /**
+     * @param UserPostExternalAuthRequest $request
+     * @return User
+     */
+    public function processPostExternalAuth(UserPostExternalAuthRequest $request) : User;
 
     /**
      * @param UserGetListRequest $listRequest

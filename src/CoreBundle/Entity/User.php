@@ -201,8 +201,6 @@ class User
      * @var int
      *
      * @ORM\Column(name="immortal_id", type="integer", nullable=true)
-     *
-     * @JMS\Exclude()
      */
     private $immortalId;
 
@@ -210,8 +208,6 @@ class User
      * @var string
      *
      * @ORM\Column(name="another_login", type="string", length=255, nullable=true)
-     *
-     * @JMS\Exclude()
      */
     private $anotherLogin;
 

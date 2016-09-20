@@ -13,7 +13,7 @@ use CoreBundle\Model\Request\RequestInterface;
 use Exception;
 use RuntimeException;
 
-class ProcessorException extends RuntimeException
+class ProcessorException extends RuntimeException implements ProcessorExceptionInterface
 {
     /**
      * @var RequestInterface

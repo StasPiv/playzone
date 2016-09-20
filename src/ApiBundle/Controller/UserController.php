@@ -13,6 +13,7 @@ use CoreBundle\Model\Request\User\UserPatchLagRequest;
 use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
 use CoreBundle\Model\Request\User\UserGetListRequest;
+use CoreBundle\Model\Request\User\UserPostExternalAuthRequest;
 use CoreBundle\Model\Request\User\UserPostRegisterRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -43,6 +44,15 @@ class UserController extends BaseController
     public function postAuthAction(Request $request)
     {
         return $this->process($request, new UserPostAuthRequest());
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function postExternalAuthAction(Request $request)
+    {
+        return $this->process($request, new UserPostExternalAuthRequest());
     }
 
     /**

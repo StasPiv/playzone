@@ -12,6 +12,11 @@ playzoneServices.factory('UserRest', function($resource, $rootScope, ApiService)
                 method: 'POST',
                 url: ApiService.base_url + 'user/auth'
             },
+            external_auth: {
+                method: 'POST',
+                url: ApiService.base_url + 'user/external/auth',
+                params: ApiService.getSecurityParams() // send with login and token
+            },
             register: {
                 method: 'POST',
                 url: ApiService.base_url + 'user/register'

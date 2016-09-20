@@ -6,6 +6,21 @@
 playzoneControllers.controller('MyProfileCtrl', function ($scope, $rootScope, UserRest, $cookies, WebsocketService) {
     $scope.user_setting = {};
 
+    $scope.immortalchessUser = {};
+    $scope.immortalSuccess = false;
+
+    $scope.immortalAuth = function () {
+        UserRest.external_auth(
+            $scope.immortalchessUser,
+            function () {
+                $scope.immortalSuccess = true;
+            },
+            function () {
+                $scope.immortalSuccess = false;
+            }
+        );
+    };
+
     $rootScope.user
         .$auth({
             login: $rootScope.user ? $rootScope.user.login : $cookies.get("user_login"),

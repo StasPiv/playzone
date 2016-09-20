@@ -26,9 +26,11 @@ use CoreBundle\Model\Request\User\UserGetProfileRequest;
 use CoreBundle\Model\Request\User\UserPatchLagRequest;
 use CoreBundle\Model\Request\User\UserPatchSettingRequest;
 use CoreBundle\Model\Request\User\UserPostAuthRequest;
+use CoreBundle\Model\Request\User\UserPostExternalAuthRequest;
 use CoreBundle\Model\Request\User\UserPostRegisterRequest;
 use CoreBundle\Model\Response\ResponseStatusCode;
 use CoreBundle\Entity\User;
+use CoreBundle\Model\User\UserInterface;
 use CoreBundle\Processor\UserProcessorInterface;
 use CoreBundle\Repository\UserRepository;
 use CoreBundle\Repository\UserSettingRepository;
@@ -37,6 +39,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class UserHandler
@@ -154,7 +157,10 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
                                          ->setPassword($request->getPassword())
                 );
 
-                $user = $event->getUser();
+                $user = (new User())->setLogin($event->getExternalUser()->getLogin())
+                                    ->setPassword(
+                        $this->generatePasswordHash($request->getPassword())
+                    )->setEmail($event->getExternalUser()->getEmail());
 
                 $this->saveUser($user);
             }
@@ -171,6 +177,31 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
         $this->initUserSettings($user);
 
         return $user;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function processPostExternalAuth(UserPostExternalAuthRequest $request) : User
+    {
+        $me = $this->getSecureUser($request);
+
+        $this->container->get("event_dispatcher")->dispatch(
+            UserEvents::USER_AUTH,
+            $event = (new UserAuthEvent())
+                ->setLogin($request->getExternalLogin())
+                ->setPassword($request->getPassword())
+        );
+
+        /** @var UserAuthEvent $event */
+        $externalUser = $event->getExternalUser();
+
+        $me->setImmortalId($externalUser->getId())
+           ->setAnotherLogin($externalUser->getLogin());
+
+        $this->saveUser($me);
+
+        return $me;
     }
 
     /**

@@ -167,7 +167,7 @@ class PlayzoneServer implements MessageComponentInterface, ContainerAwareInterfa
                 case PlayzoneClientMessageScope::STOP_SERVER:
                     die('SERVER STOPPED');
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->err("Error on message: " . $exception->getCode() . " " . $exception->getMessage() . ' ' . $exception->getFile() . ' ' . $exception->getLine());
             $from->send($exception->getMessage());
         }

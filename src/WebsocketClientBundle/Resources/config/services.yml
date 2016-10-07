@@ -12,3 +12,7 @@ services:
         - '@ws.playzone.client.sender'
       tags:
         - { name: kernel.event_subscriber }
+  ws.playzone.ping_server:
+      class: WebsocketClientBundle\Service\PingServerService
+      arguments:
+        - '@ws.playzone.client.sender'

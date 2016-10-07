@@ -819,7 +819,8 @@ class GameHandler implements GameProcessorInterface
                 ->throwException(ResponseStatusCode::FORBIDDEN);
         }
 
-        $game->setResultWhite(0)->setResultBlack(0)->setStatus(GameStatus::ABORTED);
+        $game->setResultWhite(0)->setResultBlack(0);
+        $this->changeGameStatus($game, GameStatus::ABORTED);
 
         $this->saveEntity($game);
 

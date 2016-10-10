@@ -119,3 +119,5 @@ services:
         class: CoreBundle\Service\RatingService
         tags:
           - { name: kernel.event_subscriber }
+        calls:
+          - [setContainer, ['@service_container']]

@@ -13,16 +13,21 @@ use CoreBundle\Entity\User;
 use CoreBundle\Model\Event\Game\GameEvent;
 use CoreBundle\Model\Event\Game\GameEvents;
 use CoreBundle\Model\Game\GameStatus;
+use Psr\Log\LoggerInterface;
 use StasPiv\EloCalculator\EloCalculator;
 use StasPiv\EloCalculator\Model\EloGame;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class RatingService
  * @package CoreBundle\Service
  */
-class RatingService implements EventSubscriberInterface
+class RatingService implements EventSubscriberInterface, ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     const WIN = 'win';
     /**
      * @var EloCalculator
@@ -71,6 +76,15 @@ class RatingService implements EventSubscriberInterface
         $eloGame = $this->getEloGame($game);
 
         $this->eloCalculator->calculate($eloGame);
+
+        $this->container->get('logger')->info(
+            __METHOD__ .
+            '. Game #' . $game->getId().
+            '. User white: '.$game->getUserWhite().
+            '. User white elo: '.$eloGame->getWhiteElo().
+            '. User black:'.$game->getUserBlack().
+            '. User black elo:'.$eloGame->getBlackElo()
+        );
 
         $game->getUserWhite()->setRating($eloGame->getWhiteElo());
         $game->getUserBlack()->setRating($eloGame->getBlackElo());

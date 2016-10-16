@@ -104,7 +104,7 @@ playzoneControllers.directive('chessBoardLegal', function (SettingService, $time
             scope.timeBegin = 0;
         }
 
-        if (delay && scope.game.id) {
+        if (delay && scope.game) {
             LogRest.log({
                 message: 'ANTIKILLER. '+type+'. '+$rootScope.user.login+
                 '. Game #'+scope.game.id+'. Time in ms' +' ='+delay

@@ -3,7 +3,7 @@
  */
 'use strict';
 
-playzoneControllers.directive('chessTimer', function (dateFilter, $interval, $timeout) {
+playzoneControllers.directive('chessTimer', function (dateFilter, $interval) {
     return {
         link: function (scope) {
             scope.$watch(
@@ -14,13 +14,10 @@ playzoneControllers.directive('chessTimer', function (dateFilter, $interval, $ti
             );
 
             var startTimer = function () {
-                scope.timeFormat = getBlitzTimeObject(scope.time);
-                var time = scope.time;
                 scope.timer = $interval(
                     function () {
-                        time-=scope.refreshTime;
-                        scope.timeFormat = getBlitzTimeObject(time);
-                        scope.time = time;
+                        scope.time-=scope.refreshTime;
+                        scope.timeFormat = getBlitzTimeObject(scope.time);
 
                         if (scope.time <= 0) {
                             scope.fixTime();

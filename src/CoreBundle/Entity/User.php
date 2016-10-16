@@ -360,6 +360,14 @@ class User
     private $engine = false;
 
     /**
+     * @inheritDoc
+     */
+    public function __construct()
+    {
+        $this->currentRating = $this->rating;
+    }
+
+    /**
      * Get id
      *
      * @return int

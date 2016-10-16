@@ -253,7 +253,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
     {
         try {
             $user = $this->getRepository()->find($request->getId());
-            $user->setPgnLink($this->getHttpPgnLink($user));
+            $user->setPgnLink($this->getHttpPgnLink($user))->setCurrentRating($user->getRating());
             return $user;
         } catch (UserNotFoundException $e) {
             $this->getRequestError()->addError("user_id", "User not found")

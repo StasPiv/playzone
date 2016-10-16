@@ -80,11 +80,11 @@ class RatingService implements EventSubscriberInterface, ContainerAwareInterface
         $this->container->get('logger')->info(
             __METHOD__ .
             '. Game #' . $game->getId().
-            '. Result: ' . $game->getResultWhite().'-'.$game->getResultBlack().
             '. User white: '.$game->getUserWhite().
             '. User white elo: '.$game->getUserWhite()->getRating().'->'.$eloGame->getWhiteElo().
             '. User black: '.$game->getUserBlack().
-            '. User black elo: '.$game->getUserBlack()->getRating().'->'.$eloGame->getBlackElo()
+            '. User black elo: '.$game->getUserBlack()->getRating().'->'.$eloGame->getBlackElo().
+            '. Result: ' . $game->getResultWhite().'-'.$game->getResultBlack()
         );
 
         $game->getUserWhite()->setRating($eloGame->getWhiteElo());

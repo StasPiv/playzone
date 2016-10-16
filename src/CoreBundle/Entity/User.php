@@ -143,6 +143,14 @@ class User
     /**
      * @var int
      *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     */
+    private $currentRating = 1800;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="win", type="integer")
      *
      * @JMS\Expose
@@ -903,6 +911,25 @@ class User
     public function setSetting(UserSetting $userSetting) : User
     {
         $this->settings[$userSetting->getName()] = $userSetting;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentRating(): int
+    {
+        return $this->currentRating;
+    }
+
+    /**
+     * @param int $currentRating
+     * @return User
+     */
+    public function setCurrentRating(int $currentRating): self
+    {
+        $this->currentRating = $currentRating;
+
         return $this;
     }
 

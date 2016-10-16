@@ -2,6 +2,6 @@
     {{ user.login }}
     <span class="bot" ng-if="user.engine">(bot)</span>
     <span class="rating" ng-if="user.rating && !withoutrating" ng-class="{'beginner-rating': user.rate_games_count <= 10}">
-        ({{ rating ? rating : user.rating }})
+        ({{ rating ? rating : user.current_rating }})
     </span>
 </a>

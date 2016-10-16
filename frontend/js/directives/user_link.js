@@ -15,6 +15,6 @@ playzoneControllers.directive('userLink', function () {
             withoutrating: '=',
             rating: '='
         },
-        templateUrl: 'partials/user_link.html?v=5'
+        templateUrl: 'partials/user_link.html?v=6'
     }
 });

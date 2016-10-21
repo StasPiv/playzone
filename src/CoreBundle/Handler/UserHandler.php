@@ -467,6 +467,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
         $users = $this->repository->createQueryBuilder("u")
                       ->where("u.online = 1")
                       ->getQuery()
+                      ->useQueryCache(false)
                       ->getResult();
 
         foreach ($users as $user) {
@@ -496,9 +497,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
      */
     public function onUserIn(UserEvent $event)
     {
-        $this->saveUser(
-            $event->getUser()->setOnline(true)
-        );
+        $this->switchUserOnline($event, 0);
     }
 
     /**
@@ -506,9 +505,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
      */
     public function onUserOut(UserEvent $event)
     {
-        $this->saveUser(
-            $event->getUser()->setOnline(false)
-        );
+        $this->switchUserOnline($event, 1);
     }
 
     /**
@@ -544,5 +541,19 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param UserEvent $event
+     * @param int $value
+     */
+    private function switchUserOnline(UserEvent $event, int $value)
+    {
+        $this->manager->createQueryBuilder()->update('CoreBundle:User', 'u')
+            ->set('u.online', $value)
+            ->where('u.id = :uid')
+            ->setParameter('uid', $event->getUser()->getId())
+            ->getQuery()
+            ->execute();
     }
 }

@@ -180,6 +180,8 @@ class CallHandler implements CallProcessorInterface
 
         $this->manager->flush();
 
+        $this->container->get('logger')->debug(__METHOD__.'. After flush rating '.$gameCall->getFromUser().' = '.$gameCall->getFromUser()->getRating().' and rating '.$gameCall->getToUser().' = '.$gameCall->getToUser()->getRating());
+
         return $gameCall;
     }
 

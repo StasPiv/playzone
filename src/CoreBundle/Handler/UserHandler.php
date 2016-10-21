@@ -497,7 +497,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
      */
     public function onUserIn(UserEvent $event)
     {
-        $this->switchUserOnline($event, 0);
+        $this->switchUserOnline($event, 1);
     }
 
     /**
@@ -505,7 +505,7 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
      */
     public function onUserOut(UserEvent $event)
     {
-        $this->switchUserOnline($event, 1);
+        $this->switchUserOnline($event, 0);
     }
 
     /**

@@ -13,6 +13,7 @@ use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\TournamentPlayer;
 use CoreBundle\Exception\Handler\Event\EventAlreadyFoundException;
 use CoreBundle\Exception\Handler\Tournament\TournamentGameNotFoundException;
+use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
 use CoreBundle\Model\Event\EventCommandInterface;
 use CoreBundle\Model\Event\EventInterface;
 use CoreBundle\Model\Event\Game\GameEvent;
@@ -66,9 +67,13 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
     {
         $tournamentId = $this->tournamentContainer->getTournamentId();
 
-        $this->container->get('core.handler.tournament')->addPlayersIntoTournament(
-            $tournamentId, $this->container->getParameter('app_bots_to_previous_record')
-        );
+        try {
+            $this->container->get('core.handler.tournament')->addPlayersIntoTournament(
+                $tournamentId, $this->container->getParameter('app_bots_to_previous_record')
+            );
+        } catch (TournamentNotFoundException $e) {
+            return;
+        }
 
         $tournament = $this->getTournamentHandler()
                            ->getRepository()->find($tournamentId);

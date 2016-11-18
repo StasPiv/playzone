@@ -351,7 +351,7 @@ class TournamentPlayer
      */
     public function getOpponents() : array 
     {
-        return $this->opponents;
+        return (array)$this->opponents;
     }
 
     /**

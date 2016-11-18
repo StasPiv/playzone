@@ -117,7 +117,7 @@ class TournamentPlayer
      *
      * @JMS\Exclude()
      */
-    private $opponents;
+    private $opponents = [];
 
     /**
      * @var string

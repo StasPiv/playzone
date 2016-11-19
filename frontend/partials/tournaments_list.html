@@ -30,7 +30,7 @@
                 <a href="">{{ tournament.tournament_params.type | translate }}</a>
             </td>
             <td>
-                <a href="">{{ tournament.tournament_params.time_begin }}</a>
+                <a href="">{{ tournament.tournament_params.time_begin * 1000 |  date:'dd.MM.yyyy HH:mm:ss' }}</a>
             </td>
             <td>
                 <tournament-record

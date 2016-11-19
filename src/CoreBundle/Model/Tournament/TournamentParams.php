@@ -16,7 +16,7 @@ abstract class TournamentParams
     /**
      * @var DateTime
      * 
-     * @JMS\Type("DateTime<'d.m.Y H:i:s'>")
+     * @JMS\Type("DateTime<'U'>")
      */
     private $timeBegin;
 

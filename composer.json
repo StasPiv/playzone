@@ -55,7 +55,7 @@
         "symfony/phpunit-bridge": "^2.7",
         "phpunit/phpunit-mock-objects": "^3.0",
         "phpunit/phpunit": "5.2.8",
-        "phpunit/php-invoker": "dev-master",
+        "phpunit/php-invoker": "~1.1",
         "phpunit/dbunit": "~1.2",
         "phpmd/phpmd": "dev-master",
         "phpunit/php-code-coverage": "^3.2.1",

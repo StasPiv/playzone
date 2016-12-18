@@ -15,8 +15,8 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 }
             }).
             when('/register', {
-                templateUrl: 'partials/register.html',
-                controller: 'RegisterCtrl',
+                templateUrl: 'partials/auth.html',
+                controller: 'AuthCtrl',
                 resolve: {
                     factory: checkIfUnauthorized
                 }
@@ -32,7 +32,10 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 templateUrl: 'partials/games.html?v=1.0.1',
                 controller: 'GamesCtrl',
                 resolve: {
-                    factory: checkIfAuthorized
+                    factory: checkIfAuthorized,
+                    current: function (GameRest) {
+                        return GameRest.query({status: "play", user:"all"}).$promise;
+                    }
                 }
             }).
             when('/play/:gameId', {

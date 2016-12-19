@@ -90,8 +90,9 @@ class GranPriCalculator
             }
         );
 
+        $i = 0;
         foreach ($players as $player) {
-            $this->placesMap[$tournament->getId()][$player->getId()] = $player->getPlace();
+            $this->placesMap[$tournament->getId()][$player->getId()] = $i++;
         }
 
         return $this->placesMap[$tournament->getId()];

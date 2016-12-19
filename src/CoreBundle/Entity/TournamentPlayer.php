@@ -143,6 +143,11 @@ class TournamentPlayer
     private $rating;
 
     /**
+     * @var int
+     */
+    private $place;
+
+    /**
      * @return int
      */
     public function getId() : int
@@ -425,6 +430,25 @@ class TournamentPlayer
     public function setRating(int $rating): self
     {
         $this->rating = $rating;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPlace(): int
+    {
+        return $this->place;
+    }
+
+    /**
+     * @param int $place
+     * @return TournamentPlayer
+     */
+    public function setPlace(int $place): self
+    {
+        $this->place = $place;
 
         return $this;
     }

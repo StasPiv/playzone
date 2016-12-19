@@ -121,3 +121,7 @@ services:
           - { name: kernel.event_subscriber }
         calls:
           - [setContainer, ['@service_container']]
+    core.service.granpri.calculator:
+        class: CoreBundle\Service\GranPriCalculator
+        calls:
+          - [setContainer, ['@service_container']]

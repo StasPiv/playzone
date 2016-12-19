@@ -33,7 +33,7 @@ class TournamentRepository extends EntityRepository
     public function find($id, $lockMode = null, $lockVersion = null) : Tournament
     {
         $tournament = parent::find($id, $lockMode, $lockVersion);
-        
+
         if (!$tournament instanceof Tournament) {
             throw new TournamentNotFoundException;
         }
@@ -55,6 +55,17 @@ class TournamentRepository extends EntityRepository
         }
 
         return $tournament;
+    }
+
+    /**
+     * @param int $firstId
+     * @return Tournament[]
+     */
+    public function findLastTournaments(int $firstId)
+    {
+        return $this->createQueryBuilder('t')->where('t.id >= :first')
+                    ->setParameter('first', $firstId)
+                    ->getQuery()->getResult();
     }
 
 }

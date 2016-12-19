@@ -2,7 +2,7 @@
 
 Top-10
 [TABLE 1 8 0]#|[B]Игрок[/B]|[B]Очки[/B]
-{% for firstPlayer in players if loop.index <= 10 %}
+{% for firstPlayer in players|slice(0, 10) %}
 {{ loop.index }}|[URL="http://playzone.immortalchess.net/#/user/{{ firstPlayer.player.id }}/profile"][SIZE="3"]{{ firstPlayer.player.login }}[/SIZE][/URL]|{{ firstPlayer.sum }}
 {% endfor  %}[/TABLE]
 

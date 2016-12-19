@@ -60,6 +60,7 @@ class GranPriCalculator implements EventSubscriberInterface
      */
     private function calculate()
     {
+        echo 'here';
         $playerRepository = $this->container->get('doctrine')->getRepository('CoreBundle:TournamentPlayer');
 
         $tournamentRepository = $this->container->get('doctrine')->getRepository('CoreBundle:Tournament');

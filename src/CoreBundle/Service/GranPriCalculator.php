@@ -10,6 +10,7 @@ namespace CoreBundle\Service;
 
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\TournamentPlayer;
+use CoreBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
@@ -24,6 +25,11 @@ class GranPriCalculator
      * @var array
      */
     private $placesMap = [];
+
+    /**
+     * @var array
+     */
+    private $usersMap = [];
 
     //todo: need to implement logic for separate simple tournaments from granpri
     const FIRST_TOURNAMENT = 2128;
@@ -54,26 +60,38 @@ class GranPriCalculator
             $granPriPointsMap[$player->getPlayer()->getId()][$player->getTournament()->getTournamentParams()->getTimeBegin()->format('W')][$player->getTournament()->getId()] = count($player->getTournament()->getPlayers()) - $this->getPlacesMap($player->getTournament())[$player->getId()];
         }
 
-        var_export($granPriPointsMap);
+        $bestPlayers = [];
 
-        $bestResults = [];
-
-        foreach ($granPriPointsMap as $playerId => $weekResults) {
+        foreach ($granPriPointsMap as $userId => $weekResults) {
             foreach ($weekResults as $week => $weekPoints) {
                 rsort($weekPoints);
                 $twoBest = array_slice($weekPoints, 0, 2);
 
-                if (!isset($bestResults[$playerId])) {
-                    $bestResults[$playerId] = array_sum($twoBest);
+                if (!isset($bestPlayers[$userId])) {
+                    $bestPlayers[$userId] = [
+                        'player' => $this->getUserFromMap($userId),
+                        'sum' => array_sum($twoBest)
+                    ];
                 } else {
-                    $bestResults[$playerId] += array_sum($twoBest);
+                    $bestPlayers[$userId]['sum'] += array_sum($twoBest);
                 }
             }
         }
 
-        ksort($bestResults);
+        uksort(
+            $bestPlayers,
+            function (array $first, array $second)
+            {
+                return $second['sum'] <=> $first['sum'];
+            }
+        );
 
-        var_export($bestResults);
+        echo $this->container->get("templating")->render(
+            'Post/granpri.html.twig',
+            [
+                'players' => $bestPlayers
+            ]
+        );
     }
 
     /**
@@ -103,5 +121,18 @@ class GranPriCalculator
         }
 
         return $this->placesMap[$tournament->getId()];
+    }
+
+    /**
+     * @param int $userId
+     * @return User
+     */
+    private function getUserFromMap(int $userId): User
+    {
+        if (isset($this->usersMap[$userId])) {
+            return $this->usersMap[$userId];
+        }
+
+        return $this->usersMap[$userId] = $this->container->get('doctrine')->getRepository('CoreBundle:User')->find($userId);
     }
 }

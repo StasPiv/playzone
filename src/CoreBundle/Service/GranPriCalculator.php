@@ -91,7 +91,7 @@ class GranPriCalculator
 
         usort(
             $players,
-            function (TournamentPlayer $playerA, TournamentPlayer $playerB)
+            function (TournamentPlayer $playerB, TournamentPlayer $playerA)
             {
                 return 1000 * $playerA->getPoints() + $playerA->getCoefficient() <=> 1000 * $playerB->getPoints() + $playerB->getCoefficient();
             }

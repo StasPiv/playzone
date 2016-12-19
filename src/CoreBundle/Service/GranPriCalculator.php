@@ -59,11 +59,11 @@ class GranPriCalculator
         $bestResults = [];
 
         foreach ($granPriPointsMap as $playerId => $weekResults) {
-            sort($weekResults);
-
-            $twoBest = array_slice($weekResults, 0, 2);
-
-            $bestResults[$playerId] += array_sum($twoBest);
+            foreach ($weekResults as $week => $weekPoints) {
+                sort($weekPoints);
+                $twoBest = array_slice($weekResults, 0, 2);
+                $bestResults[$playerId] += array_sum($twoBest);
+            }
         }
 
         ksort($bestResults);

@@ -54,7 +54,7 @@ class GranPriCalculator
             $granPriPointsMap[$player->getPlayer()->getId()][$player->getTournament()->getTournamentParams()->getTimeBegin()->format('W')][$player->getTournament()->getId()] = count($player->getTournament()->getPlayers()) - $this->getPlacesMap($player->getTournament())[$player->getId()];
         }
 
-        var_dump($granPriPointsMap);
+        var_export($granPriPointsMap);
 
         $bestResults = [];
 
@@ -73,7 +73,7 @@ class GranPriCalculator
 
         ksort($bestResults);
 
-        var_dump($bestResults);
+        var_export($bestResults);
     }
 
     /**

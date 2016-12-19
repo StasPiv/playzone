@@ -78,7 +78,7 @@ class GranPriCalculator
             }
         }
 
-        uksort(
+        usort(
             $bestPlayers,
             function (array $first, array $second)
             {

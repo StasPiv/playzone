@@ -174,7 +174,7 @@ class GranPriCalculator implements EventSubscriberInterface
     {
         return [
             TournamentEvents::TOURNAMENT_FINISHED => [
-                ['onTournamentFinish', 10]
+                ['onTournamentFinish', 30]
             ]
         ];
     }

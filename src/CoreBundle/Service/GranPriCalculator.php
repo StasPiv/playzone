@@ -45,13 +45,13 @@ class GranPriCalculator
 
         $tournamentRepository = $this->container->get('doctrine')->getRepository('CoreBundle:Tournament');
 
-
+        /** @var TournamentPlayer[] $players */
         $players = $playerRepository->findBy(['tournament' => $tournamentRepository->findLastTournaments(self::FIRST_TOURNAMENT)]);
 
         $granPriPointsMap = [];
 
         foreach ($players as $player) {
-            $granPriPointsMap[$player->getPlayer()->getId()][$player->getTournament()->getTournamentParams()->getTimeBegin()->format('W')][] = count($player->getTournament()->getPlayers()) - $this->getPlacesMap($player->getTournament())[$player->getId()] + 1;
+            $granPriPointsMap[$player->getPlayer()->getId()][$player->getTournament()->getTournamentParams()->getTimeBegin()->format('W')][$player->getTournament()->getId()] = count($player->getTournament()->getPlayers()) - $this->getPlacesMap($player->getTournament())[$player->getId()] + 1;
         }
 
         var_dump($granPriPointsMap);

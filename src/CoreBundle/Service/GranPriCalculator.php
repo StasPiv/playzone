@@ -54,6 +54,8 @@ class GranPriCalculator
             $granPriPointsMap[$player->getPlayer()->getId()][$player->getTournament()->getTournamentParams()->getTimeBegin()->format('W')][] = count($player->getTournament()->getPlayers()) - $this->getPlacesMap($player->getTournament())[$player->getId()] + 1;
         }
 
+        var_dump($granPriPointsMap);
+
         $bestResults = [];
 
         foreach ($granPriPointsMap as $playerId => $weekResults) {

@@ -11,14 +11,17 @@ namespace CoreBundle\Service;
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\TournamentPlayer;
 use CoreBundle\Entity\User;
+use CoreBundle\Model\Event\Tournament\TournamentContainer;
+use CoreBundle\Model\Event\Tournament\TournamentEvents;
 use ImmortalchessNetBundle\Model\Post;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class GranPriCalculator
  * @package CoreBundle\Service
  */
-class GranPriCalculator
+class GranPriCalculator implements EventSubscriberInterface
 {
     use ContainerAwareTrait;
 
@@ -97,13 +100,6 @@ class GranPriCalculator
         );
 
         $this->players = $bestPlayers;
-
-        echo $this->container->get("templating")->render(
-            'Post/granpri.html.twig',
-            [
-                'players' => $bestPlayers
-            ]
-        );
     }
 
     /**
@@ -169,5 +165,25 @@ class GranPriCalculator
                 )
             )
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            TournamentEvents::TOURNAMENT_FINISHED => [
+                ['onTournamentFinish', 10]
+            ]
+        ];
+    }
+
+    /**
+     * @param TournamentContainer $tournamentContainer
+     */
+    public function onTournamentFinish(TournamentContainer $tournamentContainer)
+    {
+        $this->process(true);
     }
 }

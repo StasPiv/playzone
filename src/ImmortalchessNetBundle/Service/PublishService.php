@@ -25,12 +25,14 @@ class PublishService
     use ContainerAwareTrait;
 
     /**
+     * @param int $postId
      * @param PostModel $postModel
-     * @throws \Doctrine\DBAL\DBALException
      */
-    public function publishNewPost(PostModel $postModel)
+    public function editPost(int $postId, PostModel $postModel)
     {
-        $post = (new Post())->setThreadid($postModel->getThreadId())
+        $post = $this->getManager()->find('ImmortalchessNetBundle:Post', $postId);
+
+        $post->setThreadid($postModel->getThreadId())
             ->setParentid(0)
             ->setUsername($postModel->getLastPosterName())
             ->setUserid($postModel->getLastPosterId())
@@ -83,6 +85,72 @@ class PublishService
         
         $this->getManager()->persist($forum);
         
+        try {
+            $this->getManager()->flush();
+        } catch (\Exception $e) {
+            $this->container->get("logger")->error(__METHOD__ . " " . $e->getMessage());
+        }
+    }
+
+    /**
+     * @param PostModel $postModel
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function publishNewPost(PostModel $postModel)
+    {
+        $post = (new Post())->setThreadid($postModel->getThreadId())
+            ->setParentid(0)
+            ->setUsername($postModel->getLastPosterName())
+            ->setUserid($postModel->getLastPosterId())
+            ->setTitle($postModel->getTitle())
+            ->setPagetext($postModel->getPageText())
+            ->setVisible(1)
+            ->setDateline(time());
+
+        $this->getManager()->persist($post);
+
+        try {
+            $this->getManager()->flush();
+        } catch (\Exception $e) {
+            $this->container->get("logger")->error(__METHOD__ . " " . $e->getMessage());
+        }
+
+        try {
+            $thread = $this->getManager()->getRepository("ImmortalchessNetBundle:Thread")
+                ->find($post->getThreadid());
+        } catch (ThreadNotFoundException $e) {
+            $this->container->get("logger")->error("Thread #" . $post->getThreadid() . " is not found");
+            return;
+        }
+
+        $thread->setLastpostid($post->getPostid())
+               ->setLastpost($post->getDateline())
+               ->setLastposter($post->getUsername())
+               ->setThreadid($post->getThreadid())
+               ->setReplycount($thread->getReplycount() + 1);
+
+        if (!empty($postModel->getThreadTitle())) {
+            $thread->setTitle($postModel->getThreadTitle());
+        }
+
+        $this->getManager()->persist($thread);
+
+        try {
+            $forum = $this->getManager()->getRepository("ImmortalchessNetBundle:Forum")
+                ->find($thread->getForumid());
+        } catch (ForumNotFoundException $e) {
+            $this->container->get("logger")->error("Forum #" . $thread->getForumid() . " is not found");
+            return;
+        }
+
+        $forum->setLastpostid($post->getPostid())
+              ->setLastpost($post->getDateline())
+              ->setLastposter($post->getUsername())
+              ->setLastthreadid($post->getThreadid())
+              ->setLastthread($thread->getTitle());
+
+        $this->getManager()->persist($forum);
+
         try {
             $this->getManager()->flush();
         } catch (\Exception $e) {

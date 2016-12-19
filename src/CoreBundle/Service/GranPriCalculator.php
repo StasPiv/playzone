@@ -11,6 +11,7 @@ namespace CoreBundle\Service;
 use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\TournamentPlayer;
 use CoreBundle\Entity\User;
+use ImmortalchessNetBundle\Model\Post;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
@@ -31,6 +32,11 @@ class GranPriCalculator
      */
     private $usersMap = [];
 
+    /**
+     * @var array
+     */
+    private $players;
+
     //todo: need to implement logic for separate simple tournaments from granpri
     const FIRST_TOURNAMENT = 2128;
 
@@ -40,6 +46,10 @@ class GranPriCalculator
     public function process(bool $publish = true)
     {
         $this->calculate();
+
+        if ($publish) {
+            $this->publish();
+        }
     }
 
     /**
@@ -85,6 +95,8 @@ class GranPriCalculator
                 return $second['sum'] <=> $first['sum'];
             }
         );
+
+        $this->players = $bestPlayers;
 
         echo $this->container->get("templating")->render(
             'Post/granpri.html.twig',
@@ -134,5 +146,28 @@ class GranPriCalculator
         }
 
         return $this->usersMap[$userId] = $this->container->get('doctrine')->getRepository('CoreBundle:User')->find($userId);
+    }
+
+    /**
+     *
+     */
+    private function publish()
+    {
+        $this->container->get("immortalchessnet.service.publish")->editPost(
+            739159,
+            new Post(
+                $this->container->getParameter("app_immortalchess.forum_playzone"),
+                32697,
+                'PozitiFF_Chess',
+                87,
+                'Общий зачет гран-при',
+                $this->container->get("templating")->render(
+                    'Post/granpri.html.twig',
+                    [
+                        'players' => $this->players
+                    ]
+                )
+            )
+        );
     }
 }

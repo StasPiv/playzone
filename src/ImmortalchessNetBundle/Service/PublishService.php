@@ -38,8 +38,7 @@ class PublishService
             ->setUserid($postModel->getLastPosterId())
             ->setTitle($postModel->getTitle())
             ->setPagetext($postModel->getPageText())
-            ->setVisible(1)
-            ->setDateline(time());
+            ->setVisible(1);
 
         $this->getManager()->persist($post);
 

@@ -76,13 +76,19 @@ class GranPriCalculator implements EventSubscriberInterface
         $bestPlayers = [];
 
         foreach ($granPriPointsMap as $userId => $weekResults) {
+            $user = $this->getUserFromMap($userId);
+
+            if ($user->isEngine() || $user->isBanned()) {
+                continue;
+            }
+
             foreach ($weekResults as $week => $weekPoints) {
                 rsort($weekPoints);
                 $twoBest = array_slice($weekPoints, 0, 2);
 
                 if (!isset($bestPlayers[$userId])) {
                     $bestPlayers[$userId] = [
-                        'player' => $this->getUserFromMap($userId),
+                        'player' => $user,
                         'sum' => array_sum($twoBest)
                     ];
                 } else {

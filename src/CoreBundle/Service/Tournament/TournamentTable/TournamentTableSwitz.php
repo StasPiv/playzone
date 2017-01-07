@@ -9,6 +9,7 @@
 namespace CoreBundle\Service\Tournament\TournamentTable;
 
 use CoreBundle\Entity\Tournament;
+use CoreBundle\Entity\TournamentGame;
 use CoreBundle\Model\Game\GameColor;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Model\Tournament\TournamentGame\TournamentGameSwitz;
@@ -61,6 +62,20 @@ class TournamentTableSwitz implements TournamentTableInterface
         }
 
         $tournament->setResultsForSwiss($gamesMap);
+        $this->mixAllGames($tournament);
+    }
+
+    /**
+     * @param Tournament $tournament
+     */
+    private function mixAllGames(Tournament $tournament)
+    {
+        $games = [];
+        foreach ($tournament->getGames() as $tournamentGame) {
+            /** @var TournamentGame $tournamentGame */
+            $games[] = $tournamentGame->getGame();
+        }
+        $tournament->setAllGames($games);
     }
 
 }

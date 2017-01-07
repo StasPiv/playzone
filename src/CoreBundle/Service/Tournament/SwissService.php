@@ -69,10 +69,15 @@ class SwissService implements TournamentDrawInterface
      */
     public function makeDraw(Tournament $tournament, int $round)
     {
+        $connection = $this->manager->getConnection();
+
+        $connection->beginTransaction();
         try {
             $this->processDraw($tournament, $round);
             $this->manager->flush();
+            $connection->commit();
         } catch (TournamentDrawIncorrectException $e) {
+            $connection->rollBack();
             $this->container->get("logger")->debug("DRAW no opponents: " . $e->getMessage());
             $this->makeDraw($tournament, $round);
         }

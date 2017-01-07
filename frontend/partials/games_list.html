@@ -13,7 +13,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="game in games">
+        <tr ng-repeat="game in games | orderBy:'-id'">
             <td>
                 <a href="/#/play/{{ game.id }}">
                     {{game.id}}

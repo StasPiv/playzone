@@ -12,14 +12,19 @@
             <td class="player"><user-link data-user="swissPlayer.player" data-rating="swissPlayer.rating"></user-link></td>
             <td
                     ng-repeat="roundForPlayer in tournament.results_for_swiss[swissPlayer.id].rounds"
-                    ng-class="{
-                    draw: roundForPlayer.result == 0.5,
-                    win: roundForPlayer.result == 1,
-                    lost: roundForPlayer.result == 0}"
             >
                 <div>
-                    <a href="/#/play/{{ roundForPlayer.game_id }}">
+                    <a ng-if="roundForPlayer.game_id" ng-class="{
+                    draw: roundForPlayer.result == 0.5,
+                    win: roundForPlayer.result == 1,
+                    lost: roundForPlayer.result == 0
+                    }"
+                       href="/#/play/{{ roundForPlayer.game_id }}"
+                    >
                         {{ beautyResult(roundForPlayer.result) }}
+                    </a>
+                    <a ng-if="!roundForPlayer.game_id" class="win">
+                        1 (+)
                     </a>
                 </div>
                 <div class="swiss-opponent">

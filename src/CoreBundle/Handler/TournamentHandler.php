@@ -559,7 +559,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
             (new TournamentContainer())->setTournament($tournament)
         );
         
-        $this->recalculateCoefficients($tournament);
+        $this->recalculatePointsAndCoefficients($tournament);
 
         if ($tournament->getRounds() == $tournament->getCurrentRound()) {
             $this->changeTournamentStatus($tournament, TournamentStatus::END());
@@ -772,7 +772,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
     /**
      * @param int $tournamentId
      */
-    public function recalculateCoefficientsById(int $tournamentId)
+    public function recalculatePointsAndCoefficientsById(int $tournamentId)
     {
         try {
             $tournament = $this->repository->find($tournamentId);
@@ -781,61 +781,15 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
             return;
         }
         
-        $this->recalculateCoefficients($tournament);
+        $this->recalculatePointsAndCoefficients($tournament);
     }
 
     /**
      * @param Tournament $tournament
      */
-    private function recalculateCoefficients(Tournament $tournament)
+    private function recalculatePointsAndCoefficients(Tournament $tournament)
     {
-        foreach ($tournament->getPlayers() as $tournamentPlayer) {
-            $tournamentPlayer->setCoefficient(0)->setPoints(0);
-        }
-        
-        foreach ($tournament->getGames() as $tournamentGame) {
-            $this->updatePoints(
-                $tournamentGame->getPlayerWhite(),
-                $tournamentGame->getGame()->getResultWhite()
-            );
-
-            $this->updatePoints(
-                $tournamentGame->getPlayerBlack(),
-                $tournamentGame->getGame()->getResultBlack()
-            );
-        }
-
-        foreach ($tournament->getGames() as $tournamentGame) {
-            $this->updateCoefficients(
-                $tournamentGame->getPlayerWhite(),
-                $tournamentGame->getPlayerBlack(),
-                $tournamentGame->getGame()->getResultWhite()
-            );
-
-            $this->updateCoefficients(
-                $tournamentGame->getPlayerBlack(),
-                $tournamentGame->getPlayerWhite(),
-                $tournamentGame->getGame()->getResultBlack()
-            );
-
-            $this->manager->persist($tournamentGame->getPlayerWhite());
-            $this->manager->persist($tournamentGame->getPlayerBlack());
-        }
-        
-        $this->manager->flush();
-    }
-
-    /**
-     * @param TournamentPlayer $player
-     * @param float $result
-     */
-    private function updatePoints(
-        TournamentPlayer $player,
-        float $result
-    ) {
-        $player->setPoints(
-            $player->getPoints() + $result
-        );
+        $this->createCalculatorInstance($tournament)->calculate($tournament);
     }
 
     /**
@@ -848,9 +802,8 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         TournamentPlayer $opponent,
         float $result
     ) {
-        $player->setCoefficient(
-            $player->getCoefficient() + $result * $opponent->getPoints()
-        );
+        $this->createCalculatorInstance($player->getTournament())
+             ->updateCoefficients($player, $opponent, $result);
     }
 
     /**
@@ -881,5 +834,14 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         }
 
         return false;
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @return \CoreBundle\Model\Tournament\TournamentCalculatorInterface
+     */
+    private function createCalculatorInstance(Tournament $tournament)
+    {
+        return $this->container->get("core.service.calculator.factory")->create($tournament);
     }
 }

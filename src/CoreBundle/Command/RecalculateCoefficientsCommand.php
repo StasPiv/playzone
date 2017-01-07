@@ -33,6 +33,6 @@ class RecalculateCoefficientsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->getContainer()->get("core.handler.tournament")
-            ->recalculateCoefficientsById($input->getArgument("tournament"));
+            ->recalculatePointsAndCoefficientsById($input->getArgument("tournament"));
     }
 }

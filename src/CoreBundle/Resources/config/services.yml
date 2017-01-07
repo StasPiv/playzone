@@ -75,6 +75,11 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         calls:
           - [setContainer, ['@service_container']]
+    core.service.calculator.factory:
+        class: CoreBundle\Service\Tournament\TournamentCalculatorFactoryService
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+          - [setContainer, ['@service_container']]
     core.service.tournament_table.factory:
         class: CoreBundle\Service\Tournament\TournamentTable\TournamentTableFactory
     core.service.chess.uci:

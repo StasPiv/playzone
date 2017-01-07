@@ -15,6 +15,7 @@ use CoreBundle\Exception\Handler\Tournament\TournamentGameShouldBeSkippedExcepti
 use CoreBundle\Exception\Handler\Tournament\TournamentRoundAlreadyExistsException;
 use CoreBundle\Handler\TournamentHandler;
 use CoreBundle\Model\Game\GameColor;
+use CoreBundle\Model\Tournament\TournamentCalculatorInterface;
 use CoreBundle\Model\Tournament\TournamentDrawInterface;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -23,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
  * Class RoundrobinService
  * @package CoreBundle\Service\Tournament
  */
-class RoundrobinService implements TournamentDrawInterface
+class RoundrobinService implements TournamentDrawInterface, TournamentCalculatorInterface
 {
     use ContainerAwareTrait;
 
@@ -256,5 +257,72 @@ class RoundrobinService implements TournamentDrawInterface
                 }
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function calculate(Tournament $tournament)
+    {
+        foreach ($tournament->getPlayers() as $tournamentPlayer) {
+            $tournamentPlayer->setCoefficient(0)->setPoints(0);
+        }
+
+        foreach ($tournament->getGames() as $tournamentGame) {
+            $this->updatePoints(
+                $tournamentGame->getPlayerWhite(),
+                $tournamentGame->getGame()->getResultWhite()
+            );
+
+            $this->updatePoints(
+                $tournamentGame->getPlayerBlack(),
+                $tournamentGame->getGame()->getResultBlack()
+            );
+        }
+
+        foreach ($tournament->getGames() as $tournamentGame) {
+            $this->updateCoefficients(
+                $tournamentGame->getPlayerWhite(),
+                $tournamentGame->getPlayerBlack(),
+                $tournamentGame->getGame()->getResultWhite()
+            );
+
+            $this->updateCoefficients(
+                $tournamentGame->getPlayerBlack(),
+                $tournamentGame->getPlayerWhite(),
+                $tournamentGame->getGame()->getResultBlack()
+            );
+
+            $this->manager->persist($tournamentGame->getPlayerWhite());
+            $this->manager->persist($tournamentGame->getPlayerBlack());
+        }
+
+        $this->manager->flush();
+    }
+
+    /**
+     * @param TournamentPlayer $player
+     * @param float $result
+     */
+    private function updatePoints(
+        TournamentPlayer $player,
+        float $result
+    ) {
+        $player->setPoints(
+            $player->getPoints() + $result
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateCoefficients(
+        TournamentPlayer $player,
+        TournamentPlayer $opponent,
+        float $result
+    ) {
+        $player->setCoefficient(
+            $player->getCoefficient() + $result * $opponent->getPoints()
+        );
     }
 }

@@ -628,7 +628,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         $playerBlack->setBlackInRow($playerBlack->getBlackInRow() + 1)->setWhiteInRow(0);
 
         $playerWhite->setCountWhite($playerWhite->getCountWhite() + 1);
-        $playerBlack->setCountBlack($playerWhite->getCountBlack() + 1);
+        $playerBlack->setCountBlack($playerBlack->getCountBlack() + 1);
 
         $playerWhite->addOpponent($playerBlack->getPlayer());
         $playerBlack->addOpponent($playerWhite->getPlayer());

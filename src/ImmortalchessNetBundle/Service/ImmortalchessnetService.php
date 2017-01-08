@@ -151,6 +151,17 @@ class ImmortalchessnetService implements EventSubscriberInterface
              ->create($tournament->getTournamentParams()->getType())
              ->mixTournamentTable($tournament);
 
+        switch ($tournament->getTournamentParams()->getType()) {
+            case TournamentType::ROUND_ROBIN():
+                $templateName = "Post/tournamenttable_round_robin.html.twig";
+                break;
+            case TournamentType::SWITZ():
+                $templateName = "Post/tournamenttable_swiss.html.twig";
+                break;
+            default:
+                $templateName = "Post/tournamenttable_round_robin.html.twig";
+        }
+
         $this->container->get("immortalchessnet.service.publish")->publishNewPost(
             new Post(
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
@@ -159,7 +170,7 @@ class ImmortalchessnetService implements EventSubscriberInterface
                 $this->container->getParameter("app_immortalchess.post_userid_for_calls"),
                 "Турнир #{$tournament->getName()} завершен",
                 $this->container->get("templating")->render(
-                    "Post/tournamenttable_round_robin.html.twig",
+                    $templateName,
                     [
                         "tournament" => $tournament
                     ]

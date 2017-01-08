@@ -1,0 +1,23 @@
+<font size="4">Общий зачет гран-при</font><br />
+<br />
+Top-10<br />
+[TABLE 1 8 0]#|<b>Игрок</b>|<b>Очки</b><br />
+{% for firstPlayer in players|slice(0, 10) %}
+{{ loop.index }}|<a href="http://playzone.immortalchess.net/#/user/{{ firstPlayer.player.id }}/profile" target="_blank"><font size="3">{{ firstPlayer.player.login }}</font></a>|{{ firstPlayer.sum }}<br />
+{% endfor %}
+[/TABLE]<br />
+<br />
+Полная таблица под спойлером<br />
+<div style="margin:20px; margin-top:5px">
+    <div class="smallfont" style="margin-bottom:2px"><b>Скрытый текст:</b> <input type="button" value="Показать" style="width:60px;font-size:10px;margin:0px;padding:0px;" onClick="if (this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display != '') { this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display = '';        this.innerText = ''; this.value = 'Скрыть'; } else { this.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display = 'none'; this.innerText = ''; this.value = 'Показать'; }">
+    </div>
+    <div class="alt2" style="margin: 0px; padding: 6px; border: 1px inset;">
+        <div style="display: none;">
+            [TABLE 1 8 0]#|<b>Игрок</b>|<b>Очки</b><br />
+            {% for firstPlayer in players %}
+            {{ loop.index }}|<a href="http://playzone.immortalchess.net/#/user/{{ firstPlayer.player.id }}/profile" target="_blank"><font size="3">{{ firstPlayer.player.login }}</font></a>|{{ firstPlayer.sum }}<br />
+            {% endfor %}
+            [/TABLE]
+        </div>
+    </div>
+</div>

@@ -14,7 +14,7 @@
                     ng-repeat="roundForPlayer in tournament.results_for_swiss[swissPlayer.id].rounds"
             >
                 <div>
-                    <a ng-if="roundForPlayer.game_id" ng-class="{
+                    <a ng-if="roundForPlayer.finished && roundForPlayer.game_id" ng-class="{
                     draw: roundForPlayer.result == 0.5,
                     win: roundForPlayer.result == 1,
                     lost: roundForPlayer.result == 0
@@ -23,12 +23,19 @@
                     >
                         {{ beautyResult(roundForPlayer.result) }}
                     </a>
+                    <a ng-if="roundForPlayer.game_id && !roundForPlayer.finished"
+                       href="/#/play/{{ roundForPlayer.game_id }}"
+                    >
+                        *
+                    </a>
+                    </a>
                     <a ng-if="!roundForPlayer.game_id" class="win">
                         1 (+)
                     </a>
                 </div>
                 <div class="swiss-opponent">
-                    <user-link data-user="roundForPlayer.opponent" data-rating="roundForPlayer.opponent.rating"></user-link>
+                    <user-link data-user="roundForPlayer.opponent"
+                               data-rating="roundForPlayer.opponent_rating"></user-link>
                     <div class="color">
                         {{ roundForPlayer.color }}
                     </div>

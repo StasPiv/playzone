@@ -296,7 +296,7 @@ class Tournament
     }
 
     /**
-     * @return PersistentCollection|TournamentGame[]
+     * @return ArrayCollection|TournamentGame[]
      */
     public function getGames()
     {

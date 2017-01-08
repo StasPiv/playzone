@@ -51,18 +51,38 @@ class TournamentGameSwitz
     private $opponent = 0;
 
     /**
+     * @var bool
+     */
+    private $finished = true;
+    /**
+     * @var float
+     */
+    private $opponentRating;
+
+    /**
      * TournamentGameSwitz constructor.
      * @param int $gameId
      * @param string $color
      * @param float $result
      * @param User $opponent
+     * @param bool $finished
+     * @param float $opponentRating
      */
-    public function __construct(int $gameId, string $color, float $result, User $opponent)
+    public function __construct(
+        int $gameId,
+        string $color,
+        float $result,
+        User $opponent,
+        bool $finished = true,
+        float $opponentRating = 1800
+    )
     {
         $this->gameId = $gameId;
         $this->color = $color;
         $this->result = $result;
         $this->opponent = $opponent;
+        $this->finished = $finished;
+        $this->opponentRating = $opponentRating;
     }
 
     /**
@@ -95,6 +115,22 @@ class TournamentGameSwitz
     public function getOpponent(): User
     {
         return $this->opponent;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isFinished(): bool
+    {
+        return $this->finished;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOpponentRating(): float
+    {
+        return $this->opponentRating;
     }
 
 }

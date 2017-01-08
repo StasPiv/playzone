@@ -37,10 +37,6 @@ class TournamentTableSwitz implements TournamentTableInterface
         }
 
         foreach ($tournament->getGames() as $tournamentGame) {
-            if ($tournamentGame->getGame()->getStatus() != GameStatus::END) {
-                continue;
-            }
-            
             $playerWhite = $tournamentGame->getPlayerWhite();
             $playerBlack = $tournamentGame->getPlayerBlack();
 
@@ -49,7 +45,9 @@ class TournamentTableSwitz implements TournamentTableInterface
                     $tournamentGame->getGame()->getId(),
                     GameColor::WHITE,
                     $tournamentGame->getGame()->getResultWhite(),
-                    $playerBlack->getPlayer()
+                    $playerBlack->getPlayer(),
+                    $tournamentGame->getGame()->getStatus() == GameStatus::END,
+                    $tournamentGame->getGame()->getRatingBlack()
                 );
 
             $gamesMap[$playerBlack->getId()]["rounds"][$tournamentGame->getRound()] =
@@ -57,7 +55,9 @@ class TournamentTableSwitz implements TournamentTableInterface
                     $tournamentGame->getGame()->getId(),
                     GameColor::BLACK,
                     $tournamentGame->getGame()->getResultBlack(),
-                    $playerWhite->getPlayer()
+                    $playerWhite->getPlayer(),
+                    $tournamentGame->getGame()->getStatus() == GameStatus::END,
+                    $tournamentGame->getGame()->getRatingWhite()
                 );
         }
 

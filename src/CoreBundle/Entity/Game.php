@@ -919,7 +919,7 @@ class Game implements ChatMessageContainerInterface
      */
     public function getRatingWhite(): int
     {
-        return $this->ratingWhite;
+        return (int)$this->ratingWhite;
     }
 
     /**
@@ -938,7 +938,7 @@ class Game implements ChatMessageContainerInterface
      */
     public function getRatingBlack(): int
     {
-        return $this->ratingBlack;
+        return (int)$this->ratingBlack;
     }
 
     /**

@@ -113,12 +113,16 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         }
 
         if (withoutSaving) {
-            var incrementWhite = ($scope.game.color === 'b') ? $scope.game.game_params.time_increment : 0;
-            var incrementBlack = ($scope.game.color === 'w') ? $scope.game.game_params.time_increment : 0;
+            var incrementWhite = $scope.game.game_params.time_increment;
+            var incrementBlack = $scope.game.game_params.time_increment;
 
             $scope.game.current_move = moveNumber;
-            $scope.game.time_white += incrementWhite;
-            $scope.game.time_black += incrementBlack;
+
+            if ($scope.game.move_color === 'w') {
+                $scope.game.time_white += incrementWhite;
+            } else {
+                $scope.game.time_black += incrementBlack;
+            }
 
             $scope.game.move_color = $scope.game.move_color === 'w' ? 'b' : 'w';
 

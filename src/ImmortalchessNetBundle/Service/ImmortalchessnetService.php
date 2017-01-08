@@ -142,10 +142,6 @@ class ImmortalchessnetService implements EventSubscriberInterface
     public function onTournamentFinish(TournamentContainer $tournamentContainer)
     {
         $tournament = $tournamentContainer->getTournament();
-        
-        if ($tournament->getTournamentParams()->getType() != TournamentType::ROUND_ROBIN()) {
-            return;
-        }
 
         $this->container->get("core.service.tournament_table.factory")
              ->create($tournament->getTournamentParams()->getType())

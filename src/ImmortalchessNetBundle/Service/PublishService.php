@@ -92,6 +92,29 @@ class PublishService
     }
 
     /**
+     * @param int $postId
+     * @param string $textHtml
+     */
+    public function editPostParsed(int $postId, string $textHtml)
+    {
+        $posts = $this->getManager()->getRepository('ImmortalchessNetBundle:Postparsed')->findBy(
+            ['postid' => $postId]
+        );
+
+        foreach ($posts as $post) {
+            $post->setPagetextHtml($textHtml);
+
+            $this->getManager()->persist($post);
+        }
+
+        try {
+            $this->getManager()->flush();
+        } catch (\Exception $e) {
+            $this->container->get("logger")->error(__METHOD__." ".$e->getMessage());
+        }
+    }
+
+    /**
      * @param PostModel $postModel
      * @throws \Doctrine\DBAL\DBALException
      */

@@ -23,6 +23,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class GranPriCalculator implements EventSubscriberInterface
 {
+    const POSTID_FOR_GRANPRI_TABLE = 739159;
+    const THREADID_FOR_GRANPRI_TABLE = 32697;
+    const USERID_FOR_GRANPRI_TABLE = 87;
     use ContainerAwareTrait;
 
     /**
@@ -156,12 +159,12 @@ class GranPriCalculator implements EventSubscriberInterface
     private function publish()
     {
         $this->container->get("immortalchessnet.service.publish")->editPost(
-            739159,
+            self::POSTID_FOR_GRANPRI_TABLE,
             new Post(
                 $this->container->getParameter("app_immortalchess.forum_playzone"),
-                32697,
+                self::THREADID_FOR_GRANPRI_TABLE,
                 'PozitiFF_Chess',
-                87,
+                self::USERID_FOR_GRANPRI_TABLE,
                 'Общий зачет гран-при',
                 $this->container->get("templating")->render(
                     'Post/granpri.html.twig',
@@ -169,6 +172,16 @@ class GranPriCalculator implements EventSubscriberInterface
                         'players' => $this->players
                     ]
                 )
+            )
+        );
+
+        $this->container->get('immortalchessnet.service.publish')->editPostParsed(
+            self::POSTID_FOR_GRANPRI_TABLE,
+            $this->container->get("templating")->render(
+                'Post/granpriparsed.html.twig',
+                [
+                    'players' => $this->players,
+                ]
             )
         );
     }

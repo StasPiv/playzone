@@ -65,4 +65,12 @@ class TournamentGameSwitz
         $this->opponent = $opponent;
     }
 
+    /**
+     * @return int
+     */
+    public function getGameId(): int
+    {
+        return $this->gameId;
+    }
+
 }

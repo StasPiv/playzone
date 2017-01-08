@@ -420,7 +420,7 @@ class TournamentPlayer
      */
     public function getRating(): int
     {
-        return $this->rating;
+        return (int)$this->rating;
     }
 
     /**

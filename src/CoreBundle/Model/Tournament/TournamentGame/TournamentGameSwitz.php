@@ -73,4 +73,28 @@ class TournamentGameSwitz
         return $this->gameId;
     }
 
+    /**
+     * @return string
+     */
+    public function getColor(): string
+    {
+        return $this->color;
+    }
+
+    /**
+     * @return float
+     */
+    public function getResult(): float
+    {
+        return $this->result;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOpponent(): User
+    {
+        return $this->opponent;
+    }
+
 }

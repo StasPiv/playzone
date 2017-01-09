@@ -44,7 +44,7 @@ class TournamentTableSwitz implements TournamentTableInterface
                 new TournamentGameSwitz(
                     $tournamentGame->getGame()->getId(),
                     GameColor::WHITE,
-                    $tournamentGame->getGame()->getResultWhite(),
+                    (float)$tournamentGame->getGame()->getResultWhite(),
                     $playerBlack->getPlayer(),
                     $tournamentGame->getGame()->getStatus() == GameStatus::END,
                     $tournamentGame->getGame()->getRatingBlack()
@@ -54,7 +54,7 @@ class TournamentTableSwitz implements TournamentTableInterface
                 new TournamentGameSwitz(
                     $tournamentGame->getGame()->getId(),
                     GameColor::BLACK,
-                    $tournamentGame->getGame()->getResultBlack(),
+                    (float)$tournamentGame->getGame()->getResultBlack(),
                     $playerWhite->getPlayer(),
                     $tournamentGame->getGame()->getStatus() == GameStatus::END,
                     $tournamentGame->getGame()->getRatingWhite()

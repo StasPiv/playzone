@@ -384,15 +384,15 @@ class TournamentPlayer
 
         switch (true) {
             case $this->getBlackInRow() > 1:
-                return GameColor::WHITE;
+                return $this->requiredColor = GameColor::WHITE;
             case $this->getWhiteInRow() > 1:
-                return GameColor::BLACK;
-            case $this->getCountBlack() > $this->getCountWhite() + 1:
-                return GameColor::WHITE;
-            case $this->getCountWhite() > $this->getCountBlack() + 1:
-                return GameColor::BLACK;
+                return $this->requiredColor = GameColor::BLACK;
+            case $this->getCountBlack() > $this->getCountWhite() + 2:
+                return $this->requiredColor = GameColor::WHITE;
+            case $this->getCountWhite() > $this->getCountBlack() + 2:
+                return $this->requiredColor = GameColor::BLACK;
             default:
-                return GameColor::RANDOM;
+                return $this->requiredColor = GameColor::RANDOM;
         }
     }
 

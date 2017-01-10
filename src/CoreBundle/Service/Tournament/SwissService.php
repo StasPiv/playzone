@@ -234,7 +234,8 @@ class SwissService implements TournamentDrawInterface, TournamentCalculatorInter
         $queryBuilder->andWhere("tp.tournament = :tournament")
                      ->setParameter("tournament", $player->getTournament());
 
-        $queryBuilder->addOrderBy("tp.points", "DESC");
+        $queryBuilder->addOrderBy("tp.points", "DESC")
+            ->addOrderBy("tp.coefficient", "DESC");
 
         /** @var TournamentPlayer[] $possibleOpponents */
         $possibleOpponents = $queryBuilder->getQuery()->getResult();

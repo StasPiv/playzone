@@ -139,7 +139,22 @@ class SwissService implements TournamentDrawInterface, TournamentCalculatorInter
      */
     private function createTournamentGame(Tournament $tournament, int $round, TournamentPlayer $firstPlayer, TournamentPlayer $secondPlayer)
     {
-        $tournamentGame = $this->getTournamentHandler()->createTournamentGame($tournament, $round, $firstPlayer, $secondPlayer);
+
+        if ($this->calculateWhiteAvailabilty($firstPlayer) > $this->calculateWhiteAvailabilty($secondPlayer)) {
+            $tournamentGame = $this->getTournamentHandler()->createTournamentGame(
+                $tournament,
+                $round,
+                $firstPlayer,
+                $secondPlayer
+            );
+        } else {
+            $tournamentGame = $this->getTournamentHandler()->createTournamentGame(
+                $tournament,
+                $round,
+                $secondPlayer,
+                $firstPlayer
+            );
+        }
 
         $this->manager->persist($tournamentGame);
 
@@ -382,6 +397,20 @@ class SwissService implements TournamentDrawInterface, TournamentCalculatorInter
     ) {
         $player->setCoefficient(
             $player->getCoefficient() + $opponent->getPoints()
+        );
+    }
+
+    /**
+     * @param TournamentPlayer $player
+     * @return int
+     */
+    private function calculateWhiteAvailabilty(TournamentPlayer $player)
+    {
+        return 1000 * (int)($player->getRequiredColor() == GameColor::WHITE) - 1000 * (int)($player->getRequiredColor(
+            ) == GameColor::BLACK) + 100 * (int)($player->getBestColor(
+            ) == GameColor::WHITE) - 100 * (int)($player->getBestColor() == GameColor::BLACK) + 0.0001 * mt_rand(
+            -50000,
+            50000
         );
     }
 }

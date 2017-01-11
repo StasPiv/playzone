@@ -127,6 +127,13 @@ class TournamentPlayer
     private $requiredColor;
 
     /**
+     * @var string
+     *
+     * @JMS\Exclude()
+     */
+    private $bestColor;
+
+    /**
      * @var float
      *
      * @ORM\Column(type="float", nullable=true)
@@ -383,17 +390,36 @@ class TournamentPlayer
         }
 
         switch (true) {
-            case $this->getBlackInRow() > 1:
+            case $this->getBlackInRow() >= 2:
                 return $this->requiredColor = GameColor::WHITE;
-            case $this->getWhiteInRow() > 1:
-                return $this->requiredColor = GameColor::BLACK;
-            case $this->getCountBlack() > $this->getCountWhite() + 2:
-                return $this->requiredColor = GameColor::WHITE;
-            case $this->getCountWhite() > $this->getCountBlack() + 2:
+            case $this->getWhiteInRow() >= 2:
                 return $this->requiredColor = GameColor::BLACK;
             default:
                 return $this->requiredColor = GameColor::RANDOM;
         }
+    }
+
+    /**
+     * @return string
+     *
+     * @JMS\VirtualProperty()
+     * @JMS\SerializedName("best_color")
+     */
+    public function getBestColor()
+    {
+        if ($this->bestColor) {
+            return $this->bestColor;
+        }
+
+        if ($this->getCountWhite() > $this->getCountBlack()) {
+            return $this->bestColor = GameColor::BLACK;
+        }
+
+        if ($this->getCountWhite() < $this->getCountBlack()) {
+            return $this->bestColor = GameColor::WHITE;
+        }
+
+        return $this->bestColor = GameColor::RANDOM;
     }
 
     /**

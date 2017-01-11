@@ -323,7 +323,7 @@ class SwissService implements TournamentDrawInterface, TournamentCalculatorInter
     public function calculate(Tournament $tournament)
     {
         foreach ($tournament->getPlayers() as $tournamentPlayer) {
-            $tournamentPlayer->setCoefficient($tournamentPlayer->isMissedRound() ? $tournament->getRounds() : 0)
+            $tournamentPlayer->setCoefficient($tournamentPlayer->isMissedRound() ? $tournament->getRounds() / 2 : 0)
                              ->setPoints($tournamentPlayer->isMissedRound() ? 1 : 0);
         }
 

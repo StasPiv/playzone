@@ -127,13 +127,6 @@ class TournamentPlayer
     private $requiredColor;
 
     /**
-     * @var string
-     *
-     * @JMS\Exclude()
-     */
-    private $bestColor;
-
-    /**
      * @var float
      *
      * @ORM\Column(type="float", nullable=true)
@@ -397,29 +390,6 @@ class TournamentPlayer
             default:
                 return $this->requiredColor = GameColor::RANDOM;
         }
-    }
-
-    /**
-     * @return string
-     *
-     * @JMS\VirtualProperty()
-     * @JMS\SerializedName("best_color")
-     */
-    public function getBestColor()
-    {
-        if ($this->bestColor) {
-            return $this->bestColor;
-        }
-
-        if ($this->getCountWhite() > $this->getCountBlack()) {
-            return $this->bestColor = GameColor::BLACK;
-        }
-
-        if ($this->getCountWhite() < $this->getCountBlack()) {
-            return $this->bestColor = GameColor::WHITE;
-        }
-
-        return $this->bestColor = GameColor::RANDOM;
     }
 
     /**

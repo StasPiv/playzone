@@ -39,8 +39,8 @@ parameters:
     app_immortalchess.post_userid_for_calls: 87
     app_last_chat_messages_count: 100
     app_max_players_for_round_robin: 12
-    app_core_site_host: playzone.immortalchess.net
-    app_core_websocket_server: ws://ws.playzone.immortalchess.net:8081/
+    app_core_site_host: pozitiffchess.net
+    app_core_websocket_server: ws://ws.pozitiffchess.net:8081/
     app_core_timezone: 'Europe/Moscow'
     max_lag_for_record: 0.4
     rounds_for_swiss: 7

@@ -37,7 +37,7 @@ class PingServerService implements EventCommandInterface
     public function run()
     {
         $wsClient = new PlayzoneClient(
-            'ws://ws.playzone.immortalchess.net:8081/',
+            'ws://ws.pozitiffchess.net:8081/',
             [
                 'timeout' => -1
             ]

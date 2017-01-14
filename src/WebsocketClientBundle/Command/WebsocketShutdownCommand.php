@@ -21,7 +21,7 @@ class WebsocketShutdownCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('websocket:shutdown_server')
-             ->addArgument('ws_server_url', null, '', 'ws://ws.playzone.immortalchess.net:8081/')
+            ->addArgument('ws_server_url', null, '', 'ws://ws.pozitiffchess.net:8081/')
              ->setDescription('Shutdown websocket playzone server');
     }
 

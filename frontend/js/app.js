@@ -26,6 +26,12 @@ var playzoneApp = angular.module('playzoneApp', [
         };
     }
 
+    if ($location.host() === 'playzone.immortalchess.net') {
+        window.location.href = window.location.href.replace($location.host(), 'pozitiffchess.net');
+    }
+
+    console.log($location.host());
+
     $rootScope.browserSupported = typeof(WebSocket) === "function";
     $rootScope.isMobile = EnvService.isMobile();
     $rootScope.connected = true;

@@ -23,7 +23,7 @@ class WebsocketServerProcessCommand extends ContainerAwareCommand
                 'host',
                 InputArgument::OPTIONAL,
                 'Define host',
-                'ws.playzone.immortalchess.net'
+            'ws.pozitiffchess.net'
              )
              ->setName('websocket:server:process')
              ->setDescription('Starting websocket server in process in symfony3');

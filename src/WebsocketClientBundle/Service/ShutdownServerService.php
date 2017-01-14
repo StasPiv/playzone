@@ -29,7 +29,7 @@ class ShutdownServerService implements EventSubscriberInterface
     /** @var string */
     const TOKEN = '407f20f52463392c43bf6a58b783c4f2';
 
-    private $defaultWsServerUrl = 'ws://ws.playzone.immortalchess.net:8081/';
+    private $defaultWsServerUrl = 'ws://ws.pozitiffchess.net:8081/';
 
     /**
      * ShutdownServerService constructor.

@@ -9,11 +9,6 @@ playzoneServices.factory('WebsocketService', function($websocket, $location, $ro
     var webSocketPath = 'ws://ws.' + $location.host() + ':8081/';
     var webSocketEchoPath = 'ws://ws.' + $location.host() + ':8081/echo3';
 
-    if ($location.host() == 'pozitiffchess.net') {
-        webSocketPath = 'ws://ws.playzone.immortalchess.net:8081/';
-        webSocketEchoPath = 'ws://ws.playzone.immortalchess.net:8081/echo3';
-    }
-
     var dataStream;
 
     function createDataStream() {

@@ -27,6 +27,16 @@ interface PromotionRule
     public function getUsersToDemotion();
 
     /**
+     * @return array|ImmortalUser[]
+     */
+    public function getUsersToAdditionalPromotion();
+
+    /**
+     * @return array|ImmortalUser[]
+     */
+    public function getUsersToAdditionalDemotion();
+
+    /**
      * @return int
      */
     public function getPromotionGroupId(): int;

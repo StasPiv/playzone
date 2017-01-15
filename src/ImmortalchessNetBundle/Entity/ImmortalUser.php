@@ -698,6 +698,25 @@ class ImmortalUser implements UserInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getMembergroupids(): string
+    {
+        return $this->membergroupids;
+    }
+
+    /**
+     * @param string $membergroupids
+     * @return ImmortalUser
+     */
+    public function setMembergroupids(string $membergroupids): self
+    {
+        $this->membergroupids = $membergroupids;
+
+        return $this;
+    }
+
 
 }
 

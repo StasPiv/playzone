@@ -25,16 +25,94 @@ class PromotionRegisteredToPlayersRule implements PromotionRule, ContainerAwareI
 
     const REGISTERED_USER_GROUP_ID = 2;
 
+    const SENIOR_GROUP_ID = 19;
+
     const PLAYER_GROUP_ID = 23;
+
+    /**
+     * @var array|User[]
+     */
+    private $usersToDemotion;
+
+    /**
+     * @var array|User[]
+     */
+    private $usersToPromotion;
+
+    /**
+     * @var array|User[]
+     */
+    private $usersToAdditionalDemotion;
+
+    /**
+     * @var array|User[]
+     */
+    private $usersToAdditionalPromotion;
 
     /**
      * @inheritDoc
      */
     public function getUsersToPromotion()
     {
+        if (isset($this->usersToPromotion)) {
+            return $this->usersToPromotion;
+        }
+
+        $this->fillPromotionUsers();
+
+        return $this->usersToPromotion;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsersToDemotion()
+    {
+        if (isset($this->usersToDemotion)) {
+            return $this->usersToDemotion;
+        }
+
+        $this->fillDemotionUsers();
+
+        return $this->usersToDemotion;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsersToAdditionalPromotion()
+    {
+        if (isset($this->usersToAdditionalPromotion)) {
+            return $this->usersToAdditionalPromotion;
+        }
+
+        $this->fillPromotionUsers();
+
+        return $this->usersToAdditionalPromotion;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsersToAdditionalDemotion()
+    {
+        if (isset($this->usersToAdditionalDemotion)) {
+            return $this->usersToAdditionalDemotion;
+        }
+
+        $this->fillDemotionUsers();
+
+        return $this->usersToAdditionalDemotion;
+    }
+
+    /**
+     *
+     */
+    private function fillPromotionUsers()
+    {
         $users = $this->findAllUsersWhoPlayLast24Hours();
 
-        $immortalUsers = [];
+        $this->usersToPromotion = $this->usersToAdditionalPromotion = [];
 
         foreach ($users as $user) {
             try {
@@ -44,21 +122,21 @@ class PromotionRegisteredToPlayersRule implements PromotionRule, ContainerAwareI
             }
 
             if ($immortalUser->getUsergroupid() == self::REGISTERED_USER_GROUP_ID) {
-                $immortalUsers[] = $immortalUser;
+                $this->usersToPromotion[] = $immortalUser;
+            } elseif ($immortalUser->getUsergroupid() == self::SENIOR_GROUP_ID) {
+                $this->usersToAdditionalPromotion[] = $immortalUser;
             }
         }
-
-        return $immortalUsers;
     }
 
     /**
-     * @inheritDoc
+     *
      */
-    public function getUsersToDemotion()
+    private function fillDemotionUsers()
     {
         $users = $this->findAllUsersWhoDontPlayMoreThanMonth();
 
-        $immortalUsers = [];
+        $this->usersToDemotion = $this->usersToAdditionalDemotion = [];
 
         foreach ($users as $user) {
             try {
@@ -68,11 +146,11 @@ class PromotionRegisteredToPlayersRule implements PromotionRule, ContainerAwareI
             }
 
             if ($immortalUser->getUsergroupid() == self::PLAYER_GROUP_ID) {
-                $immortalUsers[] = $immortalUser;
+                $this->usersToDemotion[] = $immortalUser;
+            } elseif ($immortalUser->getUsergroupid() == self::SENIOR_GROUP_ID) {
+                $this->usersToAdditionalDemotion[] = $immortalUser;
             }
         }
-
-        return $immortalUsers;
     }
 
     /**

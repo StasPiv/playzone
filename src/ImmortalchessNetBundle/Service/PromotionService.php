@@ -44,7 +44,35 @@ class PromotionService implements ContainerAwareInterface
             $this->getManager()->persist($user);
         }
 
-        $this->getManager()->flush();
+        foreach ($promotionRule->getUsersToAdditionalDemotion() as $user) {
+            $additionalGroupIds = explode(',', $user->getMembergroupids());
+
+            if(($key = array_search($promotionRule->getPromotionGroupId(), $additionalGroupIds)) !== false) {
+                unset($additionalGroupIds[$key]);
+            }
+
+            $user->setMembergroupids(empty($additionalGroupIds) ? '' : implode(',', $additionalGroupIds));
+
+            $output->writeln('Additional demote: '.$user->getUsername());
+
+            $this->getManager()->persist($user);
+        }
+
+        foreach ($promotionRule->getUsersToAdditionalPromotion() as $user) {
+            $additionalGroupIds = empty($user->getMembergroupids()) ? [] : explode(',', $user->getMembergroupids());
+
+            if(($key = array_search($promotionRule->getPromotionGroupId(), $additionalGroupIds)) === false) {
+                $additionalGroupIds[] = $promotionRule->getPromotionGroupId();
+            }
+
+            $user->setMembergroupids(implode(',', $additionalGroupIds));
+
+            $output->writeln('Additional promote: '.$user->getUsername());
+
+            $this->getManager()->persist($user);
+        }
+
+//        $this->getManager()->flush();
     }
 
     /**

@@ -3,8 +3,7 @@
 Top-10<br />
 [TABLE 1 8 0]#|<b>Игрок</b>|<b>Очки</b><br />
 {% for firstPlayer in players|slice(0, 10) %}
-    {{ loop.index }}|<a href="http://pozitiffchess.net/#/user/{{ firstPlayer.player.id }}/profile" target="_blank"><font
-            size="3">{{ firstPlayer.player.login }}</font></a>|{{ firstPlayer.sum }}<br/>
+    {{ loop.index }}|<a href="http://pozitiffchess.net/#/user/{{ firstPlayer.player.id }}/profile" target="_blank"><font size="3">{{ firstPlayer.player.login }}</font></a>|{{ firstPlayer.sum }}<br />
 {% endfor %}
 [/TABLE]<br />
 <br />
@@ -16,8 +15,7 @@ Top-10<br />
         <div style="display: none;">
             [TABLE 1 8 0]#|<b>Игрок</b>|<b>Очки</b><br />
             {% for firstPlayer in players %}
-                {{ loop.index }}|<a href="http://pozitiffchess.net/#/user/{{ firstPlayer.player.id }}/profile"
-                                    target="_blank"><font size="3">{{ firstPlayer.player.login }}</font></a>|{{ firstPlayer.sum }}<br/>
+                {{ loop.index }}|<a href="http://pozitiffchess.net/#/user/{{ firstPlayer.player.id }}/profile" target="_blank"><font size="3">{{ firstPlayer.player.login }}</font></a>|{{ firstPlayer.sum }}<br />
             {% endfor %}
             [/TABLE]
         </div>

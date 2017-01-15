@@ -45,7 +45,7 @@ class PromotionService implements ContainerAwareInterface
         }
 
         foreach ($promotionRule->getUsersToAdditionalDemotion() as $user) {
-            $additionalGroupIds = explode(',', $user->getMembergroupids());
+            $additionalGroupIds = $user->getMembergroupidsAsArray();
 
             if(($key = array_search($promotionRule->getPromotionGroupId(), $additionalGroupIds)) !== false) {
                 unset($additionalGroupIds[$key]);
@@ -59,7 +59,7 @@ class PromotionService implements ContainerAwareInterface
         }
 
         foreach ($promotionRule->getUsersToAdditionalPromotion() as $user) {
-            $additionalGroupIds = empty($user->getMembergroupids()) ? [] : explode(',', $user->getMembergroupids());
+            $additionalGroupIds = $user->getMembergroupidsAsArray();
 
             if(($key = array_search($promotionRule->getPromotionGroupId(), $additionalGroupIds)) === false) {
                 $additionalGroupIds[] = $promotionRule->getPromotionGroupId();

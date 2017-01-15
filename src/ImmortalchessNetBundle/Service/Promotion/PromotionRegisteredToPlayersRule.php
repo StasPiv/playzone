@@ -123,7 +123,7 @@ class PromotionRegisteredToPlayersRule implements PromotionRule, ContainerAwareI
 
             if ($immortalUser->getUsergroupid() == self::REGISTERED_USER_GROUP_ID) {
                 $this->usersToPromotion[] = $immortalUser;
-            } elseif ($immortalUser->getUsergroupid() == self::SENIOR_GROUP_ID) {
+            } elseif(!in_array(self::PLAYER_GROUP_ID, $immortalUser->getMembergroupidsAsArray())) {
                 $this->usersToAdditionalPromotion[] = $immortalUser;
             }
         }
@@ -147,7 +147,7 @@ class PromotionRegisteredToPlayersRule implements PromotionRule, ContainerAwareI
 
             if ($immortalUser->getUsergroupid() == self::PLAYER_GROUP_ID) {
                 $this->usersToDemotion[] = $immortalUser;
-            } elseif ($immortalUser->getUsergroupid() == self::SENIOR_GROUP_ID) {
+            } elseif(in_array(self::PLAYER_GROUP_ID, $immortalUser->getMembergroupidsAsArray())) {
                 $this->usersToAdditionalDemotion[] = $immortalUser;
             }
         }

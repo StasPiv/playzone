@@ -717,6 +717,14 @@ class ImmortalUser implements UserInterface
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getMembergroupidsAsArray(): array
+    {
+        return empty($this->getMembergroupids()) ? [] : explode(',', $this->getMembergroupids());
+    }
+
 
 }
 

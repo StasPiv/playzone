@@ -31,6 +31,10 @@ services:
     class: ImmortalchessNetBundle\Service\Promotion\PromotionRegisteredToPlayersRule
     calls:
       - [setContainer, ['@service_container']]
+  immortalchessnet.service.promotion_to_players.event:
+    class: ImmortalchessNetBundle\Service\Promotion\PromotionToPlayersEventCommand
+    calls:
+      - [setContainer, ['@service_container']]
   immortalchess.service.database_converter:
     class: ImmortalchessNetBundle\Service\DatabaseConverter
     arguments:

@@ -35,16 +35,16 @@ class PromotionService implements ContainerAwareInterface
         foreach ($promotionRule->getUsersToDemotion() as $user) {
             $user->setUsergroupid($promotionRule->getDemotionGroupId());
             $output->writeln('Demote: '.$user->getUsername());
-//            $this->getManager()->persist($user);
+            $this->getManager()->persist($user);
         }
 
         foreach ($promotionRule->getUsersToPromotion() as $user) {
             $user->setUsergroupid($promotionRule->getPromotionGroupId());
             $output->writeln('Promote: '.$user->getUsername());
-            //$this->getManager()->persist($user);
+            $this->getManager()->persist($user);
         }
 
-        //$this->getManager()->flush();
+        $this->getManager()->flush();
     }
 
     /**

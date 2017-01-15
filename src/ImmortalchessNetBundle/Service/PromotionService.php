@@ -72,7 +72,7 @@ class PromotionService implements ContainerAwareInterface
             $this->getManager()->persist($user);
         }
 
-//        $this->getManager()->flush();
+        $this->getManager()->flush();
     }
 
     /**

@@ -179,7 +179,7 @@ class PromotionRegisteredToPlayersRule implements PromotionRule, ContainerAwareI
             ->getRepository('CoreBundle:User')
             ->createQueryBuilder('u')
             ->where('u.lastMove BETWEEN :from AND :to')
-            ->setParameter('from', new \DateTime('-332day'))
+            ->setParameter('from', new \DateTime('-32day'))
             ->setParameter('to', new \DateTime('-31day'))
             ->getQuery()->getResult();
 
@@ -196,7 +196,7 @@ class PromotionRegisteredToPlayersRule implements PromotionRule, ContainerAwareI
             ->getRepository('CoreBundle:User')
             ->createQueryBuilder('u')
             ->where('u.lastMove BETWEEN :from AND :to')
-            ->setParameter('from', new \DateTime('-30day'))
+            ->setParameter('from', new \DateTime('-1day'))
             ->setParameter('to', new \DateTime('now'))
             ->getQuery()->getResult();
 

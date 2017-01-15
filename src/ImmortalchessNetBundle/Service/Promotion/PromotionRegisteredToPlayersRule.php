@@ -118,7 +118,7 @@ class PromotionRegisteredToPlayersRule implements PromotionRule, ContainerAwareI
             ->getRepository('CoreBundle:User')
             ->createQueryBuilder('u')
             ->where('u.lastMove BETWEEN :from AND :to')
-            ->setParameter('from', new \DateTime('-1day'))
+            ->setParameter('from', new \DateTime('-30day'))
             ->setParameter('to', new \DateTime('now'))
             ->getQuery()->getResult();
 

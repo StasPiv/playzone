@@ -360,6 +360,16 @@ class User
     private $engine = false;
 
     /**
+     * @var Tournament
+     *
+     * @ORM\ManyToOne(targetEntity="Tournament")
+     * @ORM\JoinColumn(name="last_tournament_id", referencedColumnName="id", nullable=true)
+     *
+     * @JMS\Exclude()
+     */
+    private $lastTournament = null;
+
+    /**
      * Get id
      *
      * @return int
@@ -1159,6 +1169,25 @@ class User
     public function setEngine(bool $engine): self
     {
         $this->engine = $engine;
+
+        return $this;
+    }
+
+    /**
+     * @return Tournament
+     */
+    public function getLastTournament(): Tournament
+    {
+        return $this->lastTournament;
+    }
+
+    /**
+     * @param Tournament $lastTournament
+     * @return User
+     */
+    public function setLastTournament(Tournament $lastTournament): self
+    {
+        $this->lastTournament = $lastTournament;
 
         return $this;
     }

@@ -1,0 +1,161 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: stas
+ * Date: 15.01.17
+ * Time: 13:48
+ */
+
+namespace ImmortalchessNetBundle\Service\Promotion;
+
+use CoreBundle\Entity\User;
+use CoreBundle\Exception\Handler\User\UserNotFoundException;
+use Doctrine\Common\Persistence\ObjectManager;
+use ImmortalchessNetBundle\Entity\ImmortalUser;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+
+/**
+ * Class PromotionRegisteredToPlayersRule
+ * @package ImmortalchessNetBundle\Service\Promotion
+ */
+class PromotionRegisteredToPlayersRule implements PromotionRule, ContainerAwareInterface
+{
+    use ContainerAwareTrait;
+
+    const REGISTERED_USER_GROUP_ID = 2;
+
+    const PLAYER_GROUP_ID = 23;
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsersToPromotion()
+    {
+        $users = $this->findAllUsersWhoPlayLast24Hours();
+
+        $immortalUsers = [];
+
+        foreach ($users as $user) {
+            try {
+                $immortalUser = $this->searchImmortalUser($user);
+            } catch (UserNotFoundException $e) {
+                continue;
+            }
+
+            if ($immortalUser->getUsergroupid() == self::REGISTERED_USER_GROUP_ID) {
+                $immortalUsers[] = $immortalUser;
+            }
+        }
+
+        return $immortalUsers;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsersToDemotion()
+    {
+        $users = $this->findAllUsersWhoDontPlayMoreThanMonth();
+
+        $immortalUsers = [];
+
+        foreach ($users as $user) {
+            try {
+                $immortalUser = $this->searchImmortalUser($user);
+            } catch (UserNotFoundException $e) {
+                continue;
+            }
+
+            if ($immortalUser->getUsergroupid() == self::PLAYER_GROUP_ID) {
+                $immortalUsers[] = $immortalUser;
+            }
+        }
+
+        return $immortalUsers;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPromotionGroupId(): int
+    {
+        return self::PLAYER_GROUP_ID;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDemotionGroupId(): int
+    {
+        return self::REGISTERED_USER_GROUP_ID;
+    }
+
+    /**
+     * @return array|User[]
+     */
+    private function findAllUsersWhoDontPlayMoreThanMonth()
+    {
+        /** @var User[] $users */
+        $users = $this->getDefaultManager()
+            ->getRepository('CoreBundle:User')
+            ->createQueryBuilder('u')
+            ->where('u.lastMove BETWEEN :from AND :to')
+            ->setParameter('from', new \DateTime('-332day'))
+            ->setParameter('to', new \DateTime('-31day'))
+            ->getQuery()->getResult();
+
+        return $users;
+    }
+
+    /**
+     * @return array|User[]
+     */
+    private function findAllUsersWhoPlayLast24Hours()
+    {
+        /** @var User[] $users */
+        $users = $this->getDefaultManager()
+            ->getRepository('CoreBundle:User')
+            ->createQueryBuilder('u')
+            ->where('u.lastMove BETWEEN :from AND :to')
+            ->setParameter('from', new \DateTime('-1day'))
+            ->setParameter('to', new \DateTime('now'))
+            ->getQuery()->getResult();
+
+        return $users;
+    }
+
+    /**
+     * @param User $user
+     * @return ImmortalUser
+     */
+    private function searchImmortalUser(User $user) : ImmortalUser
+    {
+        $repository = $this->getImmortalManager()->getRepository('ImmortalchessNetBundle:ImmortalUser');
+
+        if ($user->getImmortalId()) {
+            $immortalUser = $repository->find($user->getImmortalId());
+        } else {
+            $immortalUser = $repository->findOneByUsername($user->getLogin());
+        }
+
+        return $immortalUser;
+    }
+
+    /**
+     * @return ObjectManager
+     */
+    private function getImmortalManager() : ObjectManager
+    {
+        return $this->container->get('doctrine')->getManager('immortalchess');
+    }
+
+    /**
+     * @return ObjectManager
+     */
+    private function getDefaultManager() : ObjectManager
+    {
+        return $this->container->get('doctrine')->getManager();
+    }
+
+}

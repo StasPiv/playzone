@@ -23,6 +23,14 @@ services:
     class: ImmortalchessNetBundle\Service\TextConverter
     calls:
       - [setContainer, ['@service_container']]
+  immortalchessnet.service.promote:
+    class: ImmortalchessNetBundle\Service\PromotionService
+    calls:
+      - [setContainer, ['@service_container']]
+  immortalchessnet.service.promotion_registered_to_players.rule:
+    class: ImmortalchessNetBundle\Service\Promotion\PromotionRegisteredToPlayersRule
+    calls:
+      - [setContainer, ['@service_container']]
   immortalchess.service.database_converter:
     class: ImmortalchessNetBundle\Service\DatabaseConverter
     arguments:

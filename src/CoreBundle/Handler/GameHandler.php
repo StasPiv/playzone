@@ -726,9 +726,8 @@ class GameHandler implements GameProcessorInterface
         $games = $queryBuilder
             ->where("g.status = :status")
             ->setParameter("status", GameStatus::PLAY)
-            ->setParameter('now', new \DateTime())
             ->andWhere(
-                '(g.timeWhite < (:now - g.timeLastMove) AND g.userWhite <> g.userToMove) OR (g.timeBlack < (:now - g.timeLastMove) AND g.userBlack <> g.userToMove)'
+                '(g.timeWhite < (CURRENT_TIMESTAMP() - g.timeLastMove) AND g.userWhite <> g.userToMove) OR (g.timeBlack < (CURRENT_TIMESTAMP() - g.timeLastMove) AND g.userBlack <> g.userToMove)'
             )
             ->getQuery()
             ->getResult();

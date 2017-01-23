@@ -345,12 +345,12 @@ class SwissService implements TournamentDrawInterface, TournamentCalculatorInter
         foreach ($tournament->getGames() as $tournamentGame) {
             $this->updatePoints(
                 $tournamentGame->getPlayerWhite(),
-                $tournamentGame->getGame()->getResultWhite()
+                (float)$tournamentGame->getGame()->getResultWhite()
             );
 
             $this->updatePoints(
                 $tournamentGame->getPlayerBlack(),
-                $tournamentGame->getGame()->getResultBlack()
+                (float)$tournamentGame->getGame()->getResultBlack()
             );
         }
 

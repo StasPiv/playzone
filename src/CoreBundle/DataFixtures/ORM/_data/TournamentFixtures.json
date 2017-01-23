@@ -245,5 +245,38 @@
     },
     "status": "new",
     "private": true
+  },
+  {
+    "referenceName": "tournament-one-player-online",
+    "name": "Tournament one player online",
+    "players": [
+      "user-stas",
+      "user-test-login"
+    ],
+    "game_params": {
+      "time_base": 180000
+    },
+    "tournament_params": {
+      "type": "switz",
+      "time_begin": "tomorrow"
+    }
+  },
+  {
+    "referenceName": "tournament-four-players-online",
+    "name": "Tournament four players online, but one offline",
+    "players": [
+      "user-stas",
+      "user-test-login",
+      "user-petro",
+      "user-a",
+      "user-h"
+    ],
+    "game_params": {
+      "time_base": 180000
+    },
+    "tournament_params": {
+      "type": "switz",
+      "time_begin": "tomorrow"
+    }
   }
 ]

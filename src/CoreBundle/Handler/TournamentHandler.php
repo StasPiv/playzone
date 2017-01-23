@@ -586,12 +586,56 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
      */
     public function onTournamentStart(TournamentContainer $tournamentContainer)
     {
-        $tournament = $tournamentContainer->getTournament();                
+        $tournament = $tournamentContainer->getTournament();
+
         $this->removeOfflinePlayers($tournament);
+
+        if ($tournament->getPlayers()->count() > $this->container->getParameter("app_max_players_for_round_robin")
+        ) {
+            $this->changeTournamentTypeOnSwiss($tournament);
+        }
+
+        if ($tournament->getTournamentParams()->getGamesVsOpponent() == 1) {
+            switch (
+            count($tournament->getPlayers())
+            ) {
+                case 0:
+                case 1:
+                    $this->manager->remove($tournament);
+                    $this->manager->flush();
+
+                    return;
+                    break;
+                case 2:
+                    $tournament->getTournamentParams()->setGamesVsOpponent(4);
+                    break;
+                case 3:
+                case 4:
+                    $tournament->getTournamentParams()->setGamesVsOpponent(2);
+                    break;
+            }
+        }
+
         $this->changeTournamentStatus($tournament, TournamentStatus::CURRENT());
         $this->calculateRounds($tournament);
 
         $this->manager->flush($tournament);
+    }
+
+    /**
+     * @param Tournament $tournament
+     */
+    private function changeTournamentTypeOnSwiss(Tournament $tournament)
+    {
+        $tournamentParams = TournamentParamsFactory::create(TournamentType::SWITZ())
+            ->setTimeBegin($tournament->getTournamentParams()->getTimeBegin());
+
+        $tournament->setTournamentParams($tournamentParams)->setRounds(
+            $this->container->getParameter("rounds_for_swiss")
+        );
+
+        $this->manager->persist($tournament);
+        $this->manager->flush();
     }
 
     /**
@@ -763,6 +807,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
         );
 
         foreach ($offlinePlayers as $player) {
+            $tournament->getPlayers()->removeElement($player);
             $this->manager->remove($player);
         }
 

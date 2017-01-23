@@ -78,35 +78,8 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
         $tournament = $this->getTournamentHandler()
                            ->getRepository()->find($tournamentId);
 
-        if (
-            $tournament->getCurrentRound() == 0 && 
-            count($tournament->getPlayers()) > $this->container->getParameter("app_max_players_for_round_robin")
-        ) {
-            $this->changeTournamentTypeOnSwiss($tournament);
-        }
-
         $event = (new TournamentContainer())->setTournament($tournament);
         if ($tournament->getCurrentRound() == 0) {
-            if ($tournament->getTournamentParams()->getGamesVsOpponent() == 1) {
-                switch (
-                count($tournament->getPlayers())
-                ) {
-                    case 0:
-                    case 1:
-                        $this->getManager()->remove($tournament);
-                        $this->getManager()->flush();
-                        return;
-                        break;
-                    case 2:
-                        $tournament->getTournamentParams()->setGamesVsOpponent(4);
-                        break;
-                    case 3:
-                    case 4:
-                        $tournament->getTournamentParams()->setGamesVsOpponent(2);
-                        break;
-                }
-            }
-
             $this->container->get("event_dispatcher")->dispatch(
                 TournamentEvents::START,
                 $event
@@ -152,20 +125,6 @@ class StartTournamentRound implements EventCommandInterface, EventSubscriberInte
         $this->tournamentId = $tournamentId;
 
         return $this;
-    }
-
-    /**
-     * @param Tournament $tournament
-     */
-    private function changeTournamentTypeOnSwiss(Tournament $tournament)
-    {
-        $tournamentParams = TournamentParamsFactory::create(TournamentType::SWITZ())
-            ->setTimeBegin($tournament->getTournamentParams()->getTimeBegin());
-
-        $tournament->setTournamentParams($tournamentParams)->setRounds($this->container->getParameter("rounds_for_swiss"));
-
-        $this->getManager()->persist($tournament);
-        $this->getManager()->flush();
     }
 
     /**

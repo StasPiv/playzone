@@ -20,6 +20,7 @@
     "immortal_id": 87,
     "another_login": "",
     "last_move": "yesterday",
+    "online": 1,
     "settings": [
       {
         "settingReference": "setting-sound-move",
@@ -262,7 +263,8 @@
     "balance": 0,
     "immortal_id": 88,
     "another_login": "",
-    "last_move": "yesterday"
+    "last_move": "yesterday",
+    "online": 1
   },
   {
     "referenceName": "user-i",

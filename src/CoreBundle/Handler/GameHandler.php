@@ -734,7 +734,7 @@ class GameHandler implements GameProcessorInterface
             ->getResult();
 
         $this->container->get("logger")->info(
-            "Abort long games: ".$queryBuilder->getQuery()->getSQL()
+            "Abort long games: ".$queryBuilder->getQuery()->getSQL()." Count: ".count($games)
         );
 
         foreach ($games as $game) {

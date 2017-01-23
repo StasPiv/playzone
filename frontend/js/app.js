@@ -12,7 +12,7 @@ var playzoneApp = angular.module('playzoneApp', [
     'playzoneServices',
     'pascalprecht.translate',
     'LocalStorageModule'
-]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'ChatRest', 'WebsocketService', 'EnvService', '$interval', '$location', '$templateCache', 'TournamentRest', function ($http, $rootScope, $cookies, UserRest, ChatRest, WebsocketService, EnvService, $interval, $location, $templateCache, TournamentRest) {
+]).run(['$http', '$rootScope', '$cookies', 'UserRest', 'ChatRest', 'WebsocketService', 'EnvService', '$interval', '$location', '$templateCache', 'TournamentRest', 'AudioService', function ($http, $rootScope, $cookies, UserRest, ChatRest, WebsocketService, EnvService, $interval, $location, $templateCache, TournamentRest, AudioService) {
 
     $rootScope.location = $location;
 
@@ -135,6 +135,7 @@ var playzoneApp = angular.module('playzoneApp', [
             },
             function (game) {
                 $location.path( '/play/' + game.id );
+                AudioService.newGame();
             },
             function (errorData) {
                 console.log('error_data', data);

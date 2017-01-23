@@ -680,6 +680,7 @@ class GameHandler implements GameProcessorInterface
     {
         $this->fixResultGamesByColor("White");
         $this->fixResultGamesByColor("Black");
+        $this->abortLongGames();
 
         $this->manager->flush();
     }
@@ -714,6 +715,30 @@ class GameHandler implements GameProcessorInterface
                     break;
             }
             $this->changeGameStatus($game, GameStatus::END);
+            $this->manager->persist($game);
+        }
+    }
+
+    private function abortLongGames()
+    {
+        $queryBuilder = $this->getRepository()->createQueryBuilder("g");
+        /** @var Game[] $games */
+        $games = $queryBuilder
+            ->where("g.status = :status")
+            ->setParameter("status", GameStatus::PLAY)
+            ->setParameter('now', new \DateTime())
+            ->andWhere(
+                '(g.timeWhite < (:now - g.timeLastMove) AND g.userWhite <> g.userToMove) OR (g.timeBlack < (:now - g.timeLastMove) AND g.userBlack <> g.userToMove)'
+            )
+            ->getQuery()
+            ->getResult();
+
+        $this->container->get("logger")->info(
+            "Abort long games: ".$queryBuilder->getQuery()->getSQL()
+        );
+
+        foreach ($games as $game) {
+            $this->changeGameStatus($game, GameStatus::ABORTED);
             $this->manager->persist($game);
         }
     }

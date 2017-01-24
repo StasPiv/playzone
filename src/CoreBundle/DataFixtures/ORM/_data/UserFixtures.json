@@ -484,7 +484,8 @@
     "balance": 0,
     "immortal_id": 88,
     "another_login": "",
-    "last_move": "yesterday"
+    "last_move": "yesterday",
+    "online": 1
   },
   {
     "referenceName": "user-s",
@@ -506,7 +507,8 @@
     "balance": 0,
     "immortal_id": 88,
     "another_login": "",
-    "last_move": "yesterday"
+    "last_move": "yesterday",
+    "online": 1
   },
   {
     "referenceName": "user-t",
@@ -528,7 +530,8 @@
     "balance": 0,
     "immortal_id": 88,
     "another_login": "",
-    "last_move": "yesterday"
+    "last_move": "yesterday",
+    "online": 1
   },
   {
     "referenceName": "user-u",
@@ -550,7 +553,8 @@
     "balance": 0,
     "immortal_id": 88,
     "another_login": "",
-    "last_move": "yesterday"
+    "last_move": "yesterday",
+    "online": 1
   },
   {
     "referenceName": "user-v",
@@ -572,7 +576,8 @@
     "balance": 0,
     "immortal_id": 88,
     "another_login": "",
-    "last_move": "yesterday"
+    "last_move": "yesterday",
+    "online": 1
   },
   {
     "referenceName": "user-w",
@@ -594,7 +599,8 @@
     "balance": 0,
     "immortal_id": 88,
     "another_login": "",
-    "last_move": "yesterday"
+    "last_move": "yesterday",
+    "online": 1
   },
   {
     "referenceName": "user-x",
@@ -616,7 +622,8 @@
     "balance": 0,
     "immortal_id": 88,
     "another_login": "",
-    "last_move": "yesterday"
+    "last_move": "yesterday",
+    "online": 1
   },
   {
     "referenceName": "user-y",
@@ -638,7 +645,8 @@
     "balance": 0,
     "immortal_id": 88,
     "another_login": "",
-    "last_move": "yesterday"
+    "last_move": "yesterday",
+    "online": 1
   },
   {
     "referenceName": "user-z",
@@ -660,7 +668,8 @@
     "balance": 0,
     "immortal_id": 88,
     "another_login": "",
-    "last_move": "yesterday"
+    "last_move": "yesterday",
+    "online": 1
   },
   {
     "referenceName": "user-robot",

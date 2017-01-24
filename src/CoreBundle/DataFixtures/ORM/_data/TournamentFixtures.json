@@ -278,5 +278,27 @@
       "type": "switz",
       "time_begin": "tomorrow"
     }
+  },
+  {
+    "referenceName": "tournament-nine-players-online",
+    "name": "Tournament nine players online",
+    "players": [
+      "user-s",
+      "user-r",
+      "user-t",
+      "user-u",
+      "user-v",
+      "user-w",
+      "user-x",
+      "user-y",
+      "user-z"
+    ],
+    "game_params": {
+      "time_base": 180000
+    },
+    "tournament_params": {
+      "type": "switz",
+      "time_begin": "tomorrow"
+    }
   }
 ]

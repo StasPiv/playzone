@@ -12,6 +12,7 @@ use CoreBundle\Exception\Handler\Tournament\TournamentNotFoundException;
 use CoreBundle\Handler\TournamentHandler;
 use CoreBundle\Model\Event\Tournament\TournamentContainer;
 use CoreBundle\Model\Event\Tournament\TournamentEvents;
+use CoreBundle\Model\Tournament\TournamentType;
 use CoreBundle\Tests\KernelAwareTest;
 
 /**
@@ -65,5 +66,24 @@ class TournamentStartTest extends KernelAwareTest
 
         self::assertEquals(6, $tournament->getRounds());
         self::assertEquals(4, $tournament->getPlayers()->count());
+    }
+
+    public function testNinePlayersOnline()
+    {
+        $name = 'Tournament nine players online';
+        $tournament = $this->getManager()->getRepository('CoreBundle:Tournament')
+            ->findOneByName($name);
+
+        self::assertEquals(9, $tournament->getPlayers()->count());
+
+        $this->container->get('event_dispatcher')
+            ->dispatch(TournamentEvents::START, (new TournamentContainer())->setTournament($tournament));
+
+        $tournament = $this->getManager()->getRepository('CoreBundle:Tournament')
+            ->findOneByName($name);
+
+        self::assertEquals(TournamentType::SWITZ, $tournament->getTournamentParams()->getType());
+        self::assertEquals(6, $tournament->getRounds());
+        self::assertEquals(9, $tournament->getPlayers()->count());
     }
 }

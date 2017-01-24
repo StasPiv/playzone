@@ -60,6 +60,28 @@ class SwissServiceTest extends KernelAwareTest
         $this->assertRequiredColors($tournament, $round);
     }
 
+    public function testCalculateRoundsForSwiss()
+    {
+        foreach ([
+                     15 => 6,
+                     17 => 7,
+                     31 => 7,
+                     32 => 7,
+                     33 => 8,
+                 ] as $countPlayers => $countRounds) {
+            $tournament = new Tournament();
+
+            for ($i = 0; $i < $countPlayers; $i++) {
+                $tournament->addPlayer(new User());
+            }
+
+            $rounds = $this->swissService->calculateRoundsForSwiss($tournament);
+
+            self::assertEquals($countRounds, $rounds);
+        }
+
+    }
+
     /**
      * @param Tournament $tournament
      * @param int $round

@@ -632,7 +632,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
 
         $tournament->setTournamentParams($tournamentParams)->setRounds(
             $this->container->getParameter("rounds_for_swiss")
-        );
+        )->setRounds($this->container->get('core.service.swiss')->calculateRoundsForSwiss($tournament));
 
         $this->manager->persist($tournament);
         $this->manager->flush();

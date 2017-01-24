@@ -409,4 +409,13 @@ class SwissService implements TournamentDrawInterface, TournamentCalculatorInter
         return 100 * ($player->getCountBlack() - $player->getCountWhite()) +
         0.0001 * mt_rand(-50000, 50000);
     }
+
+    /**
+     * @param Tournament $tournament
+     * @return float
+     */
+    public function calculateRoundsForSwiss(Tournament $tournament)
+    {
+        return ceil(log($tournament->getPlayers()->count(), 2)) + 2;
+    }
 }

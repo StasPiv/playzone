@@ -305,9 +305,6 @@ class SwissService implements TournamentDrawInterface, TournamentCalculatorInter
 
             if (!$secondPlayer) {
                 if (!$this->existsMissedPlayer && !$firstPlayer->isMissedRound()) {
-                    $firstPlayer->setPoints($firstPlayer->getPoints() + 1)
-                                ->setMissedRound(true);
-
                     $alreadyPlayed[$firstPlayer->getId()] = $firstPlayer->getId();
                     $this->existsMissedPlayer = true;
                     continue;

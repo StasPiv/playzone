@@ -727,7 +727,7 @@ class GameHandler implements GameProcessorInterface
             ->where("g.status = :status")
             ->setParameter("status", GameStatus::PLAY)
             ->andWhere(
-                '(g.timeWhite < (CURRENT_TIMESTAMP() - g.timeLastMove) AND g.userWhite <> g.userToMove) OR (g.timeBlack < (CURRENT_TIMESTAMP() - g.timeLastMove) AND g.userBlack <> g.userToMove)'
+                '(60 + g.timeWhite < (CURRENT_TIMESTAMP() - g.timeLastMove) AND g.userWhite <> g.userToMove) OR (60 + g.timeBlack < (CURRENT_TIMESTAMP() - g.timeLastMove) AND g.userBlack <> g.userToMove)'
             )
             ->getQuery()
             ->getResult();

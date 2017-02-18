@@ -32,5 +32,6 @@ class CronCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->getContainer()->get("core.handler.event")->runAllCurrentEvents();
+        $this->getContainer()->get("core.handler.game")->fixResultGames();
     }
 }

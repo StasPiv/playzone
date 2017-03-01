@@ -203,6 +203,6 @@ class GranPriCalculator implements EventSubscriberInterface
      */
     public function onTournamentFinish(TournamentContainer $tournamentContainer)
     {
-        $this->process(true);
+//        $this->process(true);
     }
 }

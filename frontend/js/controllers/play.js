@@ -195,7 +195,10 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
                     game_id: responseGame.id,
                     call_id: $scope.revengeCall.id
                 },
-                []
+                [
+                    $scope.game.user_white.login,
+                    $scope.game.user_black.login
+                ]
             );
             AudioService.newGame();
             $location.path( '/play/' + responseGame.id );

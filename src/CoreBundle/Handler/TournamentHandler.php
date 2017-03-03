@@ -313,7 +313,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
     public function isCurrentRoundFinished(Tournament $tournament) : bool
     {
         foreach ($this->getRoundGames($tournament, $tournament->getCurrentRound()) as $tournamentGame) {
-            if ($tournamentGame->getGame()->getStatus() != GameStatus::END) {
+            if (!$this->isGameFinished($tournamentGame->getGame())) {
                 return false;
             }
         }
@@ -537,7 +537,7 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
      */
     public function onGameChangeStatus(GameEvent $gameEvent)
     {
-        if ($gameEvent->getGame()->getStatus() != GameStatus::END) {
+        if (!$this->isGameFinished($gameEvent->getGame())) {
             return;
         }
 
@@ -888,5 +888,14 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
     private function createCalculatorInstance(Tournament $tournament)
     {
         return $this->container->get("core.service.calculator.factory")->create($tournament);
+    }
+
+    /**
+     * @param Game $game
+     * @return bool
+     */
+    private function isGameFinished(Game $game)
+    {
+        return in_array($game->getStatus(), [GameStatus::END, GameStatus::ABORTED]);
     }
 }

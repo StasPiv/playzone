@@ -23,10 +23,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class GranPriCalculator implements EventSubscriberInterface
 {
-    const POSTID_FOR_GRANPRI_TABLE = 739159;
-    const THREADID_FOR_GRANPRI_TABLE = 32697;
-    const USERID_FOR_GRANPRI_TABLE = 87;
     use ContainerAwareTrait;
+
+    const POSTID_FOR_GRANPRI_TABLE = 753937;
+    const THREADID_FOR_GRANPRI_TABLE = 33274;
+    const USERID_FOR_GRANPRI_TABLE = 87;
 
     /**
      * @var array
@@ -44,7 +45,7 @@ class GranPriCalculator implements EventSubscriberInterface
     private $players;
 
     //todo: need to implement logic for separate simple tournaments from granpri
-    const FIRST_TOURNAMENT = 2128;
+    const FIRST_TOURNAMENT = 2448;
 
     /**
      * @param bool $publish
@@ -89,10 +90,12 @@ class GranPriCalculator implements EventSubscriberInterface
                 rsort($weekPoints);
                 $twoBest = array_slice($weekPoints, 0, 2);
 
+                $otherResults = array_slice($weekPoints, 2);
+
                 if (!isset($bestPlayers[$userId])) {
                     $bestPlayers[$userId] = [
                         'player' => $user,
-                        'sum' => array_sum($twoBest)
+                        'sum' => 3 * array_sum($twoBest) + array_sum($otherResults)
                     ];
                 } else {
                     $bestPlayers[$userId]['sum'] += array_sum($twoBest);

@@ -528,6 +528,9 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
             ],
             GameEvents::CHANGE_STATUS_AFTER => [
                 ['onGameChangeStatus', 20]
+            ],
+            TournamentEvents::TOURNAMENT_FINISHED => [
+                ['onTournamentFinished', 20]
             ]
         ];
     }
@@ -571,6 +574,18 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
             );
         }
         
+    }
+
+    /**
+     * @param TournamentContainer $event
+     */
+    public function onTournamentFinished(TournamentContainer $event)
+    {
+        $event->getTournament()->setStatus(TournamentStatus::END());
+
+        $this->manager->persist($event->getTournament());
+
+        $this->manager->flush();
     }
 
     /**

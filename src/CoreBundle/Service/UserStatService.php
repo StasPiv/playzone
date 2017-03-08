@@ -9,10 +9,12 @@
 namespace CoreBundle\Service;
 
 use CoreBundle\Entity\Game;
+use CoreBundle\Entity\GameMove;
 use CoreBundle\Entity\User;
 use CoreBundle\Model\Event\Game\GameEvent;
 use CoreBundle\Model\Event\Game\GameEvents;
 use CoreBundle\Model\Game\GameStatus;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -178,5 +180,57 @@ class UserStatService implements EventSubscriberInterface
         $this->updateWinDrawLose($game, $user, $win, $draw, $lose);
 
         $user->setWin($win)->setDraw($draw)->setLose($lose);
+    }
+
+    /**
+     * @param User $user
+     * @param Game|null $game
+     * @return array
+     */
+    public function analyzeGameMove(User $user, Game $game = null): array
+    {
+        $criteria = [
+            'user' => $user
+        ];
+
+        if ($game) {
+            $criteria['game'] = $game;
+        }
+
+        /** @var GameMove[] $gameMoves */
+        $gameMoves = $this->container->get('doctrine')
+                     ->getRepository('CoreBundle:GameMove')
+                     ->findBy($criteria, ['id' => Criteria::ASC]);
+
+        $sumDelay = 0;
+
+        foreach ($gameMoves as $gameMove) {
+            $sumDelay += $gameMove->getDelay();
+        }
+
+        $averageDelay = $sumDelay / count($gameMoves);
+
+        $moreThan150 = $moreThan200 = $moreThan300 = 0;
+
+        foreach ($gameMoves as $gameMove) {
+            $delayWeight = $gameMove->getDelay() / $averageDelay;
+            if ($delayWeight > 1.5) {
+                $moreThan150++;
+            }
+
+            if ($delayWeight > 2) {
+                $moreThan200++;
+            }
+
+            if ($delayWeight > 3) {
+                $moreThan300++;
+            }
+        }
+
+        return [
+            '>150' => $moreThan150,
+            '>200' => $moreThan200,
+            '>300' => $moreThan300
+        ];
     }
 }

@@ -245,7 +245,21 @@ class GameHandler implements GameProcessorInterface
     {
         $gameMove = new GameMoveEntity();
 
-        $gameMove->setGame($game)->setUser($user)->setDelay($delay);
+        $gameMove->setGame($game)
+                 ->setUser($user)
+                 ->setDelay($delay);
+
+        preg_match('/.*(\d+\. ?.+)$/', $game->getPgn(), $matches);
+
+        if (isset($matches[1])) {
+            $move = $matches[1];
+
+            if (preg_match('/^(\d+)\. ?\w+ (\w+)$/', $move, $matches)) {
+                $move = $matches[1].'... '.$matches[2];
+            }
+
+            $gameMove->setMoveNotation($move);
+        }
 
         $this->manager->persist($gameMove);
     }

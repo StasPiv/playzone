@@ -67,18 +67,28 @@ class GameMove
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="time_last_move", type="datetime")
+     * @ORM\Column(type="datetime")
      *
      * @JMS\Exclude()
      */
-    private $timeLastMove;
+    private $timeMove;
+
+    /**
+     * @var string
+     *
+     * @JMS\Expose
+     * @JMS\Type("string")
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $moveNotation;
 
     /**
      * GameMove constructor.
      */
     public function __construct()
     {
-        $this->setTimeLastMove(new \DateTime());
+        $this->setTimeMove(new \DateTime());
     }
 
     /**
@@ -149,18 +159,37 @@ class GameMove
     /**
      * @return \DateTime
      */
-    public function getTimeLastMove(): \DateTime
+    public function getTimeMove(): \DateTime
     {
-        return $this->timeLastMove;
+        return $this->timeMove;
     }
 
     /**
-     * @param \DateTime $timeLastMove
+     * @param \DateTime $timeMove
      * @return GameMove
      */
-    public function setTimeLastMove(\DateTime $timeLastMove): self
+    public function setTimeMove(\DateTime $timeMove): self
     {
-        $this->timeLastMove = $timeLastMove;
+        $this->timeMove = $timeMove;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMoveNotation(): string
+    {
+        return $this->moveNotation;
+    }
+
+    /**
+     * @param string $moveNotation
+     * @return GameMove
+     */
+    public function setMoveNotation(string $moveNotation): self
+    {
+        $this->moveNotation = $moveNotation;
 
         return $this;
     }

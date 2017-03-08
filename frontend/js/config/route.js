@@ -15,8 +15,8 @@ playzoneApp.config(['$routeProvider', '$locationProvider',
                 }
             }).
             when('/register', {
-                templateUrl: 'partials/auth.html',
-                controller: 'AuthCtrl',
+                templateUrl: 'partials/register.html',
+                controller: 'RegisterCtrl',
                 resolve: {
                     factory: checkIfUnauthorized
                 }

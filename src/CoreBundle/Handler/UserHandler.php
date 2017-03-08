@@ -84,8 +84,6 @@ class UserHandler implements UserProcessorInterface, EventSubscriberInterface
      */
     public function processPostRegister(UserPostRegisterRequest $request) : User
     {
-        $this->getRequestError()->throwException(Response::HTTP_FORBIDDEN);
-
         try {
             if ($this->repository->findOneByEmail($request->getEmail())) {
                 $this->getRequestError()->addError("email", 'This email was already registered');

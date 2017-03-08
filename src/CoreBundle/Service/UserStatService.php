@@ -203,12 +203,13 @@ class UserStatService implements EventSubscriberInterface
                      ->findBy($criteria, ['id' => Criteria::ASC]);
 
         $sumDelay = 0;
+        $countGames = count($gameMoves);
 
         foreach ($gameMoves as $gameMove) {
             $sumDelay += $gameMove->getDelay();
         }
 
-        $averageDelay = $sumDelay / count($gameMoves);
+        $averageDelay = $sumDelay / $countGames;
 
         $moreThan150 = $moreThan200 = $moreThan300 = 0;
 
@@ -230,7 +231,8 @@ class UserStatService implements EventSubscriberInterface
         return [
             '>150' => $moreThan150,
             '>200' => $moreThan200,
-            '>300' => $moreThan300
+            '>300' => $moreThan300,
+            'count' => $countGames
         ];
     }
 }

@@ -45,7 +45,5 @@ class AnalyzeGameMoveCommand extends ContainerAwareCommand
         $stat = $this->getContainer()->get('core.user.stat')->analyzeGameMove($user, $game);
 
         print_r($stat);
-
-        $output->writeln($stat);
     }
 }

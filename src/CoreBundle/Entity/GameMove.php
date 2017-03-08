@@ -36,9 +36,10 @@ class GameMove
     /**
      * @var Game
      *
-     * @ORM\JoinColumn(name="game_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Game")
+     * @ORM\JoinColumn(name="game_id", referencedColumnName="id", nullable=true)
      *
-     * @JMS\Type("CoreBundle\Entity\Game")
+     * @JMS\Exclude()
      */
     private $game;
 

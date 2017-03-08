@@ -1,7 +1,4 @@
 <div id="playroom" ng-class="{'observer': !game.mine}">
-    <div ng-if="game.mine && game.opponent.login !== 'Robot' && game.opponent.offline" class="alert alert-warning">
-        {{ 'Opponent is offline' | translate }}
-    </div>
     <div class="play-chess-board chess-board-legal" data-board="board">
         <div class="left-column">&nbsp;
             <playzone-chat ng-if="game.mine" class="pgn table-responsive"
@@ -16,7 +13,7 @@
                            ng-if="!game.mine"
             ></playzone-chat>
         </div>
-        <div tabindex="1" class="middle-column" ng-mouseleave="boardMouseLeave()">
+        <div class="middle-column" ng-mouseleave="boardMouseLeave()">
             <chess-timer
                     ng-if="game.status == 'play'"
                     class="chess-timer white"

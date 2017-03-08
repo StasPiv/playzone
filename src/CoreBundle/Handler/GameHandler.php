@@ -265,6 +265,11 @@ class GameHandler implements GameProcessorInterface
         }
 
         /** @var Game $game */
+        if ($game->getStatus() !== GameStatus::PLAY) {
+            $this->getRequestError()->addError("id", "Game is not played")
+                ->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
         if (!$this->isMyGame($game, $me)) {
             $this->getRequestError()->addError("id", "Game is not mine");
             $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);

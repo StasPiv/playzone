@@ -16,7 +16,7 @@
                            ng-if="!game.mine"
             ></playzone-chat>
         </div>
-        <div class="middle-column">
+        <div tabindex="1" class="middle-column" ng-mouseleave="boardMouseLeave()">
             <chess-timer
                     ng-if="game.status == 'play'"
                     class="chess-timer white"

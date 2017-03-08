@@ -213,6 +213,35 @@ playzoneControllers.controller('PlayCtrl', function ($scope, $rootScope, $routeP
         );
     };
 
+    $scope.countMouseLeave = 0;
+
+    $scope.boardMouseLeave = function () {
+        GameRest.sendCountEvents(
+            {
+                id: $scope.game.id,
+                count_switching: $scope.countSwitching,
+                count_mouse_leave: ++$scope.countMouseLeave
+            }
+        );
+    };
+
+    $scope.countSwitching = 0;
+
+    $(window).blur(function(e) {
+        GameRest.sendCountEvents(
+            {
+                id: $scope.game.id,
+                count_switching: ++$scope.countSwitching,
+                count_mouse_leave: $scope.countMouseLeave
+            }
+        );
+
+        console.log('countSwitching', $scope.countSwitching);
+    });
+    $(window).focus(function(e) {
+        // Do Focus Actions Here
+    });
+
     $scope.highlightLastMove = highlightLastMove;
 
     WebsocketService.addListener('listen_opponent_gone', 'user_gone', function (user) {

@@ -315,6 +315,46 @@ class Game implements ChatMessageContainerInterface
     private $currentMove = 0;
 
     /**
+     * @var int
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $countSwitchingWhite = 0;
+
+    /**
+     * @var int
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $countSwitchingBlack = 0;
+
+    /**
+     * @var int
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $countMouseLeaveWhite = 0;
+
+    /**
+     * @var int
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $countMouseLeaveBlack = 0;
+
+    /**
      * Game constructor.
      */
     public function __construct()
@@ -967,6 +1007,82 @@ class Game implements ChatMessageContainerInterface
     public function setCurrentMove(int $currentMove): self
     {
         $this->currentMove = $currentMove;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountSwitchingWhite(): int
+    {
+        return $this->countSwitchingWhite;
+    }
+
+    /**
+     * @param int $countSwitchingWhite
+     * @return Game
+     */
+    public function setCountSwitchingWhite(int $countSwitchingWhite): self
+    {
+        $this->countSwitchingWhite = $countSwitchingWhite;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountSwitchingBlack(): int
+    {
+        return $this->countSwitchingBlack;
+    }
+
+    /**
+     * @param int $countSwitchingBlack
+     * @return Game
+     */
+    public function setCountSwitchingBlack(int $countSwitchingBlack): self
+    {
+        $this->countSwitchingBlack = $countSwitchingBlack;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountMouseLeaveWhite(): int
+    {
+        return $this->countMouseLeaveWhite;
+    }
+
+    /**
+     * @param int $countMouseLeaveWhite
+     * @return Game
+     */
+    public function setCountMouseLeaveWhite(int $countMouseLeaveWhite): self
+    {
+        $this->countMouseLeaveWhite = $countMouseLeaveWhite;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountMouseLeaveBlack(): int
+    {
+        return $this->countMouseLeaveBlack;
+    }
+
+    /**
+     * @param int $countMouseLeaveBlack
+     * @return Game
+     */
+    public function setCountMouseLeaveBlack(int $countMouseLeaveBlack): self
+    {
+        $this->countMouseLeaveBlack = $countMouseLeaveBlack;
 
         return $this;
     }

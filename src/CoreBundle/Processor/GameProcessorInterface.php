@@ -16,6 +16,7 @@ use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePostPublishRequest;
 use CoreBundle\Model\Request\Game\GamePutAbortRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
+use CoreBundle\Model\Request\Game\GamePutCountEventsRequest;
 use CoreBundle\Model\Request\Game\GamePutFixRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
@@ -47,6 +48,12 @@ interface GameProcessorInterface extends ProcessorInterface
      * @return Game
      */
     public function processPutPgn(GamePutPgnRequest $request) : Game;
+
+    /**
+     * @param GamePutCountEventsRequest $request
+     * @return Game
+     */
+    public function processPutCountEvents(GamePutCountEventsRequest $request) : Game;
 
     /**
      * @param GamePostPublishRequest $request

@@ -38,6 +38,10 @@ playzoneServices.factory('GameRest', function($resource, $rootScope, ApiService)
                 method: 'POST',
                 url: ApiService.base_url + 'game/:id/publish'
             },
+            sendCountEvents: {
+                method: 'PUT',
+                url: ApiService.base_url + 'game/:id/count/events'
+            },
             publishFen: {
                 method: 'POST',
                 url: ApiService.base_url + 'game/:id/publish'

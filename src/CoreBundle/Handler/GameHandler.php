@@ -29,6 +29,7 @@ use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePostPublishRequest;
 use CoreBundle\Model\Request\Game\GamePutAbortRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
+use CoreBundle\Model\Request\Game\GamePutCountEventsRequest;
 use CoreBundle\Model\Request\Game\GamePutFix;
 use CoreBundle\Model\Request\Game\GamePutFixRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
@@ -226,6 +227,43 @@ class GameHandler implements GameProcessorInterface
         $this->manager->flush($game);
 
         return $this->getUserGame($game, $me);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function processPutCountEvents(GamePutCountEventsRequest $request) : Game
+    {
+        $me = $this->container->get("core.service.security")->getUserIfCredentialsIsOk($request, $this->getRequestError());
+
+        try {
+            $game = $this->repository->find($request->getId());
+        } catch (GameNotFoundException $e) {
+            $this->getRequestError()->addError("id", "Game is not found")
+                ->throwException(ResponseStatusCode::NOT_FOUND);
+        }
+
+        /** @var Game $game */
+        if (!$this->isMyGame($game, $me)) {
+            $this->getRequestError()->addError("id", "Game is not mine");
+            $this->getRequestError()->throwException(ResponseStatusCode::FORBIDDEN);
+        }
+
+        if ($me == $game->getUserWhite()) {
+            $game->setCountSwitchingWhite($request->getCountSwitching())
+                 ->setCountMouseLeaveWhite($request->getCountMouseLeave());
+        }
+
+        if ($me == $game->getUserBlack()) {
+            $game->setCountSwitchingBlack($request->getCountSwitching())
+                 ->setCountMouseLeaveBlack($request->getCountMouseLeave());
+        }
+
+        $this->manager->persist($game);
+
+        $this->manager->flush();
+
+        return $game;
     }
 
     /**

@@ -15,6 +15,7 @@ use CoreBundle\Model\Request\Game\GamePostNewrobotRequest;
 use CoreBundle\Model\Request\Game\GamePostPublishRequest;
 use CoreBundle\Model\Request\Game\GamePutAbortRequest;
 use CoreBundle\Model\Request\Game\GamePutAcceptdrawRequest;
+use CoreBundle\Model\Request\Game\GamePutCountEventsRequest;
 use CoreBundle\Model\Request\Game\GamePutFixRequest;
 use CoreBundle\Model\Request\Game\GamePutOfferdrawRequest;
 use CoreBundle\Model\Request\Game\GamePutPgnRequest;
@@ -61,6 +62,29 @@ class GameController extends BaseController
     public function putPgnAction(Request $request, $id)
     {
         return $this->process($request, new GamePutPgnRequest());
+    }
+
+    /**
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Save pgn",
+     *  filters={
+     *      {"name"="login", "dataType"="string", "description"="Your name"},
+     *      {"name"="token", "dataType"="string", "description"="Your token"},
+     *      {"name"="count_switching_white", "dataType"="integer"},
+     *      {"name"="count_switching_black", "dataType"="integer"},
+     *      {"name"="count_mouse_leave_white", "dataType"="integer"},
+     *      {"name"="count_mouse_leave_black", "dataType"="integer"}
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    public function putCountEventsAction(Request $request, $id)
+    {
+        return $this->process($request, new GamePutCountEventsRequest());
     }
 
     /**

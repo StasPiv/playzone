@@ -276,13 +276,21 @@ class GameHandler implements GameProcessorInterface
         }
 
         if ($me == $game->getUserWhite()) {
-            $game->setCountSwitchingWhite($request->getCountSwitching())
-                 ->setCountMouseLeaveWhite($request->getCountMouseLeave());
+            if ($request->getCountSwitching() > $game->getCountSwitchingWhite() ||
+                $request->getCountMouseLeave() > $game->getCountMouseLeaveWhite()
+            ) {
+                $game->setCountSwitchingWhite($request->getCountSwitching())
+                     ->setCountMouseLeaveWhite($request->getCountMouseLeave());
+            }
         }
 
         if ($me == $game->getUserBlack()) {
-            $game->setCountSwitchingBlack($request->getCountSwitching())
-                 ->setCountMouseLeaveBlack($request->getCountMouseLeave());
+            if ($request->getCountSwitching() > $game->getCountSwitchingBlack() ||
+                $request->getCountMouseLeave() > $game->getCountMouseLeaveBlack()
+            ) {
+                $game->setCountSwitchingBlack($request->getCountSwitching())
+                     ->setCountMouseLeaveBlack($request->getCountMouseLeave());
+            }
         }
 
         $this->manager->persist($game);

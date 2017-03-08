@@ -71,10 +71,8 @@ class GameController extends BaseController
      *  filters={
      *      {"name"="login", "dataType"="string", "description"="Your name"},
      *      {"name"="token", "dataType"="string", "description"="Your token"},
-     *      {"name"="count_switching_white", "dataType"="integer"},
-     *      {"name"="count_switching_black", "dataType"="integer"},
-     *      {"name"="count_mouse_leave_white", "dataType"="integer"},
-     *      {"name"="count_mouse_leave_black", "dataType"="integer"}
+     *      {"name"="count_switching", "dataType"="integer"},
+     *      {"name"="count_mouse_leave", "dataType"="integer"}
      *  }
      * )
      *

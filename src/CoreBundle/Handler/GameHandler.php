@@ -20,6 +20,7 @@ use CoreBundle\Model\Event\Game\GameEvent;
 use CoreBundle\Model\Event\Game\GameEvents;
 use CoreBundle\Model\Event\Game\GamePublishEvent;
 use CoreBundle\Model\Game\GameMove;
+use CoreBundle\Entity\GameMove as GameMoveEntity;
 use CoreBundle\Model\Request\Call\ErrorAwareTrait;
 use CoreBundle\Model\Request\Game\GameGetListRequest;
 use CoreBundle\Model\Request\Game\GameGetRequest;
@@ -212,6 +213,8 @@ class GameHandler implements GameProcessorInterface
             )->setCurrentMove($request->getCurrentMove());
         }
 
+        $previousTimeLastMove = $game->getTimeLastMove();
+
         $game->setDraw("")
              ->setTimeLastMove(new \DateTime());
 
@@ -224,9 +227,27 @@ class GameHandler implements GameProcessorInterface
             $this->changeGameStatus($game, GameStatus::END);
         }
 
-        $this->manager->flush($game);
+        $this->manager->persist($game);
+
+        $this->addGameMove($game, $me, $game->getTimeLastMove()->getTimestamp() - $previousTimeLastMove->getTimestamp());
+
+        $this->manager->flush();
 
         return $this->getUserGame($game, $me);
+    }
+
+    /**
+     * @param Game $game
+     * @param User $user
+     * @param int $delay
+     */
+    private function addGameMove(Game $game, User $user, int $delay)
+    {
+        $gameMove = new GameMoveEntity();
+
+        $gameMove->setGame($game)->setUser($user)->setDelay($delay);
+
+        $this->manager->persist($gameMove);
     }
 
     /**

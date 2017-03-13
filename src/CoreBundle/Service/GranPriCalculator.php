@@ -92,17 +92,17 @@ class GranPriCalculator implements EventSubscriberInterface
 
                 $otherResults = array_slice($weekPoints, 2);
 
+                $sumForPlayer = 3 * array_sum($twoBest) + array_sum($otherResults);
+
                 if (!isset($bestPlayers[$userId])) {
                     $bestPlayers[$userId] = [
                         'player' => $user,
-                        'sum' => 3 * array_sum($twoBest) + array_sum($otherResults)
+                        'sum' => $sumForPlayer
                     ];
                 } else {
-                    $bestPlayers[$userId]['sum'] += array_sum($twoBest);
+                    $bestPlayers[$userId]['sum'] += $sumForPlayer;
                 }
             }
-
-            print_r($bestPlayers);
         }
 
         usort(

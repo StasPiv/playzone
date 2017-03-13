@@ -101,6 +101,8 @@ class GranPriCalculator implements EventSubscriberInterface
                     $bestPlayers[$userId]['sum'] += array_sum($twoBest);
                 }
             }
+
+            print_r($bestPlayers);
         }
 
         usort(

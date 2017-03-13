@@ -566,11 +566,16 @@ class TournamentHandler implements TournamentProcessorInterface, EventSubscriber
 
         if ($tournament->getRounds() == $tournament->getCurrentRound()) {
             $this->changeTournamentStatus($tournament, TournamentStatus::END());
-            $this->manager->flush($tournament);
+
+            $this->manager->persist($tournament);
+            $this->manager->flush();
 
             $this->container->get("event_dispatcher")->dispatch(
                 TournamentEvents::TOURNAMENT_FINISHED,
-                (new TournamentContainer())->setTournament($tournament)
+                (new TournamentContainer())->setTournament(
+                    // for correct players ordering
+                    $this->manager->find('CoreBundle:Tournament', $tournament->getId())
+                )
             );
         }
         

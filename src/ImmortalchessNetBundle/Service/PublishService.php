@@ -61,7 +61,8 @@ class PublishService
                ->setLastpost($post->getDateline())
                ->setLastposter($post->getUsername())
                ->setThreadid($post->getThreadid())
-               ->setReplycount($thread->getReplycount() + 1);
+               ->setReplycount($thread->getReplycount() + 1)
+               ->setDateline(time());
 
         if (!empty($postModel->getThreadTitle())) {
             $thread->setTitle($postModel->getThreadTitle());

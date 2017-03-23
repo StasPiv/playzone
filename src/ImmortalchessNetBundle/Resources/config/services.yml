@@ -45,3 +45,7 @@ services:
       - '%app_immortalchess.database_name%'
       - '@doctrine'
       - '@filesystem'
+  immortalchessnet.service.search_cheater:
+    class: ImmortalchessNetBundle\Service\SearchCheaterService
+    calls:
+      - [setContainer, ['@service_container']]

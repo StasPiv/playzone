@@ -1,0 +1,5 @@
+[TABLE 1 3 0][B]Номер партии[/B]|[B]Подозреваемый[/B]|[B]Оппонент[/B]
+{% for cheater in cheaters %}
+    #[URL="http://pozitiffchess.net/#/play/{{ cheater.game_id }}"]{{ cheater.game_id }}[/URL]|{{ cheater.suspected_in_cheating }}|{{ cheater.opponent }}
+{% endfor %}
+[/TABLE]

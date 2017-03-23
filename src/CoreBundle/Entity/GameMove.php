@@ -84,6 +84,16 @@ class GameMove
     private $moveNotation;
 
     /**
+     * @var int
+     *
+     * @JMS\Expose
+     * @JMS\Type("integer")
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $moveNumber = 0;
+
+    /**
      * GameMove constructor.
      */
     public function __construct()
@@ -190,6 +200,25 @@ class GameMove
     public function setMoveNotation(string $moveNotation): self
     {
         $this->moveNotation = $moveNotation;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMoveNumber(): int
+    {
+        return $this->moveNumber;
+    }
+
+    /**
+     * @param int $moveNumber
+     * @return GameMove
+     */
+    public function setMoveNumber(int $moveNumber): self
+    {
+        $this->moveNumber = $moveNumber;
 
         return $this;
     }

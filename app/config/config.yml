@@ -105,7 +105,12 @@ monolog:
         main:
             type:         fingers_crossed
             action_level: error
+            handler:      nested
             channels: [!ws]
+        nested:
+            type:  stream
+            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
         ws:
             type: stream
             path: "%kernel.logs_dir%/ws.log"

@@ -105,7 +105,6 @@ monolog:
         main:
             type:         fingers_crossed
             action_level: error
-            handler:      nested
             channels: [!ws]
         ws:
             type: stream

@@ -37,7 +37,7 @@ FROM game_move gm
   JOIN game g ON g.id = gm.game_id
   JOIN user opponent_table ON opponent_table.id = IF(gm.user_id = id_white, g.id_black, g.id_white)
   JOIN user cheater_table ON cheater_table.id = gm.user_id
-WHERE delay > 0 AND IF(gm.user_id = id_white, g.result_white, g.result_black) <> 0 AND gm.time_move >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+WHERE delay > 0 AND IF(gm.user_id = id_white, g.result_white, g.result_black) <> 0 AND gm.time_move >= CURDATE()
 GROUP BY user_id, game_id
 HAVING COUNT(delay) > 10 AND (delayPercentMoreThan3 > 85 OR switching > 5)
 ORDER BY game_id DESC';

@@ -31,16 +31,16 @@ class SearchCheaterService implements EventCommandInterface
   cheater_table.login as suspected_in_cheating,
   opponent_table.login as opponent,
   IF(gm.user_id = id_white, g.result_white, g.result_black) as result,
-  ROUND(100 * SUM(IF(delay > 3, 1, 0)) / COUNT(delay), 2) as delayPercentMoreThan3,
+  ROUND(100 * SUM(IF(delay > 2, 1, 0)) / COUNT(delay), 2) as delayPercentMoreThan2,
   IF(gm.user_id = id_white, g.count_switching_white, g.count_switching_black) as switching
 FROM game_move gm
   JOIN game g ON g.id = gm.game_id
   JOIN user opponent_table ON opponent_table.id = IF(gm.user_id = id_white, g.id_black, g.id_white)
   JOIN user cheater_table ON cheater_table.id = gm.user_id
-WHERE delay > 0 AND IF(gm.user_id = id_white, g.result_white, g.result_black) <> 0 AND gm.time_move >= CURDATE()
+WHERE delay > 0 AND gm.time_move >= CURDATE()
 GROUP BY user_id, game_id
-HAVING COUNT(delay) > 10 AND (delayPercentMoreThan3 > 85 OR switching > 5)
-ORDER BY game_id DESC';
+HAVING COUNT(delay) > 10 AND (delayPercentMoreThan2 > 94)
+ORDER BY delayPercentMoreThan2 DESC';
 
         $doctrine = $this->container->get('doctrine');
 

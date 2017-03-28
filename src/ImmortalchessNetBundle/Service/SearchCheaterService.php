@@ -24,23 +24,39 @@ class SearchCheaterService implements EventCommandInterface
 {
     use ContainerAwareTrait;
 
-    public function searchCheaterAndPublishPost()
+    /**
+     * @param int $from
+     * @param int $to
+     */
+    public function searchCheaterAndPublishPost(int $from = 0, int $to = 1)
     {
-        $sql = 'SELECT
+        $sql = sprintf(
+            'SELECT
   game_id,
   cheater_table.login as suspected_in_cheating,
   opponent_table.login as opponent,
   IF(gm.user_id = id_white, g.result_white, g.result_black) as result,
-  ROUND(100 * SUM(IF(delay > 2, 1, 0)) / COUNT(delay), 2) as delayPercentMoreThan2,
+  ROUND(100 * SUM(IF(delay BETWEEN 0 AND 3, 1, 0)) / COUNT(delay), 2) as firstInterval,
+  ROUND(100 * SUM(IF(delay BETWEEN 1 AND 4, 1, 0)) / COUNT(delay), 2) as secondInterval,
+  ROUND(100 * SUM(IF(delay BETWEEN 2 AND 5, 1, 0)) / COUNT(delay), 2) as thirdInterval,
+  ROUND(100 * SUM(IF(delay BETWEEN 3 AND 6, 1, 0)) / COUNT(delay), 2) as fourthInterval,
+  ROUND(100 * SUM(IF(delay BETWEEN 4 AND 7, 1, 0)) / COUNT(delay), 2) as fifthInterval,
+  ROUND(100 * SUM(IF(delay BETWEEN 5 AND 8, 1, 0)) / COUNT(delay), 2) as sixthInterval,
+  ROUND(100 * SUM(IF(delay BETWEEN 6 AND 9, 1, 0)) / COUNT(delay), 2) as seventhInterval,
+  ROUND(100 * SUM(IF(delay BETWEEN 7 AND 10, 1, 0)) / COUNT(delay), 2) as eighthInterval,
   IF(gm.user_id = id_white, g.count_switching_white, g.count_switching_black) as switching
 FROM game_move gm
   JOIN game g ON g.id = gm.game_id
   JOIN user opponent_table ON opponent_table.id = IF(gm.user_id = id_white, g.id_black, g.id_white)
   JOIN user cheater_table ON cheater_table.id = gm.user_id
-WHERE delay > 0 AND gm.time_move >= CURDATE()
+WHERE delay > 0 AND gm.time_move BETWEEN (CURDATE() - INTERVAL %s DAY) AND (CURDATE() + INTERVAL %s DAY)
 GROUP BY user_id, game_id
-HAVING COUNT(delay) > 10 AND (delayPercentMoreThan2 > 94)
-ORDER BY delayPercentMoreThan2 DESC';
+HAVING COUNT(delay) > 10
+       AND (fourthInterval >= 60 OR fifthInterval >= 60 OR sixthInterval >= 60 OR seventhInterval >= 60 OR eighthInterval >= 60 OR firstInterval < 10 OR secondInterval < 10)
+ORDER BY fourthInterval DESC',
+            $from,
+            $to
+        );
 
         $doctrine = $this->container->get('doctrine');
 

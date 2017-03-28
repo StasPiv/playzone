@@ -20,7 +20,9 @@ class SearchCheatersCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('immortalchessnet:search_cheaters');
+        $this->setName('immortalchessnet:search_cheaters')
+             ->addArgument('from', null, '', 0)
+             ->addArgument('to', null, '', 1);
     }
 
     /**
@@ -30,6 +32,7 @@ class SearchCheatersCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('immortalchessnet.service.search_cheater')->searchCheaterAndPublishPost();
+        $this->getContainer()->get('immortalchessnet.service.search_cheater')
+            ->searchCheaterAndPublishPost($input->getArgument('from'), $input->getArgument('to'));
     }
 }

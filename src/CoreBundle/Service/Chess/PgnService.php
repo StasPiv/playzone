@@ -15,6 +15,7 @@ use CoreBundle\Model\Event\Game\GameEvents;
 use CoreBundle\Model\Game\GameStatus;
 use CoreBundle\Service\Chess\Pgn\PgnParser;
 use CoreBundle\Model\Chess\PgnGame;
+use CoreBundle\Service\Chess\PgnService\GetGameFactory;
 use StasPiv\PgnSaver\Model\Pgn;
 use StasPiv\PgnSaver\Service\ArrayOfPgnContainer;
 use StasPiv\PgnSaver\Service\OneGameContainer;
@@ -37,26 +38,17 @@ class PgnService implements ContainerAwareInterface, EventSubscriberInterface
 
     /**
      * @param string $pgnPath
-     * @param array $excludedFens
+     * @param string $strategy
+     * @param array $params
      * @return PgnGame
-     * @throws NotFoundResourceException
      */
-    public function getRandomPgnGame(string $pgnPath, array $excludedFens = []) : PgnGame
+    public function getPgnGame(
+        string $pgnPath,
+        string $strategy = 'random',
+        array $params
+    ) : PgnGame
     {
-        $this->parser = new PgnParser($pgnPath);
-        $availableGames = [];
-        
-        foreach ($this->parser->getGames() as $index => $pgnGame) {
-            if (!in_array($pgnGame->getFen(), $excludedFens)) {
-                $availableGames[] = $pgnGame;
-            }
-        }
-        
-        if (empty($availableGames)) {
-            throw new NotFoundResourceException;
-        }
-        
-        return $availableGames[mt_rand(0, count($availableGames) - 1)];
+        return GetGameFactory::create($strategy, $pgnPath, $params)->getGame();
     }
 
     /**

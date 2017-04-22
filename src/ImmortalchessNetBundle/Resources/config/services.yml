@@ -13,6 +13,10 @@ services:
       - [setContainer, ['@service_container']]
   immortalchessnet.service.event.post_problem:
     class: ImmortalchessNetBundle\Service\Event\PostProblemService
+    arguments:
+      - 147
+      - 'korol.pgn'
+      - 'random'
     calls:
       - [setContainer, ['@service_container']]
   immortalchessnet.service.event.new_tournament_notifier:

@@ -25,8 +25,45 @@ use Symfony\Component\Translation\Exception\NotFoundResourceException;
 class PostProblemService implements EventCommandInterface, ContainerAwareInterface
 {
     use ContainerAwareTrait;
-    
-    const FORUM_FOR_PROBLEMS = 147;
+
+    /**
+     * @var int
+     */
+    private $forumForProblems;
+
+    /**
+     * @var string
+     */
+    private $pgnFile;
+
+    /**
+     * @var string
+     */
+    private $strategy;
+
+    /**
+     * @var
+     */
+    private $params;
+
+    /**
+     * PostProblemService constructor.
+     * @param int $forumForProblems
+     * @param string $pgnFile
+     * @param string $strategy
+     */
+    public function __construct(int $forumForProblems, string $pgnFile, string $strategy)
+    {
+        $this->forumForProblems = $forumForProblems;
+        $this->pgnFile = $pgnFile;
+        $this->strategy = $strategy;
+
+        if ($strategy == 'random') {
+            $this->params = [
+                'excluded_fens' => $this->getAlreadyPostedFens()
+            ];
+        }
+    }
 
     /**
      * @inheritDoc
@@ -34,33 +71,18 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
     public function run()
     {
         try {
-            $pgnGame = $this->container->get("core.service.chess.pgn")->getRandomPgnGame(
-                $this->container->get("kernel")->getRootDir() .
-                DIRECTORY_SEPARATOR . '../web/uploads/korol.pgn',
-                $this->getAlreadyPostedFens()
+            $pgnGame = $this->container->get("core.service.chess.pgn")->getPgnGame(
+                $this->container->get("kernel")->getRootDir().
+                DIRECTORY_SEPARATOR.'../web/uploads/'.$this->pgnFile,
+                $this->strategy,
+                $this->params
             );
         } catch (NotFoundResourceException $e) {
             $this->container->get("logger")->err("There are no available fens for posting problem");
             return;
         }
 
-        $publishService = $this->container->get("immortalchessnet.service.publish");
-        $title = $this->getTitle($pgnGame);
-        $publishService->publishNewThread(
-            new Post(
-                self::FORUM_FOR_PROBLEMS, null,
-                $this->container->getParameter("app_immortalchess.post_username_for_calls"),
-                $this->container->getParameter("app_immortalchess.post_userid_for_calls"), $title,
-                $this->container->get("templating")->render(
-                    ":Post:fenproblem.html.twig",
-                    [
-                        "pgnGame" => $pgnGame,
-                        "title" => $title
-                    ]
-                ),
-                $pgnGame->getFen()
-            )
-        );
+        $this->publishPgnGame($pgnGame);
     }
 
     /**
@@ -71,7 +93,7 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
         $fens = [];
 
         $threads = $this->getManager()->getRepository("ImmortalchessNetBundle:Thread")->findBy([
-            "forumid" => self::FORUM_FOR_PROBLEMS
+            "forumid" => $this->forumForProblems
         ]);
 
         foreach ($threads as $thread) {
@@ -127,6 +149,30 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
         }
 
         return $text;
+    }
+
+    /**
+     * @param PgnGame $pgnGame
+     */
+    private function publishPgnGame(PgnGame $pgnGame)
+    {
+        $publishService = $this->container->get("immortalchessnet.service.publish");
+        $title = $this->getTitle($pgnGame);
+        $publishService->publishNewThread(
+            new Post(
+                $this->forumForProblems, null,
+                $this->container->getParameter("app_immortalchess.post_username_for_calls"),
+                $this->container->getParameter("app_immortalchess.post_userid_for_calls"), $title,
+                $this->container->get("templating")->render(
+                    ":Post:fenproblem.html.twig",
+                    [
+                        "pgnGame" => $pgnGame,
+                        "title" => $title
+                    ]
+                ),
+                $pgnGame->getFen()
+            )
+        );
     }
 
 }

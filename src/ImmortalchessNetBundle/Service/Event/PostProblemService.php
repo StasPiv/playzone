@@ -12,6 +12,7 @@ use CoreBundle\Model\Chess\PgnGame;
 use CoreBundle\Model\Event\EventCommandInterface;
 use CoreBundle\Model\Event\EventInterface;
 use CoreBundle\Service\Chess\ChessGameService;
+use CoreBundle\Service\Chess\Pgn\PgnParser;
 use Doctrine\Common\Persistence\ObjectManager;
 use ImmortalchessNetBundle\Model\Post;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -42,11 +43,6 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
     private $strategy;
 
     /**
-     * @var
-     */
-    private $params;
-
-    /**
      * PostProblemService constructor.
      * @param int $forumForProblems
      * @param string $pgnFile
@@ -57,12 +53,6 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
         $this->forumForProblems = $forumForProblems;
         $this->pgnFile = $pgnFile;
         $this->strategy = $strategy;
-
-        if ($strategy == 'random') {
-            $this->params = [
-                'excluded_fens' => $this->getAlreadyPostedFens()
-            ];
-        }
     }
 
     /**
@@ -74,8 +64,7 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
             $pgnGame = $this->container->get("core.service.chess.pgn")->getPgnGame(
                 $this->container->get("kernel")->getRootDir().
                 DIRECTORY_SEPARATOR.'../web/uploads/'.$this->pgnFile,
-                $this->strategy,
-                $this->params
+                $this->strategy
             );
         } catch (NotFoundResourceException $e) {
             $this->container->get("logger")->err("There are no available fens for posting problem");
@@ -83,32 +72,6 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
         }
 
         $this->publishPgnGame($pgnGame);
-    }
-
-    /**
-     * @return array
-     */
-    private function getAlreadyPostedFens() : array
-    {
-        $fens = [];
-
-        $threads = $this->getManager()->getRepository("ImmortalchessNetBundle:Thread")->findBy([
-            "forumid" => $this->forumForProblems
-        ]);
-
-        foreach ($threads as $thread) {
-            $fens[] = $thread->getTaglist();
-        }
-
-        return $fens;
-    }
-
-    /**
-     * @return ObjectManager
-     */
-    private function getManager() : ObjectManager
-    {
-        return $this->container->get('doctrine')->getManager('immortalchess');
     }
 
     /**
@@ -152,6 +115,31 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
     }
 
     /**
+     * @param string $pgnPath
+     * @param int $number
+     * @param int $forumId
+     * @param int $threadId
+     */
+    public function publishPgnGameByNumber(string $pgnPath, int $number, int $forumId, int $threadId)
+    {
+        $pgnGame = $this->getPgnGameByNumber($pgnPath, $number);
+
+        $this->publishPgnGameInThread($pgnGame, $forumId, $threadId);
+    }
+
+    /**
+     * @param string $pgnPath
+     * @param int $number
+     * @return PgnGame
+     */
+    private function getPgnGameByNumber(string $pgnPath, int $number): PgnGame
+    {
+        $pgnParser = new PgnParser($pgnPath);
+
+        return $pgnParser->getGame($number);
+    }
+
+    /**
      * @param PgnGame $pgnGame
      */
     private function publishPgnGame(PgnGame $pgnGame)
@@ -161,6 +149,33 @@ class PostProblemService implements EventCommandInterface, ContainerAwareInterfa
         $publishService->publishNewThread(
             new Post(
                 $this->forumForProblems, null,
+                $this->container->getParameter("app_immortalchess.post_username_for_calls"),
+                $this->container->getParameter("app_immortalchess.post_userid_for_calls"), $title,
+                $this->container->get("templating")->render(
+                    ":Post:fenproblem.html.twig",
+                    [
+                        "pgnGame" => $pgnGame,
+                        "title" => $title
+                    ]
+                ),
+                $pgnGame->getFen()
+            )
+        );
+    }
+
+    /**
+     * @param PgnGame $pgnGame
+     * @param int $forumId
+     * @param int $threadId
+     */
+    private function publishPgnGameInThread(PgnGame $pgnGame, int $forumId, int $threadId)
+    {
+        $publishService = $this->container->get("immortalchessnet.service.publish");
+        $title = $this->getTitle($pgnGame);
+
+        $publishService->publishNewPost(
+            new Post(
+                $forumId, $threadId,
                 $this->container->getParameter("app_immortalchess.post_username_for_calls"),
                 $this->container->getParameter("app_immortalchess.post_userid_for_calls"), $title,
                 $this->container->get("templating")->render(

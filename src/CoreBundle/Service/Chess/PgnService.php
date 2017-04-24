@@ -33,22 +33,31 @@ class PgnService implements ContainerAwareInterface, EventSubscriberInterface
 {
     use ContainerAwareTrait;
 
-    /** @var PgnParser */
-    private $parser;
+    /**
+     * @var GetGameFactory
+     */
+    private $getGameFactory;
+
+    /**
+     * @param GetGameFactory $getGameFactory
+     */
+    public function __construct(GetGameFactory $getGameFactory)
+    {
+        $this->getGameFactory = $getGameFactory;
+    }
 
     /**
      * @param string $pgnPath
      * @param string $strategy
-     * @param array $params
      * @return PgnGame
+     * @internal param array $params
      */
     public function getPgnGame(
         string $pgnPath,
-        string $strategy = 'random',
-        array $params
+        string $strategy = 'random'
     ) : PgnGame
     {
-        return GetGameFactory::create($strategy, $pgnPath, $params)->getGame();
+        return $this->getGameFactory->create($strategy)->getGame($pgnPath);
     }
 
     /**

@@ -1,3 +1,6 @@
+parameters:
+    forum_for_random_problems: 147
+
 services:
     core.request.error:
         class: CoreBundle\Model\Request\RequestError
@@ -116,6 +119,8 @@ services:
           - [setContainer, ['@service_container']]
     core.service.chess.pgn:
         class: CoreBundle\Service\Chess\PgnService
+        arguments:
+          - "@core.service.get_game_factory"
         tags:
           - { name: kernel.event_subscriber }
         calls:
@@ -132,3 +137,12 @@ services:
           - { name: kernel.event_subscriber }
         calls:
           - [setContainer, ['@service_container']]
+    core.service.get_game_factory:
+        class: CoreBundle\Service\Chess\PgnService\GetGameFactory
+        arguments:
+          - "@core.service.get_random_game"
+    core.service.get_random_game:
+        class: CoreBundle\Service\Chess\PgnService\GetRandomGame
+        arguments:
+          - "@doctrine.orm.entity_manager"
+          - "%forum_for_random_problems%"

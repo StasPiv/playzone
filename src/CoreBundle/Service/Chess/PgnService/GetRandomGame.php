@@ -9,6 +9,7 @@
 namespace CoreBundle\Service\Chess\PgnService;
 
 use CoreBundle\Service\Chess\Pgn\PgnParser;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 /**
@@ -18,39 +19,34 @@ use Symfony\Component\Translation\Exception\NotFoundResourceException;
 class GetRandomGame implements GetGameInterface
 {
     /**
-     * @var array
+     * @var ObjectManager
      */
-    private $params = [];
+    private $manager;
     /**
-     * @var string
+     * @var int
      */
-    private $pgnPath;
+    private $forumForRandomProblems;
 
     /**
-     * @inheritDoc
-     * @param string $params
-     * @param array $params
+     * @param ObjectManager $manager
+     * @param int $forumForRandomProblems
      */
-    public function __construct(string $pgnPath, array $params)
+    public function __construct(ObjectManager $manager, int $forumForRandomProblems)
     {
-        if (!isset($params['excluded_fens'])) {
-            throw new \RuntimeException('excluded_fens param is required for GetRandomGame');
-        }
-
-        $this->pgnPath = $params;
-        $this->params = $params;
+        $this->manager = $manager;
+        $this->forumForRandomProblems = $forumForRandomProblems;
     }
 
     /**
      * @inheritDoc
      */
-    public function getGame()
+    public function getGame(string $pgnPath)
     {
-        $pgnParser = new PgnParser($this->pgnPath);
+        $pgnParser = new PgnParser($pgnPath);
         $availableGames = [];
 
         foreach ($pgnParser->getGames() as $index => $pgnGame) {
-            if (!in_array($pgnGame->getFen(), $this->params['excluded_fens'])) {
+            if (!in_array($pgnGame->getFen(), $this->getAlreadyPostedFens())) {
                 $availableGames[] = $pgnGame;
             }
         }
@@ -60,6 +56,24 @@ class GetRandomGame implements GetGameInterface
         }
 
         return $availableGames[mt_rand(0, count($availableGames) - 1)];
+    }
+
+    /**
+     * @return array
+     */
+    private function getAlreadyPostedFens() : array
+    {
+        $fens = [];
+
+        $threads = $this->manager->getRepository("ImmortalchessNetBundle:Thread")->findBy([
+            "forumid" => $this->forumForRandomProblems
+        ]);
+
+        foreach ($threads as $thread) {
+            $fens[] = $thread->getTaglist();
+        }
+
+        return $fens;
     }
 
 }

@@ -14,7 +14,7 @@ services:
   immortalchessnet.service.event.post_problem:
     class: ImmortalchessNetBundle\Service\Event\PostProblemService
     arguments:
-      - 147
+      - "%forum_for_random_problems%"
       - 'korol.pgn'
       - 'random'
     calls:

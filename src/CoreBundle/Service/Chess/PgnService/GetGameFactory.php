@@ -17,16 +17,31 @@ use function Couchbase\defaultDecoder;
 class GetGameFactory
 {
     /**
-     * @param string $strategy
-     * @param string $pgnPath
-     * @param array $params
-     * @return GetGameInterface
+     * @var GetRandomGame
      */
-    public static function create(string $strategy, string $pgnPath, array $params): GetGameInterface
+    private $randomGame;
+
+    /**
+     * @inheritDoc
+     * @param GetRandomGame $randomGame
+     */
+    public function __construct(GetRandomGame $randomGame)
+    {
+        $this->randomGame = $randomGame;
+    }
+
+
+    /**
+     * @param string $strategy
+     * @return GetGameInterface
+     * @internal param string $pgnPath
+     * @internal param array $params
+     */
+    public function create(string $strategy): GetGameInterface
     {
         switch ($strategy) {
             case 'random':
-                return new GetRandomGame($pgnPath, $params);
+                return $this->randomGame;
             case 'by_order':
                 return;
             default:

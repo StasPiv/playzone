@@ -56,7 +56,8 @@ class ProblemHandler implements ProblemProcessorInterface
      */
     public function processGet(ProblemGetRequest $request) : Problem
     {
-        return $this->repository->find($request->getId());
+        exec('/var/www/search-men/bin/console search:men 25', $output);
+        print_r($output);
     }
 
     /**
